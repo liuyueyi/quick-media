@@ -1,4 +1,4 @@
-package com.hust.hui.quickmedia.common;
+package com.hust.hui.quickmedia.common.audio;
 
 import com.hust.hui.quickmedia.common.util.FileUtil;
 import com.hust.hui.quickmedia.common.util.ProcessUtil;

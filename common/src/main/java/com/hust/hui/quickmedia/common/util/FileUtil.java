@@ -166,6 +166,10 @@ public class FileUtil {
      * @throws FileNotFoundException
      */
     public static void mkDir(File file) throws FileNotFoundException {
+        if (file.getParentFile() == null) {
+            file = file.getAbsoluteFile();
+        }
+
         if (file.getParentFile().exists()) {
             if (!file.exists() && !file.mkdir()) {
                 throw new FileNotFoundException();

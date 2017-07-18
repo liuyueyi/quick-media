@@ -1,6 +1,6 @@
 package com.hust.hui.quickmedia.web.api.audio;
 
-import com.hust.hui.quickmedia.common.AudioWrapper;
+import com.hust.hui.quickmedia.common.audio.AudioWrapper;
 import com.hust.hui.quickmedia.common.util.HttpUtil;
 import com.hust.hui.quickmedia.web.entity.Response;
 import lombok.extern.slf4j.Slf4j;
@@ -38,7 +38,7 @@ public class AudioController {
             }
         } catch (Exception e) {
             log.error("get audio error! e: {}", e);
-            return new Response(5001, "get audio resource error!");
+            return new Response<>(5001, "get audio resource error!");
         }
 
 
@@ -50,7 +50,7 @@ public class AudioController {
                     .asFile();
         } catch (Exception e) {
             log.error("parse audio error! e: {}", e);
-            return new Response(5001, "get audio resource error!");
+            return new Response<>(5001, "get audio resource error!");
         }
 
 

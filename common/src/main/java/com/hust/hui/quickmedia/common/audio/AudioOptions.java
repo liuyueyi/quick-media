@@ -1,4 +1,4 @@
-package com.hust.hui.quickmedia.common;
+package com.hust.hui.quickmedia.common.audio;
 
 import java.util.HashMap;
 import java.util.Map;
