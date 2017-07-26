@@ -11,6 +11,7 @@ import com.hust.hui.quickmedia.common.util.QrCodeUtil;
 import lombok.ToString;
 
 import javax.imageio.ImageIO;
+import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
@@ -72,6 +73,12 @@ public class QrCodeGenWrapper {
          * logo的样式
          */
         private QrCodeOptions.LogoStyle logoStyle = QrCodeOptions.LogoStyle.NORMAL;
+
+
+        /**
+         * logo的边框背景色
+         */
+        private Color logoBgColor = Color.WHITE;
 
 
         /**
@@ -139,6 +146,12 @@ public class QrCodeGenWrapper {
 
         public Builder setLogoStyle(QrCodeOptions.LogoStyle logoStyle) {
             this.logoStyle = logoStyle;
+            return this;
+        }
+
+
+        public Builder setLogoBgColor(Color color) {
+            this.logoBgColor = color;
             return this;
         }
 
@@ -236,6 +249,7 @@ public class QrCodeGenWrapper {
             qrCodeConfig.setW(getW());
             qrCodeConfig.setLogo(logo);
             qrCodeConfig.setLogoStyle(logoStyle);
+            qrCodeConfig.setLogoBgColor(logoBgColor);
             qrCodeConfig.setPicType(picType);
 
             Map<EncodeHintType, Object> hints = new HashMap<>(3);

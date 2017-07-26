@@ -17,18 +17,23 @@ public class ImageUtil {
     /**
      * 在图片中间,插入圆角的logo
      *
-     * @param qrCode 原图
-     * @param logo   logo地址
+     * @param qrCode      原图
+     * @param logo        logo地址
+     * @param logoStyle   logo 的样式 （圆角， 直角）
+     * @param logoBgColor logo的背景色
      * @throws IOException
      */
-    public static void insertLogo(BufferedImage qrCode, String logo, QrCodeOptions.LogoStyle logoStyle) throws IOException {
+    public static void insertLogo(BufferedImage qrCode,
+                                  String logo,
+                                  QrCodeOptions.LogoStyle logoStyle,
+                                  Color logoBgColor) throws IOException {
         int QRCODE_WIDTH = qrCode.getWidth();
         int QRCODE_HEIGHT = qrCode.getHeight();
 
         // 获取logo图片
         BufferedImage bf = getImageByPath(logo);
-        int size = bf.getWidth() > QRCODE_WIDTH * 2 / 10 ? QRCODE_WIDTH * 2 / 50 : bf.getWidth() / 5;
-        bf = ImageUtil.makeRoundBorder(bf, logoStyle, size, Color.BLUE); // 边距为二维码图片的1/10
+        int size = bf.getWidth() / 15;
+        bf = ImageUtil.makeRoundBorder(bf, logoStyle, size, logoBgColor); // 边距为二维码图片的1/15
 
         // logo的宽高
         int w = bf.getWidth() > QRCODE_WIDTH * 2 / 10 ? QRCODE_WIDTH * 2 / 10 : bf.getWidth();
@@ -66,27 +71,27 @@ public class ImageUtil {
 
 
     /**
-     * fixme 边框的计算需要根据最终生成logo图片的大小来定义，这样才不会出现不同的logo原图，导致边框不一致的问题
-     *
+     * <p>
      * 生成圆角图片 & 圆角边框
      *
-     * @param image        原图
+     * @param image     原图
      * @param logoStyle 圆角的角度
-     * @param size         边框的边距
-     * @param color        边框的颜色
+     * @param size      边框的边距
+     * @param color     边框的颜色
      * @return 返回带边框的圆角图
      */
-    public static BufferedImage makeRoundBorder(BufferedImage image, QrCodeOptions.LogoStyle logoStyle, int size, Color color) {
+    public static BufferedImage makeRoundBorder(BufferedImage image,
+                                                QrCodeOptions.LogoStyle logoStyle,
+                                                int size, Color color) {
         // 将图片变成圆角
         int cornerRadius = 0;
         if (logoStyle == QrCodeOptions.LogoStyle.ROUND) {
-            cornerRadius = 30;
+            cornerRadius = image.getWidth() / 4;
             image = makeRoundedCorner(image, cornerRadius);
         }
 
-        int borderSize = size;
-        int w = image.getWidth() + borderSize;
-        int h = image.getHeight() + borderSize;
+        int w = image.getWidth() + size;
+        int h = image.getHeight() + size;
         BufferedImage output = new BufferedImage(w, h,
                 BufferedImage.TYPE_INT_ARGB);
 
@@ -101,7 +106,7 @@ public class ImageUtil {
         // ... then compositing the image on top,
         // using the white shape from above as alpha source
         g2.setComposite(AlphaComposite.SrcAtop);
-        g2.drawImage(image, size, size, null);
+        g2.drawImage(image, size / 2, size / 2, null);
         g2.dispose();
 
         return output;

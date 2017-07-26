@@ -4,6 +4,7 @@ import com.google.zxing.EncodeHintType;
 import com.google.zxing.client.j2se.MatrixToImageConfig;
 import lombok.Data;
 
+import java.awt.*;
 import java.util.Map;
 
 /**
@@ -27,6 +28,11 @@ public class QrCodeOptions {
      * logo的样式， 目前支持圆角+普通
      */
     private LogoStyle logoStyle;
+
+    /**
+     * logo 的边框背景色
+     */
+    private Color logoBgColor;
 
 
     /**

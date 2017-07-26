@@ -40,5 +40,5 @@
 
 ### 文档
 
-[音频转码服务说明](doc/audio.md)
-[二维码生成解析服务说明](doc/qrcode.md)
+- [音频转码服务说明](doc/audio.md)
+- [二维码生成解析服务说明](doc/qrcode.md)

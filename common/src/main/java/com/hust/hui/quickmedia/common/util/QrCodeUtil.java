@@ -171,7 +171,10 @@ public class QrCodeUtil {
 
         // 插入logo
         if (!(qrCodeConfig.getLogo() == null || "".equals(qrCodeConfig.getLogo()))) {
-            ImageUtil.insertLogo(qrCode, qrCodeConfig.getLogo(), qrCodeConfig.getLogoStyle());
+            ImageUtil.insertLogo(qrCode,
+                    qrCodeConfig.getLogo(),
+                    qrCodeConfig.getLogoStyle(),
+                    qrCodeConfig.getLogoBgColor());
         }
 
         // 若二维码的实际宽高和预期的宽高不一致, 则缩放

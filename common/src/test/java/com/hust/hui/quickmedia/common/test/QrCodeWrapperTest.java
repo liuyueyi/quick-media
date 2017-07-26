@@ -6,6 +6,8 @@ import junit.framework.Assert;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.Test;
 
+import java.awt.*;
+
 /**
  * Created by yihui on 2017/7/17.
  */
@@ -70,7 +72,7 @@ public class QrCodeWrapperTest {
                     .setBgColor(0xffffffff)
                     .setPadding(0)
                     .setLogo(logo)
-                    .setLogoStyle(QrCodeOptions.LogoStyle.ROUND)
+                    .setLogoBgColor(Color.gray)
                     .asFile("src/test/qrcode/gen_300x300_logo.png");
             System.out.println(ans);
         } catch (Exception e) {
@@ -88,6 +90,8 @@ public class QrCodeWrapperTest {
                     .setBgColor(0xffffffff)
                     .setPadding(0)
                     .setLogo(logo)
+                    .setLogoStyle(QrCodeOptions.LogoStyle.ROUND)
+                    .setLogoBgColor(Color.green)
                     .asFile("src/test/qrcode/gen_300x300_logo_v2.png");
             System.out.println(ans);
         } catch (Exception e) {
