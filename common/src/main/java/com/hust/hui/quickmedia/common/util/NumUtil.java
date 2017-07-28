@@ -11,7 +11,7 @@ public class NumUtil {
      * @param defaultValue
      * @return
      */
-    public static int decode2int(String str, int defaultValue) {
+    public static Integer decode2int(String str, Integer defaultValue) {
         if (str == null) {
             return defaultValue;
         }

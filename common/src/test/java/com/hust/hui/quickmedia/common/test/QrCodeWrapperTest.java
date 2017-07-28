@@ -2,11 +2,14 @@ package com.hust.hui.quickmedia.common.test;
 
 import com.hust.hui.quickmedia.common.qrcode.QrCodeGenWrapper;
 import com.hust.hui.quickmedia.common.qrcode.QrCodeOptions;
+import com.hust.hui.quickmedia.common.util.Base64Util;
 import junit.framework.Assert;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.Test;
 
-import java.awt.*;
+import javax.imageio.ImageIO;
+import java.awt.image.BufferedImage;
+import java.io.ByteArrayOutputStream;
 
 /**
  * Created by yihui on 2017/7/17.
@@ -72,7 +75,7 @@ public class QrCodeWrapperTest {
                     .setBgColor(0xffffffff)
                     .setPadding(0)
                     .setLogo(logo)
-                    .setLogoBgColor(Color.gray)
+                    .setLogoBgColor(0xff808080)
                     .asFile("src/test/qrcode/gen_300x300_logo.png");
             System.out.println(ans);
         } catch (Exception e) {
@@ -91,9 +94,61 @@ public class QrCodeWrapperTest {
                     .setPadding(0)
                     .setLogo(logo)
                     .setLogoStyle(QrCodeOptions.LogoStyle.ROUND)
-                    .setLogoBgColor(Color.green)
+                    .setLogoBgColor(0xff00ff00)
                     .asFile("src/test/qrcode/gen_300x300_logo_v2.png");
             System.out.println(ans);
+        } catch (Exception e) {
+            System.out.println("create qrcode error! e: " + e);
+            Assert.assertTrue(false);
+        }
+
+
+        // 根据本地文件生成待logo的二维码， 重新着色位置探测图像
+        try {
+            String logo = "logo.jpg";
+            String bg = "bg.png";
+            boolean ans = QrCodeGenWrapper.of(msg)
+                    .setW(300)
+                    .setPreColor(0xff0000ff)
+                    .setBgColor(0xffffffff)
+                    .setDetectCornerPreColor(0xff00FF00)
+                    .setPadding(0)
+                    .setLogo(logo)
+                    .setLogoStyle(QrCodeOptions.LogoStyle.ROUND)
+                    .setLogoBgColor(0xff00ff00)
+                    .setBackground(bg)
+                    .asFile("src/test/qrcode/gen_300x300_logo_v3.png");
+            System.out.println(ans);
+        } catch (Exception e) {
+            System.out.println("create qrcode error! e: " + e);
+            Assert.assertTrue(false);
+        }
+    }
+
+
+    @Test
+    public void testGenColorCode() {
+        String msg = "https://my.oschina.net/u/566591/blog/1359432";
+        // 根据本地文件生成待logo的二维码， 重新着色位置探测图像
+        try {
+            String logo = "logo.jpg";
+            String bg = "bg.png";
+            BufferedImage img = QrCodeGenWrapper.of(msg)
+                    .setW(300)
+                    .setPreColor(0xff0000ff)
+                    .setBgColor(0xffFFFF00)
+                    .setDetectCornerPreColor(0xffff0000)
+                    .setPadding(2)
+                    .setLogo(logo)
+                    .setLogoStyle(QrCodeOptions.LogoStyle.ROUND)
+                    .setLogoBgColor(0xff00cc00)
+                    .setBackground(bg)
+                    .asBufferedImage();
+
+
+            ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+            ImageIO.write(img, "png", outputStream);
+            System.out.println(Base64Util.encode(outputStream));
         } catch (Exception e) {
             System.out.println("create qrcode error! e: " + e);
             Assert.assertTrue(false);

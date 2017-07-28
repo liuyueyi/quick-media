@@ -8,8 +8,10 @@ import com.google.zxing.qrcode.decoder.ErrorCorrectionLevel;
 import com.google.zxing.qrcode.encoder.ByteMatrix;
 import com.google.zxing.qrcode.encoder.Encoder;
 import com.google.zxing.qrcode.encoder.QRCode;
+import com.hust.hui.quickmedia.common.qrcode.BitMatrixEx;
 import com.hust.hui.quickmedia.common.qrcode.QrCodeOptions;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang.StringUtils;
 
 import java.awt.*;
 import java.awt.image.BufferedImage;
@@ -30,7 +32,7 @@ public class QrCodeUtil {
      * <p/>
      * 源码参考 {@link com.google.zxing.qrcode.QRCodeWriter#encode(String, BarcodeFormat, int, int, Map)}
      */
-    public static BitMatrix encode(QrCodeOptions qrCodeConfig) throws WriterException {
+    public static BitMatrixEx encode(QrCodeOptions qrCodeConfig) throws WriterException {
         ErrorCorrectionLevel errorCorrectionLevel = ErrorCorrectionLevel.L;
         int quietZone = 1;
         if (qrCodeConfig.getHints() != null) {
@@ -64,7 +66,7 @@ public class QrCodeUtil {
      * @param quietZone 取值 [0, 4]
      * @return
      */
-    private static BitMatrix renderResult(QRCode code, int width, int height, int quietZone) {
+    private static BitMatrixEx renderResult(QRCode code, int width, int height, int quietZone) {
         ByteMatrix input = code.getMatrix();
         if (input == null) {
             throw new IllegalStateException();
@@ -110,16 +112,30 @@ public class QrCodeUtil {
 
         BitMatrix output = new BitMatrix(outputWidth, outputHeight);
 
+        BitMatrixEx res = new BitMatrixEx(output);
+
+        // 获取位置探测图形的size，根据源码分析，有两种size的可能
+        // {@link com.google.zxing.qrcode.encoder.MatrixUtil.embedPositionDetectionPatternsAndSeparators}
+        int detectCornerSize = input.get(0, 5) == 1 ? 7 : 5;
+
         for (int inputY = 0, outputY = topPadding; inputY < inputHeight; inputY++, outputY += multiple) {
             // Write the contents of this row of the barcode
             for (int inputX = 0, outputX = leftPadding; inputX < inputWidth; inputX++, outputX += multiple) {
                 if (input.get(inputX, inputY) == 1) {
                     output.setRegion(outputX, outputY, multiple, multiple);
                 }
+
+
+                // 设置三个位置探测图形
+                if (inputX < detectCornerSize && inputY < detectCornerSize // 左上角
+                        || (inputX < detectCornerSize && inputY >= inputHeight - detectCornerSize) // 左下脚
+                        || (inputX >= inputWidth - detectCornerSize && inputY < detectCornerSize)) { // 右上角
+                    res.setRegion(outputX, outputY, multiple, multiple);
+                }
             }
         }
 
-        return output;
+        return res;
     }
 
 
@@ -146,7 +162,6 @@ public class QrCodeUtil {
     }
 
 
-
     /**
      * 根据二维码配置 & 二维码矩阵生成二维码图片
      *
@@ -155,27 +170,27 @@ public class QrCodeUtil {
      * @return
      * @throws IOException
      */
-    public static BufferedImage toBufferedImage(QrCodeOptions qrCodeConfig, BitMatrix bitMatrix) throws IOException {
+    public static BufferedImage toBufferedImage(QrCodeOptions qrCodeConfig, BitMatrixEx bitMatrix) throws IOException {
         int qrCodeWidth = bitMatrix.getWidth();
         int qrCodeHeight = bitMatrix.getHeight();
         BufferedImage qrCode = new BufferedImage(qrCodeWidth, qrCodeHeight, BufferedImage.TYPE_INT_RGB);
 
         for (int x = 0; x < qrCodeWidth; x++) {
             for (int y = 0; y < qrCodeHeight; y++) {
-                qrCode.setRGB(x, y,
-                        bitMatrix.get(x, y) ?
-                                qrCodeConfig.getMatrixToImageConfig().getPixelOnColor() :
-                                qrCodeConfig.getMatrixToImageConfig().getPixelOffColor());
+                if (bitMatrix.isDetectCorner(x, y)) { // 着色位置探测图形
+                    qrCode.setRGB(x, y,
+                            bitMatrix.get(x, y) ?
+                                    qrCodeConfig.getDetectCornerColor().getPixelOnColor() :
+                                    qrCodeConfig.getDetectCornerColor().getPixelOffColor());
+                } else { // 着色二维码主题
+                    qrCode.setRGB(x, y,
+                            bitMatrix.get(x, y) ?
+                                    qrCodeConfig.getMatrixToImageConfig().getPixelOnColor() :
+                                    qrCodeConfig.getMatrixToImageConfig().getPixelOffColor());
+                }
             }
         }
 
-        // 插入logo
-        if (!(qrCodeConfig.getLogo() == null || "".equals(qrCodeConfig.getLogo()))) {
-            ImageUtil.insertLogo(qrCode,
-                    qrCodeConfig.getLogo(),
-                    qrCodeConfig.getLogoStyle(),
-                    qrCodeConfig.getLogoBgColor());
-        }
 
         // 若二维码的实际宽高和预期的宽高不一致, 则缩放
         int realQrCodeWidth = qrCodeConfig.getW();
@@ -186,6 +201,25 @@ public class QrCodeUtil {
                     qrCode.getScaledInstance(realQrCodeWidth, realQrCodeHeight,
                             Image.SCALE_SMOOTH), 0, 0, null);
             qrCode = tmp;
+        }
+
+
+
+        // 绘制背景图
+        if (StringUtils.isNotBlank(qrCodeConfig.getBackground())) {
+            qrCode = ImageUtil.drawBackground(qrCode,
+                    qrCodeConfig.getBackground(),
+                    qrCodeConfig.getBgW(),
+                    qrCodeConfig.getBgH());
+        }
+
+
+        // 插入logo
+        if (!(qrCodeConfig.getLogo() == null || "".equals(qrCodeConfig.getLogo()))) {
+            ImageUtil.insertLogo(qrCode,
+                    qrCodeConfig.getLogo(),
+                    qrCodeConfig.getLogoStyle(),
+                    qrCodeConfig.getLogoBgColor());
         }
 
         return qrCode;

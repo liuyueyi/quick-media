@@ -1,8 +1,8 @@
 package com.hust.hui.quickmedia.web.api.qrcode;
 
-import com.google.zxing.client.j2se.MatrixToImageConfig;
 import com.hust.hui.quickmedia.common.qrcode.QrCodeDeWrapper;
 import com.hust.hui.quickmedia.common.qrcode.QrCodeGenWrapper;
+import com.hust.hui.quickmedia.common.qrcode.QrCodeOptions;
 import com.hust.hui.quickmedia.common.util.NumUtil;
 import com.hust.hui.quickmedia.web.entity.Response;
 import lombok.extern.slf4j.Slf4j;
@@ -45,12 +45,18 @@ public class QrCodeController {
 
         try {
             String qr = QrCodeGenWrapper.of(qrCodeRequest.getContent())
+                    .setBackground(qrCodeRequest.getBackground())
+                    .setBgW(qrCodeRequest.getBgW())
+                    .setBgH(qrCodeRequest.getBgH())
                     .setLogo(qrCodeRequest.getLogo())
+                    .setLogoStyle(QrCodeOptions.LogoStyle.getStyle(qrCodeRequest.getLogoStyle()))
+                    .setLogoBgColor(NumUtil.decode2int(qrCodeRequest.getLogoBorderColor(), 0xff00cc00))
                     .setCode(qrCodeRequest.getCharset())
                     .setW(qrCodeRequest.getSize())
                     .setH(qrCodeRequest.getSize())
-                    .setBgColor(NumUtil.decode2int(qrCodeRequest.getBgColor(), MatrixToImageConfig.WHITE))
-                    .setPreColor(NumUtil.decode2int(qrCodeRequest.getPreColor(), MatrixToImageConfig.BLACK))
+                    .setBgColor(NumUtil.decode2int(qrCodeRequest.getBgColor(), 0xFFFFFFFF))
+                    .setPreColor(NumUtil.decode2int(qrCodeRequest.getPreColor(), 0xFF000000))
+                    .setDetectCornerPreColor(NumUtil.decode2int(qrCodeRequest.getDetectedPreColor(), null))
                     .setPadding(qrCodeRequest.getPadding())
                     .asString();
             return new Response<>(new QrCodeResponse(qr));

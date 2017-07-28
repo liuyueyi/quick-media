@@ -19,6 +19,23 @@ public class QrCodeOptions {
 
 
     /**
+     * 二维码的背景图
+     */
+    private String background;
+
+    /**
+     * 背景图宽
+     */
+    private Integer bgW;
+
+
+    /**
+     * 背景图高
+     */
+    private Integer bgH;
+
+
+    /**
      * 二维码中间的logo
      */
     private String logo;
@@ -53,6 +70,12 @@ public class QrCodeOptions {
     private MatrixToImageConfig matrixToImageConfig;
 
 
+    /**
+     * 三个位置探测图形的背景色和前置色
+     */
+    private MatrixToImageConfig detectCornerColor;
+
+
     private Map<EncodeHintType, Object> hints;
 
 
@@ -65,5 +88,14 @@ public class QrCodeOptions {
     public enum LogoStyle {
         ROUND,
         NORMAL;
+
+
+        public static LogoStyle getStyle(String name) {
+            if ("ROUND".equalsIgnoreCase(name)) {
+                return ROUND;
+            } else {
+                return NORMAL;
+            }
+        }
     }
 }

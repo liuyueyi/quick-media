@@ -3,9 +3,9 @@ package com.hust.hui.quickmedia.common.qrcode;
 import com.google.zxing.EncodeHintType;
 import com.google.zxing.WriterException;
 import com.google.zxing.client.j2se.MatrixToImageConfig;
-import com.google.zxing.common.BitMatrix;
 import com.google.zxing.qrcode.decoder.ErrorCorrectionLevel;
 import com.hust.hui.quickmedia.common.util.Base64Util;
+import com.hust.hui.quickmedia.common.util.ColorUtil;
 import com.hust.hui.quickmedia.common.util.FileUtil;
 import com.hust.hui.quickmedia.common.util.QrCodeUtil;
 import lombok.ToString;
@@ -29,7 +29,7 @@ public class QrCodeGenWrapper {
 
 
     private static BufferedImage asBufferedImage(QrCodeOptions qrCodeConfig) throws WriterException, IOException {
-        BitMatrix bitMatrix = QrCodeUtil.encode(qrCodeConfig);
+        BitMatrixEx bitMatrix = QrCodeUtil.encode(qrCodeConfig);
         return QrCodeUtil.toBufferedImage(qrCodeConfig, bitMatrix);
     }
 
@@ -61,6 +61,24 @@ public class QrCodeGenWrapper {
          * The message to put into QrCode
          */
         private String msg;
+
+
+        /**
+         * background image
+         */
+        private String background;
+
+
+        /**
+         * background image width
+         */
+        private Integer bgW;
+
+
+        /**
+         * background image height
+         */
+        private Integer bgH;
 
 
         /**
@@ -106,6 +124,18 @@ public class QrCodeGenWrapper {
 
 
         /**
+         * 位置探测图形的背景色， 默认等同 {@link #bgColor }
+         */
+        private Integer detectCornerBgColor;
+
+
+        /**
+         * 位置探测图形的前置色， 默认等同 {@link #preColor}
+         */
+        private Integer detectCornerPreColor;
+
+
+        /**
          * qrcode message's code, default UTF-8
          */
         private String code = "utf-8";
@@ -138,6 +168,33 @@ public class QrCodeGenWrapper {
             return this;
         }
 
+        public String getBackground() {
+            return background;
+        }
+
+        public Builder setBackground(String background) {
+            this.background = background;
+            return this;
+        }
+
+        public Integer getBgW() {
+            return bgW == null ? getW() : bgW;
+        }
+
+        public Builder setBgW(Integer bgW) {
+            this.bgW = bgW;
+            return this;
+        }
+
+        public Integer getBgH() {
+            return bgH == null ? getH() : bgH;
+        }
+
+        public Builder setBgH(Integer bgH) {
+            this.bgH = bgH;
+            return this;
+        }
+
         public Builder setLogo(String logo) {
             this.logo = logo;
             return this;
@@ -150,8 +207,8 @@ public class QrCodeGenWrapper {
         }
 
 
-        public Builder setLogoBgColor(Color color) {
-            this.logoBgColor = color;
+        public Builder setLogoBgColor(int color) {
+            this.logoBgColor = ColorUtil.int2color(color);
             return this;
         }
 
@@ -197,6 +254,31 @@ public class QrCodeGenWrapper {
             this.preColor = preColor;
             return this;
         }
+
+
+
+        public Integer getDetectCornerBgColor() {
+            return detectCornerBgColor == null ? getBgColor() : detectCornerBgColor;
+        }
+
+
+//        前置色与背景色不同时，对于二维码的解析会有影响， 先屏蔽掉这个设置
+//        public Builder setDetectCornerBgColor(Integer detectCornerBgColor) {
+//            this.detectCornerBgColor = detectCornerBgColor;
+//            return this;
+//        }
+
+
+        public Integer getDetectCornerPreColor() {
+            return detectCornerPreColor == null ? getPreColor() : detectCornerPreColor;
+        }
+
+
+        public Builder setDetectCornerPreColor(Integer detectCornerPreColor) {
+            this.detectCornerPreColor = detectCornerPreColor;
+            return this;
+        }
+
 
         public Builder setCode(String code) {
             this.code = code;
@@ -247,6 +329,13 @@ public class QrCodeGenWrapper {
             qrCodeConfig.setMsg(getMsg());
             qrCodeConfig.setH(getH());
             qrCodeConfig.setW(getW());
+
+
+            // 设置背景图信息
+            qrCodeConfig.setBackground(getBackground());
+            qrCodeConfig.setBgW(getW());
+            qrCodeConfig.setBgH(getH());
+
             qrCodeConfig.setLogo(logo);
             qrCodeConfig.setLogoStyle(logoStyle);
             qrCodeConfig.setLogoBgColor(logoBgColor);
@@ -259,6 +348,7 @@ public class QrCodeGenWrapper {
             qrCodeConfig.setHints(hints);
 
 
+            // 设置二维码主题的着色
             MatrixToImageConfig config;
             if (getPreColor() == MatrixToImageConfig.BLACK
                     && getBgColor() == MatrixToImageConfig.WHITE) {
@@ -267,6 +357,16 @@ public class QrCodeGenWrapper {
                 config = new MatrixToImageConfig(getPreColor(), getBgColor());
             }
             qrCodeConfig.setMatrixToImageConfig(config);
+
+
+
+            // 设置三个位置探测图形的着色
+            if (getDetectCornerPreColor() == MatrixToImageConfig.BLACK
+                    && getDetectCornerBgColor() == MatrixToImageConfig.WHITE) {
+                qrCodeConfig.setDetectCornerColor(DEFAULT_CONFIG);
+            } else {
+                qrCodeConfig.setDetectCornerColor(new MatrixToImageConfig(getDetectCornerPreColor(), getDetectCornerBgColor()));
+            }
 
 
             return qrCodeConfig;

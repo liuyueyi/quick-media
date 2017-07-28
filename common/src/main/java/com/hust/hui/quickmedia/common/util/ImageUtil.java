@@ -42,8 +42,8 @@ public class ImageUtil {
         // 插入LOGO
         Graphics2D graph = qrCode.createGraphics();
 
-        int x = (QRCODE_WIDTH - w) / 2;
-        int y = (QRCODE_HEIGHT - h) / 2;
+        int x = (QRCODE_WIDTH - w) >> 1;
+        int y = (QRCODE_HEIGHT - h) >> 1;
 
         graph.drawImage(bf, x, y, w, h, null);
         graph.dispose();
@@ -105,7 +105,8 @@ public class ImageUtil {
 
         // ... then compositing the image on top,
         // using the white shape from above as alpha source
-        g2.setComposite(AlphaComposite.SrcAtop);
+//        g2.setComposite(AlphaComposite.SrcAtop);
+        g2.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_ATOP, 1.0f));
         g2.drawImage(image, size / 2, size / 2, null);
         g2.dispose();
 
@@ -151,4 +152,51 @@ public class ImageUtil {
         return output;
     }
 
+
+    /**
+     * 绘制背景图
+     *
+     * @param source     原图
+     * @param background 背景图
+     * @param bgW        背景图宽
+     * @param bgH        背景图高
+     * @return
+     * @throws IOException
+     */
+    public static BufferedImage drawBackground(BufferedImage source, String background, int bgW, int bgH) throws IOException {
+        int sW = source.getWidth();
+        int sH = source.getHeight();
+
+
+        // 背景的图宽高不应该小于原图
+        if (bgW < sW) {
+            bgW = sW;
+        }
+
+        if (bgH < sH) {
+            bgH = sH;
+        }
+
+
+        // 获取背景图
+        BufferedImage bg = getImageByPath(background);
+        if (bg.getWidth() != bgW || bg.getHeight() != bgH) { // 需要缩放
+            BufferedImage temp = new BufferedImage(bgW, bgH, BufferedImage.TYPE_INT_ARGB);
+            temp.getGraphics().drawImage(bg.getScaledInstance(bgW, bgH, Image.SCALE_SMOOTH)
+                    , 0, 0, null);
+            bg = temp;
+        }
+
+
+        // 绘制背景图
+        int x = (bgW - sW) >> 1;
+        int y = (bgH - sH) >> 1;
+        Graphics2D g2d = bg.createGraphics();
+        g2d.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_ATOP, 0.8f)); // 透明度， 避免看不到背景
+        g2d.drawImage(source, x, y, sW, sH, null);
+        g2d.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_ATOP, 1.0f));
+        g2d.dispose();
+        bg.flush();
+        return bg;
+    }
 }
