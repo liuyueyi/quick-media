@@ -113,6 +113,9 @@ public class QrCodeUtil {
         BitMatrix output = new BitMatrix(outputWidth, outputHeight);
 
         BitMatrixEx res = new BitMatrixEx(output);
+        res.setLeftPadding(leftPadding);
+        res.setTopPadding(topPadding);
+        res.setMultiple(multiple);
 
         // 获取位置探测图形的size，根据源码分析，有两种size的可能
         // {@link com.google.zxing.qrcode.encoder.MatrixUtil.embedPositionDetectionPatternsAndSeparators}
@@ -173,23 +176,7 @@ public class QrCodeUtil {
     public static BufferedImage toBufferedImage(QrCodeOptions qrCodeConfig, BitMatrixEx bitMatrix) throws IOException {
         int qrCodeWidth = bitMatrix.getWidth();
         int qrCodeHeight = bitMatrix.getHeight();
-        BufferedImage qrCode = new BufferedImage(qrCodeWidth, qrCodeHeight, BufferedImage.TYPE_INT_RGB);
-
-        for (int x = 0; x < qrCodeWidth; x++) {
-            for (int y = 0; y < qrCodeHeight; y++) {
-                if (bitMatrix.isDetectCorner(x, y)) { // 着色位置探测图形
-                    qrCode.setRGB(x, y,
-                            bitMatrix.get(x, y) ?
-                                    qrCodeConfig.getDetectCornerColor().getPixelOnColor() :
-                                    qrCodeConfig.getDetectCornerColor().getPixelOffColor());
-                } else { // 着色二维码主题
-                    qrCode.setRGB(x, y,
-                            bitMatrix.get(x, y) ?
-                                    qrCodeConfig.getMatrixToImageConfig().getPixelOnColor() :
-                                    qrCodeConfig.getMatrixToImageConfig().getPixelOffColor());
-                }
-            }
-        }
+        BufferedImage qrCode = ImageUtil.drawQrInfo(qrCodeConfig, bitMatrix);
 
 
         // 若二维码的实际宽高和预期的宽高不一致, 则缩放
@@ -202,7 +189,6 @@ public class QrCodeUtil {
                             Image.SCALE_SMOOTH), 0, 0, null);
             qrCode = tmp;
         }
-
 
 
         // 绘制背景图

@@ -124,13 +124,13 @@ public class QrCodeGenWrapper {
 
 
         /**
-         * 位置探测图形的背景色， 默认等同 {@link #bgColor }
+         * 位置探测图形的内框色， 默认等同 {@link #detectCornerPreColor }
          */
         private Integer detectCornerBgColor;
 
 
         /**
-         * 位置探测图形的前置色， 默认等同 {@link #preColor}
+         * 位置探测图形的外框色， 默认等同 {@link #preColor}
          */
         private Integer detectCornerPreColor;
 
@@ -157,6 +157,21 @@ public class QrCodeGenWrapper {
          * output qrcode image type, default png
          */
         private String picType = "png";
+
+
+        /**
+         * {@link QrCodeOptions.DrawStyle#name}
+         * draw qrcode msg info style
+         * 绘制二维码信息的样式
+         */
+        private String drawStyle;
+
+
+        /**
+         * draw qrcode msg info img
+         * 代表二维码信息的图片
+         */
+        private String drawImg;
 
 
         public String getMsg() {
@@ -256,17 +271,15 @@ public class QrCodeGenWrapper {
         }
 
 
-
         public Integer getDetectCornerBgColor() {
-            return detectCornerBgColor == null ? getBgColor() : detectCornerBgColor;
+            return detectCornerBgColor == null ? getDetectCornerPreColor() : detectCornerBgColor;
         }
 
 
-//        前置色与背景色不同时，对于二维码的解析会有影响， 先屏蔽掉这个设置
-//        public Builder setDetectCornerBgColor(Integer detectCornerBgColor) {
-//            this.detectCornerBgColor = detectCornerBgColor;
-//            return this;
-//        }
+        public Builder setDetectCornerBgColor(Integer detectCornerBgColor) {
+            this.detectCornerBgColor = detectCornerBgColor;
+            return this;
+        }
 
 
         public Integer getDetectCornerPreColor() {
@@ -311,8 +324,20 @@ public class QrCodeGenWrapper {
             return this;
         }
 
-        public void setErrorCorrection(ErrorCorrectionLevel errorCorrection) {
+        public Builder setErrorCorrection(ErrorCorrectionLevel errorCorrection) {
             this.errorCorrection = errorCorrection;
+            return this;
+        }
+
+
+        public Builder setDrawStyle(String drawStyle) {
+            this.drawStyle = drawStyle;
+            return this;
+        }
+
+        public Builder setDrawImg(String drawImg) {
+            this.drawImg = drawImg;
+            return this;
         }
 
         private void validate() {
@@ -359,7 +384,6 @@ public class QrCodeGenWrapper {
             qrCodeConfig.setMatrixToImageConfig(config);
 
 
-
             // 设置三个位置探测图形的着色
             if (getDetectCornerPreColor() == MatrixToImageConfig.BLACK
                     && getDetectCornerBgColor() == MatrixToImageConfig.WHITE) {
@@ -369,6 +393,9 @@ public class QrCodeGenWrapper {
             }
 
 
+            // 设置绘制二维码信息的style
+            qrCodeConfig.setDrawStyle(QrCodeOptions.DrawStyle.getDrawStyle(drawStyle));
+            qrCodeConfig.setDrawImg(drawImg);
             return qrCodeConfig;
         }
 

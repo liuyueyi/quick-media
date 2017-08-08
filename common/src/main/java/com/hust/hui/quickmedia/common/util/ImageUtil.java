@@ -1,9 +1,13 @@
 package com.hust.hui.quickmedia.common.util;
 
+import com.hust.hui.quickmedia.common.qrcode.BitMatrixEx;
 import com.hust.hui.quickmedia.common.qrcode.QrCodeOptions;
+import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang.StringUtils;
 
 import javax.imageio.ImageIO;
 import java.awt.*;
+import java.awt.geom.Rectangle2D;
 import java.awt.geom.RoundRectangle2D;
 import java.awt.image.BufferedImage;
 import java.io.File;
@@ -12,6 +16,7 @@ import java.io.IOException;
 /**
  * Created by yihui on 2017/4/7.
  */
+@Slf4j
 public class ImageUtil {
 
     /**
@@ -33,11 +38,12 @@ public class ImageUtil {
         // 获取logo图片
         BufferedImage bf = getImageByPath(logo);
         int size = bf.getWidth() / 15;
-        bf = ImageUtil.makeRoundBorder(bf, logoStyle, size, logoBgColor); // 边距为二维码图片的1/15
+        bf = ImageUtil.makeRoundBorder(bf, logoStyle, size, logoBgColor); // 边距为logo的1/15
 
         // logo的宽高
-        int w = bf.getWidth() > QRCODE_WIDTH * 2 / 10 ? QRCODE_WIDTH * 2 / 10 : bf.getWidth();
-        int h = bf.getHeight() > QRCODE_HEIGHT * 2 / 10 ? QRCODE_HEIGHT * 2 / 10 : bf.getHeight();
+        int logoRate = 12;
+        int w = bf.getWidth() > QRCODE_WIDTH * 2 / logoRate ? QRCODE_WIDTH * 2 / logoRate : bf.getWidth();
+        int h = bf.getHeight() > QRCODE_HEIGHT * 2 / logoRate ? QRCODE_HEIGHT * 2 / logoRate : bf.getHeight();
 
         // 插入LOGO
         Graphics2D graph = qrCode.createGraphics();
@@ -59,6 +65,10 @@ public class ImageUtil {
      * @throws IOException
      */
     public static BufferedImage getImageByPath(String path) throws IOException {
+        if (StringUtils.isBlank(path)) {
+            return null;
+        }
+
         if (path.startsWith("http")) { // 从网络获取logo
 //            return ImageIO.read(new URL(path));
             return ImageIO.read(HttpUtil.downFile(path));
@@ -192,11 +202,75 @@ public class ImageUtil {
         int x = (bgW - sW) >> 1;
         int y = (bgH - sH) >> 1;
         Graphics2D g2d = bg.createGraphics();
-        g2d.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_ATOP, 0.8f)); // 透明度， 避免看不到背景
+        g2d.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_ATOP, 0.85f)); // 透明度， 避免看不到背景
         g2d.drawImage(source, x, y, sW, sH, null);
         g2d.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_ATOP, 1.0f));
         g2d.dispose();
         bg.flush();
         return bg;
+    }
+
+
+    /**
+     * 绘制二维码信息
+     *
+     * @return
+     */
+    public static BufferedImage drawQrInfo(QrCodeOptions qrCodeConfig, BitMatrixEx bitMatrix) {
+        int qrCodeWidth = bitMatrix.getWidth();
+        int qrCodeHeight = bitMatrix.getHeight();
+        int infoSize = bitMatrix.getMultiple();
+        BufferedImage qrCode = new BufferedImage(qrCodeWidth, qrCodeHeight, BufferedImage.TYPE_INT_RGB);
+
+
+        Color bgColor = ColorUtil.int2color(qrCodeConfig.getMatrixToImageConfig().getPixelOffColor());
+        Color preColor = ColorUtil.int2color(qrCodeConfig.getMatrixToImageConfig().getPixelOnColor());
+
+        Color detectOutColor = ColorUtil.int2color(qrCodeConfig.getDetectCornerColor().getPixelOnColor());
+        Color detectInnerColor = ColorUtil.int2color(qrCodeConfig.getDetectCornerColor().getPixelOffColor());
+
+
+        Graphics2D g2 = qrCode.createGraphics();
+        g2.setComposite(AlphaComposite.Src);
+        g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+
+
+        // 直接背景铺满整个图
+        g2.setColor(bgColor);
+        g2.fillRect(0, 0, qrCodeWidth, qrCodeHeight);
+
+
+        BufferedImage drawImg = checkDrawImg(qrCodeConfig);
+        for (int x = bitMatrix.getLeftPadding(); x < qrCodeWidth; x += bitMatrix.getMultiple()) {
+            for (int y = bitMatrix.getTopPadding(); y < qrCodeHeight; y += bitMatrix.getMultiple()) {
+                // fixme 支持内框二维码的着色
+                if (bitMatrix.isDetectCorner(x, y)) { // 着色位置探测图形
+                    g2.setColor(bitMatrix.get(x, y) ? detectOutColor : bgColor);
+                    g2.fill(new Rectangle2D.Float(x, y, bitMatrix.getMultiple(), bitMatrix.getMultiple()));
+                } else if (bitMatrix.get(x, y)) { // 着色二维码主题
+                    g2.setColor(preColor);
+                    qrCodeConfig.getDrawStyle().draw(g2, x, y, infoSize, drawImg);
+                }
+            }
+        }
+        g2.dispose();
+        return qrCode;
+    }
+
+
+
+    private static BufferedImage checkDrawImg(QrCodeOptions qrCodeConfig) {
+        BufferedImage drawImg = null;
+        try {
+            drawImg = ImageUtil.getImageByPath(qrCodeConfig.getDrawImg());
+        } catch (Exception e) {
+            log.error("load draw img error! e: {}", e);
+        }
+
+        if (qrCodeConfig.getDrawStyle() == QrCodeOptions.DrawStyle.IMAGE && drawImg == null) {
+            throw new IllegalArgumentException("选择二维码信息绘制图片不存在!");
+        }
+
+        return drawImg;
     }
 }

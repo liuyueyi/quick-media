@@ -18,6 +18,22 @@ public class BitMatrixEx {
     private final int[] bits;
 
 
+    /**
+     * 左白边大小
+     */
+    private int leftPadding;
+
+    /**
+     * 上白边大小
+     */
+    private int topPadding;
+
+    /**
+     * 矩阵信息缩放比例
+     */
+    private int multiple;
+
+
     private BitMatrix bitMatrix;
 
     public BitMatrixEx(BitMatrix bitMatrix) {
