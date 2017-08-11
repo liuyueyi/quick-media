@@ -138,6 +138,10 @@ public class QrCodeUtil {
             }
         }
 
+
+
+        res.setByteMatrix(input);
+
         return res;
     }
 
@@ -176,7 +180,8 @@ public class QrCodeUtil {
     public static BufferedImage toBufferedImage(QrCodeOptions qrCodeConfig, BitMatrixEx bitMatrix) throws IOException {
         int qrCodeWidth = bitMatrix.getWidth();
         int qrCodeHeight = bitMatrix.getHeight();
-        BufferedImage qrCode = ImageUtil.drawQrInfo(qrCodeConfig, bitMatrix);
+//        BufferedImage qrCode = ImageUtil.drawQrInfo(qrCodeConfig, bitMatrix);
+        BufferedImage qrCode = ImageUtil.drawQrInfoV2(qrCodeConfig, bitMatrix);
 
 
         // 若二维码的实际宽高和预期的宽高不一致, 则缩放

@@ -211,6 +211,80 @@ public class ImageUtil {
     }
 
 
+    public static BufferedImage drawQrInfoV2(QrCodeOptions qrCodeConfig, BitMatrixEx bitMatrix) {
+        int qrCodeWidth = bitMatrix.getWidth();
+        int qrCodeHeight = bitMatrix.getHeight();
+        int infoSize = bitMatrix.getMultiple();
+        BufferedImage qrCode = new BufferedImage(qrCodeWidth, qrCodeHeight, BufferedImage.TYPE_INT_RGB);
+
+
+        Color bgColor = ColorUtil.int2color(qrCodeConfig.getMatrixToImageConfig().getPixelOffColor());
+        Color preColor = ColorUtil.int2color(qrCodeConfig.getMatrixToImageConfig().getPixelOnColor());
+
+        Color detectOutColor = ColorUtil.int2color(qrCodeConfig.getDetectCornerColor().getPixelOnColor());
+        Color detectInnerColor = ColorUtil.int2color(qrCodeConfig.getDetectCornerColor().getPixelOffColor());
+
+        int leftPadding = bitMatrix.getLeftPadding();
+        int topPadding = bitMatrix.getTopPadding();
+
+        Graphics2D g2 = qrCode.createGraphics();
+        g2.setComposite(AlphaComposite.Src);
+        g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+
+
+        // 直接背景铺满整个图
+        g2.setColor(bgColor);
+        g2.fillRect(0, 0, qrCodeWidth, qrCodeHeight);
+        BufferedImage drawImg = checkDrawImg(qrCodeConfig);
+
+
+        int detectCornerSize = bitMatrix.getByteMatrix().get(0, 5) == 1 ? 7 : 5;
+
+        int byteW = bitMatrix.getByteMatrix().getWidth();
+        int byteH = bitMatrix.getByteMatrix().getHeight();
+        for (int x = 0; x < byteW; x++) {
+            for (int y = 0; y < byteH; y++) {
+                // 设置三个位置探测图形
+                if (x < detectCornerSize && y < detectCornerSize // 左上角
+                        || (x < detectCornerSize && y >= byteH - detectCornerSize) // 左下脚
+                        || (x >= byteW - detectCornerSize && y < detectCornerSize)) { // 右上角
+                    if (bitMatrix.getByteMatrix().get(x, y) == 0) {
+                        continue;
+                    }
+
+
+                    if (x == 0 || x == detectCornerSize - 1 || x == byteW - 1 || x == byteW - detectCornerSize
+                            || y == 0 || y == detectCornerSize - 1 || y == byteH - 1 || y == byteH - detectCornerSize) {
+                        // 外层的框
+                        g2.setColor(detectOutColor);
+                    } else {
+                        // 内层的框
+                        g2.setColor(detectInnerColor);
+                    }
+
+                    g2.fillRect(leftPadding + x * infoSize, topPadding + y * infoSize, infoSize, infoSize);
+                } else if (bitMatrix.getByteMatrix().get(x, y) == 1) { // 着色二维码主题
+                    g2.setColor(preColor);
+
+                    if (x + 1 < byteW && y + 1 < byteH &&
+                            bitMatrix.getByteMatrix().get(x + 1, y) == 1 &&
+                            bitMatrix.getByteMatrix().get(x, y + 1) == 1 &&
+                            bitMatrix.getByteMatrix().get(x + 1, y + 1) == 1) {
+                        bitMatrix.getByteMatrix().set(x + 1, y, 0);
+                        bitMatrix.getByteMatrix().set(x + 1, y + 1, 0);
+                        bitMatrix.getByteMatrix().set(x, y + 1, 0);
+                        qrCodeConfig.getDrawStyle().draw(g2, leftPadding + x * infoSize, topPadding + y * infoSize, infoSize << 1, drawImg);
+                    } else {
+                        qrCodeConfig.getDrawStyle().draw(g2, leftPadding + x * infoSize, topPadding + y * infoSize, infoSize, drawImg);
+                    }
+                }
+            }
+        }
+        g2.dispose();
+        return qrCode;
+    }
+
+
     /**
      * 绘制二维码信息
      *
@@ -256,7 +330,6 @@ public class ImageUtil {
         g2.dispose();
         return qrCode;
     }
-
 
 
     private static BufferedImage checkDrawImg(QrCodeOptions qrCodeConfig) {

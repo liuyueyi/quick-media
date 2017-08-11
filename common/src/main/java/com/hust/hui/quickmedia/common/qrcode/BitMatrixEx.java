@@ -1,6 +1,7 @@
 package com.hust.hui.quickmedia.common.qrcode;
 
 import com.google.zxing.common.BitMatrix;
+import com.google.zxing.qrcode.encoder.ByteMatrix;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -35,6 +36,12 @@ public class BitMatrixEx {
 
 
     private BitMatrix bitMatrix;
+
+
+    @Getter
+    @Setter
+    private ByteMatrix byteMatrix;
+
 
     public BitMatrixEx(BitMatrix bitMatrix) {
         this(bitMatrix.getWidth(), bitMatrix.getHeight());
