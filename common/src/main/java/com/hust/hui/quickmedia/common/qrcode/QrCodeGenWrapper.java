@@ -4,11 +4,9 @@ import com.google.zxing.EncodeHintType;
 import com.google.zxing.WriterException;
 import com.google.zxing.client.j2se.MatrixToImageConfig;
 import com.google.zxing.qrcode.decoder.ErrorCorrectionLevel;
-import com.hust.hui.quickmedia.common.util.Base64Util;
-import com.hust.hui.quickmedia.common.util.ColorUtil;
-import com.hust.hui.quickmedia.common.util.FileUtil;
-import com.hust.hui.quickmedia.common.util.QrCodeUtil;
+import com.hust.hui.quickmedia.common.util.*;
 import lombok.ToString;
+import lombok.extern.slf4j.Slf4j;
 
 import javax.imageio.ImageIO;
 import java.awt.*;
@@ -16,6 +14,7 @@ import java.awt.image.BufferedImage;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -54,6 +53,7 @@ public class QrCodeGenWrapper {
 
 
     @ToString
+    @Slf4j
     public static class Builder {
         private static final MatrixToImageConfig DEFAULT_CONFIG = new MatrixToImageConfig();
 
@@ -61,43 +61,6 @@ public class QrCodeGenWrapper {
          * The message to put into QrCode
          */
         private String msg;
-
-
-        /**
-         * background image
-         */
-        private String background;
-
-
-        /**
-         * background image width
-         */
-        private Integer bgW;
-
-
-        /**
-         * background image height
-         */
-        private Integer bgH;
-
-
-        /**
-         * qrcode center logo
-         */
-        private String logo;
-
-
-        /**
-         * logo的样式
-         */
-        private QrCodeOptions.LogoStyle logoStyle = QrCodeOptions.LogoStyle.NORMAL;
-
-
-        /**
-         * logo的边框背景色
-         */
-        private Color logoBgColor = Color.WHITE;
-
 
         /**
          * qrcode image width
@@ -109,30 +72,6 @@ public class QrCodeGenWrapper {
          * qrcode image height
          */
         private Integer h;
-
-
-        /**
-         * qrcode bgcolor, default white
-         */
-        private Integer bgColor;
-
-
-        /**
-         * qrcode msg color, default black
-         */
-        private Integer preColor;
-
-
-        /**
-         * 位置探测图形的内框色， 默认等同 {@link #detectCornerPreColor }
-         */
-        private Integer detectCornerBgColor;
-
-
-        /**
-         * 位置探测图形的外框色， 默认等同 {@link #preColor}
-         */
-        private Integer detectCornerPreColor;
 
 
         /**
@@ -159,19 +98,39 @@ public class QrCodeGenWrapper {
         private String picType = "png";
 
 
-        /**
-         * {@link QrCodeOptions.DrawStyle#name}
-         * draw qrcode msg info style
-         * 绘制二维码信息的样式
-         */
-        private String drawStyle;
+        private QrCodeOptions.BgImgOptions.BgImgOptionsBuilder bgImgOptions;
+
+        private QrCodeOptions.LogoOptions.LogoOptionsBuilder logoOptions;
+
+        private QrCodeOptions.DrawOptions.DrawOptionsBuilder drawOptions;
+
+        private QrCodeOptions.DetectOptions.DetectOptionsBuilder detectOptions;
 
 
-        /**
-         * draw qrcode msg info img
-         * 代表二维码信息的图片
-         */
-        private String drawImg;
+        public Builder() {
+            // 背景图默认采用覆盖方式
+            bgImgOptions = QrCodeOptions.BgImgOptions.builder()
+                    .bgImgStyle(QrCodeOptions.BgImgStyle.OVERRIDE)
+                    .opacity(0.85f);
+
+
+            // 默认采用普通格式的logo， 无边框
+            logoOptions = QrCodeOptions.LogoOptions.builder()
+                    .logoStyle(QrCodeOptions.LogoStyle.NORMAL)
+                    .border(false)
+                    .rate(12);
+
+
+            // 绘制信息，默认黑白方块
+            drawOptions = QrCodeOptions.DrawOptions.builder()
+                    .drawStyle(QrCodeOptions.DrawStyle.RECT)
+                    .bgColor(Color.WHITE)
+                    .preColor(Color.BLACK)
+                    .enableScale(false);
+
+            // 探测图形
+            detectOptions = QrCodeOptions.DetectOptions.builder();
+        }
 
 
         public String getMsg() {
@@ -182,51 +141,6 @@ public class QrCodeGenWrapper {
             this.msg = msg;
             return this;
         }
-
-        public String getBackground() {
-            return background;
-        }
-
-        public Builder setBackground(String background) {
-            this.background = background;
-            return this;
-        }
-
-        public Integer getBgW() {
-            return bgW == null ? getW() : bgW;
-        }
-
-        public Builder setBgW(Integer bgW) {
-            this.bgW = bgW;
-            return this;
-        }
-
-        public Integer getBgH() {
-            return bgH == null ? getH() : bgH;
-        }
-
-        public Builder setBgH(Integer bgH) {
-            this.bgH = bgH;
-            return this;
-        }
-
-        public Builder setLogo(String logo) {
-            this.logo = logo;
-            return this;
-        }
-
-
-        public Builder setLogoStyle(QrCodeOptions.LogoStyle logoStyle) {
-            this.logoStyle = logoStyle;
-            return this;
-        }
-
-
-        public Builder setLogoBgColor(int color) {
-            this.logoBgColor = ColorUtil.int2color(color);
-            return this;
-        }
-
 
         public Integer getW() {
             return w == null ? (h == null ? 200 : h) : w;
@@ -251,47 +165,6 @@ public class QrCodeGenWrapper {
             this.h = h;
             return this;
         }
-
-        public Integer getBgColor() {
-            return bgColor == null ? MatrixToImageConfig.WHITE : bgColor;
-        }
-
-        public Builder setBgColor(Integer bgColor) {
-            this.bgColor = bgColor;
-            return this;
-        }
-
-        public Integer getPreColor() {
-            return preColor == null ? MatrixToImageConfig.BLACK : preColor;
-        }
-
-        public Builder setPreColor(Integer preColor) {
-            this.preColor = preColor;
-            return this;
-        }
-
-
-        public Integer getDetectCornerBgColor() {
-            return detectCornerBgColor == null ? getDetectCornerPreColor() : detectCornerBgColor;
-        }
-
-
-        public Builder setDetectCornerBgColor(Integer detectCornerBgColor) {
-            this.detectCornerBgColor = detectCornerBgColor;
-            return this;
-        }
-
-
-        public Integer getDetectCornerPreColor() {
-            return detectCornerPreColor == null ? getPreColor() : detectCornerPreColor;
-        }
-
-
-        public Builder setDetectCornerPreColor(Integer detectCornerPreColor) {
-            this.detectCornerPreColor = detectCornerPreColor;
-            return this;
-        }
-
 
         public Builder setCode(String code) {
             this.code = code;
@@ -330,15 +203,319 @@ public class QrCodeGenWrapper {
         }
 
 
-        public Builder setDrawStyle(String drawStyle) {
-            this.drawStyle = drawStyle;
+        /////////////// logo 相关配置 ///////////////
+
+        public Builder setLogo(String logo) throws IOException {
+            try {
+                return setLogo(ImageUtil.getImageByPath(logo));
+            } catch (IOException e) {
+                log.error("load logo error! e:{}", e);
+                throw new IOException("load logo error!", e);
+            }
+        }
+
+        public Builder setLogo(InputStream inputStream) throws IOException {
+            try {
+                return setLogo(ImageIO.read(inputStream));
+            } catch (IOException e) {
+                log.error("load backgroundImg error! e:{}", e);
+                throw new IOException("load backgroundImg error!", e);
+            }
+        }
+
+        public Builder setLogo(BufferedImage img) {
+            logoOptions.logo(img);
             return this;
         }
 
-        public Builder setDrawImg(String drawImg) {
-            this.drawImg = drawImg;
+        public Builder setLogoStyle(QrCodeOptions.LogoStyle logoStyle) {
+            logoOptions.logoStyle(logoStyle);
             return this;
         }
+
+        public Builder setLogoBgColor(int color) {
+            return setLogoBgColor(ColorUtil.int2color(color));
+        }
+
+        public Builder setLogoBgColor(Color color) {
+            logoOptions.border(true);
+            logoOptions.borderColor(color);
+            return this;
+        }
+
+        public Builder setLogoBorder(boolean border) {
+            logoOptions.border(border);
+            return this;
+        }
+
+        public Builder setLogoRate(int rate) {
+            logoOptions.rate(rate);
+            return this;
+        }
+
+        ///////////////// logo配置结束 ///////////////
+
+
+        // ------------------------------------------
+
+
+        /////////////// 背景 相关配置 ///////////////
+
+        public Builder setBgImg(String bgImg) throws IOException {
+            try {
+                return setBgImg(ImageUtil.getImageByPath(bgImg));
+            } catch (IOException e) {
+                log.error("load backgroundImg error! e:{}", e);
+                throw new IOException("load backgroundImg error!", e);
+            }
+        }
+
+
+        public Builder setBgImg(InputStream inputStream) throws IOException {
+            try {
+                return setBgImg(ImageIO.read(inputStream));
+            } catch (IOException e) {
+                log.error("load backgroundImg error! e:{}", e);
+                throw new IOException("load backgroundImg error!", e);
+            }
+        }
+
+
+        public Builder setBgImg(BufferedImage bufferedImage) {
+            bgImgOptions.bgImg(bufferedImage);
+            return this;
+        }
+
+
+        public Builder setBgStyle(QrCodeOptions.BgImgStyle bgImgStyle) {
+            bgImgOptions.bgImgStyle(bgImgStyle);
+            return this;
+        }
+
+
+        public Builder setBgW(int w) {
+            bgImgOptions.bgW(w);
+            return this;
+        }
+
+        public Builder setBgH(int h) {
+            bgImgOptions.bgH(h);
+            return this;
+        }
+
+
+        public Builder setBgOpacity(float opacity) {
+            bgImgOptions.opacity(opacity);
+            return this;
+        }
+
+
+        public Builder setBgStartX(int startX) {
+            bgImgOptions.startX(startX);
+            return this;
+        }
+
+        public Builder setBgStartY(int startY) {
+            bgImgOptions.startY(startY);
+            return this;
+        }
+
+
+        /////////////// logo 配置结束 ///////////////
+
+
+        // ------------------------------------------
+
+
+        /////////////// 探测图形 相关配置 ///////////////
+        public Builder setDetectImg(String detectImg) throws IOException {
+            try {
+                return setDetectImg(ImageUtil.getImageByPath(detectImg));
+            } catch (IOException e) {
+                log.error("load detectImage error! e:{}", e);
+                throw new IOException("load detectImage error!", e);
+            }
+        }
+
+
+        public Builder setDetectImg(InputStream detectImg) throws IOException {
+            try {
+                return setDetectImg(ImageIO.read(detectImg));
+            } catch (IOException e) {
+                log.error("load detectImage error! e:{}", e);
+                throw new IOException("load detectImage error!", e);
+            }
+        }
+
+
+        public Builder setDetectImg(BufferedImage detectImg) {
+            detectOptions.detectImg(detectImg);
+            return this;
+        }
+
+
+        public Builder setDetectOutColor(int outColor) {
+            return setDetectOutColor(ColorUtil.int2color(outColor));
+        }
+
+        public Builder setDetectOutColor(Color outColor) {
+            detectOptions.outColor(outColor);
+            return this;
+        }
+
+        public Builder setDetectInColor(int inColor) {
+            return setDetectInColor(ColorUtil.int2color(inColor));
+        }
+
+        public Builder setDetectInColor(Color inColor) {
+            detectOptions.inColor(inColor);
+            return this;
+        }
+
+        /////////////// 探测图形 配置结束 ///////////////
+
+
+        // ------------------------------------------
+
+
+        /////////////// 二维码绘制 相关配置 ///////////////
+
+        public Builder setDrawStyle(String style) {
+            return setDrawStyle(QrCodeOptions.DrawStyle.getDrawStyle(style));
+        }
+
+
+        public Builder setDrawStyle(QrCodeOptions.DrawStyle drawStyle) {
+            drawOptions.drawStyle(drawStyle);
+            return this;
+        }
+
+
+        public Builder setDrawPreColor(int color) {
+            return setDrawPreColor(ColorUtil.int2color(color));
+        }
+
+
+        public Builder setDrawPreColor(Color color) {
+            drawOptions.preColor(color);
+            return this;
+        }
+
+        public Builder setDrawBgColor(int color) {
+            return setDrawBgColor(ColorUtil.int2color(color));
+        }
+
+        public Builder setDrawBgColor(Color color) {
+            drawOptions.bgColor(color);
+            return this;
+        }
+
+        public Builder setDrawEnableScale(boolean enable) {
+            drawOptions.enableScale(enable);
+            return this;
+        }
+
+
+        public Builder setDrawImg(String img) throws IOException {
+            try {
+                return setDrawImg(ImageUtil.getImageByPath(img));
+            } catch (IOException e) {
+                log.error("load draw img error! e: {}", e);
+                throw new IOException("load draw img error!", e);
+            }
+        }
+
+        public Builder setDrawImg(InputStream input) throws IOException {
+            try {
+                return setDrawImg(ImageIO.read(input));
+            } catch (IOException e) {
+                log.error("load draw img error! e: {}", e);
+                throw new IOException("load draw img error!", e);
+            }
+        }
+
+        public Builder setDrawImg(BufferedImage img) {
+            drawOptions.img(img);
+            return this;
+        }
+
+
+        public Builder setDrawRow2Img(BufferedImage row2img) {
+            drawOptions.enableScale(true);
+            drawOptions.row2Img(row2img);
+            return this;
+        }
+
+        public Builder setDrawRow2Img(String row2img) throws IOException {
+            try {
+                return setDrawRow2Img(ImageUtil.getImageByPath(row2img));
+            } catch (IOException e) {
+                log.error("load draw row2img error! e: {}", e);
+                throw new IOException("load draw row2img error!", e);
+            }
+        }
+
+        public Builder setDrawRow2Img(InputStream row2img) throws IOException {
+            try {
+                return setDrawRow2Img(ImageIO.read(row2img));
+            } catch (IOException e) {
+                log.error("load draw row2img error! e: {}", e);
+                throw new IOException("load draw row2img error!", e);
+            }
+        }
+
+
+        public Builder setDrawCol2Img(BufferedImage col2img) {
+            drawOptions.enableScale(true);
+            drawOptions.col2img(col2img);
+            return this;
+        }
+
+        public Builder setDrawCol2Img(String col2img) throws IOException {
+            try {
+                return setDrawCol2Img(ImageUtil.getImageByPath(col2img));
+            } catch (IOException e) {
+                log.error("load draw col2img error! e: {}", e);
+                throw new IOException("load draw col2img error!", e);
+            }
+        }
+
+        public Builder setDrawCol2Img(InputStream col2img) throws IOException {
+            try {
+                return setDrawCol2Img(ImageIO.read(col2img));
+            } catch (IOException e) {
+                log.error("load draw col2img error! e: {}", e);
+                throw new IOException("load draw col2img error!", e);
+            }
+        }
+
+
+        public Builder setDrawSize4Img(BufferedImage size4Img) {
+            drawOptions.enableScale(true);
+            drawOptions.size4Img(size4Img);
+            return this;
+        }
+
+        public Builder setDrawSize4Img(String size4img) throws IOException {
+            try {
+                return setDrawSize4Img(ImageUtil.getImageByPath(size4img));
+            } catch (IOException e) {
+                log.error("load draw size4img error! e: {}", e);
+                throw new IOException("load draw size4img error!", e);
+            }
+        }
+
+        public Builder setDrawSize4Img(InputStream size4img) throws IOException {
+            try {
+                return setDrawSize4Img(ImageIO.read(size4img));
+            } catch (IOException e) {
+                log.error("load draw size4img error! e: {}", e);
+                throw new IOException("load draw size4img error!", e);
+            }
+        }
+
+        /////////////// 二维码绘制 配置结束 ///////////////
+
 
         private void validate() {
             if (msg == null || msg.length() == 0) {
@@ -356,46 +533,52 @@ public class QrCodeGenWrapper {
             qrCodeConfig.setW(getW());
 
 
-            // 设置背景图信息
-            qrCodeConfig.setBackground(getBackground());
-            qrCodeConfig.setBgW(getW());
-            qrCodeConfig.setBgH(getH());
+            // 设置背景信息
+            QrCodeOptions.BgImgOptions bgOp = bgImgOptions.build();
+            if (bgOp.getBgImg() == null) {
+                qrCodeConfig.setBgImgOptions(null);
+            } else {
+                qrCodeConfig.setBgImgOptions(bgOp);
+            }
 
-            qrCodeConfig.setLogo(logo);
-            qrCodeConfig.setLogoStyle(logoStyle);
-            qrCodeConfig.setLogoBgColor(logoBgColor);
+
+            // 设置logo信息
+            QrCodeOptions.LogoOptions logoOp = logoOptions.build();
+            if (logoOp.getLogo() == null) {
+                qrCodeConfig.setLogoOptions(null);
+            } else {
+                qrCodeConfig.setLogoOptions(logoOp);
+            }
+
+
+            // 绘制信息
+            QrCodeOptions.DrawOptions drawOp = drawOptions.build();
+            qrCodeConfig.setDrawOptions(drawOp);
+
+
+            // 设置detect绘制信息
+            QrCodeOptions.DetectOptions detectOp = detectOptions.build();
+            if (detectOp.getOutColor() == null && detectOp.getInColor() == null) {
+                detectOp.setInColor(drawOp.getPreColor());
+                detectOp.setOutColor(drawOp.getPreColor());
+            } else if (detectOp.getOutColor() == null) {
+                detectOp.setOutColor(detectOp.getOutColor());
+            } else if (detectOp.getInColor() == null) {
+                detectOp.setInColor(detectOp.getInColor());
+            }
+            qrCodeConfig.setDetectOptions(detectOp);
+
+
+            // 设置输出图片格式
             qrCodeConfig.setPicType(picType);
 
+            // 设置精度参数
             Map<EncodeHintType, Object> hints = new HashMap<>(3);
             hints.put(EncodeHintType.ERROR_CORRECTION, errorCorrection);
             hints.put(EncodeHintType.CHARACTER_SET, code);
             hints.put(EncodeHintType.MARGIN, this.getPadding());
             qrCodeConfig.setHints(hints);
 
-
-            // 设置二维码主题的着色
-            MatrixToImageConfig config;
-            if (getPreColor() == MatrixToImageConfig.BLACK
-                    && getBgColor() == MatrixToImageConfig.WHITE) {
-                config = DEFAULT_CONFIG;
-            } else {
-                config = new MatrixToImageConfig(getPreColor(), getBgColor());
-            }
-            qrCodeConfig.setMatrixToImageConfig(config);
-
-
-            // 设置三个位置探测图形的着色
-            if (getDetectCornerPreColor() == MatrixToImageConfig.BLACK
-                    && getDetectCornerBgColor() == MatrixToImageConfig.WHITE) {
-                qrCodeConfig.setDetectCornerColor(DEFAULT_CONFIG);
-            } else {
-                qrCodeConfig.setDetectCornerColor(new MatrixToImageConfig(getDetectCornerPreColor(), getDetectCornerBgColor()));
-            }
-
-
-            // 设置绘制二维码信息的style
-            qrCodeConfig.setDrawStyle(QrCodeOptions.DrawStyle.getDrawStyle(drawStyle));
-            qrCodeConfig.setDrawImg(drawImg);
             return qrCodeConfig;
         }
 
