@@ -48,6 +48,11 @@
  自定义图片：使用自定义的图片来代替传统的纯色 （建议jpg格式非透明的图片）
   
   ![styl2](doc/img/qrcode/styleQr2.png)
+  
+ 
+ 深度定制：二维码上的所有信息都可以进行自定义替换，如下
+ 
+  ![style3](doc/img/qrcode/小灰灰blog.png)
 
 
 ---
@@ -66,6 +71,18 @@
     - xxx
     
 2. 视频相关
+
+
+### tag 记录
+
+1. [v0.001](https://github.com/liuyueyi/quick-media/releases/tag/v0.001)
+
+    - 实现音频转码服务
+    - 实现二维码基础服务，完成基于zxing的二维码深度定制
+ 
+2. [v0.002](https://github.com/liuyueyi/quick-media/releases/tag/v0.002)
+
+    - 重写zxing的二维码渲染逻辑，只使用二维码矩阵的生成逻辑，支持二维码的全面定制化
 
 
 ### 文档

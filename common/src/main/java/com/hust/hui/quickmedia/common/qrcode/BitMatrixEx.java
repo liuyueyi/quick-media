@@ -1,6 +1,6 @@
 package com.hust.hui.quickmedia.common.qrcode;
 
-import com.google.zxing.common.BitMatrix;
+import com.google.zxing.qrcode.encoder.ByteMatrix;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -12,10 +12,16 @@ import lombok.Setter;
 @Getter
 @Setter
 public class BitMatrixEx {
-    private final int width;
-    private final int height;
-    private final int rowSize;
-    private final int[] bits;
+    /**
+     * 实际生成二维码的宽
+     */
+    private int width;
+
+
+    /**
+     * 实际生成二维码的高
+     */
+    private int height;
 
 
     /**
@@ -33,48 +39,5 @@ public class BitMatrixEx {
      */
     private int multiple;
 
-
-    private BitMatrix bitMatrix;
-
-    public BitMatrixEx(BitMatrix bitMatrix) {
-        this(bitMatrix.getWidth(), bitMatrix.getHeight());
-        this.bitMatrix = bitMatrix;
-
-    }
-
-    private BitMatrixEx(int width, int height) {
-        if (width < 1 || height < 1) {
-            throw new IllegalArgumentException("Both dimensions must be greater than 0");
-        }
-
-        this.width = width;
-        this.height = height;
-        this.rowSize = (width + 31) / 32;
-        bits = new int[rowSize * height];
-    }
-
-
-
-    public void setRegion(int left, int top, int width, int height) {
-        int right = left + width;
-        int bottom = top + height;
-
-        for (int y = top; y < bottom; y++) {
-            int offset = y * rowSize;
-            for (int x = left; x < right; x++) {
-                bits[offset + (x / 32)] |= 1 << (x & 0x1f);
-            }
-        }
-    }
-
-
-    public boolean get(int x, int y) {
-        return bitMatrix.get(x, y);
-    }
-
-
-    public boolean isDetectCorner(int x, int y) {
-        int offset = y * rowSize + (x / 32);
-        return ((bits[offset] >>> (x & 0x1f)) & 1) != 0;
-    }
+    private ByteMatrix byteMatrix;
 }

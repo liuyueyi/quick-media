@@ -1,6 +1,10 @@
 package com.hust.hui.quickmedia.common.test;
 
+import com.google.zxing.ChecksumException;
+import com.google.zxing.FormatException;
+import com.google.zxing.NotFoundException;
 import com.google.zxing.qrcode.decoder.ErrorCorrectionLevel;
+import com.hust.hui.quickmedia.common.qrcode.QrCodeDeWrapper;
 import com.hust.hui.quickmedia.common.qrcode.QrCodeGenWrapper;
 import com.hust.hui.quickmedia.common.qrcode.QrCodeOptions;
 import com.hust.hui.quickmedia.common.util.Base64Util;
@@ -9,14 +13,25 @@ import lombok.extern.slf4j.Slf4j;
 import org.junit.Test;
 
 import javax.imageio.ImageIO;
+import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.ByteArrayOutputStream;
+import java.io.IOException;
 
 /**
  * Created by yihui on 2017/7/17.
  */
 @Slf4j
 public class QrCodeWrapperTest {
+
+
+    @Test
+    public void testDepaseQrCode() throws FormatException, ChecksumException, NotFoundException, IOException {
+        String img = "https://static.oschina.net/uploads/img/201707/09205944_0PzS.jpg";
+
+        String ans = QrCodeDeWrapper.decode(img);
+        System.out.println(ans);
+    }
 
 
     /**
@@ -28,7 +43,7 @@ public class QrCodeWrapperTest {
 
         try {
             String out = QrCodeGenWrapper.of(msg).asString();
-            System.out.println(out);
+            System.out.println("<img src=\"data:image/png;base64," + out + "\" />");
         } catch (Exception e) {
             System.out.println("create qrcode error! e: " + e);
             Assert.assertTrue(false);
@@ -56,8 +71,8 @@ public class QrCodeWrapperTest {
         try {
             boolean ans = QrCodeGenWrapper.of(msg)
                     .setW(300)
-                    .setPreColor(0xffff0000)
-                    .setBgColor(0xffffffff)
+                    .setDrawPreColor(0xffff0000)
+                    .setDrawBgColor(0xffffffff)
                     .setPadding(0)
                     .asFile("src/test/qrcode/gen_300x300.png");
             System.out.println(ans);
@@ -72,11 +87,12 @@ public class QrCodeWrapperTest {
             String logo = "https://static.oschina.net/uploads/user/283/566591_100.jpeg";
             boolean ans = QrCodeGenWrapper.of(msg)
                     .setW(300)
-                    .setPreColor(0xffff0000)
-                    .setBgColor(0xffffffff)
+                    .setDrawPreColor(0xffff0000)
+                    .setDrawBgColor(0xffffffff)
                     .setPadding(0)
                     .setLogo(logo)
                     .setLogoBgColor(0xff808080)
+                    .setLogoBorder(true)
                     .asFile("src/test/qrcode/gen_300x300_logo.png");
             System.out.println(ans);
         } catch (Exception e) {
@@ -90,12 +106,13 @@ public class QrCodeWrapperTest {
             String logo = "logo.jpg";
             boolean ans = QrCodeGenWrapper.of(msg)
                     .setW(300)
-                    .setPreColor(0xffff0000)
-                    .setBgColor(0xffffffff)
+                    .setDrawPreColor(0xffff0000)
+                    .setDrawBgColor(0xffffffff)
                     .setPadding(0)
                     .setLogo(logo)
                     .setLogoStyle(QrCodeOptions.LogoStyle.ROUND)
                     .setLogoBgColor(0xff00ff00)
+                    .setLogoBorder(true)
                     .asFile("src/test/qrcode/gen_300x300_logo_v2.png");
             System.out.println(ans);
         } catch (Exception e) {
@@ -104,21 +121,52 @@ public class QrCodeWrapperTest {
         }
 
 
-        // 根据本地文件生成待logo的二维码， 重新着色位置探测图像
+        // 根据本地文件生成待logo的二维码，无边框， 重新着色位置探测图像， 设置背景
         try {
             String logo = "logo.jpg";
             String bg = "bg.png";
             boolean ans = QrCodeGenWrapper.of(msg)
                     .setW(300)
-                    .setPreColor(0xff0000ff)
-                    .setBgColor(0xffffffff)
-                    .setDetectCornerPreColor(0xff00FF00)
-                    .setPadding(0)
+                    .setDrawPreColor(0xff0000ff)
+                    .setDrawBgColor(0xffffffff)
+                    .setDetectOutColor(0xff00FF00)
+                    .setDetectInColor(0xffff0000)
+                    .setPadding(1)
                     .setLogo(logo)
+                    .setLogoRate(15)
                     .setLogoStyle(QrCodeOptions.LogoStyle.ROUND)
-                    .setLogoBgColor(0xff00ff00)
-                    .setBackground(bg)
+                    .setBgImg(bg)
+                    .setBgOpacity(0.8f)
                     .asFile("src/test/qrcode/gen_300x300_logo_v3.png");
+            System.out.println(ans);
+        } catch (Exception e) {
+            System.out.println("create qrcode error! e: " + e);
+            Assert.assertTrue(false);
+        }
+
+
+        // 根据本地文件生成待logo的二维码，无边框， 重新着色位置探测图像， 设置背景
+        try {
+            String logo = "logo.jpg";
+            String bg = "bg.png";
+            boolean ans = QrCodeGenWrapper.of(msg)
+                    .setW(300)
+                    .setDrawPreColor(0xff0000ff)
+                    .setDrawBgColor(0xffffffff)
+                    .setDetectOutColor(0xff00FF00)
+                    .setDetectInColor(0xffff0000)
+                    .setPadding(1)
+                    .setLogo(logo)
+                    .setLogoRate(12)
+                    .setLogoStyle(QrCodeOptions.LogoStyle.ROUND)
+                    .setLogoBorder(true)
+                    .setLogoBgColor(Color.GREEN)
+                    .setBgImg(bg)
+                    .setBgOpacity(0.8f)
+                    .setBgStyle(QrCodeOptions.BgImgStyle.FILL)
+                    .setBgStartX(108)
+                    .setBgStartY(40)
+                    .asFile("src/test/qrcode/gen_300x300_logo_v4.png");
             System.out.println(ans);
         } catch (Exception e) {
             System.out.println("create qrcode error! e: " + e);
@@ -129,23 +177,24 @@ public class QrCodeWrapperTest {
 
     @Test
     public void testGenColorCode() {
-        String msg = "http://blog.zbang.online:8080/articles/2017/07/18/1500369136069.html";
+        String msg = "http://blog.zbang.online:8080";
         // 根据本地文件生成待logo的二维码， 重新着色位置探测图像
         try {
             String logo = "mg.jpg";
             String bg = "bg.png";
             BufferedImage img = QrCodeGenWrapper.of(msg)
-                    .setW(300)
-                    .setPreColor(0xff002fa7) // 宝石蓝
-                    .setDetectCornerPreColor(0xff0000ff)
+                    .setW(500)
+                    .setDrawPreColor(0xff002fa7) // 宝石蓝
+                    .setDetectOutColor(0xff00ff00)
+                    .setDetectInColor(0xffff0000)
                     .setPadding(1)
                     .setErrorCorrection(ErrorCorrectionLevel.H)
                     .setLogo(logo)
                     .setLogoStyle(QrCodeOptions.LogoStyle.ROUND)
                     .setLogoBgColor(0xff00cc00)
-                    .setBackground(bg)
+                    .setBgImg(bg)
                     .setDrawStyle(QrCodeOptions.DrawStyle.IMAGE.name())
-                    .setDrawImg("logo.jpg")
+                    .setDrawImg("xhrSize4.jpg")
                     .asBufferedImage();
 
 
@@ -160,29 +209,32 @@ public class QrCodeWrapperTest {
     }
 
 
-
     @Test
     public void testGenStyleCode() {
         String msg = "http://blog.zbang.online:8080/articles/2017/07/18/1500369136069.html";
         // 根据本地文件生成待logo的二维码， 重新着色位置探测图像
 
-        for(QrCodeOptions.DrawStyle style : QrCodeOptions.DrawStyle.values()) {
+        for (QrCodeOptions.DrawStyle style : QrCodeOptions.DrawStyle.values()) {
 
             try {
                 String logo = "mg.jpg";
                 String bg = "bg.png";
                 BufferedImage img = QrCodeGenWrapper.of(msg)
-                        .setW(500)
-                        .setPreColor(0xff002fa7) // 宝石蓝
-                        .setDetectCornerPreColor(0xff0000ff)
+                        .setW(540)
+                        .setDrawPreColor(0xff002fa7) // 宝石蓝
+                        .setDetectOutColor(0xff0000ff)
+                        .setDetectInColor(Color.RED)
                         .setPadding(1)
                         .setErrorCorrection(ErrorCorrectionLevel.H)
                         .setLogo(logo)
                         .setLogoStyle(QrCodeOptions.LogoStyle.ROUND)
                         .setLogoBgColor(0xff00cc00)
-                        .setBackground(bg)
+                        .setLogoRate(15)
+                        .setBgImg(bg)
+                        .setBgOpacity(0.93f)
                         .setDrawStyle(style.name())
-                        .setDrawImg("logo.jpg")
+                        .setDrawImg("xhrBase.jpg")
+                        .setDrawEnableScale(true)
                         .asBufferedImage();
 
 
@@ -194,6 +246,44 @@ public class QrCodeWrapperTest {
                 System.out.println("create qrcode error! e: " + e);
                 Assert.assertTrue(false);
             }
+        }
+    }
+
+
+    @Test
+    public void testGenStyleCodeV2() {
+        String msg = "http://weixin.qq.com/r/FS9waAPEg178rUcL93oH";
+
+        try {
+            String logo = "logo.jpg";
+            BufferedImage img = QrCodeGenWrapper.of(msg)
+                    .setW(500)
+                    .setDrawPreColor(0xff002fa7) // 宝石蓝
+                    .setDetectOutColor(0xff0000ff)
+                    .setDetectInColor(Color.RED)
+                    .setDetectImg("detect.png")
+                    .setPadding(1)
+                    .setErrorCorrection(ErrorCorrectionLevel.H)
+                    .setLogo(logo)
+                    .setLogoStyle(QrCodeOptions.LogoStyle.ROUND)
+                    .setLogoBgColor(0xff00cc00)
+                    .setLogoRate(15)
+                    .setDrawStyle(QrCodeOptions.DrawStyle.IMAGE.name())
+                    .setDrawEnableScale(true)
+                    .setDrawImg("xhrBase.jpg")
+                    .setDrawRow2Img("xhrr2.jpeg")
+                    .setDrawCol2Img("xhrc2.jpeg")
+                    .setDrawSize4Img("xhrSize4.jpg")
+                    .asBufferedImage();
+
+
+            ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+            ImageIO.write(img, "png", outputStream);
+            String img64 = Base64Util.encode(outputStream);
+            System.out.println("<img src=\"data:image/png;base64," + img64 + "\" />");
+        } catch (Exception e) {
+            System.out.println("create qrcode error! e: " + e);
+            Assert.assertTrue(false);
         }
     }
 }

@@ -3,7 +3,6 @@ package com.hust.hui.quickmedia.common.util;
 import com.google.zxing.BarcodeFormat;
 import com.google.zxing.EncodeHintType;
 import com.google.zxing.WriterException;
-import com.google.zxing.common.BitMatrix;
 import com.google.zxing.qrcode.decoder.ErrorCorrectionLevel;
 import com.google.zxing.qrcode.encoder.ByteMatrix;
 import com.google.zxing.qrcode.encoder.Encoder;
@@ -11,7 +10,6 @@ import com.google.zxing.qrcode.encoder.QRCode;
 import com.hust.hui.quickmedia.common.qrcode.BitMatrixEx;
 import com.hust.hui.quickmedia.common.qrcode.QrCodeOptions;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.commons.lang.StringUtils;
 
 import java.awt.*;
 import java.awt.image.BufferedImage;
@@ -110,34 +108,15 @@ public class QrCodeUtil {
         int leftPadding = (outputWidth - (inputWidth * multiple)) / 2;
         int topPadding = (outputHeight - (inputHeight * multiple)) / 2;
 
-        BitMatrix output = new BitMatrix(outputWidth, outputHeight);
 
-        BitMatrixEx res = new BitMatrixEx(output);
+        BitMatrixEx res = new BitMatrixEx();
+        res.setByteMatrix(input);
         res.setLeftPadding(leftPadding);
         res.setTopPadding(topPadding);
         res.setMultiple(multiple);
 
-        // 获取位置探测图形的size，根据源码分析，有两种size的可能
-        // {@link com.google.zxing.qrcode.encoder.MatrixUtil.embedPositionDetectionPatternsAndSeparators}
-        int detectCornerSize = input.get(0, 5) == 1 ? 7 : 5;
-
-        for (int inputY = 0, outputY = topPadding; inputY < inputHeight; inputY++, outputY += multiple) {
-            // Write the contents of this row of the barcode
-            for (int inputX = 0, outputX = leftPadding; inputX < inputWidth; inputX++, outputX += multiple) {
-                if (input.get(inputX, inputY) == 1) {
-                    output.setRegion(outputX, outputY, multiple, multiple);
-                }
-
-
-                // 设置三个位置探测图形
-                if (inputX < detectCornerSize && inputY < detectCornerSize // 左上角
-                        || (inputX < detectCornerSize && inputY >= inputHeight - detectCornerSize) // 左下脚
-                        || (inputX >= inputWidth - detectCornerSize && inputY < detectCornerSize)) { // 右上角
-                    res.setRegion(outputX, outputY, multiple, multiple);
-                }
-            }
-        }
-
+        res.setWidth(outputWidth);
+        res.setHeight(outputHeight);
         return res;
     }
 
@@ -176,6 +155,7 @@ public class QrCodeUtil {
     public static BufferedImage toBufferedImage(QrCodeOptions qrCodeConfig, BitMatrixEx bitMatrix) throws IOException {
         int qrCodeWidth = bitMatrix.getWidth();
         int qrCodeHeight = bitMatrix.getHeight();
+//        BufferedImage qrCode = ImageUtil.drawQrInfo(qrCodeConfig, bitMatrix);
         BufferedImage qrCode = ImageUtil.drawQrInfo(qrCodeConfig, bitMatrix);
 
 
@@ -191,21 +171,29 @@ public class QrCodeUtil {
         }
 
 
+
+        /**
+         * 说明
+         *  在覆盖模式下，先设置二维码的透明度，然后绘制在背景图的正中央，最后绘制logo，这样保证logo不会透明，显示清晰
+         *  在填充模式下，先绘制logo，然后绘制在背景的指定位置上；若先绘制背景，再绘制logo，则logo大小偏移量的计算会有问题
+         */
+        boolean logoDrawed = false;
         // 绘制背景图
-        if (StringUtils.isNotBlank(qrCodeConfig.getBackground())) {
-            qrCode = ImageUtil.drawBackground(qrCode,
-                    qrCodeConfig.getBackground(),
-                    qrCodeConfig.getBgW(),
-                    qrCodeConfig.getBgH());
+        if (qrCodeConfig.getBgImgOptions() != null) {
+            if (qrCodeConfig.getBgImgOptions().getBgImgStyle() == QrCodeOptions.BgImgStyle.FILL
+                    && qrCodeConfig.getLogoOptions() != null) {
+                // 此种模式，先绘制logo
+                qrCode = ImageUtil.drawLogo(qrCode, qrCodeConfig.getLogoOptions());
+                logoDrawed = true;
+            }
+
+            qrCode = ImageUtil.drawBackground(qrCode, qrCodeConfig.getBgImgOptions());
         }
 
 
         // 插入logo
-        if (!(qrCodeConfig.getLogo() == null || "".equals(qrCodeConfig.getLogo()))) {
-            ImageUtil.insertLogo(qrCode,
-                    qrCodeConfig.getLogo(),
-                    qrCodeConfig.getLogoStyle(),
-                    qrCodeConfig.getLogoBgColor());
+        if (qrCodeConfig.getLogoOptions() != null && !logoDrawed) {
+            qrCode = ImageUtil.drawLogo(qrCode, qrCodeConfig.getLogoOptions());
         }
 
         return qrCode;

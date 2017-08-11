@@ -17,22 +17,6 @@ public class GraphicTest {
 
 
     @Test
-    public void testDrawRect() throws IOException {
-        BufferedImage bufferedImage = ImageUtil.getImageByPath("logo.jpg");
-
-        int size = bufferedImage.getWidth() / 15;
-        BufferedImage bf2 = ImageUtil.makeRoundBorder(bufferedImage, QrCodeOptions.LogoStyle.ROUND, size, Color.RED);
-
-
-        int radius = 40;
-        BufferedImage bf1 = ImageUtil.makeRoundedCorner(bufferedImage, radius);
-        System.out.println("----");
-
-
-    }
-
-
-    @Test
     public void testDrawCircle() throws IOException {
         int w = 100;
         int h = 100;
