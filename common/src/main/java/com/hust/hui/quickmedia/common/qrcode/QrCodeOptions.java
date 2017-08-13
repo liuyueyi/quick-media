@@ -393,7 +393,7 @@ public class QrCodeOptions {
         private static Map<String, DrawStyle> map;
 
         static {
-            map = new HashMap<>(6);
+            map = new HashMap<>(10);
             for (DrawStyle style : DrawStyle.values()) {
                 map.put(style.name(), style);
             }

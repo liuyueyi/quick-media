@@ -89,6 +89,14 @@ public class ImageUtil {
     }
 
 
+    /**
+     * 生成边框
+     *
+     * @param image        原图
+     * @param cornerRadius 角度（根据实测效果，一般建议为图片宽度的1/4）, 0表示直角
+     * @param color        边框颜色
+     * @return
+     */
     public static BufferedImage makeRoundBorder(BufferedImage image,
                                                 int cornerRadius,
                                                 Color color) {
@@ -115,7 +123,7 @@ public class ImageUtil {
      * 生成圆角图片
      *
      * @param image        原始图片
-     * @param cornerRadius 圆角的弧度
+     * @param cornerRadius 圆角的弧度（根据实测效果，一般建议为图片宽度的1/4）, 0表示直角
      * @return 返回圆角图
      */
     public static BufferedImage makeRoundedCorner(BufferedImage image,

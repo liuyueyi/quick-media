@@ -90,3 +90,4 @@
 - [音频转码服务说明](doc/audio.md)
 - [二维码生成解析服务说明](doc/qrcode.md)
 - [二维码服务拓展说明](doc/qrcodeExtend.md)
+- [二维码生成深度定制](doc/qrcodeSelfDesign.md)

@@ -211,7 +211,8 @@ public class QrCodeWrapperTest {
 
     @Test
     public void testGenStyleCode() {
-        String msg = "http://blog.zbang.online:8080/articles/2017/07/18/1500369136069.html";
+//        String msg = "http://blog.zbang.online:8080/articles/2017/07/18/1500369136069.html";
+        String msg = "http://weixin.qq.com/r/FS9waAPEg178rUcL93oH";
         // 根据本地文件生成待logo的二维码， 重新着色位置探测图像
 
         for (QrCodeOptions.DrawStyle style : QrCodeOptions.DrawStyle.values()) {
@@ -256,8 +257,9 @@ public class QrCodeWrapperTest {
 
         try {
             String logo = "logo.jpg";
+            String bg = "qrbg.jpg";
             BufferedImage img = QrCodeGenWrapper.of(msg)
-                    .setW(500)
+                    .setW(550)
                     .setDrawPreColor(0xff002fa7) // 宝石蓝
                     .setDetectOutColor(0xff0000ff)
                     .setDetectInColor(Color.RED)
@@ -274,6 +276,10 @@ public class QrCodeWrapperTest {
                     .setDrawRow2Img("xhrr2.jpeg")
                     .setDrawCol2Img("xhrc2.jpeg")
                     .setDrawSize4Img("xhrSize4.jpg")
+                    .setBgStyle(QrCodeOptions.BgImgStyle.FILL)
+                    .setBgImg(bg)
+                    .setBgStartX(230)
+                    .setBgStartY(330)
                     .asBufferedImage();
 
 
