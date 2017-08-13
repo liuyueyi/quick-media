@@ -233,7 +233,11 @@ public class QrCodeGenWrapper {
             return this;
         }
 
-        public Builder setLogoBgColor(int color) {
+        public Builder setLogoBgColor(Integer color) {
+            if (color == null) {
+                return this;
+            }
+
             return setLogoBgColor(ColorUtil.int2color(color));
         }
 
@@ -354,7 +358,11 @@ public class QrCodeGenWrapper {
         }
 
 
-        public Builder setDetectOutColor(int outColor) {
+        public Builder setDetectOutColor(Integer outColor) {
+            if (outColor == null) {
+                return this;
+            }
+
             return setDetectOutColor(ColorUtil.int2color(outColor));
         }
 
@@ -363,7 +371,11 @@ public class QrCodeGenWrapper {
             return this;
         }
 
-        public Builder setDetectInColor(int inColor) {
+        public Builder setDetectInColor(Integer inColor) {
+            if (inColor == null) {
+                return this;
+            }
+
             return setDetectInColor(ColorUtil.int2color(inColor));
         }
 
@@ -441,6 +453,10 @@ public class QrCodeGenWrapper {
 
 
         public Builder setDrawRow2Img(BufferedImage row2img) {
+            if (row2img == null) {
+                return this;
+            }
+
             drawOptions.enableScale(true);
             drawOptions.row2Img(row2img);
             return this;
@@ -466,6 +482,10 @@ public class QrCodeGenWrapper {
 
 
         public Builder setDrawCol2Img(BufferedImage col2img) {
+            if (col2img == null) {
+                return this;
+            }
+
             drawOptions.enableScale(true);
             drawOptions.col2img(col2img);
             return this;
@@ -491,6 +511,10 @@ public class QrCodeGenWrapper {
 
 
         public Builder setDrawSize4Img(BufferedImage size4Img) {
+            if (size4Img == null) {
+                return this;
+            }
+
             drawOptions.enableScale(true);
             drawOptions.size4Img(size4Img);
             return this;

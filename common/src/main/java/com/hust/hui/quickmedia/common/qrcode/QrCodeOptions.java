@@ -265,11 +265,7 @@ public class QrCodeOptions {
 
 
         public static LogoStyle getStyle(String name) {
-            if ("ROUND".equalsIgnoreCase(name)) {
-                return ROUND;
-            } else {
-                return NORMAL;
-            }
+            return "ROUND".equalsIgnoreCase(name) ? ROUND : NORMAL;
         }
     }
 
@@ -286,6 +282,11 @@ public class QrCodeOptions {
          * 将二维码填充在背景图的指定位置
          */
         FILL;
+
+
+        public static BgImgStyle getStyle(String name) {
+            return "fill".equalsIgnoreCase(name) ? FILL : OVERRIDE;
+        }
     }
 
 
