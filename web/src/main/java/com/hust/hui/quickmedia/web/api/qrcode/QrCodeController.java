@@ -4,7 +4,7 @@ import com.hust.hui.quickmedia.common.qrcode.QrCodeDeWrapper;
 import com.hust.hui.quickmedia.common.qrcode.QrCodeGenWrapper;
 import com.hust.hui.quickmedia.common.qrcode.QrCodeOptions;
 import com.hust.hui.quickmedia.common.util.NumUtil;
-import com.hust.hui.quickmedia.web.entity.Response;
+import com.hust.hui.quickmedia.web.entity.ResponseWrapper;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -34,26 +34,26 @@ public class QrCodeController {
      * @return
      */
     @RequestMapping(value = "/qrcode/decode", method = {RequestMethod.GET, RequestMethod.OPTIONS, RequestMethod.POST})
-    public Response<QrCodeResponse> decode(HttpServletRequest httpServletRequest,
-                                           @RequestParam("path") String path) {
+    public ResponseWrapper<QrCodeResponse> decode(HttpServletRequest httpServletRequest,
+                                                  @RequestParam("path") String path) {
 
         String ans;
         try {
             if (httpServletRequest instanceof MultipartHttpServletRequest) {
                 MultipartFile file = ((MultipartHttpServletRequest) httpServletRequest).getFile("file");
                 ans = QrCodeDeWrapper.decode(ImageIO.read(file.getInputStream()));
-                return new Response<QrCodeResponse>(new QrCodeResponse(ans));
+                return new ResponseWrapper<QrCodeResponse>(new QrCodeResponse(ans));
             } else if (StringUtils.isNotBlank(path) && path.startsWith("http")) {
                 ans = QrCodeDeWrapper.decode(path);
-                return new Response<QrCodeResponse>(new QrCodeResponse(ans));
+                return new ResponseWrapper<QrCodeResponse>(new QrCodeResponse(ans));
             }
         } catch (Exception e) {
             log.error("reader info from qrcode error! e: {}", e);
-            return new Response<QrCodeResponse>(5001, "read info from qrcode error!");
+            return new ResponseWrapper<QrCodeResponse>(5001, "read info from qrcode error!");
         }
 
 
-        return new Response<QrCodeResponse>(5002, "请上传二维码图片or指定二维码的网络地址");
+        return new ResponseWrapper<QrCodeResponse>(5002, "请上传二维码图片or指定二维码的网络地址");
     }
 
 
@@ -68,21 +68,21 @@ public class QrCodeController {
      * @return
      */
     @RequestMapping(value = "/qrcode/gen", method = {RequestMethod.GET, RequestMethod.POST, RequestMethod.OPTIONS})
-    public Response<QrCodeResponse> parse(HttpServletRequest httpServletRequest,
-                                          QrCodeRequest qrCodeRequest) {
+    public ResponseWrapper<QrCodeResponse> parse(HttpServletRequest httpServletRequest,
+                                                 QrCodeRequest qrCodeRequest) {
 
         if (qrCodeRequest.getContent() == null || qrCodeRequest.getContent().length() > 300) {
-            return new Response<>(5002, "生成二维码的内容在0-300字符内");
+            return new ResponseWrapper<>(5002, "生成二维码的内容在0-300字符内");
         }
 
 
         try {
             String qr = this.build(qrCodeRequest).asString();
             qr = "<img src=\"data:image/png;base64," + qr + "\"/>";
-            return new Response<>(new QrCodeResponse(qr));
+            return new ResponseWrapper<>(new QrCodeResponse(qr));
         } catch (Exception e) {
             log.error("create qrcode error! request:{}, e: {}", qrCodeRequest, e);
-            return new Response<>(5001, "gen qrcode error!");
+            return new ResponseWrapper<>(5001, "gen qrcode error!");
         }
     }
 

@@ -2,7 +2,7 @@ package com.hust.hui.quickmedia.web.api.audio;
 
 import com.hust.hui.quickmedia.common.audio.AudioWrapper;
 import com.hust.hui.quickmedia.common.util.HttpUtil;
-import com.hust.hui.quickmedia.web.entity.Response;
+import com.hust.hui.quickmedia.web.entity.ResponseWrapper;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -25,8 +25,8 @@ public class AudioController {
 
 
     @RequestMapping(value = "/audio/parse", method = {RequestMethod.GET, RequestMethod.POST})
-    public Response<AudioResponse> parse(HttpServletRequest httpServletRequest,
-                                         AudioRequest audioRequest) {
+    public ResponseWrapper<AudioResponse> parse(HttpServletRequest httpServletRequest,
+                                                AudioRequest audioRequest) {
 
         InputStream inputStream;
         try {
@@ -38,7 +38,7 @@ public class AudioController {
             }
         } catch (Exception e) {
             log.error("get audio error! e: {}", e);
-            return new Response<>(5001, "get audio resource error!");
+            return new ResponseWrapper<>(5001, "get audio resource error!");
         }
 
 
@@ -50,11 +50,11 @@ public class AudioController {
                     .asFile();
         } catch (Exception e) {
             log.error("parse audio error! e: {}", e);
-            return new Response<>(5001, "get audio resource error!");
+            return new ResponseWrapper<>(5001, "get audio resource error!");
         }
 
 
-        return new Response<>(new AudioResponse(file));
+        return new ResponseWrapper<>(new AudioResponse(file));
     }
 
 }

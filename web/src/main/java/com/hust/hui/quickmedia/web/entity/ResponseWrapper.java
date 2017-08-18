@@ -11,19 +11,19 @@ import lombok.ToString;
 @Getter
 @Setter
 @ToString
-public class Response<T> {
+public class ResponseWrapper<T> {
 
     private Status status;
 
     private T result;
 
 
-    public Response(int code, String msg) {
+    public ResponseWrapper(int code, String msg) {
         status = new Status(code, msg);
     }
 
 
-    public Response(T t) {
+    public ResponseWrapper(T t) {
         status = new Status(200, "success");
         this.result = t;
     }
