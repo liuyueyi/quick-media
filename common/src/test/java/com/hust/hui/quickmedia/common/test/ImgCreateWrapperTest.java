@@ -21,8 +21,8 @@ public class ImgCreateWrapperTest {
     public void testGenImg() throws IOException {
         int w = 400;
         int leftPadding = 10;
-        int topPadding = 200;
-        int bottomPadding = 200;
+        int topPadding = 40;
+        int bottomPadding = 40;
         int linePadding = 10;
         Font font = new Font("宋体", Font.PLAIN, 18);
 
@@ -34,9 +34,11 @@ public class ImgCreateWrapperTest {
                 .setLinePadding(linePadding)
                 .setFont(font)
                 .setAlignStyle(ImgCreateOptions.AlignStyle.CENTER)
-                .setBgImg(ImageUtil.getImageByPath("qrbg.jpg"))
+//                .setBgImg(ImageUtil.getImageByPath("createImg/bg.jpeg"))
+                .setBgColor(Color.WHITE)
+                .setBorder(true)
+                .setBorderColor(0xFFF7EED6)
                 ;
-//                .setBgColor(Color.GREEN);
 
 
         BufferedReader reader = FileReadUtil.createLineRead("text/poem.txt");
@@ -45,15 +47,16 @@ public class ImgCreateWrapperTest {
         while ((line = reader.readLine()) != null) {
             build.drawContent(line);
 
-            if(++index == 5) {
-                build.drawImage(ImageUtil.getImageByPath("mg.jpg"));
+            if (++index == 5) {
+                build.drawImage(ImageUtil.getImageByPath("https://static.oschina.net/uploads/img/201708/12175633_sOfz.png"));
             }
 
             if (index == 7) {
                 build.setFontSize(25);
             }
 
-            if (index == 8) {
+            if (index == 10) {
+                build.setFontSize(20);
                 build.setFontColor(Color.RED);
             }
         }

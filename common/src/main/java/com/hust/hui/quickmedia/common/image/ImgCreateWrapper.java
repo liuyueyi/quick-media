@@ -36,7 +36,10 @@ public class ImgCreateWrapper {
         private BufferedImage result;
 
 
-        private final int addH = 1000;
+        /**
+         * 图片的高度基本增量值， 即每次扩容时，最少加 {@link #BASE_ADD_H} 的高度
+         */
+        private final int BASE_ADD_H = 1000;
 
 
         /**
@@ -46,6 +49,56 @@ public class ImgCreateWrapper {
 
 
         private Color bgColor;
+
+
+        private boolean border;
+
+        private Color borderColor;
+
+        private int borderTopPadding = 30;
+
+        private int borderLeftPadding = 20;
+
+        private int borderBottomPadding = 40;
+
+        private String borderSignText = "  by QuickMedia @YiHui";
+
+
+        public Builder setBorderColor(int color) {
+            return setBorderColor(ColorUtil.int2color(color));
+        }
+
+
+        public Builder setBorderColor(Color borderColor) {
+            this.borderColor = borderColor;
+            return this;
+        }
+
+
+        public Builder setBorder(boolean border) {
+            this.border = border;
+            return this;
+        }
+
+        public Builder setBorderTopPadding(int borderTopPadding) {
+            this.borderTopPadding = borderTopPadding;
+            return this;
+        }
+
+        public Builder setBorderLeftPadding(int borderLeftPadding) {
+            this.borderLeftPadding = borderLeftPadding;
+            return this;
+        }
+
+        public Builder setBorderBottomPadding(int borderBottomPadding) {
+            this.borderBottomPadding = borderBottomPadding;
+            return this;
+        }
+
+        public Builder setBorderSignText(String borderSignText) {
+            this.borderSignText = borderSignText;
+            return this;
+        }
 
         public Builder setBgColor(int color) {
             return setBgColor(ColorUtil.int2color(color));
@@ -146,12 +199,12 @@ public class ImgCreateWrapper {
 
             if (result == null) {
                 result = GraphicUtil.createImg(options.getImgW(),
-                        Math.max(height + options.getTopPadding() + options.getBottomPadding(), addH),
+                        Math.max(height + options.getTopPadding() + options.getBottomPadding(), BASE_ADD_H),
                         null);
             } else if (result.getHeight() < contentH + height + options.getBottomPadding()) {
                 // 超过原来图片高度的上限, 则需要扩充图片长度
                 result = GraphicUtil.createImg(options.getImgW(),
-                        result.getHeight() + Math.max(height + options.getBottomPadding(), addH),
+                        result.getHeight() + Math.max(height + options.getBottomPadding(), BASE_ADD_H),
                         result);
             }
 
@@ -174,7 +227,7 @@ public class ImgCreateWrapper {
         public Builder drawImage(String img) {
             BufferedImage bfImg;
             try {
-                 bfImg = ImageUtil.getImageByPath(img);
+                bfImg = ImageUtil.getImageByPath(img);
             } catch (IOException e) {
                 log.error("load draw img error! img: {}, e:{}", img, e);
                 throw new IllegalStateException("load draw img error! img: " + img, e);
@@ -188,30 +241,14 @@ public class ImgCreateWrapper {
 
             if (result == null) {
                 result = GraphicUtil.createImg(options.getImgW(),
-                        Math.max(bufferedImage.getHeight() + options.getBottomPadding() + options.getTopPadding(), addH),
+                        Math.max(bufferedImage.getHeight() + options.getBottomPadding() + options.getTopPadding(), BASE_ADD_H),
                         null);
             } else if (result.getHeight() < contentH + bufferedImage.getHeight() + options.getBottomPadding()) {
                 // 超过阀值
                 result = GraphicUtil.createImg(options.getImgW(),
-                        result.getHeight() + Math.max(bufferedImage.getHeight() + options.getBottomPadding() + options.getTopPadding(), addH),
+                        result.getHeight() + Math.max(bufferedImage.getHeight() + options.getBottomPadding() + options.getTopPadding(), BASE_ADD_H),
                         result);
             }
-
-//
-//            // 图片绘制
-//            Graphics2D g2d = GraphicUtil.getG2d(result);
-//            int w = Math.min(bufferedImage.getWidth(), options.getImgW() - (options.getLeftPadding() << 1));
-//            int h = w * bufferedImage.getHeight() / bufferedImage.getWidth();
-//            g2d.drawImage(bufferedImage,
-//                    options.getLeftPadding(),
-//                    contentH + options.getLinePadding(),
-//                    w,
-//                    h,
-//                    null);
-//            g2d.dispose();
-
-
-//            contentH += h + options.getLinePadding();
 
             // 更新实际高度
             int h = GraphicUtil.drawImage(result,
@@ -224,19 +261,56 @@ public class ImgCreateWrapper {
 
 
         public BufferedImage asImage() {
-            int realH = contentH + options.getBottomPadding();
-
-            BufferedImage bf = new BufferedImage(options.getImgW(), realH, BufferedImage.TYPE_INT_ARGB);
-            Graphics2D g2d = bf.createGraphics();
-
-            if (options.getBgImg() == null) {
-                g2d.setColor(bgColor == null ? Color.WHITE : bgColor);
-                g2d.fillRect(0, 0, options.getImgW(), realH);
-            } else {
-                g2d.drawImage(options.getBgImg(), 0, 0, options.getImgW(), realH, null);
+            int leftPadding = 0;
+            int topPadding = 0;
+            int bottomPadding = 0;
+            if(border) {
+                leftPadding = this.borderLeftPadding;
+                topPadding = this.borderTopPadding;
+                bottomPadding = this.borderBottomPadding;
             }
 
-            g2d.drawImage(result, 0, 0, null);
+
+            int x = leftPadding;
+            int y = topPadding;
+
+
+            // 实际生成图片的宽
+            int realW = options.getImgW();
+            // 实际生成图片的高
+            int realH = contentH + options.getBottomPadding();
+
+            BufferedImage bf = new BufferedImage((leftPadding << 1) + realW, realH + topPadding + bottomPadding, BufferedImage.TYPE_INT_ARGB);
+            Graphics2D g2d = GraphicUtil.getG2d(bf);
+
+
+            // 绘制边框
+            if (border) {
+                g2d.setColor(borderColor == null ? ColorUtil.OFF_WHITE : borderColor);
+                g2d.fillRect(0, 0, realW + (leftPadding << 1), realH + topPadding + bottomPadding);
+
+
+                // 绘制签名
+                g2d.setColor(Color.GRAY);
+
+                int fSize = Math.min(15, realW / (borderSignText.length()));
+                int addY = (borderBottomPadding - fSize) >> 1;
+                g2d.setFont(new Font(ImgCreateOptions.DEFAULT_FONT.getName(), ImgCreateOptions.DEFAULT_FONT.getStyle(), fSize));
+                g2d.drawString(borderSignText, x, y + addY + realH + g2d.getFontMetrics().getAscent());
+            }
+
+
+            // 绘制背景
+            if (options.getBgImg() == null) {
+                g2d.setColor(bgColor == null ? Color.WHITE : bgColor);
+                g2d.fillRect(x, y, realW, realH);
+            } else {
+                g2d.drawImage(options.getBgImg(), x, y, realW, realH, null);
+            }
+
+
+            // 绘制内容
+            g2d.drawImage(result, x, y,null);
             g2d.dispose();
             return bf;
         }

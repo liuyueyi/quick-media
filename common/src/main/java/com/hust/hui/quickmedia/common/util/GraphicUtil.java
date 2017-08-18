@@ -102,6 +102,16 @@ public class GraphicUtil {
         return y + (linePadding + font.getSize()) * (index);
     }
 
+
+    /**
+     * 计算不同对其方式时，对应的x坐标
+     *
+     * @param padding 左右边距
+     * @param width   图片总宽
+     * @param strSize 字符串总长
+     * @param style   对其方式
+     * @return 返回计算后的x坐标
+     */
     private static int calOffsetX(int padding,
                                   int width,
                                   int strSize,

@@ -17,6 +17,8 @@ import java.util.Map;
 @ToString
 public class ImgCreateOptions {
 
+    public static final Font DEFAULT_FONT = new Font("宋体", Font.PLAIN, 18);;
+
     /**
      * 绘制的背景图
      */
@@ -29,9 +31,12 @@ public class ImgCreateOptions {
     private Integer imgW;
 
 
-    private Font font = new Font("宋体", Font.PLAIN, 18);
+    private Font font = DEFAULT_FONT;
 
 
+    /**
+     * 字体色
+     */
     private Color fontColor = Color.BLACK;
 
 

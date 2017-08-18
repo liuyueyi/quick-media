@@ -9,6 +9,12 @@ public class ColorUtil {
 
 
     /**
+     * 米黄色
+     */
+    public static Color OFF_WHITE = ColorUtil.int2color(0xFFF7EED6);
+
+
+    /**
      * int格式的颜色转为 awt 的Color对象
      *
      * @param color 0xffffffff  前两位为透明读， 三四位 R， 五六位 G， 七八位 B

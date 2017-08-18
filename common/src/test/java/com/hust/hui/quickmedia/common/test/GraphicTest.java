@@ -1,12 +1,16 @@
 package com.hust.hui.quickmedia.common.test;
 
+import com.hust.hui.quickmedia.common.image.ImgCreateOptions;
 import com.hust.hui.quickmedia.common.util.Base64Util;
+import com.hust.hui.quickmedia.common.util.FileReadUtil;
+import com.hust.hui.quickmedia.common.util.GraphicUtil;
 import com.hust.hui.quickmedia.common.util.ImageUtil;
 import org.junit.Test;
 
 import java.awt.*;
 import java.awt.geom.Ellipse2D;
 import java.awt.image.BufferedImage;
+import java.io.BufferedReader;
 import java.io.IOException;
 
 /**
@@ -75,13 +79,12 @@ public class GraphicTest {
         System.out.println("五边形: <img src=\"data:image/png;base64," + img64 + "\" />");
 
 
-
         // 这是一个失败的五角星
         g2.setColor(Color.BLACK);
         g2.fillRect(0, 0, w, h);
         g2.setColor(Color.RED);
-        int px3[] = {x + tw/ 2, x + tw - bottomX, x, x + tw, x + bottomX};
-        int py3[] = {y, y + th, y+leftY, y + leftY, y + th};
+        int px3[] = {x + tw / 2, x + tw - bottomX, x, x + tw, x + bottomX};
+        int py3[] = {y, y + th, y + leftY, y + leftY, y + th};
         g2.fillPolygon(px3, py3, 5);
         img64 = Base64Util.encode(bufferedImage, "png");
         System.out.println("五角星: <img src=\"data:image/png;base64," + img64 + "\" />");
@@ -145,22 +148,34 @@ public class GraphicTest {
 
 
     @Test
-    public void testDra() {
-        BufferedImage img = new BufferedImage(100, 100, BufferedImage.TYPE_INT_ARGB);
-        Graphics2D g2d = img.createGraphics();
-        g2d.setFont(new Font("Arial", Font.PLAIN, 18));
-        g2d.setColor(Color.RED);
-        g2d.drawString("hello world", 20, 20);
-        g2d.dispose();
+    public void testDra() throws IOException {
+        int w = 400;
+        int h = 1000;
+        ImgCreateOptions options = new ImgCreateOptions();
+        options.setImgW(w);
+        options.setTopPadding(50);
+        options.setLeftPadding(20);
+        options.setBottomPadding(50);
+        options.setLinePadding(10);
 
-        BufferedImage bg = new BufferedImage(200, 200, BufferedImage.TYPE_INT_ARGB);
-        g2d = bg.createGraphics();
+
+        StringBuilder builder = new StringBuilder();
+
+        BufferedReader reader = FileReadUtil.createLineRead("text/poem.txt");
+        String line = reader.readLine();
+        while (line != null) {
+            builder.append(line).append("\n");
+            line = reader.readLine();
+        }
+
+        BufferedImage bImg = new BufferedImage(w, h, BufferedImage.TYPE_INT_RGB);
+        Graphics2D g2d = bImg.createGraphics();
         g2d.setColor(Color.WHITE);
-        g2d.fillRect(0, 0, 200, 200);
+        g2d.fillRect(0, 0, w, h);
 
-        g2d.drawImage(img, 10, 10, null);
-        g2d.dispose();
 
+        GraphicUtil.drawContent(g2d, builder.toString(), 50, options);
+        System.out.println("========");
     }
 
 }
