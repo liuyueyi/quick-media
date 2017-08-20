@@ -6,10 +6,12 @@ import com.hust.hui.quickmedia.common.util.GraphicUtil;
 import com.hust.hui.quickmedia.common.util.ImageUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang.time.DateFormatUtils;
 
 import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
+import java.util.Date;
 
 /**
  * Created by yihui on 2017/8/16.
@@ -292,6 +294,10 @@ public class ImgCreateWrapper {
 
                 // 绘制签名
                 g2d.setColor(Color.GRAY);
+
+
+                String date = DateFormatUtils.format(new Date(), "yyyy-MM-dd HH:mm:ss");
+                borderSignText = borderSignText + "  " + date;
 
                 int fSize = Math.min(15, realW / (borderSignText.length()));
                 int addY = (borderBottomPadding - fSize) >> 1;
