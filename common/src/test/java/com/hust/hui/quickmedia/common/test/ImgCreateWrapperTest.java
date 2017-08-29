@@ -76,7 +76,7 @@ public class ImgCreateWrapperTest {
         int topPadding = 20;
         int bottomPadding = 10;
         int linePadding = 10;
-        Font font = new Font("宋体", Font.PLAIN, 18);
+        Font font = new Font("手札体", Font.PLAIN, 18);
 
         ImgCreateWrapper.Builder build = ImgCreateWrapper.build()
                 .setImgW(w)

@@ -25,6 +25,9 @@ public class GraphicUtil {
 
 
     public static Graphics2D getG2d(BufferedImage bf) {
+        if (bf == null) {
+            bf = new BufferedImage(1, 1, BufferedImage.TYPE_INT_RGB);
+        }
         Graphics2D g2d = bf.createGraphics();
 
         g2d.setRenderingHint(RenderingHints.KEY_ALPHA_INTERPOLATION, RenderingHints.VALUE_ALPHA_INTERPOLATION_QUALITY);
@@ -79,27 +82,24 @@ public class GraphicUtil {
         int w = options.getImgW();
         int leftPadding = options.getLeftPadding();
         int linePadding = options.getLinePadding();
-        Font font = options.getFont();
 
+        g2d.setFont(options.getFont());
 
-        // 一行容纳的字符个数
-        int lineNum = (int) Math.floor((w - (leftPadding << 1)) / (double) font.getSize());
+        int lineLen = w - (leftPadding << 1);
+        String[] strs = splitStr(content, lineLen, g2d.getFontMetrics());
 
-        String[] strs = splitStr(content, lineNum);
-
-        g2d.setFont(font);
 
         g2d.setColor(options.getFontColor());
         int index = 0;
         int x;
         for (String tmp : strs) {
-            x = calOffsetX(leftPadding, w, tmp.length() * font.getSize(), options.getAlignStyle());
-            g2d.drawString(tmp, x, y + (linePadding + font.getSize()) * index);
+            x = calOffsetX(leftPadding, w, g2d.getFontMetrics().stringWidth(tmp), options.getAlignStyle());
+            g2d.drawString(tmp, x, y + (linePadding + g2d.getFontMetrics().getHeight()) * index);
             index++;
         }
 
 
-        return y + (linePadding + font.getSize()) * (index);
+        return y + (linePadding + g2d.getFontMetrics().getHeight()) * (index);
     }
 
 
@@ -127,28 +127,59 @@ public class GraphicUtil {
 
 
     /**
-     * 按照长度对字符串进行分割
-     * <p>
-     * fixme 包含emoj表情时，兼容一把
+     * 将字符串根据每行容纳的长度进行分割为多行
      *
-     * @param str      原始字符串
-     * @param splitLen 分割的长度
+     * @param str         待分割的字符串内容
+     * @param lineLen     一行长度
+     * @param fontMetrics 字体信息
      * @return
      */
-    public static String[] splitStr(String str, int splitLen) {
-        int len = str.length();
-        int size = (int) Math.ceil(len / (float) splitLen);
+    public static String[] splitStr(String str, int lineLen, FontMetrics fontMetrics) {
+        int lineNum = (int) Math.ceil(fontMetrics.stringWidth(str) / (float) lineLen);
 
-        String[] ans = new String[size];
-        int start = 0;
-        int end = splitLen;
-        for (int i = 0; i < size; i++) {
-            ans[i] = str.substring(start, end > len ? len : end);
-            start = end;
+        if (lineNum == 1) {
+            return new String[]{str};
+        }
 
-            end += splitLen;
+
+        String[] ans = new String[lineNum];
+        int strLen = str.length();
+        int lastTotal = 0;
+        int lastIndex = 0;
+        int ansIndex = 0;
+        int tmpLen;
+        for (int i = 0; i < strLen; i++) {
+            tmpLen = fontMetrics.charWidth(str.charAt(i));
+            lastTotal += tmpLen;
+            if (lastTotal > lineLen) {
+                ans[ansIndex++] = str.substring(lastIndex, i);
+                lastIndex = i;
+                lastTotal = tmpLen;
+            }
+        }
+
+        if (lastIndex < strLen) {
+            ans[ansIndex] = str.substring(lastIndex);
         }
 
         return ans;
+    }
+
+
+    /**
+     * 计算总行数
+     *
+     * @param strs        字符串列表
+     * @param lineLen     每行容纳内容的长度
+     * @param fontMetrics 字体信息
+     * @return
+     */
+    public static int calLineNum(String[] strs, int lineLen, FontMetrics fontMetrics) {
+        int totalLine = 0;
+        for (String str : strs) {
+            totalLine += Math.ceil(fontMetrics.stringWidth(str) / (float) lineLen);
+        }
+
+        return totalLine;
     }
 }

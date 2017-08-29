@@ -194,8 +194,14 @@ public class ImgCreateWrapper {
                 strs[0] = " ";
             }
 
-            int fontSize = options.getFont().getSize();
-            int lineNum = calLineNum(strs, options.getImgW(), options.getLeftPadding(), fontSize);
+            Graphics2D g2d = GraphicUtil.getG2d(result);
+            g2d.setFont(options.getFont());
+            FontMetrics fontMetrics = g2d.getFontMetrics();
+
+
+            int fontSize = fontMetrics.getHeight();
+            int lineNum = GraphicUtil.calLineNum(strs, options.getImgW() - (options.getLinePadding() << 1), fontMetrics);
+
             // 填写内容需要占用的高度
             int height = lineNum * (fontSize + options.getLinePadding());
 
@@ -203,16 +209,17 @@ public class ImgCreateWrapper {
                 result = GraphicUtil.createImg(options.getImgW(),
                         Math.max(height + options.getTopPadding() + options.getBottomPadding(), BASE_ADD_H),
                         null);
+                g2d = GraphicUtil.getG2d(result);
             } else if (result.getHeight() < contentH + height + options.getBottomPadding()) {
                 // 超过原来图片高度的上限, 则需要扩充图片长度
                 result = GraphicUtil.createImg(options.getImgW(),
                         result.getHeight() + Math.max(height + options.getBottomPadding(), BASE_ADD_H),
                         result);
+                g2d = GraphicUtil.getG2d(result);
             }
 
 
             // 绘制文字
-            Graphics2D g2d = GraphicUtil.getG2d(result);
             int index = 0;
             for (String str : strs) {
                 GraphicUtil.drawContent(g2d, str,
@@ -327,27 +334,27 @@ public class ImgCreateWrapper {
             return Base64Util.encode(img, "png");
         }
 
-        /**
-         * 计算总行数
-         *
-         * @param strs     字符串列表
-         * @param w        生成图片的宽
-         * @param padding  渲染内容的左右边距
-         * @param fontSize 字体大小
-         * @return
-         */
-        private int calLineNum(String[] strs, int w, int padding, int fontSize) {
-            // 每行的字符数
-            double lineFontLen = Math.floor((w - (padding << 1)) / (double) fontSize);
-
-
-            int totalLine = 0;
-            for (String str : strs) {
-                totalLine += Math.ceil(str.length() / lineFontLen);
-            }
-
-            return totalLine;
-        }
+//        /**
+//         * 计算总行数
+//         *
+//         * @param strs     字符串列表
+//         * @param w        生成图片的宽
+//         * @param padding  渲染内容的左右边距
+//         * @param fontSize 字体大小
+//         * @return
+//         */
+//        private int calLineNum(String[] strs, int w, int padding, int fontSize) {
+//            // 每行的字符数
+//            double lineFontLen = Math.floor((w - (padding << 1)) / (double) fontSize);
+//
+//
+//            int totalLine = 0;
+//            for (String str : strs) {
+//                totalLine += Math.ceil(str.length() / lineFontLen);
+//            }
+//
+//            return totalLine;
+//        }
     }
 
 
