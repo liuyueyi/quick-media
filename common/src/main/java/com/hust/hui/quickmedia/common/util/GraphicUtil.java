@@ -11,13 +11,18 @@ import java.awt.image.BufferedImage;
 public class GraphicUtil {
 
     public static BufferedImage createImg(int w, int h, BufferedImage img) {
+        return createImg(w, h, 0, 0, img);
+    }
+
+
+    public static BufferedImage createImg(int w, int h, int offsetX, int offsetY, BufferedImage img) {
         BufferedImage bf = new BufferedImage(w, h, BufferedImage.TYPE_INT_ARGB);
         Graphics2D g2d = bf.createGraphics();
 
         if (img != null) {
             g2d.setComposite(AlphaComposite.Src);
             g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
-            g2d.drawImage(img, 0, 0, null);
+            g2d.drawImage(img, offsetX, offsetY, null);
         }
         g2d.dispose();
         return bf;
@@ -57,11 +62,15 @@ public class GraphicUtil {
                                 int y,
                                 ImgCreateOptions options) {
         Graphics2D g2d = getG2d(source);
-        int w = Math.min(dest.getWidth(), options.getImgW() - (options.getLeftPadding() << 1));
+        int w = Math.min(dest.getWidth(), options.getImgW() - options.getLeftPadding() - options.getRightPadding());
         int h = w * dest.getHeight() / dest.getWidth();
 
         int x = calOffsetX(options.getLeftPadding(),
-                options.getImgW(), w, options.getAlignStyle());
+                options.getRightPadding(),
+                options.getImgW(),
+                w,
+                options.getAlignStyle());
+
         g2d.drawImage(dest,
                 x,
                 y + options.getLinePadding(),
@@ -74,6 +83,41 @@ public class GraphicUtil {
     }
 
 
+    public static int drawVerticalImage(BufferedImage source,
+                                        BufferedImage dest,
+                                        int x,
+                                        ImgCreateOptions options) {
+        Graphics2D g2d = getG2d(source);
+        int h = Math.min(dest.getHeight(), options.getImgH() - options.getTopPadding() - options.getBottomPadding());
+        int w = h * dest.getWidth() / dest.getHeight();
+
+        int y = calOffsetY(options.getTopPadding(),
+                options.getBottomPadding(),
+                options.getImgH(),
+                h,
+                options.getAlignStyle());
+
+
+        // xxx 传入的x坐标，即 contentW 实际上已经包含了行间隔，因此不需额外添加
+        int drawX = x;
+        if (options.getDrawStyle() == ImgCreateOptions.DrawStyle.VERTICAL_RIGHT) {
+            drawX = source.getWidth() - w - drawX;
+        }
+        g2d.drawImage(dest, drawX, y, w, h, null);
+        g2d.dispose();
+        return w;
+    }
+
+
+    /**
+     * 水平内容绘制
+     *
+     * @param g2d
+     * @param content
+     * @param y
+     * @param options
+     * @return
+     */
     public static int drawContent(Graphics2D g2d,
                                   String content,
                                   int y,
@@ -81,11 +125,13 @@ public class GraphicUtil {
 
         int w = options.getImgW();
         int leftPadding = options.getLeftPadding();
+        int rightPadding = options.getRightPadding();
         int linePadding = options.getLinePadding();
 
         g2d.setFont(options.getFont());
 
-        int lineLen = w - (leftPadding << 1);
+        // 实际填充内容的单行长度
+        int lineLen = w - leftPadding - rightPadding;
         String[] strs = splitStr(content, lineLen, g2d.getFontMetrics());
 
 
@@ -93,7 +139,7 @@ public class GraphicUtil {
         int index = 0;
         int x;
         for (String tmp : strs) {
-            x = calOffsetX(leftPadding, w, g2d.getFontMetrics().stringWidth(tmp), options.getAlignStyle());
+            x = calOffsetX(leftPadding, rightPadding, w, g2d.getFontMetrics().stringWidth(tmp), options.getAlignStyle());
             g2d.drawString(tmp, x, y + (linePadding + g2d.getFontMetrics().getHeight()) * index);
             index++;
         }
@@ -104,24 +150,86 @@ public class GraphicUtil {
 
 
     /**
+     * 垂直文字绘制
+     *
+     * @param g2d
+     * @param content
+     * @param x
+     * @param options
+     */
+    public static void drawVerticalContent(Graphics2D g2d,
+                                           String content,
+                                           int x,
+                                           ImgCreateOptions options) {
+        int topPadding = options.getTopPadding();
+        int bottomPadding = options.getBottomPadding();
+
+        g2d.setFont(options.getFont());
+        FontMetrics fontMetrics = g2d.getFontMetrics();
+
+        // 实际填充内容的高度， 需要排除上下间距
+        int contentH = options.getImgH() - options.getTopPadding() - options.getBottomPadding();
+        String[] strs = splitVerticalStr(content, contentH, g2d.getFontMetrics());
+
+        int fontWidth = options.getFont().getSize() + options.getLinePadding();
+        if (options.getDrawStyle() == ImgCreateOptions.DrawStyle.VERTICAL_RIGHT) { // 从右往左绘制时，偏移量为负
+            fontWidth = -fontWidth;
+        }
+
+
+        g2d.setColor(options.getFontColor());
+
+        int lastX = x, lastY, startY;
+        for (String tmp : strs) {
+            lastY = 0;
+            startY = calOffsetY(topPadding, bottomPadding, options.getImgH(),
+                    fontMetrics.stringWidth(tmp) + fontMetrics.getDescent() * (tmp.length() - 1), options.getAlignStyle())
+                    + fontMetrics.getAscent();
+
+            for (int i = 0; i < tmp.length(); i++) {
+                g2d.drawString(tmp.charAt(i) + "",
+                        lastX,
+                        startY + lastY);
+
+                lastY += g2d.getFontMetrics().charWidth(tmp.charAt(i)) + g2d.getFontMetrics().getDescent();
+            }
+            lastX += fontWidth;
+        }
+    }
+
+
+    /**
      * 计算不同对其方式时，对应的x坐标
      *
-     * @param padding 左右边距
-     * @param width   图片总宽
-     * @param strSize 字符串总长
-     * @param style   对其方式
+     * @param leftPadding  左边距
+     * @param rightPadding 右边距
+     * @param width        图片总宽
+     * @param strSize      字符串总长
+     * @param style        对其方式
      * @return 返回计算后的x坐标
      */
-    private static int calOffsetX(int padding,
+    private static int calOffsetX(int leftPadding,
+                                  int rightPadding,
                                   int width,
                                   int strSize,
                                   ImgCreateOptions.AlignStyle style) {
         if (style == ImgCreateOptions.AlignStyle.LEFT) {
-            return padding;
+            return leftPadding;
         } else if (style == ImgCreateOptions.AlignStyle.RIGHT) {
-            return width - padding - strSize;
+            return width - rightPadding - strSize;
         } else {
             return (width - strSize) >> 1;
+        }
+    }
+
+
+    private static int calOffsetY(int topPadding, int bottomPadding, int height, int strSize, ImgCreateOptions.AlignStyle style) {
+        if (style == ImgCreateOptions.AlignStyle.TOP) {
+            return topPadding;
+        } else if (style == ImgCreateOptions.AlignStyle.BOTTOM) {
+            return height - bottomPadding - strSize;
+        } else {
+            return (height - strSize) >> 1;
         }
     }
 
@@ -135,7 +243,7 @@ public class GraphicUtil {
      * @return
      */
     public static String[] splitStr(String str, int lineLen, FontMetrics fontMetrics) {
-        int lineNum = (int) Math.ceil(fontMetrics.stringWidth(str) / (float) lineLen);
+        int lineNum = (int) Math.ceil((fontMetrics.stringWidth(str)) / (float) lineLen);
 
         if (lineNum == 1) {
             return new String[]{str};
@@ -166,6 +274,39 @@ public class GraphicUtil {
     }
 
 
+    public static String[] splitVerticalStr(String str, int lineLen, FontMetrics fontMetrics) {
+        int l = fontMetrics.getDescent() * (str.length() - 1);
+        int lineNum = (int) Math.ceil((fontMetrics.stringWidth(str) + l) / (float) lineLen);
+
+        if (lineNum == 1) {
+            return new String[]{str};
+        }
+
+
+        String[] ans = new String[lineNum];
+        int strLen = str.length();
+        int lastTotal = 0;
+        int lastIndex = 0;
+        int ansIndex = 0;
+        int tmpLen;
+        for (int i = 0; i < strLen; i++) {
+            tmpLen = fontMetrics.charWidth(str.charAt(i)) + fontMetrics.getDescent();
+            lastTotal += tmpLen;
+            if (lastTotal > lineLen) {
+                ans[ansIndex++] = str.substring(lastIndex, i);
+                lastIndex = i;
+                lastTotal = tmpLen;
+            }
+        }
+
+        if (lastIndex < strLen) {
+            ans[ansIndex] = str.substring(lastIndex);
+        }
+
+        return ans;
+    }
+
+
     /**
      * 计算总行数
      *
@@ -180,6 +321,15 @@ public class GraphicUtil {
             totalLine += Math.ceil(fontMetrics.stringWidth(str) / (float) lineLen);
         }
 
+        return totalLine;
+    }
+
+
+    public static int calVerticalLineNum(String[] strs, int lineLen, FontMetrics fontMetrics) {
+        int totalLine = 0;
+        for (String str : strs) {
+            totalLine += Math.ceil((fontMetrics.stringWidth(str) + (str.length() - 1) * fontMetrics.getDescent()) / (float) lineLen);
+        }
         return totalLine;
     }
 }

@@ -161,7 +161,7 @@ public class GraphicTest {
 
         StringBuilder builder = new StringBuilder();
 
-        BufferedReader reader = FileReadUtil.createLineRead("text/poem.txt");
+        BufferedReader reader = FileReadUtil.createLineRead("text/poem2.txt");
         String line = reader.readLine();
         while (line != null) {
             builder.append(line).append("\n");
@@ -176,6 +176,38 @@ public class GraphicTest {
 
         GraphicUtil.drawContent(g2d, builder.toString(), 50, options);
         System.out.println("========");
+    }
+
+
+    @Test
+    public void testDrawVerticalContent() {
+        int w = 500;
+        int h = 300;
+        BufferedImage bf = new BufferedImage(w, h, BufferedImage.TYPE_INT_RGB);
+        Graphics2D g2d = GraphicUtil.getG2d(bf);
+        g2d.setColor(Color.WHITE);
+        g2d.fillRect(0, 0, w, h);
+        g2d.setColor(Color.BLACK);
+
+
+        Font font = new Font("宋体", Font.BOLD, 18);
+        String content = "正正正正真之正震泽后给你整整的这单打发AD诗酒风流";
+
+        ImgCreateOptions option = new ImgCreateOptions();
+        option.setFont(font);
+        option.setImgH(h);
+        option.setImgW(w);
+        option.setTopPadding(18);
+
+        g2d.drawLine(0, 18, w, 18);
+
+        option.setBottomPadding(18);
+        g2d.drawLine(0, h - 18, w, h - 18);
+
+        option.setLinePadding(18);
+
+        GraphicUtil.drawVerticalContent(g2d, content, 10, option);
+        System.out.println("---");
     }
 
 }

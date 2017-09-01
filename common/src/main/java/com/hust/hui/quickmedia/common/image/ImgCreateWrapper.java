@@ -41,13 +41,19 @@ public class ImgCreateWrapper {
         /**
          * 图片的高度基本增量值， 即每次扩容时，最少加 {@link #BASE_ADD_H} 的高度
          */
-        private final int BASE_ADD_H = 1000;
+        private final int BASE_ADD_H = 400;
 
 
         /**
          * 实际填充的内容高度
          */
         private int contentH;
+
+
+        /**
+         * 实际填充的内容宽度
+         */
+        private int contentW;
 
 
         private Color bgColor;
@@ -129,6 +135,13 @@ public class ImgCreateWrapper {
             return this;
         }
 
+
+        public Builder setImgH(int h) {
+            options.setImgH(h);
+            return this;
+        }
+
+
         public Builder setFont(Font font) {
             options.setFont(font);
             return this;
@@ -161,6 +174,12 @@ public class ImgCreateWrapper {
             return this;
         }
 
+
+        public Builder setRightPadding(int rightPadding) {
+            options.setRightPadding(rightPadding);
+            return this;
+        }
+
         public Builder setTopPadding(int topPadding) {
             options.setTopPadding(topPadding);
             contentH = topPadding;
@@ -187,7 +206,32 @@ public class ImgCreateWrapper {
         }
 
 
+        public Builder setDrawStyle(String style) {
+            return setDrawStyle(ImgCreateOptions.DrawStyle.getStyle(style));
+        }
+
+
+        public Builder setDrawStyle(ImgCreateOptions.DrawStyle drawStyle) {
+            options.setDrawStyle(drawStyle);
+            return this;
+        }
+
+
         public Builder drawContent(String content) {
+            switch (options.getDrawStyle()) {
+                case HORIZONTAL:
+                    return drawHorizontalContent(content);
+                case VERTICAL_LEFT:
+                    return drawVerticalLeftContent(content);
+                case VERTICAL_RIGHT:
+                    return drawVerticalRightContent(content);
+                default:
+                    return this;
+            }
+        }
+
+
+        private Builder drawHorizontalContent(String content) {
             String[] strs = StringUtils.split(content, "\n");
             if (strs.length == 0) { // empty line
                 strs = new String[1];
@@ -199,13 +243,15 @@ public class ImgCreateWrapper {
             FontMetrics fontMetrics = g2d.getFontMetrics();
 
 
-            int fontSize = fontMetrics.getHeight();
-            int lineNum = GraphicUtil.calLineNum(strs, options.getImgW() - (options.getLinePadding() << 1), fontMetrics);
+            int fontHeight = fontMetrics.getHeight();
+            int lineNum = GraphicUtil.calLineNum(strs, options.getImgW() - options.getLeftPadding() - options.getRightPadding(), fontMetrics);
+
 
             // 填写内容需要占用的高度
-            int height = lineNum * (fontSize + options.getLinePadding());
+            int height = lineNum * (fontHeight + options.getLinePadding());
 
-            if (result == null) {
+
+            if (result == null) { // 首次绘制内容时
                 result = GraphicUtil.createImg(options.getImgW(),
                         Math.max(height + options.getTopPadding() + options.getBottomPadding(), BASE_ADD_H),
                         null);
@@ -223,12 +269,122 @@ public class ImgCreateWrapper {
             int index = 0;
             for (String str : strs) {
                 GraphicUtil.drawContent(g2d, str,
-                        contentH + (fontSize + options.getLinePadding()) * (++index)
+                        contentH + (fontHeight + options.getLinePadding()) * (++index)
                         , options);
             }
             g2d.dispose();
 
             contentH += height;
+            return this;
+        }
+
+
+        private Builder drawVerticalLeftContent(String content) {
+            if (contentW == 0) { // 初始化边距
+                contentW = options.getLeftPadding();
+            }
+
+
+            String[] strs = StringUtils.split(content, "\n");
+            if (strs.length == 0) { // empty line
+                strs = new String[1];
+                strs[0] = " ";
+            }
+
+            Graphics2D g2d = GraphicUtil.getG2d(result);
+            g2d.setFont(options.getFont());
+            FontMetrics fontMetrics = g2d.getFontMetrics();
+
+
+            int fontSize = fontMetrics.getFont().getSize();
+            int lineNum = GraphicUtil.calVerticalLineNum(strs, options.getImgH() - options.getBottomPadding() - options.getTopPadding(), fontMetrics);
+
+            // 填写内容需要占用的宽度
+            int width = lineNum * (fontSize + options.getLinePadding());
+
+            if (result == null) {
+                result = GraphicUtil.createImg(
+                        Math.max(width + options.getTopPadding() + options.getLeftPadding(), BASE_ADD_H),
+                        options.getImgH(),
+                        null);
+                g2d = GraphicUtil.getG2d(result);
+            } else if (result.getWidth() < contentW + width + options.getLeftPadding()) {
+                // 超过原来图片高度的上限, 则需要扩充图片长度
+                result = GraphicUtil.createImg(
+                        result.getWidth() + Math.max(width + options.getLeftPadding(), BASE_ADD_H),
+                        options.getImgH(),
+                        result);
+                g2d = GraphicUtil.getG2d(result);
+            }
+
+
+            // 绘制文字
+            int index = 0;
+            for (String str : strs) {
+                GraphicUtil.drawVerticalContent(g2d, str,
+                        contentW + (fontSize + options.getLinePadding()) * (index ++)
+                        , options);
+            }
+            g2d.dispose();
+
+            contentW += width;
+            return this;
+        }
+
+
+        private Builder drawVerticalRightContent(String content) {
+            if(contentW == 0) {
+                contentW = options.getRightPadding();
+            }
+
+
+            String[] strs = StringUtils.split(content, "\n");
+            if (strs.length == 0) { // empty line
+                strs = new String[1];
+                strs[0] = " ";
+            }
+
+            Graphics2D g2d = GraphicUtil.getG2d(result);
+            g2d.setFont(options.getFont());
+            FontMetrics fontMetrics = g2d.getFontMetrics();
+
+
+            int fontSize = fontMetrics.getFont().getSize();
+            int lineNum = GraphicUtil.calVerticalLineNum(strs, options.getImgH() - options.getBottomPadding() - options.getTopPadding(), fontMetrics);
+
+            // 填写内容需要占用的宽度
+            int width = lineNum * (fontSize + options.getLinePadding());
+
+            if (result == null) {
+                result = GraphicUtil.createImg(
+                        Math.max(width + options.getTopPadding() + options.getLeftPadding(), BASE_ADD_H),
+                        options.getImgH(),
+                        null);
+                g2d = GraphicUtil.getG2d(result);
+            } else if (result.getWidth() < contentW + width + options.getLeftPadding()) {
+                // 超过原来图片高度的上限, 则需要扩充图片长度
+                int newW = result.getWidth() + Math.max(width + options.getLeftPadding(), BASE_ADD_H);
+                result = GraphicUtil.createImg(
+                        newW,
+                        options.getImgH(),
+                        newW - result.getWidth(),
+                        0,
+                        result);
+                g2d = GraphicUtil.getG2d(result);
+            }
+
+
+            // 绘制文字
+            int index = 0;
+            int offsetX = result.getWidth() - contentW;
+            for (String str : strs) {
+                GraphicUtil.drawVerticalContent(g2d, str,
+                        offsetX - (fontSize + options.getLinePadding()) * (++index)
+                        , options);
+            }
+            g2d.dispose();
+
+            contentW += width;
             return this;
         }
 
@@ -247,7 +403,15 @@ public class ImgCreateWrapper {
 
 
         public Builder drawImage(BufferedImage bufferedImage) {
+            if (options.getDrawStyle() == ImgCreateOptions.DrawStyle.HORIZONTAL) {
+                return drawHorizontalImage(bufferedImage);
+            } else {
+                return drawVerticalImage(bufferedImage);
+            }
+        }
 
+
+        private Builder drawHorizontalImage(BufferedImage bufferedImage) {
             if (result == null) {
                 result = GraphicUtil.createImg(options.getImgW(),
                         Math.max(bufferedImage.getHeight() + options.getBottomPadding() + options.getTopPadding(), BASE_ADD_H),
@@ -269,11 +433,36 @@ public class ImgCreateWrapper {
         }
 
 
+        private Builder drawVerticalImage(BufferedImage bufferedImage) {
+            int padding = options.getDrawStyle() == ImgCreateOptions.DrawStyle.VERTICAL_RIGHT ? options.getLeftPadding() : options.getRightPadding();
+
+            if(result == null) {
+                result = GraphicUtil.createImg(
+                        Math.max(bufferedImage.getHeight() + options.getBottomPadding() + options.getTopPadding(), BASE_ADD_H),
+                        options.getImgH(),
+                        null);
+            } else if (result.getWidth() < contentW + bufferedImage.getWidth() + padding) {
+                int realW = result.getWidth() + Math.max(bufferedImage.getHeight() + options.getBottomPadding() + options.getTopPadding(), BASE_ADD_H);
+                int offsetX = options.getDrawStyle() == ImgCreateOptions.DrawStyle.VERTICAL_RIGHT ? realW - result.getWidth() : 0;
+                result = GraphicUtil.createImg(
+                        realW,
+                        options.getImgH(),
+                        offsetX,
+                        0,
+                        null);
+            }
+
+            int w = GraphicUtil.drawVerticalImage(result, bufferedImage, contentW, options);
+            contentW += w + options.getLinePadding();
+            return this;
+        }
+
+
         public BufferedImage asImage() {
             int leftPadding = 0;
             int topPadding = 0;
             int bottomPadding = 0;
-            if(border) {
+            if (border) {
                 leftPadding = this.borderLeftPadding;
                 topPadding = this.borderTopPadding;
                 bottomPadding = this.borderBottomPadding;
@@ -284,10 +473,15 @@ public class ImgCreateWrapper {
             int y = topPadding;
 
 
-            // 实际生成图片的宽
-            int realW = options.getImgW();
-            // 实际生成图片的高
-            int realH = contentH + options.getBottomPadding();
+            // 实际生成图片的宽， 高
+            int realW, realH;
+            if (options.getImgW() == null) { // 垂直文本输出
+                realW = contentW + options.getLeftPadding() + options.getRightPadding();
+                realH = options.getImgH();
+            } else { // 水平文本输出
+                realW = options.getImgW();
+                realH = contentH + options.getBottomPadding();
+            }
 
             BufferedImage bf = new BufferedImage((leftPadding << 1) + realW, realH + topPadding + bottomPadding, BufferedImage.TYPE_INT_ARGB);
             Graphics2D g2d = GraphicUtil.getG2d(bf);
@@ -323,7 +517,10 @@ public class ImgCreateWrapper {
 
 
             // 绘制内容
-            g2d.drawImage(result, x, y,null);
+            if (options.getDrawStyle() == ImgCreateOptions.DrawStyle.VERTICAL_RIGHT) {
+                x = bf.getWidth() - result.getWidth() - x;
+            }
+            g2d.drawImage(result, x, y, null);
             g2d.dispose();
             return bf;
         }

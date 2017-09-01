@@ -43,7 +43,7 @@ public class ImgCreateWrapperTest {
                 ;
 
 
-        BufferedReader reader = FileReadUtil.createLineRead("text/poem.txt");
+        BufferedReader reader = FileReadUtil.createLineRead("text/poem2.txt");
         String line;
         int index = 0;
         while ((line = reader.readLine()) != null) {
@@ -81,6 +81,7 @@ public class ImgCreateWrapperTest {
         ImgCreateWrapper.Builder build = ImgCreateWrapper.build()
                 .setImgW(w)
                 .setLeftPadding(leftPadding)
+                .setRightPadding(leftPadding)
                 .setTopPadding(topPadding)
                 .setBottomPadding(bottomPadding)
                 .setLinePadding(linePadding)
@@ -105,4 +106,42 @@ public class ImgCreateWrapperTest {
         ImageIO.write(img, "png", new File("/Users/yihui/Desktop/2out.png"));
     }
 
+
+    @Test
+    public void testLocalGenVerticalImg() throws IOException {
+        int h = 300;
+        int leftPadding = 10;
+        int topPadding = 10;
+        int bottomPadding = 10;
+        int linePadding = 10;
+        Font font = new Font("手札体", Font.PLAIN, 18);
+
+        ImgCreateWrapper.Builder build = ImgCreateWrapper.build()
+                .setImgH(h)
+                .setDrawStyle(ImgCreateOptions.DrawStyle.VERTICAL_LEFT)
+                .setLeftPadding(leftPadding)
+                .setTopPadding(topPadding)
+                .setBottomPadding(bottomPadding)
+                .setLinePadding(linePadding)
+                .setFont(font)
+                .setAlignStyle(ImgCreateOptions.AlignStyle.TOP)
+                .setBgColor(Color.WHITE)
+                .setBorder(true)
+                .setBorderColor(0xFFF7EED6)
+                ;
+
+
+        BufferedReader reader = FileReadUtil.createLineRead("text/poem.txt");
+        String line;
+        while ((line = reader.readLine()) != null) {
+            build.drawContent(line);
+        }
+
+        build.setAlignStyle(ImgCreateOptions.AlignStyle.BOTTOM)
+                .drawImage("/Users/yihui/Desktop/sina_out.jpg");
+        build.setFontColor(Color.BLUE).drawContent("后缀签名").drawContent("灰灰自动生成");
+
+        BufferedImage img = build.asImage();
+        ImageIO.write(img, "png", new File("/Users/yihui/Desktop/2out.png"));
+    }
 }
