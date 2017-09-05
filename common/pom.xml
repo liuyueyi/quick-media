@@ -65,6 +65,12 @@
         </dependency>
 
 
+        <dependency>
+            <groupId>com.github.jarlakxen</groupId>
+            <artifactId>embedphantomjs</artifactId>
+            <version>3.0</version>
+        </dependency>
+
     </dependencies>
 
 

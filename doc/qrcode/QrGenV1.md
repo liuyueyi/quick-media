@@ -830,7 +830,7 @@ public class QrCodeDeWrapper {
 
 启动spring-boot， 然后开启测试
 
-![演示图片](qr.gif)
+![演示图片](../img/qrcode/qr.gif)
 
 ## 5. 其他
 

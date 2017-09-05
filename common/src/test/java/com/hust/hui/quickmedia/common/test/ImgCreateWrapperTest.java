@@ -118,13 +118,13 @@ public class ImgCreateWrapperTest {
 
         ImgCreateWrapper.Builder build = ImgCreateWrapper.build()
                 .setImgH(h)
-                .setDrawStyle(ImgCreateOptions.DrawStyle.VERTICAL_LEFT)
+                .setDrawStyle(ImgCreateOptions.DrawStyle.VERTICAL_RIGHT)
                 .setLeftPadding(leftPadding)
                 .setTopPadding(topPadding)
                 .setBottomPadding(bottomPadding)
                 .setLinePadding(linePadding)
                 .setFont(font)
-                .setAlignStyle(ImgCreateOptions.AlignStyle.TOP)
+                .setAlignStyle(ImgCreateOptions.AlignStyle.CENTER)
                 .setBgColor(Color.WHITE)
                 .setBorder(true)
                 .setBorderColor(0xFFF7EED6)
@@ -138,8 +138,8 @@ public class ImgCreateWrapperTest {
         }
 
         build.setAlignStyle(ImgCreateOptions.AlignStyle.BOTTOM)
-                .drawImage("/Users/yihui/Desktop/sina_out.jpg");
-        build.setFontColor(Color.BLUE).drawContent("后缀签名").drawContent("灰灰自动生成");
+                .drawImage("/Users/yihui/Desktop/12.jpg");
+//        build.setFontColor(Color.BLUE).drawContent("后缀签名").drawContent("灰灰自动生成");
 
         BufferedImage img = build.asImage();
         ImageIO.write(img, "png", new File("/Users/yihui/Desktop/2out.png"));

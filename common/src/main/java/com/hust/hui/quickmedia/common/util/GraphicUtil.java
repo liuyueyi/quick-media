@@ -153,9 +153,9 @@ public class GraphicUtil {
      * 垂直文字绘制
      *
      * @param g2d
-     * @param content
-     * @param x
-     * @param options
+     * @param content 待绘制的内容
+     * @param x       绘制的起始x坐标
+     * @param options 配置项
      */
     public static void drawVerticalContent(Graphics2D g2d,
                                            String content,
@@ -223,7 +223,24 @@ public class GraphicUtil {
     }
 
 
-    private static int calOffsetY(int topPadding, int bottomPadding, int height, int strSize, ImgCreateOptions.AlignStyle style) {
+    /**
+     * 垂直绘制时，根据不同的对其方式，计算起始的y坐标
+     * 1. 上对齐，则 y = 上边距
+     * 2. 下对其， 则 y = 总高度 - 内容高度 - 下边距
+     * 3. 居中， 则 y = (总高度 - 内容高度) / 2
+     *
+     * @param topPadding    上边距
+     * @param bottomPadding 下边距
+     * @param height        总高度
+     * @param strSize       文本内容对应绘制的高度
+     * @param style         对其样式
+     * @return
+     */
+    private static int calOffsetY(int topPadding,
+                                  int bottomPadding,
+                                  int height,
+                                  int strSize,
+                                  ImgCreateOptions.AlignStyle style) {
         if (style == ImgCreateOptions.AlignStyle.TOP) {
             return topPadding;
         } else if (style == ImgCreateOptions.AlignStyle.BOTTOM) {

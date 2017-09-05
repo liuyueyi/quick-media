@@ -203,7 +203,7 @@ public class QrCodeWrapperTest {
             String img64 = Base64Util.encode(outputStream);
             System.out.println("<img src=\"data:image/png;base64," + img64 + "\" />");
         } catch (Exception e) {
-            System.out.println("create qrcode error! e: " + e);
+            System.out.println("cmvreate qrcode error! e: " + e);
             Assert.assertTrue(false);
         }
     }
@@ -253,7 +253,8 @@ public class QrCodeWrapperTest {
 
     @Test
     public void testGenStyleCodeV2() {
-        String msg = "http://weixin.qq.com/r/FS9waAPEg178rUcL93oH";
+//        String msg = "http://weixin.qq.com/r/FS9waAPEg178rUcL93oH";
+        String msg = "https://my.oschina.net/u/566591/blog";
 
         try {
             String logo = "logo.jpg";
@@ -270,7 +271,7 @@ public class QrCodeWrapperTest {
                     .setLogoStyle(QrCodeOptions.LogoStyle.ROUND)
                     .setLogoBgColor(0xff00cc00)
                     .setLogoRate(15)
-                    .setDrawStyle(QrCodeOptions.DrawStyle.IMAGE.name())
+                    .setDrawStyle(QrCodeOptions.DrawStyle.TRIANGLE.name())
                     .setDrawEnableScale(true)
                     .setDrawImg("xhrBase.jpg")
                     .setDrawRow2Img("xhrr2.jpeg")

@@ -12,6 +12,7 @@ import java.awt.geom.Ellipse2D;
 import java.awt.image.BufferedImage;
 import java.io.BufferedReader;
 import java.io.IOException;
+import java.util.Arrays;
 
 /**
  * Created by yihui on 2017/7/26.
@@ -208,6 +209,21 @@ public class GraphicTest {
 
         GraphicUtil.drawVerticalContent(g2d, content, 10, option);
         System.out.println("---");
+    }
+
+
+    @Test
+    public void testSpliteVerStr() {
+        String content = "这是一个待绘制的文本长度，期待自动换行";
+        int len = 100;
+        BufferedImage bf = new BufferedImage(1, 1, BufferedImage.TYPE_INT_RGB);
+        Graphics2D g2d = GraphicUtil.getG2d(bf);
+        Font font = new Font("宋体", Font.BOLD, 18);
+        g2d.setFont(font);
+        FontMetrics fontMetrics = g2d.getFontMetrics();
+
+        String[] strs = GraphicUtil.splitVerticalStr(content, len, fontMetrics);
+        System.out.println("ans: " + Arrays.asList(strs));
     }
 
 }

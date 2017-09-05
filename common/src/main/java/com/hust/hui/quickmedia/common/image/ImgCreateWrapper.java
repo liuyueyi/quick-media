@@ -284,6 +284,10 @@ public class ImgCreateWrapper {
                 contentW = options.getLeftPadding();
             }
 
+            Graphics2D g2d = GraphicUtil.getG2d(result);
+            g2d.setFont(options.getFont());
+            FontMetrics fontMetrics = g2d.getFontMetrics();
+
 
             String[] strs = StringUtils.split(content, "\n");
             if (strs.length == 0) { // empty line
@@ -291,27 +295,23 @@ public class ImgCreateWrapper {
                 strs[0] = " ";
             }
 
-            Graphics2D g2d = GraphicUtil.getG2d(result);
-            g2d.setFont(options.getFont());
-            FontMetrics fontMetrics = g2d.getFontMetrics();
-
-
             int fontSize = fontMetrics.getFont().getSize();
             int lineNum = GraphicUtil.calVerticalLineNum(strs, options.getImgH() - options.getBottomPadding() - options.getTopPadding(), fontMetrics);
 
-            // 填写内容需要占用的宽度
+            // 计算填写内容需要占用的宽度
             int width = lineNum * (fontSize + options.getLinePadding());
+
 
             if (result == null) {
                 result = GraphicUtil.createImg(
-                        Math.max(width + options.getTopPadding() + options.getLeftPadding(), BASE_ADD_H),
+                        Math.max(width + options.getRightPadding() + options.getLeftPadding(), BASE_ADD_H),
                         options.getImgH(),
                         null);
                 g2d = GraphicUtil.getG2d(result);
-            } else if (result.getWidth() < contentW + width + options.getLeftPadding()) {
-                // 超过原来图片高度的上限, 则需要扩充图片长度
+            } else if (result.getWidth() < contentW + width + options.getRightPadding()) {
+                // 超过原来图片宽度的上限, 则需要扩充图片长度
                 result = GraphicUtil.createImg(
-                        result.getWidth() + Math.max(width + options.getLeftPadding(), BASE_ADD_H),
+                        result.getWidth() + Math.max(width + options.getRightPadding(), BASE_ADD_H),
                         options.getImgH(),
                         result);
                 g2d = GraphicUtil.getG2d(result);
@@ -337,6 +337,10 @@ public class ImgCreateWrapper {
                 contentW = options.getRightPadding();
             }
 
+            Graphics2D g2d = GraphicUtil.getG2d(result);
+            g2d.setFont(options.getFont());
+            FontMetrics fontMetrics = g2d.getFontMetrics();
+
 
             String[] strs = StringUtils.split(content, "\n");
             if (strs.length == 0) { // empty line
@@ -344,25 +348,21 @@ public class ImgCreateWrapper {
                 strs[0] = " ";
             }
 
-            Graphics2D g2d = GraphicUtil.getG2d(result);
-            g2d.setFont(options.getFont());
-            FontMetrics fontMetrics = g2d.getFontMetrics();
-
-
             int fontSize = fontMetrics.getFont().getSize();
             int lineNum = GraphicUtil.calVerticalLineNum(strs, options.getImgH() - options.getBottomPadding() - options.getTopPadding(), fontMetrics);
 
-            // 填写内容需要占用的宽度
+            // 计算填写内容需要占用的宽度
             int width = lineNum * (fontSize + options.getLinePadding());
+
 
             if (result == null) {
                 result = GraphicUtil.createImg(
-                        Math.max(width + options.getTopPadding() + options.getLeftPadding(), BASE_ADD_H),
+                        Math.max(width + options.getRightPadding() + options.getLeftPadding(), BASE_ADD_H),
                         options.getImgH(),
                         null);
                 g2d = GraphicUtil.getG2d(result);
             } else if (result.getWidth() < contentW + width + options.getLeftPadding()) {
-                // 超过原来图片高度的上限, 则需要扩充图片长度
+                // 超过原来图片宽度的上限, 则需要扩充图片长度
                 int newW = result.getWidth() + Math.max(width + options.getLeftPadding(), BASE_ADD_H);
                 result = GraphicUtil.createImg(
                         newW,
@@ -412,14 +412,17 @@ public class ImgCreateWrapper {
 
 
         private Builder drawHorizontalImage(BufferedImage bufferedImage) {
+            // 绘制图片的实际高度
+            int bfImgH = bufferedImage.getWidth() > options.getImgW() ? bufferedImage.getHeight() * options.getImgW() / bufferedImage.getWidth() : bufferedImage.getHeight();
+
             if (result == null) {
                 result = GraphicUtil.createImg(options.getImgW(),
-                        Math.max(bufferedImage.getHeight() + options.getBottomPadding() + options.getTopPadding(), BASE_ADD_H),
+                        Math.max(bfImgH + options.getBottomPadding() + options.getTopPadding(), BASE_ADD_H),
                         null);
-            } else if (result.getHeight() < contentH + bufferedImage.getHeight() + options.getBottomPadding()) {
+            } else if (result.getHeight() < contentH + bfImgH + options.getBottomPadding()) {
                 // 超过阀值
                 result = GraphicUtil.createImg(options.getImgW(),
-                        result.getHeight() + Math.max(bufferedImage.getHeight() + options.getBottomPadding() + options.getTopPadding(), BASE_ADD_H),
+                        result.getHeight() + Math.max(bfImgH + options.getBottomPadding() + options.getTopPadding(), BASE_ADD_H),
                         result);
             }
 
@@ -436,20 +439,22 @@ public class ImgCreateWrapper {
         private Builder drawVerticalImage(BufferedImage bufferedImage) {
             int padding = options.getDrawStyle() == ImgCreateOptions.DrawStyle.VERTICAL_RIGHT ? options.getLeftPadding() : options.getRightPadding();
 
+            // 实际绘制图片的宽度
+            int bfImgW = bufferedImage.getHeight() > options.getImgH() ? bufferedImage.getWidth() * options.getImgH() / bufferedImage.getHeight() : bufferedImage.getWidth();
             if(result == null) {
                 result = GraphicUtil.createImg(
-                        Math.max(bufferedImage.getHeight() + options.getBottomPadding() + options.getTopPadding(), BASE_ADD_H),
+                        Math.max(bfImgW + options.getLeftPadding() + options.getRightPadding(), BASE_ADD_H),
                         options.getImgH(),
                         null);
-            } else if (result.getWidth() < contentW + bufferedImage.getWidth() + padding) {
-                int realW = result.getWidth() + Math.max(bufferedImage.getHeight() + options.getBottomPadding() + options.getTopPadding(), BASE_ADD_H);
+            } else if (result.getWidth() < contentW + bfImgW + padding) {
+                int realW = result.getWidth() + Math.max(bfImgW + options.getLeftPadding() + options.getRightPadding(), BASE_ADD_H);
                 int offsetX = options.getDrawStyle() == ImgCreateOptions.DrawStyle.VERTICAL_RIGHT ? realW - result.getWidth() : 0;
                 result = GraphicUtil.createImg(
                         realW,
                         options.getImgH(),
                         offsetX,
                         0,
-                        null);
+                        result);
             }
 
             int w = GraphicUtil.drawVerticalImage(result, bufferedImage, contentW, options);
@@ -531,27 +536,6 @@ public class ImgCreateWrapper {
             return Base64Util.encode(img, "png");
         }
 
-//        /**
-//         * 计算总行数
-//         *
-//         * @param strs     字符串列表
-//         * @param w        生成图片的宽
-//         * @param padding  渲染内容的左右边距
-//         * @param fontSize 字体大小
-//         * @return
-//         */
-//        private int calLineNum(String[] strs, int w, int padding, int fontSize) {
-//            // 每行的字符数
-//            double lineFontLen = Math.floor((w - (padding << 1)) / (double) fontSize);
-//
-//
-//            int totalLine = 0;
-//            for (String str : strs) {
-//                totalLine += Math.ceil(str.length() / lineFontLen);
-//            }
-//
-//            return totalLine;
-//        }
     }
 
 
