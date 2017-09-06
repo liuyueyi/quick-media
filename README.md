@@ -78,7 +78,7 @@
 
     - 重写zxing的二维码渲染逻辑，只使用二维码矩阵的生成逻辑，支持二维码的全面定制化
 
-3. [v.0.003](https://github.com/liuyueyi/quick-media/releases/tag/v0.002)
+3. [v.0.003](https://github.com/liuyueyi/quick-media/releases/tag/v0.003)
 
     - 长图文生成的支持
 
