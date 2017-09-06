@@ -171,7 +171,9 @@ public class GraphicUtil {
         int contentH = options.getImgH() - options.getTopPadding() - options.getBottomPadding();
         String[] strs = splitVerticalStr(content, contentH, g2d.getFontMetrics());
 
-        int fontWidth = options.getFont().getSize() + options.getLinePadding();
+
+        int fontSize = options.getFont().getSize();
+        int fontWidth = fontSize + options.getLinePadding();
         if (options.getDrawStyle() == ImgCreateOptions.DrawStyle.VERTICAL_RIGHT) { // 从右往左绘制时，偏移量为负
             fontWidth = -fontWidth;
         }
@@ -179,7 +181,7 @@ public class GraphicUtil {
 
         g2d.setColor(options.getFontColor());
 
-        int lastX = x, lastY, startY;
+        int lastX = x, lastY, startY, tmpCharOffsetX;
         for (String tmp : strs) {
             lastY = 0;
             startY = calOffsetY(topPadding, bottomPadding, options.getImgH(),
@@ -187,8 +189,14 @@ public class GraphicUtil {
                     + fontMetrics.getAscent();
 
             for (int i = 0; i < tmp.length(); i++) {
+                if (PunctuationUtil.isPunctuation(tmp.charAt(i))) {
+                    tmpCharOffsetX = fontSize >> 1;
+                } else {
+                    tmpCharOffsetX = 0;
+                }
+
                 g2d.drawString(tmp.charAt(i) + "",
-                        lastX,
+                        lastX + tmpCharOffsetX,
                         startY + lastY);
 
                 lastY += g2d.getFontMetrics().charWidth(tmp.charAt(i)) + g2d.getFontMetrics().getDescent();
