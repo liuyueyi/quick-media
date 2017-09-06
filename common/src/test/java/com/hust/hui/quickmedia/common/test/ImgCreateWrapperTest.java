@@ -4,15 +4,14 @@ import com.hust.hui.quickmedia.common.image.ImgCreateOptions;
 import com.hust.hui.quickmedia.common.image.ImgCreateWrapper;
 import com.hust.hui.quickmedia.common.util.Base64Util;
 import com.hust.hui.quickmedia.common.util.FileReadUtil;
+import com.hust.hui.quickmedia.common.util.FontUtil;
 import com.hust.hui.quickmedia.common.util.ImageUtil;
 import org.junit.Test;
 
 import javax.imageio.ImageIO;
 import java.awt.*;
 import java.awt.image.BufferedImage;
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.IOException;
+import java.io.*;
 
 /**
  * Created by yihui on 2017/8/17.
@@ -39,8 +38,7 @@ public class ImgCreateWrapperTest {
 //                .setBgImg(ImageUtil.getImageByPath("createImg/bg.jpeg"))
                 .setBgColor(Color.WHITE)
                 .setBorder(true)
-                .setBorderColor(0xFFF7EED6)
-                ;
+                .setBorderColor(0xFFF7EED6);
 
 
         BufferedReader reader = FileReadUtil.createLineRead("text/poem2.txt");
@@ -89,8 +87,7 @@ public class ImgCreateWrapperTest {
                 .setAlignStyle(ImgCreateOptions.AlignStyle.CENTER)
                 .setBgColor(Color.WHITE)
                 .setBorder(true)
-                .setBorderColor(0xFFF7EED6)
-                ;
+                .setBorderColor(0xFFF7EED6);
 
 
         BufferedReader reader = FileReadUtil.createLineRead("text/poem.txt");
@@ -108,13 +105,14 @@ public class ImgCreateWrapperTest {
 
 
     @Test
-    public void testLocalGenVerticalImg() throws IOException {
+    public void testLocalGenVerticalImg() throws IOException, FontFormatException {
         int h = 300;
         int leftPadding = 10;
         int topPadding = 10;
         int bottomPadding = 10;
         int linePadding = 10;
-        Font font = new Font("手札体", Font.PLAIN, 18);
+//        Font font = new Font("楷体", Font.PLAIN, 18);
+        Font font = FontUtil.getFont("font/txlove.ttf", Font.PLAIN, 18);
 
         ImgCreateWrapper.Builder build = ImgCreateWrapper.build()
                 .setImgH(h)
@@ -127,8 +125,7 @@ public class ImgCreateWrapperTest {
                 .setAlignStyle(ImgCreateOptions.AlignStyle.CENTER)
                 .setBgColor(Color.WHITE)
                 .setBorder(true)
-                .setBorderColor(0xFFF7EED6)
-                ;
+                .setBorderColor(0xFFF7EED6);
 
 
         BufferedReader reader = FileReadUtil.createLineRead("text/poem.txt");
