@@ -7,6 +7,11 @@ import java.awt.*;
  */
 public class ColorUtil {
 
+    /**
+     * 全透明颜色
+     */
+    public static Color OPACITY = ColorUtil.int2color(0x00FFFFFF);
+
 
     /**
      * 米黄色

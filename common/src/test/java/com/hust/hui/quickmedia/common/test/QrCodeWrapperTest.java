@@ -253,12 +253,13 @@ public class QrCodeWrapperTest {
 
     @Test
     public void testGenStyleCodeV2() {
-//        String msg = "http://weixin.qq.com/r/FS9waAPEg178rUcL93oH";
-        String msg = "https://my.oschina.net/u/566591/blog";
+        String msg = "http://weixin.qq.com/r/FS9waAPEg178rUcL93oH";
+//        String msg = "https://my.oschina.net/u/566591/blog";
 
         try {
             String logo = "logo.jpg";
-            String bg = "qrbg.jpg";
+//            String bg = "qrbg.jpg";
+            String bg = "http://bpic.588ku.com/master_pic/00/10/04/8656612a16e2e6a.jpg";
             BufferedImage img = QrCodeGenWrapper.of(msg)
                     .setW(550)
                     .setDrawPreColor(0xff002fa7) // 宝石蓝
@@ -271,16 +272,17 @@ public class QrCodeWrapperTest {
                     .setLogoStyle(QrCodeOptions.LogoStyle.ROUND)
                     .setLogoBgColor(0xff00cc00)
                     .setLogoRate(15)
-                    .setDrawStyle(QrCodeOptions.DrawStyle.TRIANGLE.name())
+                    .setDrawStyle(QrCodeOptions.DrawStyle.CIRCLE.name())
                     .setDrawEnableScale(true)
                     .setDrawImg("xhrBase.jpg")
                     .setDrawRow2Img("xhrr2.jpeg")
                     .setDrawCol2Img("xhrc2.jpeg")
                     .setDrawSize4Img("xhrSize4.jpg")
-                    .setBgStyle(QrCodeOptions.BgImgStyle.FILL)
+                    .setBgStyle(QrCodeOptions.BgImgStyle.PENETRATE)
+                    .setBgOpacity(1.0f)
                     .setBgImg(bg)
-                    .setBgStartX(230)
-                    .setBgStartY(330)
+                    .setBgStartX(10)
+                    .setBgStartY(100)
                     .asBufferedImage();
 
 
