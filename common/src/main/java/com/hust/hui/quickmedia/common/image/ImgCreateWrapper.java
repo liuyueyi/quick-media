@@ -63,6 +63,8 @@ public class ImgCreateWrapper {
 
         private Color borderColor;
 
+        private BufferedImage borderImage;
+
         private int borderTopPadding = 30;
 
         private int borderLeftPadding = 20;
@@ -81,6 +83,12 @@ public class ImgCreateWrapper {
             this.borderColor = borderColor;
             return this;
         }
+
+        public Builder setBorderImage(BufferedImage bf) {
+            this.borderImage = bf;
+            return this;
+        }
+
 
 
         public Builder setBorder(boolean border) {
@@ -494,9 +502,12 @@ public class ImgCreateWrapper {
 
             // 绘制边框
             if (border) {
-                g2d.setColor(borderColor == null ? ColorUtil.OFF_WHITE : borderColor);
-                g2d.fillRect(0, 0, realW + (leftPadding << 1), realH + topPadding + bottomPadding);
-
+                if (this.borderImage != null) {
+                    g2d.drawImage(borderImage, 0, 0, realW + (leftPadding << 1), realH + topPadding + bottomPadding, null);
+                } else {
+                    g2d.setColor(borderColor == null ? ColorUtil.OFF_WHITE : borderColor);
+                    g2d.fillRect(0, 0, realW + (leftPadding << 1), realH + topPadding + bottomPadding);
+                }
 
                 // 绘制签名
                 g2d.setColor(Color.GRAY);

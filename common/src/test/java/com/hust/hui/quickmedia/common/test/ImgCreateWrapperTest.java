@@ -141,4 +141,40 @@ public class ImgCreateWrapperTest {
         BufferedImage img = build.asImage();
         ImageIO.write(img, "png", new File("/Users/yihui/Desktop/2out.png"));
     }
+
+
+    @Test
+    public void testWxImg() throws IOException, FontFormatException {
+        int h = 500;
+        int leftPadding = 10;
+        int topPadding = 10;
+        int bottomPadding = 10;
+        int linePadding = 10;
+//        Font font = new Font("楷体", Font.PLAIN, 18);
+        Font font = FontUtil.getFont("font/txlove.ttf", Font.PLAIN, 38);
+
+        ImgCreateWrapper.Builder build = ImgCreateWrapper.build()
+                .setImgW(h)
+                .setDrawStyle(ImgCreateOptions.DrawStyle.HORIZONTAL)
+                .setLeftPadding(leftPadding)
+                .setRightPadding(leftPadding)
+                .setTopPadding(topPadding)
+                .setBottomPadding(bottomPadding)
+                .setLinePadding(linePadding)
+                .setFont(font)
+                .setAlignStyle(ImgCreateOptions.AlignStyle.CENTER)
+                .setBgColor(Color.WHITE)
+                .setBorder(true)
+                .setBorderColor(0xFFF7EED6);
+
+        build.drawContent("ForkJoin 学习使用笔记");
+        build.setFont(font.deriveFont(Font.PLAIN, 18))
+                .setFontColor(Color.BLUE)
+                .setAlignStyle(ImgCreateOptions.AlignStyle.RIGHT)
+                .drawContent("—— 一灰");
+        build.setAlignStyle(ImgCreateOptions.AlignStyle.CENTER)
+                .drawImage("/Users/yihui/Desktop/wx.jpg");
+        BufferedImage img = build.asImage();
+        ImageIO.write(img, "png", new File("/Users/yihui/Desktop/3out.png"));
+    }
 }
