@@ -14,6 +14,7 @@
 
     <properties>
         <zxing.version>3.3.0</zxing.version>
+        <flexmark.version>0.26.4</flexmark.version>
     </properties>
 
     <dependencies>
@@ -69,6 +70,49 @@
             <groupId>com.github.jarlakxen</groupId>
             <artifactId>embedphantomjs</artifactId>
             <version>3.0</version>
+        </dependency>
+
+
+        <!--markdown to html-->
+        <dependency>
+            <groupId>com.vladsch.flexmark</groupId>
+            <artifactId>flexmark</artifactId>
+            <version>${flexmark.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>com.vladsch.flexmark</groupId>
+            <artifactId>flexmark-util</artifactId>
+            <version>${flexmark.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>com.vladsch.flexmark</groupId>
+            <artifactId>flexmark-ext-tables</artifactId>
+            <version>${flexmark.version}</version>
+        </dependency>
+        <!--markdown to html end-->
+
+
+
+        <!--html to image render-->
+        <dependency>
+            <groupId>org.xhtmlrenderer</groupId>
+            <artifactId>core-renderer</artifactId>
+            <version>R8</version>
+        </dependency>
+
+        <dependency>
+            <groupId>net.sourceforge.nekohtml</groupId>
+            <artifactId>nekohtml</artifactId>
+            <version>1.9.14</version>
+        </dependency>
+        <!--html to image render-->
+
+
+
+        <dependency>
+            <groupId>com.google.guava</groupId>
+            <artifactId>guava</artifactId>
+            <version>21.0</version>
         </dependency>
 
     </dependencies>

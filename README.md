@@ -50,6 +50,9 @@
    - [水平文字，上下布局长图文生成](doc/images/imgGenV1.md)
    - [垂直文字，左右布局长图文生成](doc/images/imgGenV2.md)
    - 第三方字体支持
+- [x] markdown 转 image
+    - [markdown 转 html](doc/md/md2html.md)
+    - [html 转 image](doc/md/html2image.md)
 - [ ] 裁剪
 - [ ] 压缩
 - [ ] 旋转

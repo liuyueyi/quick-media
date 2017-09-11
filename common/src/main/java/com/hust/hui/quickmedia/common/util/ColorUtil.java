@@ -32,4 +32,20 @@ public class ColorUtil {
         int b = (0x000000ff & color);
         return new Color(r, g, b, a);
     }
+
+
+    /**
+     * 将Color对象转为html对应的颜色配置信息
+     *
+     * 如  Color.RED  ->  #f00
+     *
+     * @param color
+     * @return
+     */
+    public static String int2htmlColor(int color) {
+        int r = (0x00ff0000 & color) >> 16;
+        int g = (0x0000ff00 & color) >> 8;
+        int b = (0x000000ff & color);
+        return "#" + NumUtil.toHex(r) + NumUtil.toHex(g) + NumUtil.toHex(b);
+    }
 }

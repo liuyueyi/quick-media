@@ -1,16 +1,29 @@
 package com.hust.hui.quickmedia.common.util;
 
+import com.google.common.base.Joiner;
+
 import java.io.*;
 import java.net.URL;
 import java.nio.charset.Charset;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * Created by yihui on 2017/8/16.
  */
 public class FileReadUtil {
+
+    public static String readAll(String fileName) throws IOException {
+        BufferedReader reader = createLineRead(fileName);
+        List<String> lines = reader.lines().collect(Collectors.toList());
+        String content = Joiner.on("\n").join(lines);
+        return content;
+    }
+
+
     /**
      * 以字节为单位读取文件，常用于读二进制文件，如图片、声音、影像等文件。
      *
