@@ -86,6 +86,10 @@
 
     - 长图文生成的支持
 
+4. [v.0.004](https://github.com/liuyueyi/quick-media/releases/tag/v0.004)
+   
+   - markdown 语法文本转html， 转image
+
 ### 文档
 
 - [音频转码服务说明](doc/audio.md)
@@ -94,6 +98,9 @@
 - [二维码生成深度定制](doc/qrcode/QrGenV3.md)
 - [长图文生成支持](doc/images/imgGenV1.md)
 - [竖排长图文生成支持](doc/images/imgGenV2.md)
+- [markdown 转 html](doc/md/md2html.md)
+- [html 转 image](doc/md/html2image.md)
+
 
 ### 其他
 
