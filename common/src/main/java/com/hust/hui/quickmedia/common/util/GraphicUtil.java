@@ -157,7 +157,7 @@ public class GraphicUtil {
      * @param x       绘制的起始x坐标
      * @param options 配置项
      */
-    public static void drawVerticalContent(Graphics2D g2d,
+    public static int drawVerticalContent(Graphics2D g2d,
                                            String content,
                                            int x,
                                            ImgCreateOptions options) {
@@ -181,7 +181,7 @@ public class GraphicUtil {
 
         g2d.setColor(options.getFontColor());
 
-        int lastX = x, lastY, startY, tmpCharOffsetX;
+        int lastX = x, lastY, startY, tmpCharOffsetX=0;
         for (String tmp : strs) {
             lastY = 0;
             startY = calOffsetY(topPadding, bottomPadding, options.getImgH(),
@@ -203,6 +203,8 @@ public class GraphicUtil {
             }
             lastX += fontWidth;
         }
+
+        return lastX + tmpCharOffsetX;
     }
 
 
@@ -216,7 +218,7 @@ public class GraphicUtil {
      * @param style        对其方式
      * @return 返回计算后的x坐标
      */
-    private static int calOffsetX(int leftPadding,
+    public static int calOffsetX(int leftPadding,
                                   int rightPadding,
                                   int width,
                                   int strSize,
@@ -244,7 +246,7 @@ public class GraphicUtil {
      * @param style         对其样式
      * @return
      */
-    private static int calOffsetY(int topPadding,
+    public static int calOffsetY(int topPadding,
                                   int bottomPadding,
                                   int height,
                                   int strSize,
