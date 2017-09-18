@@ -71,7 +71,7 @@ public class LineCreateWrapperTest {
                 .setDelay(100)
                 .setImgH(h)
                 .setImgW(h)
-                .setDrawStyle(ImgCreateOptions.DrawStyle.VERTICAL_LEFT)
+                .setDrawStyle(ImgCreateOptions.DrawStyle.VERTICAL_RIGHT)
                 .setLeftPadding(leftPadding)
                 .setTopPadding(topPadding)
                 .setBottomPadding(bottomPadding)
@@ -90,8 +90,10 @@ public class LineCreateWrapperTest {
             build.drawContent(line);
         }
 
+        build.drawContent(" ");
+
         build.setAlignStyle(ImgCreateOptions.AlignStyle.CENTER)
-                .drawImage("/Users/yihui/Desktop/12.jpg");
+                .drawImage("/Users/yihui/Desktop/long_out.png");
 
         build.asGif("/Users/yihui/Desktop/out.gif");
 //        String str = build.asString();

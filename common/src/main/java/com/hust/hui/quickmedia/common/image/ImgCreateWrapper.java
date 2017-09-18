@@ -548,16 +548,16 @@ public class ImgCreateWrapper {
                 }
 
                 // 绘制签名
-                g2d.setColor(Color.GRAY);
+//                g2d.setColor(Color.GRAY);
 
 
-                String date = DateFormatUtils.format(new Date(), "yyyy-MM-dd HH:mm:ss");
-                borderSignText = borderSignText + "  " + date;
+//                String date = DateFormatUtils.format(new Date(), "yyyy-MM-dd HH:mm:ss");
+//                borderSignText = borderSignText + "  " + date;
 
-                int fSize = Math.min(15, realW / (borderSignText.length()));
-                int addY = (borderBottomPadding - fSize) >> 1;
-                g2d.setFont(new Font(ImgCreateOptions.DEFAULT_FONT.getName(), ImgCreateOptions.DEFAULT_FONT.getStyle(), fSize));
-                g2d.drawString(borderSignText, x, y + addY + realH + g2d.getFontMetrics().getAscent());
+//                int fSize = Math.min(15, realW / (borderSignText.length()));
+//                int addY = (borderBottomPadding - fSize) >> 1;
+//                g2d.setFont(new Font(ImgCreateOptions.DEFAULT_FONT.getName(), ImgCreateOptions.DEFAULT_FONT.getStyle(), fSize));
+//                g2d.drawString(borderSignText, x, y + addY + realH + g2d.getFontMetrics().getAscent());
             }
 
 

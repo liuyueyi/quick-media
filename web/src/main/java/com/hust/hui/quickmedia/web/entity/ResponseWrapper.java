@@ -27,4 +27,21 @@ public class ResponseWrapper<T> {
         status = new Status(200, "success");
         this.result = t;
     }
+
+
+    public static <T> ResponseWrapper<T> successReturn(T t) {
+        return new ResponseWrapper(t);
+    }
+
+
+    @SuppressWarnings("unchecked")
+    public static <T> ResponseWrapper<T> errorReturn(Status.StatusEnum statusEnum) {
+        return errorReturn(statusEnum.getStatus());
+    }
+
+
+    @SuppressWarnings("unchecked")
+    public static <T> ResponseWrapper<T> errorReturn(Status status) {
+        return new ResponseWrapper<T>(status.getCode(), status.getMsg());
+    }
 }

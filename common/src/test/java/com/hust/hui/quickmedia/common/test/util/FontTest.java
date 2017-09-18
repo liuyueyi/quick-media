@@ -22,9 +22,9 @@ public class FontTest {
 
         FontMetrics fontMetrics = g2d.getFontMetrics();
 
-        String[] msg = new String[] {"hello!", "12345!", "一二三四五!", ",.;'`!", "😄"};
+        String[] msg = new String[]{"hello!", "12345!", "一二三四五!", ",.;'`!", "😄"};
         int width = 0;
-        for (String m: msg) {
+        for (String m : msg) {
             width = fontMetrics.stringWidth(m);
             System.out.println(width);
         }
@@ -58,18 +58,17 @@ public class FontTest {
         };
 
 
-        int x = 60, y=40;
+        int x = 60, y = 40;
         String[] ans;
-        for (String str: contents) {
+        for (String str : contents) {
             ans = GraphicUtil.splitVerticalStr(str, 180, fontMetrics);
-            for(String s : ans) {
+            for (String s : ans) {
                 g2d.drawString(s, x, y);
                 y += fontMetrics.getHeight();
             }
         }
         System.out.println("--over---");
     }
-
 
 
     @Test
