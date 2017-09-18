@@ -4,6 +4,7 @@ import com.hust.hui.quickmedia.common.util.Base64Util;
 import com.hust.hui.quickmedia.common.util.ColorUtil;
 import com.hust.hui.quickmedia.common.util.GraphicUtil;
 import com.hust.hui.quickmedia.common.util.ImageUtil;
+import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang.time.DateFormatUtils;
@@ -25,6 +26,7 @@ public class ImgCreateWrapper {
     }
 
 
+    @Getter
     public static class Builder {
         /**
          * 生成的图片创建参数
@@ -88,7 +90,6 @@ public class ImgCreateWrapper {
             this.borderImage = bf;
             return this;
         }
-
 
 
         public Builder setBorder(boolean border) {
@@ -239,7 +240,7 @@ public class ImgCreateWrapper {
         }
 
 
-        private Builder drawHorizontalContent(String content) {
+        protected Builder drawHorizontalContent(String content) {
             String[] strs = StringUtils.split(content, "\n");
             if (strs.length == 0) { // empty line
                 strs = new String[1];
@@ -274,6 +275,16 @@ public class ImgCreateWrapper {
 
 
             // 绘制文字
+            doDrawContent(strs, fontHeight);
+
+            contentH += height;
+            return this;
+        }
+
+
+        protected void doDrawContent(String[] strs, int fontHeight) {
+            Graphics2D g2d = GraphicUtil.getG2d(result);
+            ;
             int index = 0;
             for (String str : strs) {
                 GraphicUtil.drawContent(g2d, str,
@@ -281,13 +292,10 @@ public class ImgCreateWrapper {
                         , options);
             }
             g2d.dispose();
-
-            contentH += height;
-            return this;
         }
 
 
-        private Builder drawVerticalLeftContent(String content) {
+        protected Builder drawVerticalLeftContent(String content) {
             if (contentW == 0) { // 初始化边距
                 contentW = options.getLeftPadding();
             }
@@ -297,7 +305,7 @@ public class ImgCreateWrapper {
             FontMetrics fontMetrics = g2d.getFontMetrics();
 
 
-            String[] strs = StringUtils.split(content, "\n");
+            String[] strs = StringUtils.split(content.replaceAll("\n\n", "\n \n"), "\n");
             if (strs.length == 0) { // empty line
                 strs = new String[1];
                 strs[0] = " ";
@@ -326,22 +334,28 @@ public class ImgCreateWrapper {
             }
 
 
-            // 绘制文字
-            int index = 0;
-            for (String str : strs) {
-                GraphicUtil.drawVerticalContent(g2d, str,
-                        contentW + (fontSize + options.getLinePadding()) * (index ++)
-                        , options);
-            }
-            g2d.dispose();
+            doDrawVerticalLeftContent(strs, fontSize);
 
             contentW += width;
             return this;
         }
 
 
-        private Builder drawVerticalRightContent(String content) {
-            if(contentW == 0) {
+        protected void doDrawVerticalLeftContent(String[] strs, int fontSize) {
+            Graphics2D g2d = GraphicUtil.getG2d(result);
+            // 绘制文字
+            int index = 0;
+            for (String str : strs) {
+                GraphicUtil.drawVerticalContent(g2d, str,
+                        contentW + (fontSize + options.getLinePadding()) * (index++)
+                        , options);
+            }
+            g2d.dispose();
+        }
+
+
+        protected Builder drawVerticalRightContent(String content) {
+            if (contentW == 0) {
                 contentW = options.getRightPadding();
             }
 
@@ -350,7 +364,7 @@ public class ImgCreateWrapper {
             FontMetrics fontMetrics = g2d.getFontMetrics();
 
 
-            String[] strs = StringUtils.split(content, "\n");
+            String[] strs = StringUtils.split(content.replaceAll("\n\n", "\n \n"), "\n");
             if (strs.length == 0) { // empty line
                 strs = new String[1];
                 strs[0] = " ";
@@ -383,6 +397,16 @@ public class ImgCreateWrapper {
 
 
             // 绘制文字
+            doDrawVerticalRightContent(strs, fontSize);
+
+            contentW += width;
+            return this;
+        }
+
+
+        protected void doDrawVerticalRightContent(String[] strs, int fontSize) {
+            Graphics2D g2d = GraphicUtil.getG2d(result);
+            // 绘制文字
             int index = 0;
             int offsetX = result.getWidth() - contentW;
             for (String str : strs) {
@@ -391,9 +415,6 @@ public class ImgCreateWrapper {
                         , options);
             }
             g2d.dispose();
-
-            contentW += width;
-            return this;
         }
 
 
@@ -449,7 +470,7 @@ public class ImgCreateWrapper {
 
             // 实际绘制图片的宽度
             int bfImgW = bufferedImage.getHeight() > options.getImgH() ? bufferedImage.getWidth() * options.getImgH() / bufferedImage.getHeight() : bufferedImage.getWidth();
-            if(result == null) {
+            if (result == null) {
                 result = GraphicUtil.createImg(
                         Math.max(bfImgW + options.getLeftPadding() + options.getRightPadding(), BASE_ADD_H),
                         options.getImgH(),
@@ -472,6 +493,23 @@ public class ImgCreateWrapper {
 
 
         public BufferedImage asImage() {
+            Point point = new Point();
+            BufferedImage bf = createBg(point);
+
+            Graphics2D g2d = GraphicUtil.getG2d(bf);
+            g2d.drawImage(result, (int) point.getX(), (int) point.getY(), null);
+            g2d.dispose();
+            return bf;
+        }
+
+
+        public String asString() throws IOException {
+            BufferedImage img = asImage();
+            return Base64Util.encode(img, "png");
+        }
+
+
+        protected BufferedImage createBg(Point point) {
             int leftPadding = 0;
             int topPadding = 0;
             int bottomPadding = 0;
@@ -488,12 +526,12 @@ public class ImgCreateWrapper {
 
             // 实际生成图片的宽， 高
             int realW, realH;
-            if (options.getImgW() == null) { // 垂直文本输出
-                realW = contentW + options.getLeftPadding() + options.getRightPadding();
-                realH = options.getImgH();
-            } else { // 水平文本输出
+            if (options.getDrawStyle() == ImgCreateOptions.DrawStyle.HORIZONTAL) {// 水平文本输出
                 realW = options.getImgW();
                 realH = contentH + options.getBottomPadding();
+            } else {// 垂直文本输出
+                realW = contentW + options.getLeftPadding() + options.getRightPadding();
+                realH = options.getImgH();
             }
 
             BufferedImage bf = new BufferedImage((leftPadding << 1) + realW, realH + topPadding + bottomPadding, BufferedImage.TYPE_INT_ARGB);
@@ -510,16 +548,16 @@ public class ImgCreateWrapper {
                 }
 
                 // 绘制签名
-                g2d.setColor(Color.GRAY);
+//                g2d.setColor(Color.GRAY);
 
 
-                String date = DateFormatUtils.format(new Date(), "yyyy-MM-dd HH:mm:ss");
-                borderSignText = borderSignText + "  " + date;
+//                String date = DateFormatUtils.format(new Date(), "yyyy-MM-dd HH:mm:ss");
+//                borderSignText = borderSignText + "  " + date;
 
-                int fSize = Math.min(15, realW / (borderSignText.length()));
-                int addY = (borderBottomPadding - fSize) >> 1;
-                g2d.setFont(new Font(ImgCreateOptions.DEFAULT_FONT.getName(), ImgCreateOptions.DEFAULT_FONT.getStyle(), fSize));
-                g2d.drawString(borderSignText, x, y + addY + realH + g2d.getFontMetrics().getAscent());
+//                int fSize = Math.min(15, realW / (borderSignText.length()));
+//                int addY = (borderBottomPadding - fSize) >> 1;
+//                g2d.setFont(new Font(ImgCreateOptions.DEFAULT_FONT.getName(), ImgCreateOptions.DEFAULT_FONT.getStyle(), fSize));
+//                g2d.drawString(borderSignText, x, y + addY + realH + g2d.getFontMetrics().getAscent());
             }
 
 
@@ -536,15 +574,9 @@ public class ImgCreateWrapper {
             if (options.getDrawStyle() == ImgCreateOptions.DrawStyle.VERTICAL_RIGHT) {
                 x = bf.getWidth() - result.getWidth() - x;
             }
-            g2d.drawImage(result, x, y, null);
-            g2d.dispose();
+
+            point.setLocation(x, y);
             return bf;
-        }
-
-
-        public String asString() throws IOException {
-            BufferedImage img = asImage();
-            return Base64Util.encode(img, "png");
         }
 
     }

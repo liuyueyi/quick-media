@@ -9,6 +9,16 @@ import java.io.InputStream;
  */
 public class FontUtil {
 
+    public static Font DEFAULT_FONT;
+
+    static {
+        try {
+            DEFAULT_FONT = getFont("font/txlove.ttf", Font.PLAIN, 18);
+        } catch (Exception e) {
+            DEFAULT_FONT = new Font("宋体", Font.PLAIN, 18);
+        }
+    }
+
 
     /**
      * 根据字体文件来生成Font类

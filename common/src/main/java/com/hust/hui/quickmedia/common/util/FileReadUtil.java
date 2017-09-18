@@ -3,7 +3,6 @@ package com.hust.hui.quickmedia.common.util;
 import com.google.common.base.Joiner;
 
 import java.io.*;
-import java.net.URL;
 import java.nio.charset.Charset;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -72,8 +71,7 @@ public class FileReadUtil {
         }
 
         if (fileName.startsWith("http")) { // 网络地址
-            URL url = new URL(fileName);
-            return url.openStream();
+            return HttpUtil.downFile(fileName);
         } else if (fileName.startsWith("/")) { // 绝对路径
             Path path = Paths.get(fileName);
             return Files.newInputStream(path);

@@ -2,6 +2,7 @@ package com.hust.hui.quickmedia.common.test;
 
 import com.hust.hui.quickmedia.common.image.ImgCreateOptions;
 import com.hust.hui.quickmedia.common.image.ImgCreateWrapper;
+import com.hust.hui.quickmedia.common.tools.ChineseDataExTool;
 import com.hust.hui.quickmedia.common.util.Base64Util;
 import com.hust.hui.quickmedia.common.util.FileReadUtil;
 import com.hust.hui.quickmedia.common.util.FontUtil;
@@ -106,13 +107,13 @@ public class ImgCreateWrapperTest {
 
     @Test
     public void testLocalGenVerticalImg() throws IOException, FontFormatException {
-        int h = 300;
+        int h = 200;
         int leftPadding = 10;
         int topPadding = 10;
         int bottomPadding = 10;
         int linePadding = 10;
 //        Font font = new Font("楷体", Font.PLAIN, 18);
-        Font font = FontUtil.getFont("font/txlove.ttf", Font.PLAIN, 18);
+        Font font = FontUtil.getFont("font/txlove.ttf", Font.PLAIN, 12);
 
         ImgCreateWrapper.Builder build = ImgCreateWrapper.build()
                 .setImgH(h)
@@ -125,6 +126,9 @@ public class ImgCreateWrapperTest {
                 .setAlignStyle(ImgCreateOptions.AlignStyle.CENTER)
                 .setBgColor(Color.WHITE)
                 .setBorder(true)
+                .setBorderBottomPadding(8)
+                .setBorderLeftPadding(6)
+                .setBorderTopPadding(8)
                 .setBorderColor(0xFFF7EED6);
 
 
@@ -134,8 +138,12 @@ public class ImgCreateWrapperTest {
             build.drawContent(line);
         }
 
-        build.setAlignStyle(ImgCreateOptions.AlignStyle.BOTTOM)
-                .drawImage("/Users/yihui/Desktop/12.jpg");
+        build.setFont(FontUtil.getFont("font/txlove.ttf", Font.ITALIC, 8))
+                .setAlignStyle(ImgCreateOptions.AlignStyle.BOTTOM);
+        build.drawContent(ChineseDataExTool.getNowLunarDate());
+        build.drawContent(" ");
+        build.setAlignStyle(ImgCreateOptions.AlignStyle.CENTER)
+                .drawImage("/Users/yihui/Desktop/long_out.png");
 //        build.setFontColor(Color.BLUE).drawContent("后缀签名").drawContent("灰灰自动生成");
 
         BufferedImage img = build.asImage();
