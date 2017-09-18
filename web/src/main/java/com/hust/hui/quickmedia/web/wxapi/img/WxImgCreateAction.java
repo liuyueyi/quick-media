@@ -125,7 +125,7 @@ public class WxImgCreateAction {
 
 
         // todo 图片类型校验, 目前只支持 jpg, png, webp 等静态图片格式
-
+        String contentType = file.getContentType();
 
 
         // 获取BufferedImage对象
