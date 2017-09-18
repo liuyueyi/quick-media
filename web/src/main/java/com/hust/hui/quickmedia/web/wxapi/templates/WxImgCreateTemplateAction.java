@@ -72,14 +72,16 @@ public class WxImgCreateTemplateAction {
 
 
     private void init(String fileName) throws IOException {
-        cellList.clear();
+        List<WxImgCreateTemplateCell> list = new CopyOnWriteArrayList<>();
         BufferedReader reader = FileReadUtil.createLineRead(fileName);
         String line = reader.readLine();
         String[] temps;
         while (line != null) {
             temps = StringUtils.split(line, "|");
-            cellList.add(new WxImgCreateTemplateCell(temps[0], temps[1]));
+            list.add(new WxImgCreateTemplateCell(temps[0], temps[1]));
+            line = reader.readLine();
         }
+        cellList = list;
     }
 
 
