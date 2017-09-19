@@ -11,9 +11,25 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class WxImgCreateTemplateCell {
-
+    /**
+     * 模板名
+     */
     private String name;
 
+    /**
+     * 模板id
+     */
+    private String id;
+
+
+    /**
+     * 模板图片
+     */
     private String img;
 
+
+    /**
+     * 热度
+     */
+    private int total;
 }

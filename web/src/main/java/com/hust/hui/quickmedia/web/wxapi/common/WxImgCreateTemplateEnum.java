@@ -98,6 +98,9 @@ public enum WxImgCreateTemplateEnum {
         return alignStyle;
     }
 
+    public String getId() {
+        return id;
+    }
 
     public boolean imgEnd() {
         return imgPos == 1;
