@@ -9,7 +9,9 @@ import java.util.Date;
  */
 public class ImgGenHelper {
 
-    public static final String TMP_PATH = "/mydata/html/story/public/ximg/genimg/";
+    public static final String WEB_TMP_PATH = "/mydata/html/story/public/";
+
+    public static final String TMP_IMG_PATH = "ximg/genimg/";
 
 
     private static String getTime() {
@@ -18,6 +20,6 @@ public class ImgGenHelper {
 
     public static String genTmpImg(String type) {
         String time = System.currentTimeMillis() + "_" + ((int) (Math.random() * 100));
-        return getTime() + "/" + time + "." + type;
+        return TMP_IMG_PATH + getTime() + "/" + time + "." + type;
     }
 }

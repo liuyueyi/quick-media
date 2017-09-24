@@ -174,7 +174,7 @@ public class WxImgCreateAction {
     private static String save(BufferedImage bf) {
         String path = ImgGenHelper.genTmpImg("png");
         try {
-            File file = new File(ImgGenHelper.TMP_PATH + path);
+            File file = new File(ImgGenHelper.WEB_TMP_PATH + path);
             FileUtil.mkDir(file);
             ImageIO.write(bf, "png", file);
         } catch (Exception e) {
