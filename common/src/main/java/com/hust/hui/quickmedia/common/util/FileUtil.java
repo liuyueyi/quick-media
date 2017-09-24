@@ -186,9 +186,9 @@ public class FileUtil {
     }
 
     private static void modifyFileAuth(File file) {
-        boolean ans = file.setExecutable(true);
-        ans = file.setReadable(true) && ans;
-        ans = file.setWritable(true) && ans;
+        boolean ans = file.setExecutable(true, false);
+        ans = file.setReadable(true, false) && ans;
+        ans = file.setWritable(true, false) && ans;
         if(log.isDebugEnabled()) {
             log.debug("create file auth : {}", ans);
         }
