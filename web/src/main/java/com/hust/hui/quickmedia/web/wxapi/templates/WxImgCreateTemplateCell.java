@@ -28,6 +28,12 @@ public class WxImgCreateTemplateCell {
     private String img;
 
 
+    private int imgW;
+
+
+    private int imgH;
+
+
     /**
      * 热度
      */

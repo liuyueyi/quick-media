@@ -50,7 +50,7 @@ public class GifHelper {
             e.setDelay(delay);
             e.addFrame(img);
         }
-        e.setDelay(3000);
+//        e.setDelay(3000);
         e.addFrame(frames.get(frames.size() - 1));
         e.finish();
     }

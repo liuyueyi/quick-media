@@ -78,7 +78,7 @@ public class WxImgCreateTemplateAction {
         String[] temps;
         while (line != null) {
             temps = StringUtils.split(line, "|");
-            list.add(new WxImgCreateTemplateCell(temps[0], temps[1], temps[2], 0));
+            list.add(new WxImgCreateTemplateCell(temps[0], temps[1], temps[2], Integer.parseInt(temps[3]), Integer.parseInt(temps[4]), 0));
             line = reader.readLine();
         }
         cellList = list;

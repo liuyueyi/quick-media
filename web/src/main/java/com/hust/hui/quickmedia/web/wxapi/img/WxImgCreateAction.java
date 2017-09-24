@@ -1,15 +1,15 @@
 package com.hust.hui.quickmedia.web.wxapi.img;
 
-import com.hust.hui.quickmedia.common.constants.MediaType;
 import com.hust.hui.quickmedia.common.image.ImgCreateOptions;
 import com.hust.hui.quickmedia.common.image.ImgCreateWrapper;
 import com.hust.hui.quickmedia.common.tools.ChineseDataExTool;
-import com.hust.hui.quickmedia.common.util.Base64Util;
+import com.hust.hui.quickmedia.common.util.FileUtil;
 import com.hust.hui.quickmedia.common.util.FontUtil;
 import com.hust.hui.quickmedia.web.entity.ResponseWrapper;
 import com.hust.hui.quickmedia.web.entity.Status;
 import com.hust.hui.quickmedia.web.wxapi.WxBaseResponse;
 import com.hust.hui.quickmedia.web.wxapi.common.WxImgCreateTemplateEnum;
+import com.hust.hui.quickmedia.web.wxapi.helper.ImgGenHelper;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -22,6 +22,7 @@ import javax.imageio.ImageIO;
 import javax.servlet.http.HttpServletRequest;
 import java.awt.*;
 import java.awt.image.BufferedImage;
+import java.io.File;
 import java.io.IOException;
 
 /**
@@ -103,8 +104,9 @@ public class WxImgCreateAction {
             }
 
             WxBaseResponse wxBaseResponse = new WxBaseResponse();
-            wxBaseResponse.setBase64result(Base64Util.encode(ans, MediaType.ImagePng.getExt()));
-            wxBaseResponse.setPrefix(MediaType.ImagePng.getPrefix());
+//            wxBaseResponse.setBase64result(Base64Util.encode(ans, MediaType.ImagePng.getExt()));
+//            wxBaseResponse.setPrefix(MediaType.ImagePng.getPrefix());
+            wxBaseResponse.setImg(save(ans));
             return ResponseWrapper.successReturn(wxBaseResponse);
         } catch (Exception e) {
             log.error("WxImgCreateAction!Create image error! e: {}", e);
@@ -168,4 +170,16 @@ public class WxImgCreateAction {
         }
     }
 
+
+    private static String save(BufferedImage bf) {
+        String path = ImgGenHelper.genTmpImg("png");
+        try {
+            File file = new File(ImgGenHelper.TMP_PATH + path);
+            FileUtil.mkDir(file);
+            ImageIO.write(bf, "png", file);
+        } catch (Exception e) {
+            log.error("save file error!");
+        }
+        return path;
+    }
 }

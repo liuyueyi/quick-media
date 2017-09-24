@@ -1,6 +1,7 @@
 package com.hust.hui.quickmedia.common.util;
 
 import java.awt.*;
+import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.io.InputStream;
 
@@ -42,6 +43,14 @@ public class FontUtil {
         InputStream inputStream = FileReadUtil.getStreamByFileName(fontPath);
         Font font = Font.createFont(Font.TRUETYPE_FONT, inputStream);
         return font.deriveFont(style, size);
+    }
+
+
+    public static FontMetrics getFontMetric(Font font) {
+        BufferedImage bf = new BufferedImage(1, 1, BufferedImage.TYPE_INT_RGB);
+        Graphics2D g2d = GraphicUtil.getG2d(bf);
+        g2d.setFont(font);
+        return g2d.getFontMetrics();
     }
 
 }
