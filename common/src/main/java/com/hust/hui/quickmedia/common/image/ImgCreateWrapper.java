@@ -227,6 +227,10 @@ public class ImgCreateWrapper {
 
 
         public Builder drawContent(String content) {
+            if(content == null) {
+                return this;
+            }
+
             switch (options.getDrawStyle()) {
                 case HORIZONTAL:
                     return drawHorizontalContent(content);

@@ -23,6 +23,13 @@ public class WxImgCreateRequest implements IRequest {
     private String templateId;
 
 
+
+    private String sign;
+
+
+    private boolean singEnable;
+
+
     @Override
     public boolean validate() {
         return !(StringUtils.isBlank(msg) || StringUtils.isBlank(templateId));

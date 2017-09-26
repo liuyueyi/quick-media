@@ -16,9 +16,9 @@ import java.util.Date;
 @Slf4j
 public class ImgGenHelper {
 
-    public static final String WEB_TMP_PATH = "/mydata/html/story/public/";
+    public static final String ABS_TMP_PATH = "/mydata/html/story/public/";
 
-    public static final String TMP_IMG_PATH = "ximg/genimg/";
+    public static final String WEB_IMG_PATH = "ximg/genimg/";
 
 
     private static String getTime() {
@@ -27,18 +27,18 @@ public class ImgGenHelper {
 
     public static String genTmpImg(String type) {
         String time = System.currentTimeMillis() + "_" + ((int) (Math.random() * 100));
-        return TMP_IMG_PATH + getTime() + "/" + time + "." + type;
+        return WEB_IMG_PATH + getTime() + "/" + time + "." + type;
     }
 
 
     public static String saveImg(BufferedImage bf) {
         String path = ImgGenHelper.genTmpImg("png");
         try {
-            File file = new File(ImgGenHelper.WEB_TMP_PATH + path);
+            File file = new File(ImgGenHelper.ABS_TMP_PATH + path);
             FileUtil.mkDir(file);
             ImageIO.write(bf, "png", file);
 
-            ProcessUtil.instance().process("chomd -R 755 " + WEB_TMP_PATH + TMP_IMG_PATH);
+            ProcessUtil.instance().process("chmod -R 755 " + ABS_TMP_PATH + WEB_IMG_PATH);
         } catch (Exception e) {
             log.error("save file error!");
         }

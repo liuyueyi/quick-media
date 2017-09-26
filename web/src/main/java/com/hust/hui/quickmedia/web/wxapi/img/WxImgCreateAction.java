@@ -9,6 +9,7 @@ import com.hust.hui.quickmedia.web.entity.Status;
 import com.hust.hui.quickmedia.web.wxapi.WxBaseResponse;
 import com.hust.hui.quickmedia.web.wxapi.common.WxImgCreateTemplateEnum;
 import com.hust.hui.quickmedia.web.wxapi.helper.ImgGenHelper;
+import com.hust.hui.quickmedia.web.wxapi.validate.MediaValidate;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -19,7 +20,6 @@ import org.springframework.web.multipart.MultipartHttpServletRequest;
 
 import javax.imageio.ImageIO;
 import javax.servlet.http.HttpServletRequest;
-import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 
@@ -80,9 +80,9 @@ public class WxImgCreateAction {
             if (cenum.imgEnd()) {
                 ans = builder.setAlignStyle(cenum.getAlignStyle())
                         .drawContent(wxImgCreateRequest.getMsg())
-                        .setFont(FontUtil.getFont("font/txlove.ttf", Font.ITALIC, 16))
+                        .setFont(FontUtil.SMALLER_DEFAULT_ITALIC_FONT)
                         .setAlignStyle(cenum.getDrawStyle() == ImgCreateOptions.DrawStyle.HORIZONTAL ? ImgCreateOptions.AlignStyle.RIGHT : ImgCreateOptions.AlignStyle.BOTTOM)
-                        .drawContent(ChineseDataExTool.getNowLunarDate())
+                        .drawContent(getSign(wxImgCreateRequest))
                         .drawContent(" ")
                         .setAlignStyle(ImgCreateOptions.AlignStyle.CENTER)
                         .drawImage(bfImg)
@@ -94,9 +94,9 @@ public class WxImgCreateAction {
                         .drawContent(" ")
                         .setAlignStyle(cenum.getAlignStyle())
                         .drawContent(wxImgCreateRequest.getMsg())
-                        .setFont(FontUtil.getFont("font/txlove.ttf", Font.ITALIC, 16))
+                        .setFont(FontUtil.SMALLER_DEFAULT_ITALIC_FONT)
                         .setAlignStyle(cenum.getDrawStyle() == ImgCreateOptions.DrawStyle.HORIZONTAL ? ImgCreateOptions.AlignStyle.RIGHT : ImgCreateOptions.AlignStyle.BOTTOM)
-                        .drawContent(ChineseDataExTool.getNowLunarDate())
+                        .drawContent(getSign(wxImgCreateRequest))
                         .asImage()
                 ;
             }
@@ -124,9 +124,11 @@ public class WxImgCreateAction {
         }
 
 
-        // todo 图片类型校验, 目前只支持 jpg, png, webp 等静态图片格式
+        // 目前只支持 jpg, png, webp 等静态图片格式
         String contentType = file.getContentType();
-
+        if (!MediaValidate.validateStaticImg(contentType)) {
+            throw new IllegalArgumentException("不支持的图片类型");
+        }
 
         // 获取BufferedImage对象
         try {
@@ -136,6 +138,20 @@ public class WxImgCreateAction {
             log.error("WxImgCreateAction!Parse img from httpRequest to BuferedImage error! e: {}", e);
             throw new IllegalArgumentException("不支持的图片类型!");
         }
+    }
+
+
+    private String getSign(WxImgCreateRequest request) {
+        if(!request.isSingEnable()) {
+            return null;
+        }
+
+
+        if (StringUtils.isBlank(request.getSign())) {
+            return ChineseDataExTool.getNowLunarDate();
+        }
+
+        return request.getSign();
     }
 
 

@@ -266,6 +266,27 @@ public class EmotionWrapper {
             return this;
         }
 
+        public Builder setGif(List<BufferedImage> imgs) {
+            int tmpW = Integer.MAX_VALUE,  tmpH = Integer.MAX_VALUE;
+
+            for (BufferedImage img : imgs) {
+                if (tmpW < img.getWidth()) {
+                    tmpW = img.getWidth();
+                }
+
+                if(tmpH < img.getHeight()) {
+                    tmpH = img.getHeight();
+                }
+            }
+
+
+            this.options.setImgs(imgs);
+            this.tempGifW = tmpW;
+            this.tempGifH = tmpH;
+
+            return this;
+        }
+
 
         public Builder setImgFirst(boolean imgFirst) {
             this.options.setImgFirst(imgFirst);
@@ -308,6 +329,11 @@ public class EmotionWrapper {
             return this;
         }
 
+
+        public Builder setDelay(int delay) {
+            this.options.setDelay(delay);
+            return this;
+        }
 
         public void calRealSize() {
             int realW, realH;

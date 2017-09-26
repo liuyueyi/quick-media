@@ -1,5 +1,6 @@
 package com.hust.hui.quickmedia.web.wxapi.expression;
 
+import com.hust.hui.quickmedia.common.image.ImgCreateOptions;
 import com.hust.hui.quickmedia.web.entity.IRequest;
 import lombok.Data;
 
@@ -19,15 +20,17 @@ public class WxExpressionCreateRequest implements IRequest {
 
     /**
      * 模式
-     *
+     * <p>
      * up_down, left_right, right_left
+     * <p>
+     * {@link ImgCreateOptions.DrawStyle#name}
      */
     private String style;
 
 
     /**
      * 模板id
-     *
+     * <p>
      * 逐渐显示， 按行显示， 按标点显示，静态图
      * 文字静态，动图
      */
