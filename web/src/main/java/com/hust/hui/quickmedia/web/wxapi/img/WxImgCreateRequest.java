@@ -2,6 +2,8 @@ package com.hust.hui.quickmedia.web.wxapi.img;
 
 import com.hust.hui.quickmedia.web.entity.IRequest;
 import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 import org.apache.commons.lang.StringUtils;
 
 /**
@@ -23,11 +25,10 @@ public class WxImgCreateRequest implements IRequest {
     private String templateId;
 
 
-
     private String sign;
 
 
-    private boolean singEnable;
+    private Integer signStatus;
 
 
     @Override

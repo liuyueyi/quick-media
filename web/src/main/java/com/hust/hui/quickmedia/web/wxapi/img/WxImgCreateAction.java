@@ -142,7 +142,7 @@ public class WxImgCreateAction {
 
 
     private String getSign(WxImgCreateRequest request) {
-        if(!request.isSingEnable()) {
+        if(request.getSignStatus() == null || request.getSignStatus() <= 0) {
             return null;
         }
 
