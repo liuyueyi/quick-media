@@ -10,17 +10,17 @@ public class MediaValidate {
     private static final MediaType[] STATIC_IMG_TYPE = new MediaType[]{MediaType.ImagePng, MediaType.ImageJpg, MediaType.ImageWebp};
     private static final MediaType[] DYNAMIC_IMG_TYPE = new MediaType[]{MediaType.ImageGif};
 
-    public static boolean validateImg(String surfix) {
-        return validateStaticImg(surfix) && validateDynamicImg(surfix);
+    public static boolean validateImg(String mime) {
+        return validateStaticImg(mime) && validateDynamicImg(mime);
     }
 
-    public static boolean validateStaticImg(String surfix) {
-        if ("jpeg".equals(surfix)) {
-            return true;
+    public static boolean validateStaticImg(String mime) {
+        if (mime.contains("jpg")) {
+            mime = mime.replace("jpg", "jpeg");
         }
 
         for(MediaType type: STATIC_IMG_TYPE) {
-            if (type.getExt().equals(surfix)) {
+            if (type.getMime().equals(mime)) {
                 return true;
             }
         }
@@ -29,9 +29,9 @@ public class MediaValidate {
     }
 
 
-    public static boolean validateDynamicImg(String surfix) {
+    public static boolean validateDynamicImg(String mime) {
         for (MediaType type: DYNAMIC_IMG_TYPE) {
-            if(type.getExt().equals(surfix)) {
+            if(type.getMime().equals(mime)) {
                 return true;
             }
         }
