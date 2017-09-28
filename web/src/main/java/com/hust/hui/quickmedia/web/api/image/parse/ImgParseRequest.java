@@ -1,7 +1,6 @@
 package com.hust.hui.quickmedia.web.api.image.parse;
 
 import com.hust.hui.quickmedia.web.entity.IRequest;
-import com.hust.hui.quickmedia.web.entity.IValidate;
 import lombok.Data;
 import org.apache.commons.lang.StringUtils;
 
@@ -11,7 +10,7 @@ import org.apache.commons.lang.StringUtils;
  * Created by yihui on 2017/9/12.
  */
 @Data
-public class ImgParseRequest implements IRequest, IValidate {
+public class ImgParseRequest implements IRequest {
 
     private static final long serialVersionUID = 683602660797514455L;
 

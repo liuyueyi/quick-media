@@ -170,15 +170,27 @@ public class FileUtil {
             file = file.getAbsoluteFile();
         }
 
+        boolean ans;
         if (file.getParentFile().exists()) {
+            modifyFileAuth(file);
             if (!file.exists() && !file.mkdir()) {
                 throw new FileNotFoundException();
             }
         } else {
             mkDir(file.getParentFile());
+            modifyFileAuth(file);
             if (!file.exists() && !file.mkdir()) {
                 throw new FileNotFoundException();
             }
+        }
+    }
+
+    private static void modifyFileAuth(File file) {
+        boolean ans = file.setExecutable(true, false);
+        ans = file.setReadable(true, false) && ans;
+        ans = file.setWritable(true, false) && ans;
+        if(log.isDebugEnabled()) {
+            log.debug("create file auth : {}", ans);
         }
     }
 

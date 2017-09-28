@@ -17,7 +17,7 @@ import java.util.List;
 @Getter
 @Setter
 @ToString
-public class ImgCreateRequest implements IRequest, IValidate {
+public class ImgCreateRequest implements IRequest {
 
 
     private Integer w;
