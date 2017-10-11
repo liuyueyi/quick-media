@@ -76,4 +76,20 @@ public enum MediaType {
     public String getPrefix() {
         return prefix;
     }
+
+
+
+    public static String getExtByMime(String mime) {
+        if (mime.contains("jpg")) {
+            mime = mime.replaceAll("jpg", "jpeg");
+        }
+
+        for (MediaType type: values()) {
+            if (type.getMime().equals(mime)) {
+                return type.getExt();
+            }
+        }
+
+        return "";
+    }
 }

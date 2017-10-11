@@ -22,7 +22,7 @@ import java.util.stream.Collectors;
  */
 public class MarkDown2HtmlWrapper {
 
-    private static String MD_CSS = null;
+    public static String MD_CSS = null;
 
     static {
         try {

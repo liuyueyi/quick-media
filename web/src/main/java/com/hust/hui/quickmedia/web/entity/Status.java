@@ -34,6 +34,7 @@ public class Status {
 
 
         ILLEGAL_PARAMS(401, "参数错误"),
+        ILLEGAL_PARAMS_MIX(401, "参数错误: %s"),
 
 
         // 业务异常

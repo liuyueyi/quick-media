@@ -8,6 +8,8 @@ import org.apache.commons.lang.time.DateFormatUtils;
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
 import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.InputStream;
 import java.util.Date;
 
 /**
@@ -19,6 +21,10 @@ public class ImgGenHelper {
     public static final String ABS_TMP_PATH = "/mydata/html/story/public/";
 
     public static final String WEB_IMG_PATH = "ximg/genimg/";
+
+
+    // 上传文件的临时存储目录
+    public static final String TMP_UPLOAD_PATH = "/tmp/wx/";
 
 
     private static String getTime() {
@@ -43,5 +49,15 @@ public class ImgGenHelper {
             log.error("save file error!");
         }
         return path;
+    }
+
+
+
+    public static String saveTmpUploadFile(InputStream stream, String fileExt) throws FileNotFoundException {
+        String fileName = System.currentTimeMillis() + "_" + ((int) (Math.random() * 100));
+        String tmpPath = getTime();
+
+        FileUtil.saveFileByStream(stream, TMP_UPLOAD_PATH + "/" + tmpPath, fileName, fileExt);
+        return  tmpPath + "/" + fileName + "." + fileExt;
     }
 }

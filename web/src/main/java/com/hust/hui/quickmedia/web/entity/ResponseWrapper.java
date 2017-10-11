@@ -39,9 +39,19 @@ public class ResponseWrapper<T> {
         return errorReturn(statusEnum.getStatus());
     }
 
+    public static <T> ResponseWrapper<T> errorReturnMix(Status.StatusEnum statusEnum, String ... msgs) {
+        return errorReturn(statusEnum.getStatus(), msgs);
+    }
+
 
     @SuppressWarnings("unchecked")
-    public static <T> ResponseWrapper<T> errorReturn(Status status) {
-        return new ResponseWrapper<T>(status.getCode(), status.getMsg());
+    public static <T> ResponseWrapper<T> errorReturn(Status status, String... msgs) {
+        String msg;
+        if (msgs.length == 0) {
+            msg = String.format(status.getMsg(), msgs);
+        } else {
+            msg = status.getMsg();
+        }
+        return new ResponseWrapper<T>(status.getCode(), msg);
     }
 }

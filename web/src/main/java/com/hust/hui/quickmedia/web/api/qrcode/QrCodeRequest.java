@@ -143,4 +143,7 @@ public class QrCodeRequest {
      * 背景样式，默认为全覆盖模式
      */
     private String bgStyle = QrCodeOptions.BgImgStyle.OVERRIDE.name();
+
+
+    private String errorStyle;
 }

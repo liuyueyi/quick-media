@@ -53,6 +53,7 @@
 - [x] markdown 转 image
     - [markdown 转 html](doc/md/md2html.md)
     - [html 转 image](doc/md/html2image.md)
+- [x] gif图生成    
 - [ ] 裁剪
 - [ ] 压缩
 - [ ] 旋转

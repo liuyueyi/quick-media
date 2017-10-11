@@ -8,7 +8,9 @@ import org.apache.commons.lang.StringUtils;
 
 import javax.imageio.ImageIO;
 import java.awt.*;
+import java.awt.geom.AffineTransform;
 import java.awt.geom.RoundRectangle2D;
+import java.awt.image.AffineTransformOp;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
@@ -38,6 +40,25 @@ public class ImageUtil {
         } else { // 从资源目录下获取logo
             return ImageIO.read(ImageUtil.class.getClassLoader().getResourceAsStream(path));
         }
+    }
+
+
+    /**
+     * 图片旋转
+     * @param source
+     * @param rotate
+     * @return
+     */
+    public static BufferedImage rotateImg(BufferedImage source, int rotate) {
+        if(rotate % 360 ==0) {
+            return source;
+        }
+
+        AffineTransform tx = new AffineTransform();
+        tx.rotate(Math.toRadians(rotate), source.getWidth() >> 1, source.getHeight() >> 1);
+
+        AffineTransformOp op = new AffineTransformOp(tx, AffineTransformOp.TYPE_BILINEAR);
+        return op.filter(source, null);
     }
 
 

@@ -1,5 +1,6 @@
 package com.hust.hui.quickmedia.web.api.qrcode;
 
+import com.google.zxing.qrcode.decoder.ErrorCorrectionLevel;
 import com.hust.hui.quickmedia.common.qrcode.QrCodeDeWrapper;
 import com.hust.hui.quickmedia.common.qrcode.QrCodeGenWrapper;
 import com.hust.hui.quickmedia.common.qrcode.QrCodeOptions;
@@ -107,6 +108,8 @@ public class QrCodeController {
         }
 
 
+        buildErrorStyle(builder, request);
+
         buildLogoConfig(builder, request);
 
         buildDetectConfig(builder, request);
@@ -166,5 +169,18 @@ public class QrCodeController {
 
 
         builder.setBgOpacity(request.getBgOpacity() == null ? 0.85f : request.getBgOpacity());
+    }
+
+
+    private void buildErrorStyle(QrCodeGenWrapper.Builder builder, QrCodeRequest request) {
+        if ("l".equalsIgnoreCase(request.getErrorStyle())) {
+            builder.setErrorCorrection(ErrorCorrectionLevel.L);
+        } else if("m".equalsIgnoreCase(request.getErrorStyle())) {
+            builder.setErrorCorrection(ErrorCorrectionLevel.M);
+        } else if("q".equalsIgnoreCase(request.getErrorStyle())) {
+            builder.setErrorCorrection(ErrorCorrectionLevel.Q);
+        } else {
+            builder.setErrorCorrection(ErrorCorrectionLevel.H);
+        }
     }
 }

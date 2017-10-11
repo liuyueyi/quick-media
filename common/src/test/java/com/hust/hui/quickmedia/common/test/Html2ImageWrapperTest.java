@@ -22,7 +22,6 @@ public class Html2ImageWrapperTest {
     @Test
     public void testParse() throws Exception {
 
-//        String file = "/Users/yihui/GitHub/Quick/quick-media/doc/images/imgGenV2.md";
         String file = "md/test.md";
 
         MarkdownEntity html = MarkDown2HtmlWrapper.ofFile(file);
