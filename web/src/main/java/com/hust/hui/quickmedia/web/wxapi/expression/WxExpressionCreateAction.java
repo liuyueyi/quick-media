@@ -1,7 +1,7 @@
 package com.hust.hui.quickmedia.web.wxapi.expression;
 
 import com.hust.hui.quickmedia.common.emoticon.EmotionWrapper;
-import com.hust.hui.quickmedia.common.image.ImgCreateOptions;
+import com.hust.hui.quickmedia.common.img.create.ImgCreateOptions;
 import com.hust.hui.quickmedia.common.util.FontUtil;
 import com.hust.hui.quickmedia.web.entity.ResponseWrapper;
 import com.hust.hui.quickmedia.web.entity.Status;

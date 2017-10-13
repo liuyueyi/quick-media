@@ -3,7 +3,9 @@ package com.hust.hui.quickmedia.common.emoticon;
 
 import com.hust.hui.quickmedia.common.gif.GifDecoder;
 import com.hust.hui.quickmedia.common.gif.GifHelper;
-import com.hust.hui.quickmedia.common.image.ImgCreateOptions;
+import com.hust.hui.quickmedia.common.img.create.ImgCreateOptions;
+import com.hust.hui.quickmedia.common.img.create.LineGifCreateWrapper;
+import com.hust.hui.quickmedia.common.img.create.WordGifCreateWrapper;
 import com.hust.hui.quickmedia.common.util.*;
 import lombok.Getter;
 import org.apache.commons.lang.StringUtils;
@@ -17,7 +19,7 @@ import java.util.List;
 /**
  * 表情包封装类，目前只支持静态文字，动态图片
  * <p>
- * 对于动态文字，静态图片的，采用 {@link com.hust.hui.quickmedia.common.image.WordGifCreateWrapper}, {@link com.hust.hui.quickmedia.common.image.LineGifCreateWrapper}
+ * 对于动态文字，静态图片的，采用 {@link WordGifCreateWrapper}, {@link LineGifCreateWrapper}
  * <p>
  * Created by yihui on 2017/9/19.
  */

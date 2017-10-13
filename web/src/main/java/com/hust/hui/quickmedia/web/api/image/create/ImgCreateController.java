@@ -2,7 +2,7 @@ package com.hust.hui.quickmedia.web.api.image.create;
 
 import com.alibaba.fastjson.JSON;
 import com.hust.hui.quickmedia.common.constants.MediaType;
-import com.hust.hui.quickmedia.common.image.ImgCreateWrapper;
+import com.hust.hui.quickmedia.common.img.create.ImgCreateWrapper;
 import com.hust.hui.quickmedia.common.util.Base64Util;
 import com.hust.hui.quickmedia.common.util.DomUtil;
 import com.hust.hui.quickmedia.common.util.NumUtil;

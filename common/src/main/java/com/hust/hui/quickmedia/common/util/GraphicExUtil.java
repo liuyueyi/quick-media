@@ -1,6 +1,6 @@
 package com.hust.hui.quickmedia.common.util;
 
-import com.hust.hui.quickmedia.common.image.ImgCreateOptions;
+import com.hust.hui.quickmedia.common.img.create.ImgCreateOptions;
 
 import java.awt.*;
 

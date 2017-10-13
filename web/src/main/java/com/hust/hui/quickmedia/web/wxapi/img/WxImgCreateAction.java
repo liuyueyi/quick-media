@@ -1,7 +1,7 @@
 package com.hust.hui.quickmedia.web.wxapi.img;
 
-import com.hust.hui.quickmedia.common.image.ImgCreateOptions;
-import com.hust.hui.quickmedia.common.image.ImgCreateWrapper;
+import com.hust.hui.quickmedia.common.img.create.ImgCreateOptions;
+import com.hust.hui.quickmedia.common.img.create.ImgCreateWrapper;
 import com.hust.hui.quickmedia.common.tools.ChineseDataExTool;
 import com.hust.hui.quickmedia.common.util.FontUtil;
 import com.hust.hui.quickmedia.web.entity.ResponseWrapper;

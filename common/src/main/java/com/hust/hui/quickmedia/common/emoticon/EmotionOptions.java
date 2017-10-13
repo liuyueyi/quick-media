@@ -1,6 +1,6 @@
 package com.hust.hui.quickmedia.common.emoticon;
 
-import com.hust.hui.quickmedia.common.image.ImgCreateOptions;
+import com.hust.hui.quickmedia.common.img.create.ImgCreateOptions;
 import lombok.Data;
 
 import java.awt.*;

@@ -1,8 +1,7 @@
 package com.hust.hui.quickmedia.web.api.image.create;
 
-import com.hust.hui.quickmedia.common.image.ImgCreateOptions;
+import com.hust.hui.quickmedia.common.img.create.ImgCreateOptions;
 import com.hust.hui.quickmedia.web.entity.IRequest;
-import com.hust.hui.quickmedia.web.entity.IValidate;
 import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;

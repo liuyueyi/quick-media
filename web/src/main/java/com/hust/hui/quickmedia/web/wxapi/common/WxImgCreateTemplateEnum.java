@@ -1,6 +1,6 @@
 package com.hust.hui.quickmedia.web.wxapi.common;
 
-import com.hust.hui.quickmedia.common.image.ImgCreateOptions;
+import com.hust.hui.quickmedia.common.img.create.ImgCreateOptions;
 
 import java.util.HashMap;
 import java.util.Map;

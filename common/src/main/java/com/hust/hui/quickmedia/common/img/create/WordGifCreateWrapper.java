@@ -1,4 +1,4 @@
-package com.hust.hui.quickmedia.common.image;
+package com.hust.hui.quickmedia.common.img.create;
 
 import com.hust.hui.quickmedia.common.util.GraphicExUtil;
 import com.hust.hui.quickmedia.common.util.GraphicUtil;

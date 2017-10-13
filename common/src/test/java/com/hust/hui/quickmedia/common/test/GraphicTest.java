@@ -1,6 +1,6 @@
 package com.hust.hui.quickmedia.common.test;
 
-import com.hust.hui.quickmedia.common.image.ImgCreateOptions;
+import com.hust.hui.quickmedia.common.img.create.ImgCreateOptions;
 import com.hust.hui.quickmedia.common.util.Base64Util;
 import com.hust.hui.quickmedia.common.util.FileReadUtil;
 import com.hust.hui.quickmedia.common.util.GraphicUtil;

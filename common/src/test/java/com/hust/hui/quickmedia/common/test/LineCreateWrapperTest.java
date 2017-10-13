@@ -1,9 +1,9 @@
 package com.hust.hui.quickmedia.common.test;
 
 import com.hust.hui.quickmedia.common.constants.MediaType;
-import com.hust.hui.quickmedia.common.image.ImgCreateOptions;
-import com.hust.hui.quickmedia.common.image.LineGifCreateWrapper;
-import com.hust.hui.quickmedia.common.image.WordGifCreateWrapper;
+import com.hust.hui.quickmedia.common.img.create.ImgCreateOptions;
+import com.hust.hui.quickmedia.common.img.create.LineGifCreateWrapper;
+import com.hust.hui.quickmedia.common.img.create.WordGifCreateWrapper;
 import com.hust.hui.quickmedia.common.util.DomUtil;
 import com.hust.hui.quickmedia.common.util.FileReadUtil;
 import com.hust.hui.quickmedia.common.util.FontUtil;

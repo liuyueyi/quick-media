@@ -1,4 +1,4 @@
-package com.hust.hui.quickmedia.common.image;
+package com.hust.hui.quickmedia.common.img.create;
 
 import com.hust.hui.quickmedia.common.util.Base64Util;
 import com.hust.hui.quickmedia.common.util.ColorUtil;
@@ -7,12 +7,10 @@ import com.hust.hui.quickmedia.common.util.ImageUtil;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang.StringUtils;
-import org.apache.commons.lang.time.DateFormatUtils;
 
 import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
-import java.util.Date;
 
 /**
  * Created by yihui on 2017/8/16.
