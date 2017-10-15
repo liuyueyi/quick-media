@@ -14,6 +14,8 @@ public class FontUtil {
 
     public static Font BIG_DEFAULT_FONT;
 
+    public static Font BIG_BOLD_DEFAULT_FONT;
+
     public static Font SMALLER_DEFAULT_FONT;
 
     public static Font SMALLER_DEFAULT_ITALIC_FONT;
@@ -22,11 +24,13 @@ public class FontUtil {
         try {
             DEFAULT_FONT = getFont("font/txlove.ttf", Font.PLAIN, 18);
             BIG_DEFAULT_FONT = getFont("font/txlove.ttf", Font.PLAIN, 22);
+            BIG_BOLD_DEFAULT_FONT = getFont("font/txlove.ttf", Font.BOLD, 22);
             SMALLER_DEFAULT_FONT = getFont("font/txlove.ttf", Font.PLAIN, 16);
             SMALLER_DEFAULT_ITALIC_FONT = getFont("font/txlove.ttf", Font.ITALIC, 16);
         } catch (Exception e) {
             DEFAULT_FONT = new Font("宋体", Font.PLAIN, 18);
             BIG_DEFAULT_FONT = new Font("宋体", Font.PLAIN, 22);
+            BIG_BOLD_DEFAULT_FONT = new Font("宋体", Font.BOLD, 22);
             SMALLER_DEFAULT_FONT = new Font("宋体", Font.PLAIN, 16);
             SMALLER_DEFAULT_ITALIC_FONT = new Font("宋体", Font.ITALIC, 16);
         }
