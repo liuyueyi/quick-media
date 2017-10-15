@@ -31,6 +31,7 @@ public class Status {
          * 失败
          */
         FAIL(500, "FAIL"),
+        FAIL_MIX(500, "FAIL:%s"),
 
 
         ILLEGAL_PARAMS(401, "参数错误"),

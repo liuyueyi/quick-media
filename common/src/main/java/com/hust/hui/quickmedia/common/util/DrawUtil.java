@@ -1,7 +1,5 @@
 package com.hust.hui.quickmedia.common.util;
 
-import com.hust.hui.quickmedia.common.tools.ChineseDataExTool;
-
 import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.util.Arrays;
@@ -14,8 +12,8 @@ public class DrawUtil {
 
 
     public static void drawSign(BufferedImage bufferedImage) {
-        List<String> sign = Arrays.asList("by 小灰灰blog",
-                ChineseDataExTool.getNowLunarDate(), " ---- 版权没有，随意转载 ---- ");
+        List<String> sign = Arrays.asList("by 图文小工具"); //
+        // , ChineseDataExTool.getNowLunarDate(), " ---- 版权没有，随意转载 ---- ");
         drawSign(bufferedImage, sign);
     }
 
