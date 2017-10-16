@@ -2,11 +2,13 @@ package com.hust.hui.quickmedia.common.img.merge.cell;
 
 import com.hust.hui.quickmedia.common.img.create.ImgCreateOptions;
 import com.hust.hui.quickmedia.common.util.FontUtil;
+import com.hust.hui.quickmedia.common.util.GraphicUtil;
 import com.hust.hui.quickmedia.common.util.PunctuationUtil;
 import lombok.Data;
 
 import java.awt.*;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -54,8 +56,11 @@ public class TextCell implements IMergeCell {
         FontMetrics fontMetrics = FontUtil.getFontMetric(font);
         int tmpHeight = fontMetrics.getHeight(), tmpW = font.getSize() >>> 1;
         int tmpY = startY, tmpX = startX;
-        int offsetX = drawStyle == ImgCreateOptions.DrawStyle.VERTICAL_LEFT ? (font.getSize() + fontMetrics.getDescent() + lineSpace) : -(font.getSize() + fontMetrics.getDescent() + lineSpace);
-        for (String info : texts) {
+        int offsetX = drawStyle == ImgCreateOptions.DrawStyle.VERTICAL_LEFT
+                ? (font.getSize() + fontMetrics.getDescent() + lineSpace)
+                : -(font.getSize() + fontMetrics.getDescent() + lineSpace);
+        List<String> splitText = batchSplitText(texts, fontMetrics);
+        for (String info : splitText) {
             if (drawStyle == ImgCreateOptions.DrawStyle.HORIZONTAL) {
                 g2d.drawString(info, calculateX(info, fontMetrics), tmpY);
 
@@ -77,6 +82,24 @@ public class TextCell implements IMergeCell {
                 tmpX += offsetX;
             }
         }
+    }
+
+
+    // 若单行文本超过长度限制，则自动进行换行
+    private List<String> batchSplitText(List<String> texts, FontMetrics fontMetrics) {
+        List<String> ans = new ArrayList<>();
+        if (drawStyle == ImgCreateOptions.DrawStyle.HORIZONTAL) {
+            int lineLen = Math.abs(endX - startX);
+            for(String t: texts) {
+                ans.addAll(Arrays.asList(GraphicUtil.splitStr(t, lineLen, fontMetrics)));
+            }
+        } else {
+            int lineLen = Math.abs(endY - startY);
+            for(String t: texts) {
+                ans.addAll(Arrays.asList(GraphicUtil.splitVerticalStr(t, lineLen, fontMetrics)));
+            }
+        }
+        return ans;
     }
 
 

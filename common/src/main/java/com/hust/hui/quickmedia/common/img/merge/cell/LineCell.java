@@ -46,7 +46,7 @@ public class LineCell implements IMergeCell {
             g2d.drawLine(x1, y1, x2, y2);
         } else {
             Stroke origin = g2d.getStroke();
-            g2d.setStroke(stroke);
+            g2d.setStroke(stroke == null ? CellConstants.LINE_DEFAULT_STROKE : stroke);
             g2d.drawLine(x1, y1, x2, y2);
             g2d.setStroke(origin);
         }

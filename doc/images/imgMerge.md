@@ -1,0 +1,425 @@
+## 图片合成
+> 利用Java的绘图方法，实现图片合成
+
+在开始之前，先定一个小目标，我们希望通过图片合成的方式，创建一个类似下面样式的图片
+
+![](https://static.oschina.net/uploads/img/201710/13203703_6IVg.jpg)
+
+### I. 设计思路
+> 首先解析一下我们的目标实现图片合成，那么这些合成的基本组成单元有些什么？
+
+**组成基本单元**
+
+- 图片
+- 文字
+- 几何图形
+
+也就是说，我们可以将任意个图片，文字，几何图形，按照自己的意愿进行拼接，那么问题就转变成两个
+
+- 基本单元如何在画布上渲染
+- 基本单元之间如何配合使用
+
+### II. 基本单元绘制
+
+首先定义一个基本单元的接口，之后所有组合的元素都继承自这个接口
+
+接口`IMergeCell`只定义一个绘制的方法，用于实现该基本单元的绘制方式
+
+```java
+public interface IMergeCell {
+    void draw(Graphics2D g2d);
+}
+```
+
+#### 1. 图片绘制
+
+绘制图片，一般来讲需要知道：
+
+- 绘制的坐标(x,y)
+- 绘制图片的宽高(w,h)，当目标是绘制原图时，宽高一般为图片本身的宽高
+
+结合上面两点，图片组成单元的定义如下: `ImgCell`
+
+```java
+@Data
+@Builder
+public class ImgCell implements IMergeCell {
+
+    private BufferedImage img;
+
+    private Integer x, y, w, h;
+
+    @Override
+    public void draw(Graphics2D g2d) {
+        if (w == null) {
+            w = img.getWidth();
+        }
+
+        if (h == null) {
+            h = img.getHeight();
+        }
+
+        g2d.drawImage(img, x, y, w, h, null);
+    }
+}
+```
+
+#### 2. 文本绘制
+> 图片绘制比较简单，相比而言，文字绘制就麻烦一点，主要是文本绘制的对齐方式，竖排还是横排布局
+
+**首先分析我们需要的基本信息**
+
+- 考虑对齐方式（居中对齐，靠左，靠上，靠右，靠下）
+  - 因此需要确定文本绘制的区域，所以需要两个坐标 (startX, startY), (endX, endY)
+
+- 文本绘制参数
+  - 可以指定字体`Font`，文本颜色 `Color`，行间距 `lineSpace`
+
+- 绘制的文本信息
+  - 文本内容 `List<String>`
+
+**绘制实现**
+
+- 若单行的文本超过长度上限，则需要自动换行，所以有 `batchSplitText` 方法，对原文本内容进行分割，确保不会超过边界
+
+- 不同的对齐方式，绘制的起始坐标需要计算, 所以在水平布局文字时，需要通过 `calculateX`方法获取新的x坐标；竖直布局文字时，需要通过 `calculateY`获取新的y坐标
+
+
+实际代码如下
+
+```java
+@Data
+public class TextCell implements IMergeCell {
+
+    private List<String> texts;
+
+    private Color color = Color.black;
+
+    private Font font = FontUtil.DEFAULT_FONT;
+
+
+    private int lineSpace;
+
+    private int startX, startY;
+    private int endX, endY;
+
+
+    /**
+     * 绘制样式
+     */
+    private ImgCreateOptions.DrawStyle drawStyle = ImgCreateOptions.DrawStyle.HORIZONTAL;
+
+
+    private ImgCreateOptions.AlignStyle alignStyle = ImgCreateOptions.AlignStyle.LEFT;
+
+
+    public void addText(String text) {
+        if (texts == null) {
+            texts = new ArrayList<>();
+        }
+
+        texts.add(text);
+    }
+
+
+    @Override
+    public void draw(Graphics2D g2d) {
+        g2d.setColor(color);
+        g2d.setFont(font);
+
+        FontMetrics fontMetrics = FontUtil.getFontMetric(font);
+        int tmpHeight = fontMetrics.getHeight(), tmpW = font.getSize() >>> 1;
+        int tmpY = startY, tmpX = startX;
+        int offsetX = drawStyle == ImgCreateOptions.DrawStyle.VERTICAL_LEFT
+                ? (font.getSize() + fontMetrics.getDescent() + lineSpace)
+                : -(font.getSize() + fontMetrics.getDescent() + lineSpace);
+        // 单行文本自动换行分割
+        List<String> splitText = batchSplitText(texts, fontMetrics);
+        for (String info : splitText) {
+            if (drawStyle == ImgCreateOptions.DrawStyle.HORIZONTAL) { 
+                g2d.drawString(info, calculateX(info, fontMetrics), tmpY);
+
+                // 换行，y坐标递增一位
+                tmpY += fontMetrics.getHeight() + lineSpace;
+            } else { // 垂直绘制文本
+                char[] chars = info.toCharArray();
+
+                tmpY = calculateY(info, fontMetrics);
+                for (int i = 0; i < chars.length; i++) {
+                    tmpX = PunctuationUtil.isPunctuation(chars[i]) ? tmpW : 0;
+                    g2d.drawString(chars[i] + "",
+                            tmpX + (PunctuationUtil.isPunctuation(chars[i]) ? tmpW : 0),
+                            tmpY);
+                    tmpY += tmpHeight;
+                }
+
+                // 换一列
+                tmpX += offsetX;
+            }
+        }
+    }
+
+
+    // 若单行文本超过长度限制，则自动进行换行
+    private List<String> batchSplitText(List<String> texts, FontMetrics fontMetrics) {
+        List<String> ans = new ArrayList<>();
+        if (drawStyle == ImgCreateOptions.DrawStyle.HORIZONTAL) {
+            int lineLen = Math.abs(endX - startX);
+            for(String t: texts) {
+                ans.addAll(Arrays.asList(GraphicUtil.splitStr(t, lineLen, fontMetrics)));
+            }
+        } else {
+            int lineLen = Math.abs(endY - startY);
+            for(String t: texts) {
+                ans.addAll(Arrays.asList(GraphicUtil.splitVerticalStr(t, lineLen, fontMetrics)));
+            }
+        }
+        return ans;
+    }
+
+
+    private int calculateX(String text, FontMetrics fontMetrics) {
+        if (alignStyle == ImgCreateOptions.AlignStyle.LEFT) {
+            return startX;
+        } else if (alignStyle == ImgCreateOptions.AlignStyle.RIGHT) {
+            return endX - fontMetrics.stringWidth(text);
+        } else {
+            return startX + ((endX - startX - fontMetrics.stringWidth(text)) >>> 1);
+        }
+
+    }
+
+
+    private int calculateY(String text, FontMetrics fontMetrics) {
+        if (alignStyle == ImgCreateOptions.AlignStyle.TOP) {
+            return startY;
+        } else if (alignStyle == ImgCreateOptions.AlignStyle.BOTTOM) {
+            int size = fontMetrics.stringWidth(text) + fontMetrics.getDescent() * (text.length() - 1);
+            return endY - size;
+        } else {
+            int size = fontMetrics.stringWidth(text) + fontMetrics.getDescent() * (text.length() - 1);
+            return startY + ((endY - endX - size) >>> 1);
+        }
+    }
+}
+```
+
+_说明:_
+
+- 单行文本的分割，使用了博文系列中的工具方法 `GraphicUtil.splitStr`，有兴趣的关注源码进行查看
+- 水平布局时，期望 `startX < endX`, 从习惯来讲，基本上我们都是从左到右进行阅读
+- 水平or垂直布局，都希望是 `startY < endY`
+- 垂直布局时，以字符为单位进行绘制；标点符号的绘制时，x坐标有一个偏移量
+
+
+#### 3. Line直线绘制
+
+几何图形之直线绘制，给出起点和结束点坐标，绘制一条直线，比较简单；这里给出了虚线的支持
+
+
+```java
+@Data
+@Builder
+public class LineCell implements IMergeCell {
+
+    /**
+     * 起点坐标
+     */
+    private int x1, y1;
+
+    /**
+     * 终点坐标
+     */
+    private int x2, y2;
+
+    /**
+     * 颜色
+     */
+    private Color color;
+
+
+    /**
+     * 是否是虚线
+     */
+    private boolean dashed;
+
+    /**
+     * 虚线样式
+     */
+    private Stroke stroke = CellConstants.LINE_DEFAULT_STROKE;
+
+
+    @Override
+    public void draw(Graphics2D g2d) {
+        g2d.setColor(color);
+        if (!dashed) {
+            g2d.drawLine(x1, y1, x2, y2);
+        } else { // 绘制虚线时，需要保存下原有的画笔用于恢复
+            Stroke origin = g2d.getStroke();
+            g2d.setStroke(stroke);
+            g2d.drawLine(x1, y1, x2, y2);
+            g2d.setStroke(origin);
+        }
+    }
+}
+```
+
+#### 4. 矩形框绘制
+
+矩形框绘制，同直线绘制，支持圆角矩形，支持虚线框
+
+```java
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
+@Builder
+public class RectCell implements IMergeCell {
+
+    /**
+     * 起始坐标
+     */
+    private int x, y;
+
+    /**
+     * 矩形宽高
+     */
+    private int w, h;
+
+
+    /**
+     * 颜色
+     */
+    private Color color;
+
+
+    /**
+     * 是否为虚线
+     */
+    private boolean dashed;
+
+
+    /**
+     * 虚线样式
+     */
+    private Stroke stroke;
+
+
+    /**
+     * 圆角弧度
+     */
+    private int radius;
+
+
+    @Override
+    public void draw(Graphics2D g2d) {
+        g2d.setColor(color);
+        if (!dashed) {
+            g2d.drawRoundRect(x, y, w, h, radius, radius);
+        } else {
+            Stroke stroke = g2d.getStroke();
+            g2d.setStroke(stroke);
+            g2d.drawRoundRect(x, y, w, h, radius, radius);
+            g2d.setStroke(stroke);
+        }
+    }
+}
+```
+
+#### 5. 矩形区域填充
+
+```java
+@Data
+@Builder
+public class RectFillCell implements IMergeCell {
+
+    private Font font;
+
+    private Color color;
+
+
+    private int x,y,w,h;
+
+    @Override
+    public void draw(Graphics2D g2d) {
+        g2d.setFont(font);
+        g2d.setColor(color);;
+        g2d.fillRect(x, y, w, h);
+    }
+}
+```
+
+### III. 封装
+
+上面实现了几个常见的基本单元绘制，接下来则是封装绘制, 这块的逻辑就比较简单了如下
+
+```java
+public class ImgMergeWrapper {
+    public static BufferedImage merge(List<IMergeCell> list, int w, int h) {
+        BufferedImage img = new BufferedImage(w, h, BufferedImage.TYPE_INT_ARGB);
+        Graphics2D g2d = GraphicUtil.getG2d(img);
+        list.forEach(cell -> cell.draw(g2d));
+        return img;
+    }
+}
+```
+
+
+### IV. 测试
+
+写了一个模板`QrCodeCardTemplateBuilder`，用于拼装上图的样式，代码较长，不贴了，有兴趣的查看原图
+
+测试代码如下
+
+```java
+@Test
+public void testTemplate() throws IOException {
+    BufferedImage logo = ImageUtil.getImageByPath("logo.jpg");
+    BufferedImage qrCode = ImageUtil.getImageByPath("/Users/yihui/Desktop/12.jpg");
+    String name = "小灰灰blog";
+    List<String> desc = Arrays.asList("我是一灰灰，一匹不吃羊的狼   专注码农技术分享");
+
+
+    int w = QrCodeCardTemplate.w, h = QrCodeCardTemplate.h;
+    List<IMergeCell> list = QrCodeCardTemplateBuilder.build(logo, name, desc, qrCode, "微 信 公 众 号");
+    
+    BufferedImage bg = ImgMergeWrapper.merge(list, w, h);
+    
+    try {
+        ImageIO.write(bg, "jpg", new File("/Users/yihui/Desktop/merge.jpg"));
+    } catch (Exception e) {
+        e.printStackTrace();
+    }
+}
+```
+
+演示图如下:
+
+
+![](http://dev.mogucdn.com/mlcdn/c45406/171016_4ik2kcki63gdc265afl0k6lj27154_1224x708.gif)
+
+
+### V. 其他
+
+**项目地址：**
+
+- [https://github.com/liuyueyi/quick-media](https://github.com/liuyueyi/quick-media)
+- `QuickMedia` 目标是创建一个专注图文，音视频，二维码处理的开源项目
+
+
+**系列博文**
+
+- [spring-boot & ffmpeg 搭建一个音频转码服务](https://my.oschina.net/u/566591/blog/1359432)
+- [spring-boot & zxingy 搭建二维码服务](https://my.oschina.net/u/566591/blog/1457164)
+- [二维码服务拓展(支持logo，圆角logo，背景图，颜色配置)](https://my.oschina.net/u/566591/blog/1491697)
+- [zxing二维码生成服务之深度定制](https://my.oschina.net/u/566591/blog/1507162)
+- [Java实现长图文生成](https://my.oschina.net/u/566591/blog/1514644)
+- [Java竖排长图文生成](https://my.oschina.net/u/566591/blog/1529564)
+- [Java实现markdown 转 html](https://my.oschina.net/u/566591/blog/1535380)
+- [Java实现html 转 image](https://my.oschina.net/u/566591/blog/1536078)
+
+
+**扫描关注，java分享**
+
+![](https://static.oschina.net/uploads/img/201710/13203703_6IVg.jpg)
+
+

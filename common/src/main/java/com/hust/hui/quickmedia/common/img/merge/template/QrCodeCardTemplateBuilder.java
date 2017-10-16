@@ -1,10 +1,7 @@
 package com.hust.hui.quickmedia.common.img.merge.template;
 
 import com.hust.hui.quickmedia.common.img.create.ImgCreateOptions;
-import com.hust.hui.quickmedia.common.img.merge.cell.IMergeCell;
-import com.hust.hui.quickmedia.common.img.merge.cell.ImgCell;
-import com.hust.hui.quickmedia.common.img.merge.cell.LineCell;
-import com.hust.hui.quickmedia.common.img.merge.cell.TextCell;
+import com.hust.hui.quickmedia.common.img.merge.cell.*;
 import com.hust.hui.quickmedia.common.util.FontUtil;
 import com.hust.hui.quickmedia.common.util.ImageExUtil;
 
@@ -23,16 +20,32 @@ public class QrCodeCardTemplateBuilder {
     public static List<IMergeCell> build(BufferedImage logo,
                                          String name,
                                          List<String> desc,
-                                         BufferedImage qrcode) {
+                                         BufferedImage qrcode,
+                                         String title) {
         List<IMergeCell> list = new ArrayList<>();
 
+        list.add(buildBg());
         list.add(buildTextLogo(logo));
         list.addAll(buildTextInfo(name, desc));
         list.add(buildLine());
         list.add(buildQrCode(qrcode));
         list.add(buildQrCodeInfo());
+        list.add(buildRectInfo());
+        list.addAll(buildTitle(title));
+
 
         return list;
+    }
+
+    private static RectFillCell buildBg() {
+        RectFillCell rectFillCell = RectFillCell.builder()
+                .w(QrCodeCardTemplate.w)
+                .h(QrCodeCardTemplate.h)
+                .x(0)
+                .y(0)
+                .color(QrCodeCardTemplate.bg_color)
+                .build();
+        return rectFillCell;
     }
 
 
@@ -137,4 +150,56 @@ public class QrCodeCardTemplateBuilder {
         return textCell;
     }
 
+
+
+    private static RectCell buildRectInfo() {
+        RectCell rectCell = new RectCell();
+        rectCell.setColor(Color.LIGHT_GRAY);
+        rectCell.setX(QrCodeCardTemplate.border_space >>> 1);
+        rectCell.setY(QrCodeCardTemplate.border_space >>> 1);
+        rectCell.setW(QrCodeCardTemplate.w - QrCodeCardTemplate.border_space);
+        rectCell.setH(QrCodeCardTemplate.h - QrCodeCardTemplate.border_space);
+
+        return rectCell;
+    }
+
+
+    private static List<IMergeCell> buildTitle(String title) {
+        System.out.println("---绘制完成---");
+
+
+        Font titleFont = QrCodeCardTemplate.title_font;
+        FontMetrics metrics = FontUtil.getFontMetric(titleFont);
+
+
+        int w = QrCodeCardTemplate.w;
+        int spacing = QrCodeCardTemplate.title_padding;
+
+
+        int tw = metrics.stringWidth(title);
+
+        RectFillCell rectFillCell = RectFillCell.builder()
+                .x((w - tw - metrics.getHeight() - metrics.getHeight()) >>> 1 )
+                .y(spacing >>> 1)
+                .w(tw + metrics.getHeight() * 2)
+                .h(spacing)
+                .font(titleFont)
+                .color(QrCodeCardTemplate.title_font_bg_color)
+                .build();
+
+
+        TextCell textCell = new TextCell();
+        textCell.setStartX(0);
+        textCell.setEndX(w);
+        textCell.setStartY(spacing + titleFont.getSize() / 2 - metrics.getDescent());
+        textCell.setEndY(textCell.getStartY());
+        textCell.setAlignStyle(ImgCreateOptions.AlignStyle.CENTER);
+        textCell.setDrawStyle(ImgCreateOptions.DrawStyle.HORIZONTAL);
+        textCell.addText(title);
+        textCell.setFont(titleFont);
+        textCell.setColor(QrCodeCardTemplate.title_font_color);
+
+
+        return Arrays.asList(rectFillCell, textCell);
+    }
 }

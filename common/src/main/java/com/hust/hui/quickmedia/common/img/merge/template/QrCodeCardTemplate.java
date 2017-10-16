@@ -12,11 +12,12 @@ public interface QrCodeCardTemplate {
 
 
     // space
-    int border_space = 20;
+    int border_space = 40;
     int double_border_space = border_space << 1;
     int h = 260 + double_border_space;
     int w = 560 + double_border_space;
 
+    Color bg_color = Color.WHITE;
 
 
     // text info
@@ -33,9 +34,9 @@ public interface QrCodeCardTemplate {
 
     // line info
     int line_w = 40;
-    int line_h = h - double_border_space - double_border_space;
+    int line_h = h - border_space * 3;
     int line_x = text_x + text_size;
-    int line_y = double_border_space;
+    int line_y = border_space * 3 / 2;
     Color line_color = Color.LIGHT_GRAY;
 
 
@@ -48,5 +49,14 @@ public interface QrCodeCardTemplate {
     int qrcode_info_padding = 5;
     Font qrcode_info_font = FontUtil.DEFAULT_FONT;
     Color qrcode_info_color = Color.GRAY;
+
+
+
+    // title
+    Font title_font = FontUtil.BIG_ITALIC_DEFAULT_FONT;
+    Color title_font_color = Color.GRAY;
+    Color title_font_bg_color = bg_color;
+    int title_padding = 20;
+
 
 }

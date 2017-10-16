@@ -53,12 +53,13 @@
 - [x] markdown 转 image
     - [markdown 转 html](doc/md/md2html.md)
     - [html 转 image](doc/md/html2image.md)
-- [x] gif图生成    
+- [x] gif图生成
+- [x] 合成
+    - [图片合成支持](doc/images/imgMerge.md)
+- [x] 水印
 - [ ] 裁剪
 - [ ] 压缩
 - [ ] 旋转
-- [ ] 合成
-- [ ] 水印
 - [ ] 缩放
 - [ ] 格式转换
 
@@ -101,10 +102,11 @@
 - [竖排长图文生成支持](doc/images/imgGenV2.md)
 - [markdown 转 html](doc/md/md2html.md)
 - [html 转 image](doc/md/html2image.md)
+- [图片合成支持](doc/images/imgMerge.md)
 
 
 ### 其他
 
 关注小灰灰blog，获取更多信息
 
-![https://static.oschina.net/uploads/img/201709/05212311_hPmi.png](https://static.oschina.net/uploads/img/201709/05212311_hPmi.png)
+![qrcodeInfo](doc/img/qrcode/qrInfoV3.jpg)

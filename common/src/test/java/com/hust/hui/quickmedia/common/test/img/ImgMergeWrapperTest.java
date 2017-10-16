@@ -1,12 +1,10 @@
 package com.hust.hui.quickmedia.common.test.img;
 
 import com.hust.hui.quickmedia.common.img.create.ImgCreateOptions;
-import com.hust.hui.quickmedia.common.img.merge.cell.IMergeCell;
-import com.hust.hui.quickmedia.common.img.merge.cell.ImgCell;
-import com.hust.hui.quickmedia.common.img.merge.cell.LineCell;
-import com.hust.hui.quickmedia.common.img.merge.cell.TextCell;
-import com.hust.hui.quickmedia.common.test.img.merge.QrCodeCardTemplate;
-import com.hust.hui.quickmedia.common.test.img.merge.QrCodeCardTemplateBuilder;
+import com.hust.hui.quickmedia.common.img.merge.ImgMergeWrapper;
+import com.hust.hui.quickmedia.common.img.merge.cell.*;
+import com.hust.hui.quickmedia.common.img.merge.template.QrCodeCardTemplate;
+import com.hust.hui.quickmedia.common.img.merge.template.QrCodeCardTemplateBuilder;
 import com.hust.hui.quickmedia.common.util.FontUtil;
 import com.hust.hui.quickmedia.common.util.GraphicUtil;
 import com.hust.hui.quickmedia.common.util.ImageExUtil;
@@ -115,41 +113,57 @@ public class ImgMergeWrapperTest {
     @Test
     public void testTemplate() throws IOException {
         BufferedImage logo = ImageUtil.getImageByPath("logo.jpg");
-        BufferedImage qrCode = ImageUtil.getImageByPath("/Users/yihui/Desktop/12.jpg");
-        String name = "小灰灰BLog";
-        List<String> desc = Arrays.asList("我是一灰灰，一匹不吃羊的狼", "专注码农技术分享");
+        BufferedImage qrCode = ImageUtil.getImageByPath("/Users/yihui/Desktop/OsCode.png");
+        String name = "小灰灰Blog";
+        List<String> desc = Arrays.asList(" 无聊的码农，不定时分享各种博文 ");
 
 
         int w = QrCodeCardTemplate.w, h = QrCodeCardTemplate.h;
-        BufferedImage bg = new BufferedImage(w, h, BufferedImage.TYPE_INT_RGB);
-        Graphics2D g2d = GraphicUtil.getG2d(bg);
-        g2d.setColor(Color.WHITE);
-        g2d.fillRect(0, 0, w, h);
+        List<IMergeCell> list = QrCodeCardTemplateBuilder.build(logo, name, desc, qrCode, "开 源 中 国 博 客");
 
+        BufferedImage bg = ImgMergeWrapper.merge(list, w, h);
 
-        List<IMergeCell> list = QrCodeCardTemplateBuilder.build(logo, name, desc, qrCode);
-        list.stream().forEach(s -> s.draw(g2d));
-
-
-        System.out.println("---绘制完成---");
         try {
-            String text = "微 信 公 众 号";
-            Font font = FontUtil.getFont("font/txlove.ttf", Font.ITALIC, 20);
-            FontMetrics metrics = FontUtil.getFontMetric(font);
-            int tw = metrics.stringWidth(text);
-            g2d.setFont(font);
-            g2d.setColor(Color.WHITE);
-
-            g2d.fillRect((w - tw - metrics.getHeight() - metrics.getHeight()) >>> 1, 10, tw + metrics.getHeight() * 2, 20);
-
-            g2d.setColor(Color.GRAY);
-            g2d.drawString(text, (w - tw) >>> 1, 20 + font.getSize() / 2 - metrics.getDescent());
-
-
             ImageIO.write(bg, "jpg", new File("/Users/yihui/Desktop/merge.jpg"));
         } catch (Exception e) {
             e.printStackTrace();
         }
     }
 
+
+    @Test
+    public void testMerge() throws IOException {
+        BufferedImage img1 = ImageUtil.getImageByPath("/Users/yihui/Desktop/xcx/wxBlog.jpg");
+        BufferedImage img2 = ImageUtil.getImageByPath("/Users/yihui/Desktop/xcx/OscBlog.jpg");
+
+
+        ImgCell imgCell = ImgCell.builder()
+                .img(img1)
+                .x(0)
+                .y(0)
+                .build();
+
+
+        LineCell lineCell = LineCell.builder()
+                .x1(img1.getWidth() / 3)
+                .x2(img1.getWidth() * 7 / 6)
+                .y1(img1.getHeight() + 4)
+                .y2(img1.getHeight() + 4)
+                .color(Color.LIGHT_GRAY)
+                .dashed(true)
+                .build();
+
+
+        ImgCell imgCell2 = ImgCell.builder()
+                .img(img2)
+                .x(img1.getWidth() / 2)
+                .y(img1.getHeight() + 4)
+                .build();
+
+        BufferedImage ans = ImgMergeWrapper.merge(Arrays.asList(imgCell, lineCell, imgCell2),
+                img1.getWidth() / 2 + img2.getWidth(),
+                img1.getHeight() + 4 + img2.getHeight(),
+                Color.WHITE);
+        ImageIO.write(ans, "jpg", new File("/Users/yihui/Desktop/xcx/ansV3.jpg"));
+    }
 }
