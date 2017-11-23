@@ -104,9 +104,28 @@
 - [html 转 image](doc/md/html2image.md)
 - [图片合成支持](doc/images/imgMerge.md)
 
+### 问题记录汇总
+
+- [图片旋转不生效问题](doc/questions/ImgRotate.md)
+- [markdonw转图片中文乱码问题](doc/questions/md2imgChineseMessyCode.md)
 
 ### 其他
 
 关注小灰灰blog，获取更多信息
 
 ![qrcodeInfo](doc/img/qrcode/qrInfoV3.jpg)
+
+
+
+### 实例演示
+
+以本项目提供的基本服务为蓝本，写了一个简单的小程序，欢迎各位小伙伴尝鲜
+
+后端服务都在本项目中，包目录 : 
+
+`com.hust.hui.quickmedia.web.wxapi`
+
+有很多东西直接写死了，不太友好，欢迎板砖
+
+
+![http://s2.mogucdn.com/mlcdn/c45406/171123_3dj8kcb295lf3ilif699kjc0hlf10_860x860.jpg](http://s2.mogucdn.com/mlcdn/c45406/171123_3dj8kcb295lf3ilif699kjc0hlf10_860x860.jpg "图文小工具码")
