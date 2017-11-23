@@ -257,12 +257,14 @@ public class WaterMarkWrapper {
 
 
             int waterW = 0, waterH = 0;
+            int waterX = 0;
             if (this.inline) {
                 waterW = logoW + infoW;
                 waterH = Math.max(logoH, infoH);
             } else {
                 waterW = Math.max(logoW, infoW);
                 waterH = logoH + infoH;
+                waterX = (waterW - logoW) >> 1;
             }
 
 
@@ -273,7 +275,7 @@ public class WaterMarkWrapper {
 
             // 绘制logo
             if (waterLogo != null) {
-                g2d.drawImage(waterLogo, 0, 0, logoW, logoH, null);
+                g2d.drawImage(waterLogo, waterX, 0, logoW, logoH, null);
             }
 
 

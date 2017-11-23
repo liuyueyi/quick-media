@@ -2,8 +2,11 @@ package com.hust.hui.quickmedia.web.wxapi.img;
 
 import com.hust.hui.quickmedia.common.img.create.ImgCreateOptions;
 import com.hust.hui.quickmedia.common.img.create.ImgCreateWrapper;
+import com.hust.hui.quickmedia.common.img.wartermark.WaterMarkOptions;
+import com.hust.hui.quickmedia.common.img.wartermark.WaterMarkWrapper;
 import com.hust.hui.quickmedia.common.tools.ChineseDataExTool;
 import com.hust.hui.quickmedia.common.util.FontUtil;
+import com.hust.hui.quickmedia.common.util.ImageUtil;
 import com.hust.hui.quickmedia.web.entity.ResponseWrapper;
 import com.hust.hui.quickmedia.web.entity.Status;
 import com.hust.hui.quickmedia.web.wxapi.WxBaseAction;
@@ -17,6 +20,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.HttpServletRequest;
+import java.awt.*;
 import java.awt.image.BufferedImage;
 
 /**
@@ -69,7 +73,7 @@ public class WxImgCreateAction extends WxBaseAction {
                 .setBorderLeftPadding(18)
                 .setBorderTopPadding(20)
                 .setBorderBottomPadding(20)
-                .setBorder(true);
+                .setBorder(false);
 
         try {
             BufferedImage ans;
@@ -96,6 +100,29 @@ public class WxImgCreateAction extends WxBaseAction {
                         .asImage()
                 ;
             }
+
+
+            ans = WaterMarkWrapper.of(ans)
+                    .setStyle(WaterMarkOptions.WaterStyle.OVERRIDE_LEFT_BOTTOM)
+                    .setWaterLogo(ImageUtil.getImageByPath("//Users/yihui/Desktop/xcx/xcx.jpg"))
+                    .setWaterInfo("图文小工具")
+                    .setWaterColor(Color.LIGHT_GRAY)
+                    .setInline(false)
+                    .setWaterLogoHeight(80)
+                    .setWaterOpacity(0.85f)
+                    .build()
+                    .asImage();
+
+            ans = WaterMarkWrapper.of(ans)
+                    .setStyle(WaterMarkOptions.WaterStyle.OVERRIDE_RIGHT_BOTTOM)
+                    .setWaterFont(FontUtil.SMALLER_DEFAULT_ITALIC_FONT)
+                    .setWaterInfo("--" + ChineseDataExTool.getNowLunarDate())
+                    .setWaterColor(Color.BLACK)
+                    .setInline(true)
+                    .setWaterOpacity(1)
+                    .build()
+                    .asImage();
+
 
             WxBaseResponse wxBaseResponse = new WxBaseResponse();
 //            wxBaseResponse.setBase64result(Base64Util.encode(ans, MediaType.ImagePng.getExt()));

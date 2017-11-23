@@ -149,7 +149,7 @@ public class ImgMergeWrapperTest {
                 .x2(img1.getWidth() * 7 / 6)
                 .y1(img1.getHeight() + 4)
                 .y2(img1.getHeight() + 4)
-                .color(Color.LIGHT_GRAY)
+                . color(Color.LIGHT_GRAY)
                 .dashed(true)
                 .build();
 
