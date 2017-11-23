@@ -92,6 +92,13 @@
    
    - markdown 语法文本转html， 转image
 
+5. [v0.005](https://github.com/liuyueyi/quick-media/releases/tag/v0.005)
+
+    - fix markdown 转图片中文乱码
+    - 图片合成服务支持
+    - 微信小程序（图文小工具）服务端源码
+
+
 ### 文档
 
 - [音频转码服务说明](doc/audio.md)
@@ -128,4 +135,4 @@
 有很多东西直接写死了，不太友好，欢迎板砖
 
 
-![http://s2.mogucdn.com/mlcdn/c45406/171123_3dj8kcb295lf3ilif699kjc0hlf10_860x860.jpg](http://s2.mogucdn.com/mlcdn/c45406/171123_3dj8kcb295lf3ilif699kjc0hlf10_860x860.jpg "图文小工具码")
+![小程序码](http://s2.mogucdn.com/mlcdn/c45406/171123_3i44i038f68gebkdk523021864f6l_320x320.jpg "图文小工具码")
