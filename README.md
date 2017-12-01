@@ -53,6 +53,7 @@
 - [x] markdown 转 image
     - [markdown 转 html](doc/md/md2html.md)
     - [html 转 image](doc/md/html2image.md)
+    - [利用phantomjs实现html转image](doc/images/html2img.md)
 - [x] gif图生成
 - [x] 合成
     - [图片合成支持](doc/images/imgMerge.md)
@@ -110,6 +111,7 @@
 - [markdown 转 html](doc/md/md2html.md)
 - [html 转 image](doc/md/html2image.md)
 - [图片合成支持](doc/images/imgMerge.md)
+- [利用phantomjs实现html转image](doc/images/html2img.md)
 
 ### 问题记录汇总
 
