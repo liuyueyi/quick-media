@@ -14,4 +14,6 @@ public class WxBaseResponse implements IResponse {
     private String prefix;
 
     private String img;
+
+    private String url;
 }

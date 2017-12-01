@@ -3,7 +3,6 @@ package com.hust.hui.quickmedia.web.wxapi.html;
 import com.hust.hui.quickmedia.common.constants.MediaType;
 import com.hust.hui.quickmedia.common.html.Html2ImageByJsWrapper;
 import com.hust.hui.quickmedia.common.util.Base64Util;
-import com.hust.hui.quickmedia.common.util.DomUtil;
 import com.hust.hui.quickmedia.web.annotation.ValidateDot;
 import com.hust.hui.quickmedia.web.entity.ResponseWrapper;
 import com.hust.hui.quickmedia.web.entity.Status;
@@ -40,20 +39,25 @@ public class Html2ImgAction {
 
 
         String ans;
+        WxBaseResponse response = new WxBaseResponse();
         if (html2ImgRequest.urlReturn()) {
             ans = ImgGenHelper.saveImg(bf);
-
+            response.setImg(ans);
+            response.setUrl("https://zbang.online/" + ans);
         } else {
             try {
-                ans = DomUtil.toDomSrc(Base64Util.encode(bf, "png"), MediaType.ImagePng);
+                ans = Base64Util.encode(bf, "png");
+                response.setBase64result(ans);
+                response.setPrefix(MediaType.ImagePng.getPrefix());
             } catch (IOException e) {
                 log.error("parse img to base64 error! req: {}, e:{}", html2ImgRequest, e);
                 ans = ImgGenHelper.saveImg(bf);
+                response.setImg(ans);
+                response.setUrl("https://zbang.online/" + ans);
             }
         }
-
-        WxBaseResponse response = new WxBaseResponse();
         response.setImg(ans);
+
         return ResponseWrapper.successReturn(response);
     }
 
