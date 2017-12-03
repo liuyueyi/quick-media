@@ -16,7 +16,8 @@ $(function() {
     $('#executeBtn').click(function() {
        var url = $('#htmlurl').val().trim();
         if(!url || !url.startsWith("http")) {
-            alert("请输入合法的以http开头的url");
+            $().toastmessage("showWarningToast", "请输入合法的以http开头的url");
+            $('#htmlurl').focus();
             return;
         }
 
@@ -25,6 +26,8 @@ $(function() {
             "url" : url,
             "type" : "url"
         };
+
+        $().toastmessage("showNoticeToast", "小马达已开，开始努力渲染!");
 
         // 显示过度动画
         $('#data').attr('src', '/web/assets/img/loading.gif');
