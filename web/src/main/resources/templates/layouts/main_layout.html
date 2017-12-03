@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="utf-8" />
+    <meta name="description" content="" />
+    <meta name="author" content="" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <meta name="keywords" content="Bootstrap 3, Template, Theme, Responsive, Corporate, Business"/>
+    <link rel="shortcut icon" href="img/favicon.png"/>
+
+
+    <title>
+        Zbang | ONLINE
+    </title>
+
+    <!-- Bootstrap core CSS -->
+    <link th:href="@{/css/bootstrap.min.css}" rel="stylesheet"/>
+    <link th:href="@{/css/theme.css}" rel="stylesheet"/>
+    <link th:href="@{/css/bootstrap-reset.css}" rel="stylesheet"/>
+
+    <!--external css-->
+    <link th:href="@{/css/flexslider.css}" rel="stylesheet"/>
+    <link th:href="@{/assets/font-awesome/css/font-awesome.css}" rel="stylesheet" />
+    <link th:href="@{/assets/bxslider/jquery.bxslider.css}" rel="stylesheet" />
+    <link th:href="@{/css/animate.css}" rel="stylesheet"/>
+    <link th:href="@{/assets/owlcarousel/owl.carousel.css}" rel="stylesheet"/>
+    <link th:href="@{/assets/owlcarousel/owl.theme.css}" rel="stylesheet"/>
+    <link th:href="@{/css/jquery.toastmessage.css}" rel="stylesheet"/>
+
+    <link th:href="@{/css/superfish.css}" rel="stylesheet" media="screen"/>
+    <link th:href='@{http://fonts.googleapis.com/css?family=Lato}' rel='stylesheet' type='text/css'/>
+
+    <!-- Custom styles for this template -->
+    <link th:href="@{/css/component.css}" rel="stylesheet" type="text/css" />
+    <link th:href="@{/css/style.css}" rel="stylesheet"/>
+    <link th:href="@{/css/style-responsive.css}" rel="stylesheet" />
+    <link th:href="@{/css/parallax-slider/parallax-slider.css}" rel="stylesheet" type="text/css"/>
+
+
+
+    <script  src="/js/parallax-slider/modernizr.custom.28468.js"></script>
+    <script src="/js/jquery-1.8.3.min.js"></script>
+    <script src="/js/bootstrap.min.js"></script>
+    <script  src="/js/hover-dropdown.js"></script>
+    <script src="/js/jquery.flexslider.js"></script>
+    <script  src="/assets/bxslider/jquery.bxslider.js"></script>
+
+    <script  src="/js/jquery.parallax-1.1.3.js"></script>
+    <script src="/js/wow.min.js"></script>
+    <script src="/assets/owlcarousel/owl.carousel.js"></script>
+
+    <script src="/js/jquery.easing.min.js"></script>
+    <script src="/js/link-hover.js"></script>
+    <script src="/js/superfish.js"></script>
+    <script  src="/js/parallax-slider/jquery.cslider.js"></script>
+    <script >
+        $(function() {
+
+            $('#da-slider').cslider({
+                autoplay    : true,
+                bgincrement : 100
+            });
+
+        });
+    </script>
+
+
+
+    <!--common script for all pages-->
+    <script src="/js/common-scripts.js"></script>
+    <script src="/js/jquery.toastmessage.js"></script>
+
+    <script >
+        jQuery(document).ready(function() {
+
+
+            $('.bxslider1').bxSlider({
+                minSlides: 5,
+                maxSlides: 6,
+                slideWidth: 360,
+                slideMargin: 2,
+                moveSlides: 1,
+                responsive: true,
+                nextSelector: '#slider-next',
+                prevSelector: '#slider-prev',
+                nextText: 'Onward →',
+                prevText: '← Go back'
+            });
+
+        });
+
+
+    </script>
+
+
+    <script>
+        $('a.info').tooltip();
+
+        $(window).load(function() {
+            $('.flexslider').flexslider({
+                animation: "slide",
+                start: function(slider) {
+                    $('body').removeClass('loading');
+                }
+            });
+        });
+
+        $(document).ready(function() {
+
+            $("#owl-demo").owlCarousel({
+
+                items : 4
+
+            });
+
+        });
+
+        jQuery(document).ready(function(){
+            jQuery('ul.superfish').superfish();
+        });
+
+        new WOW().init();
+    </script>
+</head>
+<body>
+<!--主题头-->
+<header th:replace="partials/head :: header"></header>
+<!--主题头结束-->
+
+<div th:replace="partials/head_banner :: header_banner"></div>
+
+
+<!--content-->
+<div layout:fragment="main_content">
+</div>
+<!--end content-->
+
+
+<div class="container"></div>
+
+<!-- 主题脚-->
+<footer th:replace="partials/foot_info :: footer_info"></footer>
+<footer th:replace="partials/foot :: footer"></footer>
+<!-- 主题脚-->
+
+</body>
+</html>

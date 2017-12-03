@@ -113,13 +113,13 @@ public class ImgMergeWrapperTest {
     @Test
     public void testTemplate() throws IOException {
         BufferedImage logo = ImageUtil.getImageByPath("logo.jpg");
-        BufferedImage qrCode = ImageUtil.getImageByPath("/Users/yihui/Desktop/OsCode.png");
+        BufferedImage qrCode = ImageUtil.getImageByPath("/Users/yihui/Desktop/QrCode.jpg");
         String name = "小灰灰Blog";
         List<String> desc = Arrays.asList(" 无聊的码农，不定时分享各种博文 ");
 
-
+//34485d
         int w = QrCodeCardTemplate.w, h = QrCodeCardTemplate.h;
-        List<IMergeCell> list = QrCodeCardTemplateBuilder.build(logo, name, desc, qrCode, "开 源 中 国 博 客");
+        List<IMergeCell> list = QrCodeCardTemplateBuilder.build(logo, name, desc, qrCode, "微 信 公 众 号");
 
         BufferedImage bg = ImgMergeWrapper.merge(list, w, h);
 

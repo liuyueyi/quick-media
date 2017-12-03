@@ -1,0 +1,91 @@
+
+/* ------ BOILERPLATE TEMPLATE ------ */
+
+body{
+	font-family: 'Open Sans';
+}
+
+.mixitup-wrapper{
+	margin: 50px auto 0 auto;
+}
+
+h1{
+	margin-bottom: 30px;
+}
+
+h1 strong{
+	font-weight: 700;
+}
+
+h3{
+	margin-bottom: 20px;
+	font-weight: 600;
+}
+
+p{
+	width: 500px;
+	margin: 0 0 30px;
+	text-align: left;
+	line-height: 1.5;
+}
+
+.controls{
+	display: inline-block;
+	margin: 0 0 30px;
+	vertical-align: top;
+}
+
+.controls li{
+	margin-left: 20px;
+	cursor: pointer;
+}
+
+.controls li.active{
+	font-weight: 700;
+}
+
+hr{
+	margin: 0 0 30px;
+	height: 0;
+	border: 0 none;
+	border-top: 1px solid #eee;
+}
+
+#Grid{
+	width: 100%;
+	text-align: justify;
+	font-size: 0.1px;
+}
+
+#Grid:after{
+	content: '';
+	display: inline-block;
+	width: 100%;
+}
+
+#Grid .mix{
+	display: none;
+	opacity: 0;
+	
+	vertical-align: top;
+	margin-bottom: 20px;
+	background: #ccc;
+	color: #fff;
+	
+	font-size: 30px;
+	text-align: center;
+}
+
+#Grid .gap{
+	display: inline-block;
+	width: 200px;
+}
+
+#Grid ul{
+		list-style-type: disc;
+		-webkit-margin-before: 1em;
+		-webkit-margin-after: 1em;
+		-webkit-margin-start: 0px;
+		-webkit-margin-end: 0px;
+		-webkit-padding-start: 0px;
+}

@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<body>
+
+<ul class="nav navbar-nav" th:fragment="menu">
+    <li>
+        <a class="dropdown-toggle" data-close-others="false" data-delay="0" data-hover=
+                "dropdown" href="/web/index">
+            Home
+        </a>
+    </li>
+
+    <!--图片处理Menu-->
+    <li class="dropdown">
+        <a class="dropdown-toggle" data-close-others="false" data-delay="0" data-hover=
+                "dropdown" data-toggle="dropdown" onclick="location='/web/image'" style="cursor:pointer">图片处理 <i class="fa fa-angle-down"></i>
+        </a>
+
+        <ul class="dropdown-menu">
+            <li>
+                <a href="#">图片压缩</a>
+            </li>
+
+            <li>
+                <a href="#">图片转码</a>
+            </li>
+
+            <li>
+                <a href="#">图片裁剪</a>
+            </li>
+
+            <li>
+                <a href="#">图片旋转</a>
+            </li>
+
+            <li>
+                <a href="#">圆角图片</a>
+            </li>
+            <li>
+                <a href="#">添加边框</a>
+            </li>
+            <li>
+                <a href="#">模板合成</a>
+            </li>
+        </ul>
+    </li>
+    <!--image over-->
+
+    <!--qrCode menu-->
+    <li class="dropdown" onclick="">
+        <a class="dropdown-toggle" data-close-others="false" data-delay="0" data-hover=
+                "dropdown" data-toggle="dropdown" style="cursor:pointer" onclick="location='/web/qrcode'">二维码 <i class="fa fa-angle-down"></i>
+        </a>
+        <ul class="dropdown-menu">
+            <li>
+                <a href="#">二维码生成</a>
+            </li>
+            <li>
+                <a href="#">二维码解析</a>
+            </li>
+        </ul>
+    </li>
+    <!--qrcode over-->
+
+    <!--audio menu-->
+    <li class="dropdown">
+        <a class="dropdown-toggle" data-close-others="false" data-delay="0" data-hover=
+                "dropdown" data-toggle="dropdown" style="cursor:pointer" onclick="location='/web/audio'">音频 <i class="fa fa-angle-down"></i>
+        </a>
+        <ul class="dropdown-menu">
+            <li>
+                <a href="#">音频转码</a>
+            </li>
+        </ul>
+    </li>
+    <!--audio over-->
+
+    <!--markdown menu-->
+    <li>
+        <a href="/web/markdown">Markdown
+        </a>
+    </li>
+    <!--markdown over-->
+
+
+    <!--html menu-->
+    <li>
+        <a href="/web/html">Html转图片
+        </a>
+    </li>
+    <!--html over-->
+
+
+    <li>
+        <a href="#">Fun玩</a>
+    </li>
+    <li><input class="form-control search" placeholder=" Search" type="text"/></li>
+</ul>
+
+</body>
+</html>

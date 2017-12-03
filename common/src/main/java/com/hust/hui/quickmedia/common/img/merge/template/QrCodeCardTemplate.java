@@ -1,5 +1,6 @@
 package com.hust.hui.quickmedia.common.img.merge.template;
 
+import com.hust.hui.quickmedia.common.util.ColorUtil;
 import com.hust.hui.quickmedia.common.util.FontUtil;
 
 import java.awt.*;
@@ -17,7 +18,8 @@ public interface QrCodeCardTemplate {
     int h = 260 + double_border_space;
     int w = 560 + double_border_space;
 
-    Color bg_color = Color.WHITE;
+//    Color bg_color = Color.WHITE;
+    Color bg_color = ColorUtil.int2color(0xff34485d);
 
 
     // text info
@@ -27,9 +29,11 @@ public interface QrCodeCardTemplate {
     int text_logo_size = 100;
     int text_line_space = 10;
     Font text_nameFont = FontUtil.BIG_BOLD_DEFAULT_FONT;
-    Color text_nameFont_color = Color.BLACK;
+//    Color text_nameFont_color = Color.BLACK;
+    Color text_nameFont_color = Color.WHITE;
     Font text_descFont = FontUtil.DEFAULT_FONT;
-    Color text_descFont_color = Color.GRAY;
+//    Color text_descFont_color = Color.GRAY;
+    Color text_descFont_color = ColorUtil.OFF_WHITE;
 
 
     // line info
@@ -48,13 +52,15 @@ public interface QrCodeCardTemplate {
     int qrcode_y = border_space;
     int qrcode_info_padding = 5;
     Font qrcode_info_font = FontUtil.DEFAULT_FONT;
-    Color qrcode_info_color = Color.GRAY;
+//    Color qrcode_info_color = Color.GRAY;
+    Color qrcode_info_color = ColorUtil.OFF_WHITE;
 
 
 
     // title
     Font title_font = FontUtil.BIG_ITALIC_DEFAULT_FONT;
-    Color title_font_color = Color.GRAY;
+//    Color title_font_color = Color.GRAY;
+    Color title_font_color = Color.WHITE;
     Color title_font_bg_color = bg_color;
     int title_padding = 20;
 
