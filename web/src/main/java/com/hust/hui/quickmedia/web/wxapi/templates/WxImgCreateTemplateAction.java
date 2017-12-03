@@ -85,7 +85,7 @@ public class WxImgCreateTemplateAction {
     }
 
 
-    @RequestMapping(value = "wx/list", method = {RequestMethod.GET, RequestMethod.POST, RequestMethod.OPTIONS})
+    @RequestMapping(value = {"wx/list", "wx/wx/list"}, method = {RequestMethod.GET, RequestMethod.POST, RequestMethod.OPTIONS})
     public ResponseWrapper<WxImgCreateTemplateResponse> templates(HttpServletRequest httpServletRequest) {
         WxImgCreateTemplateResponse response = new WxImgCreateTemplateResponse();
         response.setNum(cellList.size());

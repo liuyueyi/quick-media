@@ -25,7 +25,7 @@ import java.io.UnsupportedEncodingException;
 @Slf4j
 public class Markdown2ImgAction {
 
-    @RequestMapping(path = "wx/md2img", method = {RequestMethod.GET, RequestMethod.POST, RequestMethod.OPTIONS})
+    @RequestMapping(path = {"wx/md2img", "wx/wx/md2img"}, method = {RequestMethod.GET, RequestMethod.POST, RequestMethod.OPTIONS})
     @ValidateDot
     public ResponseWrapper<WxBaseResponse> parse(HttpServletRequest request, MarkdownRequest downRequest) throws UnsupportedEncodingException {
         String content = downRequest.getContent();

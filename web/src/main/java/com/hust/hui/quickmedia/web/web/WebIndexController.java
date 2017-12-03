@@ -20,7 +20,7 @@ public class WebIndexController {
     private static final String HEAD_BANNER_KEY = "banner";
 
 
-    @RequestMapping(value = {"web/", "web/index"}, method = RequestMethod.GET)
+    @RequestMapping(value = {"web", "web/", "web/index"}, method = RequestMethod.GET)
     public String index(Map<String, Object> map) {
         map.put(TOOL_BOX_KEY, ToolBoxVOConstants.getInstance().getToolBoxList());
         map.put(HEAD_BANNER_KEY, HeadBannerConstants.getInstance().htmlBannerVO);

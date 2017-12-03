@@ -40,7 +40,7 @@ public class WxImgCreateAction extends WxBaseAction {
     private static final int RIGHT_PADDING = 20;
 
 
-    @RequestMapping(value = "/wx/create", method = {RequestMethod.GET, RequestMethod.POST, RequestMethod.OPTIONS})
+    @RequestMapping(value = {"/wx/create", "wx/wx/create"}, method = {RequestMethod.GET, RequestMethod.POST, RequestMethod.OPTIONS})
     public ResponseWrapper<WxBaseResponse> create(HttpServletRequest httpServletRequest, WxImgCreateRequest wxImgCreateRequest) {
 
         BufferedImage bfImg = getImg(httpServletRequest);

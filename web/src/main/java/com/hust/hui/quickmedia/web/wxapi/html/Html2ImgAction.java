@@ -24,7 +24,7 @@ import java.io.IOException;
 @Slf4j
 public class Html2ImgAction {
 
-    @RequestMapping(path = "wx/html2img", method = {RequestMethod.GET, RequestMethod.POST, RequestMethod.OPTIONS})
+    @RequestMapping(path = {"wx/html2img", "wx/wx/html2img"}, method = {RequestMethod.GET, RequestMethod.POST, RequestMethod.OPTIONS})
     @ValidateDot
     public ResponseWrapper<WxBaseResponse> parse2img(HttpServletRequest request,
                                                      Html2ImgRequest html2ImgRequest) {
