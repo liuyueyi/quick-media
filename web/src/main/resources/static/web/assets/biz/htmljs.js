@@ -36,10 +36,10 @@ $(function() {
 
             if(data.status.code = 200) {
                 // var img = data.result.prefix + data.result.base64result;
-                var img = data.result.img;
+                var img = data.result.url;
                 $('#data').attr("src", img);
                 $('#imgDetail').attr('href', img);
-                $('#imgLink').attr("href", img);
+                $('#imgLink').attr("href", url);
                 $().toastmessage("showSuccessToast", "转换成功!");
             } else {
                 $().toastmessage("showErrorToast", "转换失败： " + data.status.msg);
