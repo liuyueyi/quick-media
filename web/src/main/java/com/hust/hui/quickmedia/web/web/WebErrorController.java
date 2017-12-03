@@ -15,14 +15,14 @@ import static com.hust.hui.quickmedia.web.web.WebIndexController.HEAD_BANNER_KEY
 public class WebErrorController {
 
 
-    @RequestMapping(value = "/404")
+    @RequestMapping(value = {"/404", "/web/404"})
     public String notFound404(Map<String, Object> map) {
         map.put(HEAD_BANNER_KEY, HeadBannerConstants.getInstance()._404VO);
         return "404";
     }
 
 
-    @RequestMapping(value = "/500")
+    @RequestMapping(value = {"/500", "/web/500"})
     public String interError500(Map<String, Object> map) {
         map.put(HEAD_BANNER_KEY, HeadBannerConstants.getInstance()._500VO);
         return "500";
