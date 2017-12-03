@@ -37,10 +37,6 @@ public class Html2ImgRequest implements IValidate {
 
 
     public boolean urlReturn() {
-        if (StringUtils.isBlank(type)) {
-            return true;
-        }
-
-        return "URL".equalsIgnoreCase(url);
+        return StringUtils.isBlank(type) || "URL".equalsIgnoreCase(type);
     }
 }
