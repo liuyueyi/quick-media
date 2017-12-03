@@ -7,8 +7,8 @@ import com.hust.hui.quickmedia.common.util.DrawUtil;
 import com.hust.hui.quickmedia.web.annotation.ValidateDot;
 import com.hust.hui.quickmedia.web.entity.ResponseWrapper;
 import com.hust.hui.quickmedia.web.entity.Status;
+import com.hust.hui.quickmedia.web.wxapi.WxBaseAction;
 import com.hust.hui.quickmedia.web.wxapi.WxBaseResponse;
-import com.hust.hui.quickmedia.web.wxapi.helper.ImgGenHelper;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -23,7 +23,7 @@ import java.io.UnsupportedEncodingException;
  */
 @RestController
 @Slf4j
-public class Markdown2ImgAction {
+public class Markdown2ImgAction extends WxBaseAction {
 
     @RequestMapping(path = {"wx/md2img", "wx/wx/md2img"}, method = {RequestMethod.GET, RequestMethod.POST, RequestMethod.OPTIONS})
     @ValidateDot
@@ -44,15 +44,12 @@ public class Markdown2ImgAction {
                     .asImage();
             // 添加签名
             DrawUtil.drawSign(img);
-
-            String ans = ImgGenHelper.saveImg(img);
-            WxBaseResponse response = new WxBaseResponse();
-            response.setImg(ans);
-            return ResponseWrapper.successReturn(response);
         } catch (Exception e) {
             e.printStackTrace();
             return ResponseWrapper.errorReturnMix(Status.StatusEnum.FAIL_MIX, "转换失败!");
         }
+
+        return buildReturn(downRequest, img);
     }
 
 }
