@@ -56,8 +56,6 @@ public class Html2ImgAction {
                 response.setUrl("https://zbang.online/" + ans);
             }
         }
-        response.setImg(ans);
-
         return ResponseWrapper.successReturn(response);
     }
 

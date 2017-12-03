@@ -16,14 +16,14 @@ import java.util.Map;
 @Slf4j
 public class WebIndexController {
 
-    private static final String TOOL_BOX_KEY = "toolBox";
-    private static final String HEAD_BANNER_KEY = "banner";
+    public static final String TOOL_BOX_KEY = "toolBox";
+    public static final String HEAD_BANNER_KEY = "banner";
 
 
     @RequestMapping(value = {"web", "web/", "web/index"}, method = RequestMethod.GET)
     public String index(Map<String, Object> map) {
         map.put(TOOL_BOX_KEY, ToolBoxVOConstants.getInstance().getToolBoxList());
-        map.put(HEAD_BANNER_KEY, HeadBannerConstants.getInstance().htmlBannerVO);
+        map.put(HEAD_BANNER_KEY, HeadBannerConstants.getInstance().indexVO);
         return "index";
     }
 
@@ -31,7 +31,7 @@ public class WebIndexController {
     @RequestMapping(value = "web/image")
     public String imageView(Map<String, Object> map) {
         map.put(TOOL_BOX_KEY, ToolBoxVOConstants.getInstance().imgToolBox);
-        map.put(HEAD_BANNER_KEY, HeadBannerConstants.getInstance().htmlBannerVO);
+        map.put(HEAD_BANNER_KEY, HeadBannerConstants.getInstance().imageVO);
         return "views/image";
     }
 
@@ -39,7 +39,7 @@ public class WebIndexController {
     @RequestMapping(value = "web/qrcode")
     public String qrcodeView(Map<String, Object> map) {
         map.put(TOOL_BOX_KEY, ToolBoxVOConstants.getInstance().qrcodeToolBox);
-        map.put(HEAD_BANNER_KEY, HeadBannerConstants.getInstance().htmlBannerVO);
+        map.put(HEAD_BANNER_KEY, HeadBannerConstants.getInstance().qrcodeVO);
         return "views/qrcode";
     }
 
@@ -47,7 +47,7 @@ public class WebIndexController {
     @RequestMapping(value = "web/audio")
     public String audioView(Map<String, Object> map) {
         map.put(TOOL_BOX_KEY, ToolBoxVOConstants.getInstance().audioToolBox);
-        map.put(HEAD_BANNER_KEY, HeadBannerConstants.getInstance().htmlBannerVO);
+        map.put(HEAD_BANNER_KEY, HeadBannerConstants.getInstance().audioVO);
         return "views/audio";
     }
 
@@ -62,7 +62,7 @@ public class WebIndexController {
 
     @RequestMapping(value = "web/markdown/edit")
     public String markdown2imgView(Map<String, Object> map) {
-        map.put(HEAD_BANNER_KEY, HeadBannerConstants.getInstance().markdownVO);
+        map.put(HEAD_BANNER_KEY, HeadBannerConstants.getInstance().markdownSubEditVO);
         return "views/process/mdedit";
     }
 
@@ -77,10 +77,8 @@ public class WebIndexController {
 
     @RequestMapping(value = "web/html/toimg")
     public String html2imgView(Map<String, Object> map) {
-        map.put(HEAD_BANNER_KEY, HeadBannerConstants.getInstance().htmlBannerVO);
+        map.put(HEAD_BANNER_KEY, HeadBannerConstants.getInstance().htmlSubPrintImgBannerVO);
         return "views/process/html2img";
     }
-
-
 
 }

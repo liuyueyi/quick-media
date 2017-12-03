@@ -41,9 +41,9 @@ public class ToolBoxVOConstants {
         initQrcodeToolBox();
         initMarkdownToolBox();
 
-        list.addAll(imgToolBox);
-        list.addAll(qrcodeToolBox);
-        list.addAll(audioToolBox);
+//        list.addAll(imgToolBox);
+//        list.addAll(qrcodeToolBox);
+//        list.addAll(audioToolBox);
         list.addAll(markdownToolBox);
         list.addAll(htmlToolBox);
     }
