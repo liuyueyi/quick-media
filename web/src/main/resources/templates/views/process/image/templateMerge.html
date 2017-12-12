@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/web/thymeleaf/layout"
+      layout:decorator="layouts/main_layout">
+<head>
+
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1"/>
+    <meta name="description" content=""/>
+    <meta name="author" content=""/>
+
+    <title>Z+ | 模板合成</title>
+</head>
+<body>
+
+<div layout:fragment="main_content" class="container">
+
+    <link rel="stylesheet" th:href="@{/web/assets/css/jquery.jsonview.min.css}"></link>
+
+    <div class="row">
+        <div class="col-md-6">
+            <textarea style="min-height: 400px" class="wrap-content">
+
+            </textarea>
+        </div>
+
+        <div class="col-md-6">
+            <div class="wrapper" id="preView">
+
+            </div>
+        </div>
+    </div>
+
+    <script src="/web/assets/js/jquery-1.8.3.min.js"></script>
+    <script src="/web/assets/js/jquery.toastmessage.js"></script>
+    <script src="/web/assets/js/jquery.jsonview.min.js"></script>
+</div>
+
+
+</body>
+</html>

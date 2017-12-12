@@ -4,6 +4,7 @@ import com.hust.hui.quickmedia.common.html.Html2ImageWrapper;
 import com.hust.hui.quickmedia.common.markdown.MarkDown2HtmlWrapper;
 import com.hust.hui.quickmedia.common.markdown.MarkdownEntity;
 import com.hust.hui.quickmedia.common.util.DrawUtil;
+import com.hust.hui.quickmedia.common.util.FileReadUtil;
 import com.hust.hui.quickmedia.web.annotation.ValidateDot;
 import com.hust.hui.quickmedia.web.entity.ResponseWrapper;
 import com.hust.hui.quickmedia.web.entity.Status;
@@ -25,11 +26,26 @@ import java.io.UnsupportedEncodingException;
 @Slf4j
 public class Markdown2ImgAction extends WxBaseAction {
 
+    public static String MD_CSS = null;
+
+    static {
+        try {
+            MD_CSS = FileReadUtil.readAll("md/huimarkdown_code.css");
+            MD_CSS = "<style type=\"text/css\">\n" + MD_CSS + "\n</style>\n";
+        } catch (Exception e) {
+            MD_CSS = "";
+        }
+    }
+
+
     @RequestMapping(path = {"wx/md2img", "wx/wx/md2img"}, method = {RequestMethod.GET, RequestMethod.POST, RequestMethod.OPTIONS})
     @ValidateDot
     public ResponseWrapper<WxBaseResponse> parse(HttpServletRequest request, MarkdownRequest downRequest) throws UnsupportedEncodingException {
         String content = downRequest.getContent();
 
+        if (downRequest.isNoborder()) {
+            MarkDown2HtmlWrapper.MD_CSS = MD_CSS;
+        }
 
         MarkdownEntity html = MarkDown2HtmlWrapper.ofContent(content);
 

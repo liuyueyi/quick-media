@@ -11,12 +11,19 @@ $(function() {
     function parse(type) {
         var content = $('#mdContent').val();
         console.log("the markdown content: ", content, type);
-        $().toastmessage("showNoticeToast", "开始导出...")
+        $().toastmessage("showNoticeToast", "开始导出...");
+
+        //
+        var noborder = false;
+        if( $('input[name="noBorder"]:checked')) {
+            noborder = true;
+        }
 
         var params = {
             "content" : content,
             "token" : "0xdahdljk3u8eqhrjqwer90e",
-            "type" : "img"
+            "type" : "img",
+            "noborder" : noborder
         };
 
         $.post("/wx/md2img?", params, function (data, status) {

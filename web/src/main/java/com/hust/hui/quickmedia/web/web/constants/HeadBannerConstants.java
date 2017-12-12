@@ -107,6 +107,20 @@ public class HeadBannerConstants {
         return htmlBannerVO;
     }
 
+    public HeadBannerVO htmlSubJsonPreBannerVO = initHtmlSubJsonPreBanner();
+    private HeadBannerVO initHtmlSubJsonPreBanner() {
+        HeadBannerVO htmlBannerVO = new HeadBannerVO();
+        htmlBannerVO.setTitle("HTML");
+        htmlBannerVO.setSubTitle("Json预览 | Json在线编辑| Json实时预览 | Json串格式化");
+
+        List<IWebVO> list = new ArrayList<>();
+        list.add(new MenuWebVO("/web/index", "首页"));
+        list.add(new MenuWebVO("/web/html", "html"));
+        list.add(new MenuWebVO("/web/html/jsonpre", "json"));
+        htmlBannerVO.setMenuList(list);
+        return htmlBannerVO;
+    }
+
 
 
 //     markdown

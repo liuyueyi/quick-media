@@ -81,4 +81,10 @@ public class WebIndexController {
         return "views/process/html2img";
     }
 
+
+    @RequestMapping(value = "web/html/jsonpre")
+    public String htmlJsonPreView(Map<String, Object> map) {
+        map.put(HEAD_BANNER_KEY, HeadBannerConstants.getInstance().htmlSubJsonPreBannerVO);
+        return "views/process/jsonpre";
+    }
 }
