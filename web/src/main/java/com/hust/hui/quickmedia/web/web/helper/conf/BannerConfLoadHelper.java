@@ -3,6 +3,7 @@ package com.hust.hui.quickmedia.web.web.helper.conf;
 import com.hust.hui.quickmedia.common.util.YamlUtil;
 import com.hust.hui.quickmedia.web.web.entity.HeadBannerVO;
 import lombok.Getter;
+import lombok.extern.slf4j.Slf4j;
 
 import java.io.IOException;
 import java.lang.reflect.Field;
@@ -12,6 +13,7 @@ import java.util.concurrent.ConcurrentHashMap;
 /**
  * Created by yihui on 2017/12/13.
  */
+@Slf4j
 public class BannerConfLoadHelper {
     private static final String BANNER_INFO_CONF_PATH = "conf/bannerInfo.yaml";
 
@@ -24,7 +26,7 @@ public class BannerConfLoadHelper {
         try {
             container = YamlUtil.read(BANNER_INFO_CONF_PATH, BannerConfContainer.class);
         } catch (IOException e) {
-            e.printStackTrace();
+            log.error("load bannerConf error! e: {}", e);
         }
     }
 

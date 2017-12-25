@@ -29,7 +29,7 @@ public class HeadBannerConstants {
         htmlBannerVO.setSubTitle("工具箱首页");
 
         List<IWebVO> list = new ArrayList<>();
-        list.add(new MenuWebVO("/web/index", "首页"));
+        list.add(new MenuWebVO("/webs/views/index", "首页"));
         htmlBannerVO.setMenuList(list);
         return htmlBannerVO;
     }
@@ -43,8 +43,8 @@ public class HeadBannerConstants {
         vo.setSubTitle("图文工具箱 | Image toolbox | 提供图片的各式操作");
 
         List<IWebVO> list = new ArrayList<>();
-        list.add(new MenuWebVO("/web/index", "首页"));
-        list.add(new MenuWebVO("/web/image", "Image"));
+        list.add(new MenuWebVO("/webs/views/index", "首页"));
+        list.add(new MenuWebVO("/webs/views/image", "Image"));
         vo.setMenuList(list);
         return vo;
     }
@@ -58,8 +58,8 @@ public class HeadBannerConstants {
         vo.setSubTitle("音频工具箱 | Audio toolbox | 提供音频的各式操作");
 
         List<IWebVO> list = new ArrayList<>();
-        list.add(new MenuWebVO("/web/index", "首页"));
-        list.add(new MenuWebVO("/web/audio", "Image"));
+        list.add(new MenuWebVO("/webs/views/index", "首页"));
+        list.add(new MenuWebVO("/webs/views/audio", "Image"));
         vo.setMenuList(list);
         return vo;
     }
@@ -72,8 +72,8 @@ public class HeadBannerConstants {
         vo.setSubTitle("二维码工具箱 | Qrcode toolbox | 提供二维码的生成和解码");
 
         List<IWebVO> list = new ArrayList<>();
-        list.add(new MenuWebVO("/web/index", "首页"));
-        list.add(new MenuWebVO("/web/qrcode", "Image"));
+        list.add(new MenuWebVO("/webs/views/index", "首页"));
+        list.add(new MenuWebVO("/webs/views/qrcode", "Image"));
         vo.setMenuList(list);
         return vo;
     }
@@ -87,8 +87,8 @@ public class HeadBannerConstants {
         htmlBannerVO.setSubTitle("网页工具箱 | Html toolbox | 提供网页的各式操作");
 
         List<IWebVO> list = new ArrayList<>();
-        list.add(new MenuWebVO("/web/index", "首页"));
-        list.add(new MenuWebVO("/web/html", "html"));
+        list.add(new MenuWebVO("/webs/views/index", "首页"));
+        list.add(new MenuWebVO("/webs/views/html", "html"));
         htmlBannerVO.setMenuList(list);
         return htmlBannerVO;
     }
@@ -100,9 +100,9 @@ public class HeadBannerConstants {
         htmlBannerVO.setSubTitle("网页输出图片 | html >>> image | 指定html，返回图片");
 
         List<IWebVO> list = new ArrayList<>();
-        list.add(new MenuWebVO("/web/index", "首页"));
-        list.add(new MenuWebVO("/web/html", "html"));
-        list.add(new MenuWebVO("/web/html/toimg", "渲染图"));
+        list.add(new MenuWebVO("/webs/views/index", "首页"));
+        list.add(new MenuWebVO("/webs/views/html", "html"));
+        list.add(new MenuWebVO("/webs/views/html/toimg", "渲染图"));
         htmlBannerVO.setMenuList(list);
         return htmlBannerVO;
     }
@@ -114,9 +114,9 @@ public class HeadBannerConstants {
         htmlBannerVO.setSubTitle("Json预览 | Json在线编辑| Json实时预览 | Json串格式化");
 
         List<IWebVO> list = new ArrayList<>();
-        list.add(new MenuWebVO("/web/index", "首页"));
-        list.add(new MenuWebVO("/web/html", "html"));
-        list.add(new MenuWebVO("/web/html/jsonpre", "json"));
+        list.add(new MenuWebVO("/webs/views/index", "首页"));
+        list.add(new MenuWebVO("/webs/views/html", "html"));
+        list.add(new MenuWebVO("/webs/views/html/jsonpre", "json"));
         htmlBannerVO.setMenuList(list);
         return htmlBannerVO;
     }
@@ -131,8 +131,8 @@ public class HeadBannerConstants {
         mdBannerVO.setSubTitle("markdown 工具箱 | markdown toolbox | 在线预览输出");
 
         List<IWebVO> list = new ArrayList<>();
-        list.add(new MenuWebVO("/web/index", "首页"));
-        list.add(new MenuWebVO("/web/markdown", "markdown"));
+        list.add(new MenuWebVO("/webs/views/index", "首页"));
+        list.add(new MenuWebVO("/webs/views/markdown", "markdown"));
         mdBannerVO.setMenuList(list);
         return mdBannerVO;
     }
@@ -144,9 +144,9 @@ public class HeadBannerConstants {
         mdBannerVO.setSubTitle("markdown 在线预览 | markdown 输出pdf/image");
 
         List<IWebVO> list = new ArrayList<>();
-        list.add(new MenuWebVO("/web/index", "首页"));
-        list.add(new MenuWebVO("/web/markdown", "markdown"));
-        list.add(new MenuWebVO("/web/markdown/edit", "markdown在线"));
+        list.add(new MenuWebVO("/webs/views/index", "首页"));
+        list.add(new MenuWebVO("/webs/views/markdown", "markdown"));
+        list.add(new MenuWebVO("/webs/views/markdown/edit", "markdown在线"));
         mdBannerVO.setMenuList(list);
         return mdBannerVO;
     }
@@ -160,7 +160,7 @@ public class HeadBannerConstants {
         mdBannerVO.setSubTitle("Page Not Found");
 
         List<IWebVO> list = new ArrayList<>();
-        list.add(new MenuWebVO("/webs/index", "首页"));
+        list.add(new MenuWebVO("/webs/views/index", "首页"));
         mdBannerVO.setMenuList(list);
         return mdBannerVO;
     }
@@ -173,7 +173,7 @@ public class HeadBannerConstants {
         bannerVO.setSubTitle("Inter Service Error");
 
         List<IWebVO> list = new ArrayList<>();
-        list.add(new MenuWebVO("/webs/index", "首页"));
+        list.add(new MenuWebVO("/webs/views/index", "首页"));
         bannerVO.setMenuList(list);
         return bannerVO;
     }

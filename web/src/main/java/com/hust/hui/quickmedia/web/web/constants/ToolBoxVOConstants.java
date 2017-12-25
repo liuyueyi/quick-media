@@ -107,7 +107,7 @@ public class ToolBoxVOConstants {
 
         List<IWebVO> list = new ArrayList<>();
 
-        list.add(new BaseToolWebVO("markdown编辑", "最优好的语言MarkDown，我们提供编辑功能，还提供导出图片，pdf!", "/web/markdown/edit", "fa-edit"));
+        list.add(new BaseToolWebVO("markdown编辑", "最优好的语言MarkDown，我们提供编辑功能，还提供导出图片，pdf!", "/webs/views/markdown/edit", "fa-edit"));
 
         markdownToolBox.setTools(list);
 
@@ -122,8 +122,8 @@ public class ToolBoxVOConstants {
 
         List<IWebVO> list = new ArrayList<>();
 
-        list.add(new BaseToolWebVO("html转图", "有访问不了的html？没关系，我们来帮你生成图片，拿走不谢", "/web/html/toimg", "fa-html5"));
-        list.add(new BaseToolWebVO("Json视窗", "在线编辑json串，实时预览", "/web/html/jsonpre", "fa-wheelchair"));
+        list.add(new BaseToolWebVO("html转图", "有访问不了的html？没关系，我们来帮你生成图片，拿走不谢", "/webs/views/html/toimg", "fa-html5"));
+        list.add(new BaseToolWebVO("Json视窗", "在线编辑json串，实时预览", "/webs/views/html/jsonpre", "fa-wheelchair"));
 
         htmlToolBox.setTools(list);
 
