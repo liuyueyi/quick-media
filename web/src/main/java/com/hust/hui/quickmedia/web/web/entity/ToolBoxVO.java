@@ -1,6 +1,6 @@
 package com.hust.hui.quickmedia.web.web.entity;
 
-import com.hust.hui.quickmedia.web.web.entity.base.IWebVO;
+import com.hust.hui.quickmedia.web.web.entity.base.BaseToolWebVO;
 import lombok.Data;
 
 import java.util.List;
@@ -16,6 +16,6 @@ public class ToolBoxVO {
      */
     private String toolName;
 
-    private List<IWebVO> tools;
+    private List<BaseToolWebVO> tools;
 
 }

@@ -1,8 +1,7 @@
 package com.hust.hui.quickmedia.web.web.constants;
 
-import com.hust.hui.quickmedia.web.web.entity.base.BaseToolWebVO;
-import com.hust.hui.quickmedia.web.web.entity.base.IWebVO;
 import com.hust.hui.quickmedia.web.web.entity.ToolBoxVO;
+import com.hust.hui.quickmedia.web.web.entity.base.BaseToolWebVO;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -54,7 +53,7 @@ public class ToolBoxVOConstants {
 
         imgToolBox.setToolName("图片工具箱/Image Tool+");
 
-        List<IWebVO> list = new ArrayList<>();
+        List<BaseToolWebVO> list = new ArrayList<>();
 
         list.add(new BaseToolWebVO("图片压缩", "支持根据宽高进行压缩，支持根据精度进行压缩", "#", "fa-image"));
         list.add(new BaseToolWebVO("图片裁剪", "图片裁剪，根据你的意愿，随意的裁剪", "#", "fa-fire-extinguisher"));
@@ -74,7 +73,7 @@ public class ToolBoxVOConstants {
 
         qrcodeToolBox.setToolName("二维码工具箱/Qrcode Tool+");
 
-        List<IWebVO> list = new ArrayList<>();
+        List<BaseToolWebVO> list = new ArrayList<>();
 
         list.add(new BaseToolWebVO("二维码生成", "生成各种酷炫的二维码", "#", "fa-qrcode"));
         list.add(new BaseToolWebVO("二维码解析", "黑白黑白框，到底是个什么鬼？让我们来解析二维码隐藏的信息", "#", "fa-barcode"));
@@ -90,7 +89,7 @@ public class ToolBoxVOConstants {
 
         audioToolBox.setToolName("音频工具箱/Audio Tool+");
 
-        List<IWebVO> list = new ArrayList<>();
+        List<BaseToolWebVO> list = new ArrayList<>();
 
         list.add(new BaseToolWebVO("音频转码", "我们的目标是：不再有手机播放不了的声音", "#", "fa-file-video-o"));
 
@@ -105,7 +104,7 @@ public class ToolBoxVOConstants {
 
         markdownToolBox.setToolName("Markdown工具箱/Markdown Tool+");
 
-        List<IWebVO> list = new ArrayList<>();
+        List<BaseToolWebVO> list = new ArrayList<>();
 
         list.add(new BaseToolWebVO("markdown编辑", "最优好的语言MarkDown，我们提供编辑功能，还提供导出图片，pdf!", "/webs/views/markdown/edit", "fa-edit"));
 
@@ -120,7 +119,7 @@ public class ToolBoxVOConstants {
 
         htmlToolBox.setToolName("Html工具箱/Html Tool+");
 
-        List<IWebVO> list = new ArrayList<>();
+        List<BaseToolWebVO> list = new ArrayList<>();
 
         list.add(new BaseToolWebVO("html转图", "有访问不了的html？没关系，我们来帮你生成图片，拿走不谢", "/webs/views/html/toimg", "fa-html5"));
         list.add(new BaseToolWebVO("Json视窗", "在线编辑json串，实时预览", "/webs/views/html/jsonpre", "fa-wheelchair"));

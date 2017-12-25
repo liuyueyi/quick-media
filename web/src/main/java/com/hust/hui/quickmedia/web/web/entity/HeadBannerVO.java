@@ -1,6 +1,6 @@
 package com.hust.hui.quickmedia.web.web.entity;
 
-import com.hust.hui.quickmedia.web.web.entity.base.IWebVO;
+import com.hust.hui.quickmedia.web.web.entity.base.MenuWebVO;
 import lombok.Data;
 
 import java.util.List;
@@ -15,5 +15,5 @@ public class HeadBannerVO {
 
     private String subTitle;
 
-    private List<IWebVO> menuList;
+    private List<MenuWebVO> menuList;
 }
