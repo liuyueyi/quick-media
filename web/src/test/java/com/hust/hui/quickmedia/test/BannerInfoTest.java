@@ -1,5 +1,6 @@
 package com.hust.hui.quickmedia.test;
 
+import com.alibaba.fastjson.JSON;
 import com.hust.hui.quickmedia.web.web.entity.HeadBannerVO;
 import com.hust.hui.quickmedia.web.web.entity.ToolBoxVO;
 import com.hust.hui.quickmedia.web.web.entity.base.BaseToolWebVO;
@@ -24,11 +25,13 @@ public class BannerInfoTest {
     @Test
     public void loadBanner() throws IOException {
         BannerConfContainer container = BannerConfLoadHelper.getInstance().getContainer();
-        System.out.println(container);
+        String json = JSON.toJSONString(container);
+        System.out.println(json);
 
+        ToolboxConfContainer tool = ToolboxConfLoadHelper.getInstance().getContainer();
+        String toolJson = JSON.toJSONString(tool);
+        System.out.println(toolJson);
 
-        ToolboxConfContainer toll = ToolboxConfLoadHelper.getInstance().getContainer();
-        System.out.println(toll);
     }
 
 
