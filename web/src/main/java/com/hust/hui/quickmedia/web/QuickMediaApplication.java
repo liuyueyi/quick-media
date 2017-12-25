@@ -32,7 +32,7 @@ public class QuickMediaApplication {
 	public FilterRegistrationBean someFilterRegistration() {
 		FilterRegistrationBean registration = new FilterRegistrationBean();
 		registration.setFilter(webActionInFilter());
-		registration.addUrlPatterns("/web/*");
+		registration.addUrlPatterns("/webs/*");
 		registration.setName("loginFilter");
 		return registration;
 	}

@@ -160,7 +160,7 @@ public class HeadBannerConstants {
         mdBannerVO.setSubTitle("Page Not Found");
 
         List<IWebVO> list = new ArrayList<>();
-        list.add(new MenuWebVO("/web/index", "首页"));
+        list.add(new MenuWebVO("/webs/index", "首页"));
         mdBannerVO.setMenuList(list);
         return mdBannerVO;
     }
@@ -173,7 +173,7 @@ public class HeadBannerConstants {
         bannerVO.setSubTitle("Inter Service Error");
 
         List<IWebVO> list = new ArrayList<>();
-        list.add(new MenuWebVO("/web/index", "首页"));
+        list.add(new MenuWebVO("/webs/index", "首页"));
         bannerVO.setMenuList(list);
         return bannerVO;
     }

@@ -5,7 +5,7 @@
 <ul class="nav navbar-nav" th:fragment="menu">
     <li>
         <a class="dropdown-toggle" data-close-others="false" data-delay="0" data-hover=
-                "dropdown" href="/web/index">
+                "dropdown" href="/webs/views/index">
             Home
         </a>
     </li>
@@ -13,7 +13,7 @@
     <!--图片处理Menu-->
     <li class="dropdown">
         <a class="dropdown-toggle" data-close-others="false" data-delay="0" data-hover=
-                "dropdown" data-toggle="dropdown" onclick="location='/web/image'" style="cursor:pointer">图片处理 <i class="fa fa-angle-down"></i>
+                "dropdown" data-toggle="dropdown" onclick="location='/webs/views/image'" style="cursor:pointer">图片处理 <i class="fa fa-angle-down"></i>
         </a>
 
         <ul class="dropdown-menu">
@@ -49,7 +49,7 @@
     <!--qrCode menu-->
     <li class="dropdown" onclick="">
         <a class="dropdown-toggle" data-close-others="false" data-delay="0" data-hover=
-                "dropdown" data-toggle="dropdown" style="cursor:pointer" onclick="location='/web/qrcode'">二维码 <i class="fa fa-angle-down"></i>
+                "dropdown" data-toggle="dropdown" style="cursor:pointer" onclick="location='/webs/views/qrcode'">二维码 <i class="fa fa-angle-down"></i>
         </a>
         <ul class="dropdown-menu">
             <li>
@@ -65,7 +65,7 @@
     <!--audio menu-->
     <li class="dropdown">
         <a class="dropdown-toggle" data-close-others="false" data-delay="0" data-hover=
-                "dropdown" data-toggle="dropdown" style="cursor:pointer" onclick="location='/web/audio'">音频 <i class="fa fa-angle-down"></i>
+                "dropdown" data-toggle="dropdown" style="cursor:pointer" onclick="location='/webs/views/audio'">音频 <i class="fa fa-angle-down"></i>
         </a>
         <ul class="dropdown-menu">
             <li>
@@ -77,7 +77,7 @@
 
     <!--markdown menu-->
     <li>
-        <a href="/web/markdown">Markdown
+        <a href="/webs/views/markdown">Markdown
         </a>
     </li>
     <!--markdown over-->
@@ -85,7 +85,7 @@
 
     <!--html menu-->
     <li>
-        <a href="/web/html">Html转图片
+        <a href="/webs/views/html">Html转图片
         </a>
     </li>
     <!--html over-->
@@ -95,6 +95,9 @@
         <a href="#">Fun玩</a>
     </li>
     <li><input class="form-control search" placeholder=" Search" type="text"/></li>
+
+    <script src="/webs/assets/js/jquery-1.8.3.min.js"></script>
+    <script  src="/webs/assets/js/hover-dropdown.js"></script>
 </ul>
 
 </body>

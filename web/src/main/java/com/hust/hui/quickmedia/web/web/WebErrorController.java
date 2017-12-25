@@ -6,7 +6,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 
 import java.util.Map;
 
-import static com.hust.hui.quickmedia.web.web.WebIndexController.HEAD_BANNER_KEY;
+import static com.hust.hui.quickmedia.web.web.WebViewController.HEAD_BANNER_KEY;
 
 /**
  * Created by yihui on 2017/12/3.
@@ -15,14 +15,14 @@ import static com.hust.hui.quickmedia.web.web.WebIndexController.HEAD_BANNER_KEY
 public class WebErrorController {
 
 
-    @RequestMapping(value = {"404", "/web/404"})
+    @RequestMapping(value = {"404", "/webs/404"})
     public String notFound404(Map<String, Object> map) {
         map.put(HEAD_BANNER_KEY, HeadBannerConstants.getInstance()._404VO);
         return "404";
     }
 
 
-    @RequestMapping(value = {"500", "/web/500"})
+    @RequestMapping(value = {"500", "/webs/500"})
     public String interError500(Map<String, Object> map) {
         map.put(HEAD_BANNER_KEY, HeadBannerConstants.getInstance()._500VO);
         return "500";
