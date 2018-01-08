@@ -1,8 +1,8 @@
 package com.hust.hui.quickmedia.web.wxapi;
 
 import com.hust.hui.quickmedia.web.entity.IRequest;
+import com.hust.hui.quickmedia.web.entity.OutputEnum;
 import lombok.Data;
-import org.apache.commons.lang.StringUtils;
 
 /**
  * Created by yihui on 2017/12/3.
@@ -17,6 +17,7 @@ public class WxBaseRequest implements IRequest {
      * <p>
      * url: 表示图片的url
      * img: 表示base64格式的图片
+     * stream : 表示直接返回图片
      */
     private String type;
 
@@ -32,6 +33,14 @@ public class WxBaseRequest implements IRequest {
 
 
     public boolean urlReturn() {
-        return StringUtils.isBlank(type) || "URL".equalsIgnoreCase(type);
+        return OutputEnum.ofStr(type) == OutputEnum.URL;
+    }
+
+    public boolean base64Return() {
+        return OutputEnum.ofStr(type) == OutputEnum.IMG;
+    }
+
+    public boolean streamReturn() {
+        return OutputEnum.ofStr(type) == OutputEnum.STREAM;
     }
 }
