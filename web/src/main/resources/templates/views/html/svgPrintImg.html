@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/web/thymeleaf/layout"
+      layout:decorator="layouts/main_layout">
+<head>
+
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1"/>
+    <meta name="description" content=""/>
+    <meta name="author" content=""/>
+
+    <!--<link rel="stylesheet" th:href="@{/css/plugins/markdown/editormd.css}"></link>-->
+
+    <title>Z+ | svg转图片</title>
+</head>
+<body>
+
+<div layout:fragment="main_content" class="container">
+
+    <div class="col-md-offset-1 col-md-12">
+        <div class="col-md-8">
+            <h4><span style="color:#48cfad">Z+</span> SvgRender
+                <small>svg渲染</small>
+            </h4>
+        </div>
+        <div class="col-md-2">
+            <!--<button class="btn btn-warning" id="md2pdf">导出pdf</button>-->
+            <button class="btn btn-info" id="md2img">导出图片</button>
+        </div>
+    </div>
+
+    <div class="row" id="mdEdit">
+
+        <div class="col-md-6">
+            <div class="col-md-11">
+                <textarea name="content"
+                          rows="25" class="form-control"
+                          id="mdContent"></textarea>
+            </div>
+        </div>
+        <div class="col-md-6" id="preData">
+            <div class="col-md-12">
+                <label>
+                    输出图片为:
+                </label>
+            </div>
+            <div class="col-md-offset-1 col-md-11">
+                <img id="data" style="max-height:414px"/>
+            </div>
+        </div>
+
+    </div>
+
+    <script src="/webs/assets/js/jquery-1.8.3.min.js"></script>
+    <script src="/webs/assets/js/jquery.toastmessage.js"></script>
+    <script src="/webs/assets/biz/svgjs.js"></script>
+</div>
+
+
+</body>
+</html>

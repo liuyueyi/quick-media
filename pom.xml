@@ -9,7 +9,8 @@
 	<modules>
 		<module>web</module>
 		<module>common</module>
-	</modules>
+        <module>svg-render</module>
+    </modules>
 	<packaging>pom</packaging>
 
 	<name>quick-media</name>

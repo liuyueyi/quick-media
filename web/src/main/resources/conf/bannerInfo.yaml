@@ -79,6 +79,15 @@ htmlJsonPre:
     - !!com.hust.hui.quickmedia.web.web.entity.base.MenuWebVO  { url : "/webs/views/index",menu : "首页"}
     - !!com.hust.hui.quickmedia.web.web.entity.base.MenuWebVO  { url : "/webs/views/html", menu : "Html"}
     - !!com.hust.hui.quickmedia.web.web.entity.base.MenuWebVO  { url : "/webs/views/html/htmlJsonPre", menu : "Json"}
+svgPrintImg:
+  !!com.hust.hui.quickmedia.web.web.entity.HeadBannerVO
+  title : "svgRender"
+  subTitle : "Svg渲染"
+  menuList:
+    - !!com.hust.hui.quickmedia.web.web.entity.base.MenuWebVO  { url : "/webs/views/index",menu : "首页"}
+    - !!com.hust.hui.quickmedia.web.web.entity.base.MenuWebVO  { url : "/webs/views/html", menu : "Html"}
+    - !!com.hust.hui.quickmedia.web.web.entity.base.MenuWebVO  { url : "/webs/views/html/svgPrintImg", menu : "渲染图"}
+
 
 markdown:
   !!com.hust.hui.quickmedia.web.web.entity.HeadBannerVO

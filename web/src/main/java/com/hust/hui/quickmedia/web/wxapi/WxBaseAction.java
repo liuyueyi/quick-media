@@ -25,6 +25,8 @@ import java.io.OutputStream;
 @Slf4j
 public class WxBaseAction {
 
+    private static final String HTTP_PREFIX = "https://zbang.online/";
+
     protected BufferedImage getImg(HttpServletRequest request) {
         MultipartFile file = null;
         if (request instanceof MultipartHttpServletRequest) {
@@ -66,36 +68,39 @@ public class WxBaseAction {
 
         String ans;
         WxBaseResponse response = new WxBaseResponse();
-//        if (request.urlReturn()) {
-//            ans = ImgGenHelper.saveImg(bf);
-//            response.setImg(ans);
-//            response.setUrl("https://zbang.online/" + ans);
-//        } else
-            if (true) {
+
+        // 输出图片类型
+        MediaType mediaType = request.genMediaType();
+
+        if (request.urlReturn()) { // 直接返回url
+            ans = ImgGenHelper.saveImg(bf);
+            response.setImg(ans);
+            response.setUrl(HTTP_PREFIX + ans);
+        } else if (request.streamReturn()) { // 直接返回图片
             try {
                 HttpServletResponse servletResponse = ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getResponse();
-                servletResponse.setContentType("image/png");
+                servletResponse.setContentType(mediaType.getMime());
                 OutputStream os = servletResponse.getOutputStream();
-                ImageIO.write(bf, "png", os);
+                ImageIO.write(bf, mediaType.getExt(), os);
                 os.flush();
                 os.close();
                 return ResponseWrapper.successReturn(response);
             } catch (Exception e) {
-                log.error("parse img to base64 error! req: {}, e:{}", request, e);
+                log.error("general return stream img error! req: {}, e:{}", request, e);
                 ans = ImgGenHelper.saveImg(bf);
                 response.setImg(ans);
-                response.setUrl("https://zbang.online/" + ans);
+                response.setUrl(HTTP_PREFIX + ans);
             }
-        } else {
+        } else { // base64的图片返回
             try {
                 ans = Base64Util.encode(bf, "png");
                 response.setBase64result(ans);
-                response.setPrefix(MediaType.ImagePng.getPrefix());
+                response.setPrefix(mediaType.getPrefix());
             } catch (IOException e) {
                 log.error("parse img to base64 error! req: {}, e:{}", request, e);
                 ans = ImgGenHelper.saveImg(bf);
                 response.setImg(ans);
-                response.setUrl("https://zbang.online/" + ans);
+                response.setUrl(HTTP_PREFIX + ans);
             }
         }
         return ResponseWrapper.successReturn(response);

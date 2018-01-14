@@ -31,6 +31,7 @@ public class BannerConfContainer {
     private HeadBannerVO html;
     private HeadBannerVO htmlPrintImg;
     private HeadBannerVO htmlJsonPre;
+    private HeadBannerVO svgPrintImg;
 
 
     // markdown

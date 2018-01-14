@@ -1,0 +1,34 @@
+<svg width="480" height="855" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Created with Method Draw - http://github.com/duopixel/Method-Draw/ -->
+    <defs>
+        <filter id="svg_2_blur">
+            <feGaussianBlur stdDeviation="0.1" in="SourceGraphic"/>
+        </filter>
+    </defs>
+    <g>
+        <title>background</title>
+        <rect fill="#fff" id="canvas_background" height="857" width="482" y="-1" x="-1"/>
+        <g display="none" overflow="visible" y="0" x="0" height="100%" width="100%" id="canvasGrid">
+            <rect fill="url(#gridpattern)" stroke-width="0" y="0" x="0" height="100%" width="100%"/>
+        </g>
+    </g>
+    <g>
+
+            <text x="100" y="55" fill="red" style="outline: 10px solid blue; font-size:2em; overflow; visible">I love SVG</text>
+        <text x="22" y="40">Text Behind Shape</text>
+
+        <circle cx="50" cy="50" r="25"
+                style="stroke: none; fill: #0000ff;
+               fill-opacity: 0.3;  " />
+        <circle cx="120" cy="50" r="25"
+                style="stroke: none; fill: #0000ff;
+               fill-opacity: 0.7;  " />
+
+
+        <title>Layer 1</title>
+        <image xlink:href="http://s2.mogucdn.com/mlcdn/c45406/170418_68lkjddg3bll08h9c9bk0d8ihkffi_800x1200.jpg_468x468.jpg" id="svg_1" height="855" width="480" y="-1" x="1"/>
+        <text style="cursor: move;" filter="url(#svg_2_blur)" opacity="0.75" stroke="#000" xml:space="preserve" text-anchor="start" font-family="Euphoria, sans-serif" font-size="35" id="svg_2" y="375.33555" x="160.49442" stroke-width="0" fill="#000000">￥1314.00</text>
+  <text xml:space="preserve" text-anchor="start" font-family="Euphoria, sans-serif" font-size="18" id="svg_3" y="827" x="208.5" stroke-width="0" fill="#999999">2017-01-28 11:02:01</text>
+    </g>
+
+</svg>

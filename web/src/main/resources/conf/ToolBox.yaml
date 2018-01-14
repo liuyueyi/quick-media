@@ -49,3 +49,5 @@ html:
     logo: fa-html5, title: html转图, url: /webs/views/html/htmlPrintImg}
   - !!com.hust.hui.quickmedia.web.web.entity.base.BaseToolWebVO {desc: 在线编辑json串，实时预览,
     logo: fa-wheelchair, title: Json视窗, url: /webs/views/html/htmlJsonPre}
+  - !!com.hust.hui.quickmedia.web.web.entity.base.BaseToolWebVO {desc: svg渲染输出图片,
+      logo: fa-unlock-alt, title: Svg渲染, url: /webs/views/html/svgPrintImg}

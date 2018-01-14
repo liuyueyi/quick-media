@@ -22,6 +22,12 @@
         </dependency>
 
         <dependency>
+            <groupId>com.hust.hui.media</groupId>
+            <artifactId>svg-render</artifactId>
+            <version>${parent.version}</version>
+        </dependency>
+
+        <dependency>
             <groupId>org.apache.httpcomponents</groupId>
             <artifactId>httpcore</artifactId>
         </dependency>

@@ -1,5 +1,6 @@
 package com.hust.hui.quickmedia.web.wxapi;
 
+import com.hust.hui.quickmedia.common.constants.MediaType;
 import com.hust.hui.quickmedia.web.entity.IRequest;
 import com.hust.hui.quickmedia.web.entity.OutputEnum;
 import lombok.Data;
@@ -25,6 +26,13 @@ public class WxBaseRequest implements IRequest {
     private String token;
 
 
+    /**
+     * 输出图片类型 ，目前只支持 jpeg, png
+     */
+    private String imgType;
+
+
+
     @Override
     public boolean validate() {
         return true;
@@ -43,4 +51,23 @@ public class WxBaseRequest implements IRequest {
     public boolean streamReturn() {
         return OutputEnum.ofStr(type) == OutputEnum.STREAM;
     }
+
+
+    /**
+     * 删除jpeg图片
+     * @return
+     */
+    public boolean genJpegImg() {
+        return !"png".equalsIgnoreCase(imgType);
+    }
+
+
+    public MediaType genMediaType() {
+        if (genJpegImg()) {
+            return MediaType.ImageJpg;
+        } else {
+            return MediaType.ImagePng;
+        }
+    }
+
 }
