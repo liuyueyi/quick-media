@@ -29,7 +29,7 @@
     <rect class='bgcolor' x='0' y='0' height='100%' width='100%'></rect>
     <rect class='bgcolor' style="stroke:#e6e6e6;stroke-width:2" id="canvas_background" height="220" width="96%" y="10" x="2%"></rect>
     <rect class='bgcolor' x='33%' y='0' height='30' width='33%'/>
-    <text y="16" x="50%" id="title"  lengthAdjust='spacing' rotate="6" textLength='33%'>微信公众号</text>
+    <text y="16" x="50%" id="title"  lengthAdjust='spacing' rotate="6" textLength='30%'>微信公众号</text>
     <svg width="300" height="230">
         <image y="40" width="100%" height="80" xlink:href="http://image.uc.cn/o/wemedia/s/upload/2017/39c53604fe3587a4876396cf3785b801x200x200x13.png" id="logo"></image>
         <text x="50%" y="150" id='name'>小灰灰Blog</text>

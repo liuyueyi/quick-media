@@ -10,8 +10,8 @@
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>com.hust.hui.media</groupId>
-    <artifactId>svg-render</artifactId>
-
+    <artifactId>self-batik-codec</artifactId>
+    <version>1.0</version>
 
     <properties>
         <batik.version>1.9.1</batik.version>
@@ -19,19 +19,13 @@
 
     <dependencies>
         <dependency>
-            <groupId>org.slf4j</groupId>
-            <artifactId>slf4j-api</artifactId>
+            <groupId>org.apache.xmlgraphics</groupId>
+            <artifactId>batik-awt-util</artifactId>
+            <version>${batik.version}</version>
         </dependency>
-        <dependency>
-            <groupId>org.projectlombok</groupId>
-            <artifactId>lombok</artifactId>
-        </dependency>
-
-
-        <!--svg render dependency-->
         <dependency>
             <groupId>org.apache.xmlgraphics</groupId>
-            <artifactId>batik-anim</artifactId>
+            <artifactId>batik-bridge</artifactId>
             <version>${batik.version}</version>
         </dependency>
         <dependency>
@@ -40,18 +34,10 @@
             <version>${batik.version}</version>
         </dependency>
         <dependency>
-            <groupId>com.hust.hui.media</groupId>
-            <artifactId>self-batik-codec</artifactId>
-            <version>1.0</version>
+            <groupId>org.apache.xmlgraphics</groupId>
+            <artifactId>batik-util</artifactId>
+            <version>${batik.version}</version>
         </dependency>
-        <!--<dependency>-->
-            <!--<groupId>org.apache.xmlgraphics</groupId>-->
-            <!--<artifactId>batik-codec</artifactId>-->
-            <!--<version>${batik.version}</version>-->
-        <!--</dependency>-->
-        <!--svg render dependency-->
-
-
     </dependencies>
 
 

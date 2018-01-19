@@ -10,6 +10,7 @@
 		<module>web</module>
 		<module>common</module>
         <module>svg-render</module>
+        <module>self-batik-codec</module>
     </modules>
 	<packaging>pom</packaging>
 
