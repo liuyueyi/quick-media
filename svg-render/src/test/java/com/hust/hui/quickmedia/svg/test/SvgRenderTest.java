@@ -32,7 +32,7 @@ public class SvgRenderTest {
     @Test
     public void testFixPngImg() {
             try {
-                BufferedImage img = SvgRenderWrapper.convertToJpegAsImg("pnptest.svg", new HashMap<>());
+                BufferedImage img = SvgRenderWrapper.convertToJpegAsImg("card.svg", new HashMap<>());
                 System.out.println("---");
             } catch (Exception e) {
                 e.printStackTrace();
