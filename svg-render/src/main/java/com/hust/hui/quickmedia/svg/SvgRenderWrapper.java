@@ -115,6 +115,7 @@ public class SvgRenderWrapper {
             doc = null;
             return bf;
         } catch (Exception e) {
+            e.printStackTrace();
             log.error("render svg to jpeg error! path:{}, data:{}, e: {}", path, paramMap, e);
             return null;
         }

@@ -14,7 +14,7 @@ public class SvgRenderTest {
 
     @Test
     public void testGenPng() {
-        Map<String, Object> map = new HashMap();
+        Map<String, Object> map = new HashMap<>();
         map.put("svg_2", "当前金额: ￥1314.00");
         map.put("svg_3", "当前时间: 2017-01-01 11:00:00");
         try {
@@ -26,5 +26,16 @@ public class SvgRenderTest {
         } catch (Exception e) {
             e.printStackTrace();
         }
+    }
+
+
+    @Test
+    public void testFixPngImg() {
+            try {
+                BufferedImage img = SvgRenderWrapper.convertToJpegAsImg("pnptest.svg", new HashMap<>());
+                System.out.println("---");
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
     }
 }

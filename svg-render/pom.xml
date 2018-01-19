@@ -14,7 +14,7 @@
 
 
     <properties>
-        <batik.version>1.9</batik.version>
+        <batik.version>1.9.1</batik.version>
     </properties>
 
     <dependencies>
@@ -39,11 +39,11 @@
             <artifactId>batik-transcoder</artifactId>
             <version>${batik.version}</version>
         </dependency>
-        <dependency>
-            <groupId>org.apache.xmlgraphics</groupId>
-            <artifactId>batik-codec</artifactId>
-            <version>${batik.version}</version>
-        </dependency>
+        <!--<dependency>-->
+            <!--<groupId>org.apache.xmlgraphics</groupId>-->
+            <!--<artifactId>batik-codec</artifactId>-->
+            <!--<version>${batik.version}</version>-->
+        <!--</dependency>-->
         <!--svg render dependency-->
 
 
