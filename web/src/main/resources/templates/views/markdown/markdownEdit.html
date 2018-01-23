@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/web/thymeleaf/layout"
+      layout:decorator="layouts/main_layout">
+<head>
+
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1"/>
+    <meta name="description" content=""/>
+    <meta name="author" content=""/>
+
+    <!--<link rel="stylesheet" th:href="@{/css/plugins/markdown/editormd.css}"></link>-->
+
+    <title>Z+ | Markdown视窗</title>
+</head>
+<body>
+
+<div layout:fragment="main_content" class="content-wrapper">
+    <link th:href="@{/webs/assets/css/bootstrap-markdown.min.css}" rel="stylesheet"/>
+
+    <div class="col-md-offset-1 col-md-12">
+        <div class="col-md-8">
+            <h4><span style="color:#48cfad">Z+</span> Markdown edit
+                <small>markdown 在线编辑/预览/输出工具</small>
+            </h4>
+        </div>
+        <div class="col-md-2">
+            <!--<button class="btn btn-warning" id="md2pdf">导出pdf</button>-->
+            <button class="btn btn-info" id="md2img">导出图片</button>
+            <label class="checkbox" >
+                <input type="checkbox" id="noBorder" value="无边框"/> 无边框
+            </label>
+        </div>
+    </div>
+
+    <div class="row" id="preData">
+        <div class="col-md-offset-1 col-md-10">
+            <img id="data" />
+        </div>
+    </div>
+
+
+    <div class="row" id="mdEdit">
+
+        <div class="col-md-offset-1 col-md-10">
+            <div class="owl-item" style="width: 100%;min-height:200px">
+
+                <div class="md-editor" id="1512303901423">
+                    <textarea name="content" data-provide="markdown" rows="26" class="md-input"
+                              style="resize: none;" id="mdContent">h1 header
+============
+
+Paragraphs are separated by a blank line.
+
+2nd paragraph. *Italic*, **bold**, and `monospace`. Itemized lists
+look like:
+
+  * this one
+  * that one
+  * the other one
+                    </textarea>
+                    <div class="md-fullscreen-controls">
+                        <a href="#" class="exit-fullscreen" title="Exit fullscreen">
+                        <span class="glyphicon glyphicon-fullscreen">
+                        </span>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <script src="/webs/assets/js/jquery-1.8.3.min.js"></script>
+    <script src="/webs/assets/js/jquery.toastmessage.js"></script>
+    <script src="/webs/assets/js/bootstrap-markdown.js"></script>
+    <script src="/webs/assets/js/markdown.js"></script>
+    <script src="/webs/assets/biz/mdjs.js"></script>
+</div>
+
+</body>
+</html>

@@ -22,7 +22,7 @@ import javax.servlet.http.HttpServletRequest;
 @RestController
 public class WxImgUpload extends WxBaseAction {
 
-    @RequestMapping(path = "wx/upload", method = {RequestMethod.GET, RequestMethod.POST, RequestMethod.OPTIONS})
+    @RequestMapping(path = {"wx/upload", "wx/wx/upload"}, method = {RequestMethod.GET, RequestMethod.POST, RequestMethod.OPTIONS})
     public ResponseWrapper<WxBaseResponse> upload(HttpServletRequest request) {
         MultipartFile file = null;
         if (request instanceof MultipartHttpServletRequest) {

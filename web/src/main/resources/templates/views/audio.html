@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/web/thymeleaf/layout"
+      layout:decorator="layouts/main_layout">
+<head>
+
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1"/>
+    <meta name="description" content=""/>
+    <meta name="author" content=""/>
+
+    <!--<link rel="stylesheet" th:href="@{/css/plugins/markdown/editormd.css}"></link>-->
+
+    <title>Z+ | 音频工具箱</title>
+</head>
+<body>
+
+<div layout:fragment="main_content" class="content-wrapper">
+
+    <div th:replace="cell/toolbox :: toolbox"></div>
+
+</div>
+
+</body>
+</html>

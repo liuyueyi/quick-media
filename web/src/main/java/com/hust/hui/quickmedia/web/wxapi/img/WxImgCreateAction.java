@@ -6,7 +6,6 @@ import com.hust.hui.quickmedia.common.img.wartermark.WaterMarkOptions;
 import com.hust.hui.quickmedia.common.img.wartermark.WaterMarkWrapper;
 import com.hust.hui.quickmedia.common.tools.ChineseDataExTool;
 import com.hust.hui.quickmedia.common.util.FontUtil;
-import com.hust.hui.quickmedia.common.util.ImageUtil;
 import com.hust.hui.quickmedia.web.entity.ResponseWrapper;
 import com.hust.hui.quickmedia.web.entity.Status;
 import com.hust.hui.quickmedia.web.wxapi.WxBaseAction;
@@ -40,7 +39,7 @@ public class WxImgCreateAction extends WxBaseAction {
     private static final int RIGHT_PADDING = 20;
 
 
-    @RequestMapping(value = "/wx/create", method = {RequestMethod.GET, RequestMethod.POST, RequestMethod.OPTIONS})
+    @RequestMapping(value = {"/wx/create", "/wx/wx/create"}, method = {RequestMethod.GET, RequestMethod.POST, RequestMethod.OPTIONS})
     public ResponseWrapper<WxBaseResponse> create(HttpServletRequest httpServletRequest, WxImgCreateRequest wxImgCreateRequest) {
 
         BufferedImage bfImg = getImg(httpServletRequest);
@@ -100,18 +99,6 @@ public class WxImgCreateAction extends WxBaseAction {
                         .asImage()
                 ;
             }
-
-
-            ans = WaterMarkWrapper.of(ans)
-                    .setStyle(WaterMarkOptions.WaterStyle.OVERRIDE_LEFT_BOTTOM)
-                    .setWaterLogo(ImageUtil.getImageByPath("//Users/yihui/Desktop/xcx/xcx.jpg"))
-                    .setWaterInfo("图文小工具")
-                    .setWaterColor(Color.LIGHT_GRAY)
-                    .setInline(false)
-                    .setWaterLogoHeight(80)
-                    .setWaterOpacity(0.85f)
-                    .build()
-                    .asImage();
 
             ans = WaterMarkWrapper.of(ans)
                     .setStyle(WaterMarkOptions.WaterStyle.OVERRIDE_RIGHT_BOTTOM)

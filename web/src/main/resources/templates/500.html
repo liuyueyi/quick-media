@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/web/thymeleaf/layout"
+      layout:decorator="layouts/main_layout">
+<head>
+
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1"/>
+    <meta name="description" content=""/>
+    <meta name="author" content=""/>
+
+    <!--<link rel="stylesheet" th:href="@{/css/plugins/markdown/editormd.css}"></link>-->
+
+    <title>Z+ | 首页</title>
+</head>
+<body>
+
+<div layout:fragment="main_content">
+
+    <div class="gray-bg">
+        <div class="fof">
+            <!-- 404 error -->
+            <div class="container  error-inner wow flipInX animated" data-wow-animation-name="flipInX" style="visibility: visible; animation-name: flipInX;">
+                <h1>500, Server Inter Error</h1>
+                <p class="text-center">Serivce has some unexpect error! So bad...</p>
+                <a class="btn btn-info" href="/webs/index">GO BACK TO THE HOMEPAGE</a>
+            </div>
+            <!-- /404 error -->
+        </div>
+    </div>
+
+</div>
+
+
+
+</body>
+</html>

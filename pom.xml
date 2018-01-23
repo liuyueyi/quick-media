@@ -9,7 +9,9 @@
 	<modules>
 		<module>web</module>
 		<module>common</module>
-	</modules>
+        <module>svg-render</module>
+        <module>self-batik-codec</module>
+    </modules>
 	<packaging>pom</packaging>
 
 	<name>quick-media</name>

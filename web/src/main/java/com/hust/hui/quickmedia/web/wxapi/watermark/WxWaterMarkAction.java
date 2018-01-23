@@ -26,7 +26,7 @@ import java.awt.image.BufferedImage;
 @Slf4j
 public class WxWaterMarkAction extends WxBaseAction {
 
-    @RequestMapping(path = "/wx/water", method = {RequestMethod.GET, RequestMethod.POST, RequestMethod.OPTIONS})
+    @RequestMapping(path = {"/wx/water", "wx/wx/water"}, method = {RequestMethod.GET, RequestMethod.POST, RequestMethod.OPTIONS})
     @ValidateDot
     public ResponseWrapper<WxBaseResponse> markWater(HttpServletRequest httpServletRequest,
                                                      WxWaterMarkRequest wxWaterMarkRequest) {

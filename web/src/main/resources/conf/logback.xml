@@ -1,0 +1,30 @@
+<configuration debug="false" scan="true" scanPeriod="30 seconds">
+    <property name="FILE_PATTERN" value="%d [%t] %5p %c - %m%n"/>
+
+    <property name="LOG_FILE_NAME" value="media"/>
+
+    <appender name="FILE"
+              class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <File>logs/${LOG_FILE_NAME}.log</File>
+        <encoder>
+            <pattern>${FILE_PATTERN}</pattern>
+        </encoder>
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <timeBasedFileNamingAndTriggeringPolicy
+                    class="ch.qos.logback.core.rolling.SizeAndTimeBasedFNATP">
+                <maxFileSize>32MB</maxFileSize>
+            </timeBasedFileNamingAndTriggeringPolicy>
+            <fileNamePattern>logs/arch/${LOG_FILE_NAME}-%d{yyyy-MM-dd}-%i.log.gz</fileNamePattern>
+            <maxHistory>30</maxHistory>
+        </rollingPolicy>
+    </appender>
+
+    <logger name="com.hust.hui" level="WARN" additivity="false">
+        <appender-ref ref="FILE"/>
+    </logger>
+
+
+    <root level="WARN">
+        <appender-ref ref="FILE"/>
+    </root>
+</configuration>

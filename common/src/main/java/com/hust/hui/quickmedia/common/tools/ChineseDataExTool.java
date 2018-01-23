@@ -42,6 +42,10 @@ public class ChineseDataExTool {
     public static String lunarDayToChinese(int day) {
         if (day <= 10) {
             return "初" + HANZI[day - 1];
+        } else if (day == 20) {
+            return "贰拾";
+        } else if( day == 30) {
+            return "叁拾";
         } else {
             return HANZI[day / 10 - 1] + HANZI[day % 10 - 1];
         }

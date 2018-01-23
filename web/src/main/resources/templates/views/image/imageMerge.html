@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/web/thymeleaf/layout"
+      layout:decorator="layouts/main_layout">
+<head>
+
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1"/>
+    <meta name="description" content=""/>
+    <meta name="author" content=""/>
+
+    <title>Z+ | 模板合成</title>
+</head>
+<body>
+
+<div layout:fragment="main_content" class="container">
+
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-5" style="max-height: 400px">
+                <div class="about-carousel wow fadeInLeft">
+                    <div id="myCarousel" class="carousel slide">
+
+                        <!-- Carousel items -->
+                        <div class="carousel-inner" id="templateList">
+                            <!--<div th:each="cell:${toolBox}" class="item">-->
+                                <!--<img src="http://s3.mogucdn.com/mlcdn/c45406/170418_68lkjddg3bll08h9c9bk0d8ihkffi_800x1200.jpg_468x468.jpg"-->
+                                     <!--alt="" style="max-height: 400px;"/>-->
+                                <!--<div class="carousel-caption">-->
+                                    <!--<p>-->
+                                        <!--Lorem ipsum dolor sit amet.-->
+                                    <!--</p>-->
+                                <!--</div>-->
+                            <!--</div>-->
+                        </div>
+
+                        <!-- Carousel nav -->
+                        <a class="carousel-control left" href="#myCarousel" data-slide="prev" style="height:50px">
+                            <i class="fa fa-angle-left">
+                            </i>
+                        </a>
+                        <a class="carousel-control right" href="#myCarousel" data-slide="next" style="height:50px">
+                            <i class="fa fa-angle-right">
+                            </i>
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-lg-7 about wow fadeInRight">
+                {{message}}
+
+            </div>
+        </div>
+
+    </div>
+
+
+
+    <script src="/webs/assets/js/jquery-1.8.3.min.js"></script>
+    <script src="/webs/assets/js/bootstrap.min.js"></script>
+    <script src="/webs/assets/js/jquery.toastmessage.js"></script>
+    <script src="/webs/assets/js/vue/vue.js"></script>
+    <script src="/webs/assets/biz/image/merge.js"></script>
+</div>
+
+
+</body>
+</html>

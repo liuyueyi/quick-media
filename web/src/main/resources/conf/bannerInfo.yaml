@@ -1,0 +1,106 @@
+index:
+  !!com.hust.hui.quickmedia.web.web.entity.HeadBannerVO
+  title : "index"
+  subTitle : "工具箱首页"
+  menuList:
+    - !!com.hust.hui.quickmedia.web.web.entity.base.MenuWebVO { url : "/webs/views/index", menu : "首页"}
+
+image:
+  !!com.hust.hui.quickmedia.web.web.entity.HeadBannerVO
+  title : "Image"
+  subTitle: "图文工具箱 | Image toolbox | 提供图片的各式操作"
+  menuList:
+    - !!com.hust.hui.quickmedia.web.web.entity.base.MenuWebVO  { url : "/webs/views/index", menu : "首页"}
+    - !!com.hust.hui.quickmedia.web.web.entity.base.MenuWebVO  { url : "/webs/views/image", menu : "Image"}
+
+imageCut:
+  !!com.hust.hui.quickmedia.web.web.entity.HeadBannerVO
+  title : "ImageCut"
+  subTitle : "图片裁剪 | Image Cut"
+  menuList:
+    - !!com.hust.hui.quickmedia.web.web.entity.base.MenuWebVO  { url : "/webs/views/index", menu : "首页"}
+    - !!com.hust.hui.quickmedia.web.web.entity.base.MenuWebVO  { url : "/webs/views/image", menu : "Image"}
+    - !!com.hust.hui.quickmedia.web.web.entity.base.MenuWebVO  { url : "/webs/views/image/imageCut", menu : "Cut"}
+
+imageScale:
+  !!com.hust.hui.quickmedia.web.web.entity.HeadBannerVO
+  title : "ImageScale"
+  subTitle : "图片压缩 | Image Scale"
+  menuList:
+    - !!com.hust.hui.quickmedia.web.web.entity.base.MenuWebVO  { url : "/webs/views/index", menu : "首页"}
+    - !!com.hust.hui.quickmedia.web.web.entity.base.MenuWebVO  { url : "/webs/views/image", menu : "Image"}
+    - !!com.hust.hui.quickmedia.web.web.entity.base.MenuWebVO  { url : "/webs/views/image/imageScale", menu : "Scale"}
+
+imageMerge:
+  !!com.hust.hui.quickmedia.web.web.entity.HeadBannerVO
+  title : "ImageMerge"
+  subTitle : "图片合成 | Image Merge"
+  menuList:
+    - !!com.hust.hui.quickmedia.web.web.entity.base.MenuWebVO  { url : "/webs/views/index", menu : "首页"}
+    - !!com.hust.hui.quickmedia.web.web.entity.base.MenuWebVO  { url : "/webs/views/image", menu : "Image"}
+    - !!com.hust.hui.quickmedia.web.web.entity.base.MenuWebVO  { url : "/webs/views/image/imageMerge", menu : "Merge"}
+
+audio:
+  !!com.hust.hui.quickmedia.web.web.entity.HeadBannerVO
+  title : "Audio"
+  subTitle : "音频工具箱 | Audio toolbox | 提供音频的各式操作"
+  menuList:
+    - !!com.hust.hui.quickmedia.web.web.entity.base.MenuWebVO  { url : "/webs/views/index", menu : "首页"}
+    - !!com.hust.hui.quickmedia.web.web.entity.base.MenuWebVO  { url : "/webs/views/audio", menu : "Audio"}
+
+qrcode:
+  !!com.hust.hui.quickmedia.web.web.entity.HeadBannerVO
+  title : "QrCode"
+  subTitle : "二维码工具箱 | Qrcode toolbox | 提供二维码的生成和解码"
+  menuList:
+    - !!com.hust.hui.quickmedia.web.web.entity.base.MenuWebVO  { url : "/webs/views/index", menu : "首页"}
+    - !!com.hust.hui.quickmedia.web.web.entity.base.MenuWebVO  { url : "/webs/views/qrcode", menu : "QrCode"}
+
+html:
+  !!com.hust.hui.quickmedia.web.web.entity.HeadBannerVO
+  title : "Html"
+  subTitle : "网页工具箱 | Html toolbox | 提供网页相关的各式小工具"
+  menuList:
+    - !!com.hust.hui.quickmedia.web.web.entity.base.MenuWebVO  { url : "/webs/views/index", menu : "首页"}
+    - !!com.hust.hui.quickmedia.web.web.entity.base.MenuWebVO  { url : "/webs/views/html", menu : "Html"}
+htmlPrintImg:
+  !!com.hust.hui.quickmedia.web.web.entity.HeadBannerVO
+  title : "html2img"
+  subTitle : "网页输出图片 | html >>> image | 指定html，返回图片"
+  menuList:
+    - !!com.hust.hui.quickmedia.web.web.entity.base.MenuWebVO  { url : "/webs/views/index", menu : "首页"}
+    - !!com.hust.hui.quickmedia.web.web.entity.base.MenuWebVO  { url : "/webs/views/html", menu : "Html"}
+    - !!com.hust.hui.quickmedia.web.web.entity.base.MenuWebVO  { url : "/webs/views/html/htmlPrintImg", menu : "渲染图"}
+htmlJsonPre:
+  !!com.hust.hui.quickmedia.web.web.entity.HeadBannerVO
+  title : "jsonView"
+  subTitle : "Json预览 | Json在线编辑| Json实时预览 | Json串格式化"
+  menuList:
+    - !!com.hust.hui.quickmedia.web.web.entity.base.MenuWebVO  { url : "/webs/views/index",menu : "首页"}
+    - !!com.hust.hui.quickmedia.web.web.entity.base.MenuWebVO  { url : "/webs/views/html", menu : "Html"}
+    - !!com.hust.hui.quickmedia.web.web.entity.base.MenuWebVO  { url : "/webs/views/html/htmlJsonPre", menu : "Json"}
+svgPrintImg:
+  !!com.hust.hui.quickmedia.web.web.entity.HeadBannerVO
+  title : "svgRender"
+  subTitle : "Svg渲染"
+  menuList:
+    - !!com.hust.hui.quickmedia.web.web.entity.base.MenuWebVO  { url : "/webs/views/index",menu : "首页"}
+    - !!com.hust.hui.quickmedia.web.web.entity.base.MenuWebVO  { url : "/webs/views/html", menu : "Html"}
+    - !!com.hust.hui.quickmedia.web.web.entity.base.MenuWebVO  { url : "/webs/views/html/svgPrintImg", menu : "渲染图"}
+
+
+markdown:
+  !!com.hust.hui.quickmedia.web.web.entity.HeadBannerVO
+  title : "Markdown"
+  subTitle : "markdown 工具箱 | markdown toolbox | 在线预览输出"
+  menuList:
+    - !!com.hust.hui.quickmedia.web.web.entity.base.MenuWebVO  { url : "/webs/views/index", menu : "首页"}
+    - !!com.hust.hui.quickmedia.web.web.entity.base.MenuWebVO  { url : "/webs/views/markdown", menu : "markdown"}
+markdownEdit:
+  !!com.hust.hui.quickmedia.web.web.entity.HeadBannerVO
+  title : "MarkdownEdit"
+  subTitle : "markdown 在线预览 | markdown 输出pdf/image"
+  menuList:
+    - !!com.hust.hui.quickmedia.web.web.entity.base.MenuWebVO  { url : "/webs/views/index", menu : "首页"}
+    - !!com.hust.hui.quickmedia.web.web.entity.base.MenuWebVO  { url : "/webs/views/markdown", menu : "markdown"}
+    - !!com.hust.hui.quickmedia.web.web.entity.base.MenuWebVO  { url : "/webs/views/markdown/markdownEdit", menu  : "markdown在线"}

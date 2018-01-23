@@ -26,7 +26,7 @@ import java.awt.image.BufferedImage;
 public class WxQrCodeAction extends WxBaseAction {
 
 
-    @RequestMapping(path = "wx/qrcode/encode", method = {RequestMethod.GET, RequestMethod.POST, RequestMethod.OPTIONS})
+    @RequestMapping(path = {"wx/qrcode/encode", "wx/wx/qrcode/encode"}, method = {RequestMethod.GET, RequestMethod.POST, RequestMethod.OPTIONS})
     public ResponseWrapper<WxBaseResponse> parse(HttpServletRequest request, WxQrCodeEncRequest qrCodeEncRequest) {
         BufferedImage logo;
         try {
