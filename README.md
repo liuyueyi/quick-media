@@ -14,6 +14,7 @@
 - ffmpeg
 - imageMagic
 - zxing
+- batik
 
 
 ### 已支持服务
@@ -58,11 +59,13 @@
 - [x] 合成
     - [图片合成支持](doc/images/imgMerge.md)
 - [x] 水印
+- [x] svg渲染
 - [ ] 裁剪
 - [ ] 压缩
 - [ ] 旋转
 - [ ] 缩放
 - [ ] 格式转换
+
 
 [查看更多图片服务详情](doc/images/ImgGuide.md)
     
@@ -99,6 +102,11 @@
     - 图片合成服务支持
     - 微信小程序（图文小工具）服务端源码
 
+6. [v0.006](https://github.com/liuyueyi/quick-media/releases/tag/v0.006)
+
+    - svg渲染支持
+    - 利用phantomjs实现html渲染
+    - 实现应用网站搭建
 
 ### 文档
 
@@ -117,6 +125,9 @@
 
 - [图片旋转不生效问题](doc/questions/ImgRotate.md)
 - [markdonw转图片中文乱码问题](doc/questions/md2imgChineseMessyCode.md)
+- [兼容ImageIO读取jpeg图片变红](https://zbang.online/hexblog/public/2018/01/22/%E5%85%BC%E5%AE%B9ImageIO%E8%AF%BB%E5%8F%96jpeg%E5%9B%BE%E7%89%87%E5%8F%98%E7%BA%A2/)
+- [Batik渲染png图片异常的bug修复](https://zbang.online/hexblog/public/2018/01/20/Batik%E6%B8%B2%E6%9F%93png%E5%9B%BE%E7%89%87%E5%BC%82%E5%B8%B8%E7%9A%84bug%E4%BF%AE%E5%A4%8D/)
+
 
 ### 其他
 
@@ -124,9 +135,15 @@
 
 ![qrcodeInfo](doc/img/qrcode/qrInfoV3.jpg)
 
-
+---
 
 ### 实例演示
+
+#### 0. 应用网站
+
+Z+ : [https://zbang.online/webs](https://zbang.online/webs)
+
+#### 1. 小程序
 
 以本项目提供的基本服务为蓝本，写了一个简单的小程序，欢迎各位小伙伴尝鲜
 
