@@ -22,7 +22,7 @@ public class UpdateController {
         if ("book".equalsIgnoreCase(method)) {
             new Thread(() -> {
                 try {
-                    ProcessUtil.instance().process("/mydata/HuiTech; sh /mydata/HuiTech/build.sh 1>> /tmp/up.txt");
+                    ProcessUtil.instance().process("cd /mydata; sh /mydata/build.sh");
                 } catch (Exception e) {
                     log.error("update error! e: {}", e);
                 }
