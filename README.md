@@ -129,11 +129,21 @@
 - [Batik渲染png图片异常的bug修复](https://zbang.online/hexblog/public/2018/01/20/Batik%E6%B8%B2%E6%9F%93png%E5%9B%BE%E7%89%87%E5%BC%82%E5%B8%B8%E7%9A%84bug%E4%BF%AE%E5%A4%8D/)
 
 
-### 其他
+### 声明
 
-关注小灰灰blog，获取更多信息
+尽信书则不如，已上内容，纯属一家之言，因本人能力一般，见识有限，如发现bug或者有更好的建议，随时欢迎批评指正，我的微博地址: [小灰灰Blog](https://weibo.com/p/1005052169825577/home)
 
-![qrcodeInfo](doc/img/qrcode/qrInfoV3.jpg)
+### 扫描关注
+
+公众号&博客
+
+![QrCode](https://s17.mogucdn.com/mlcdn/c45406/180209_74fic633aebgh5dgfhid2fiiggc99_1220x480.png)
+
+
+打赏码
+
+![pay](https://s11.mogucdn.com/mlcdn/c45406/180211_1ic7ic78jf8ib5chae60lkab3271j_1220x478.png)
+
 
 ---
 
@@ -153,5 +163,4 @@ Z+ : [https://zbang.online/webs](https://zbang.online/webs)
 
 有很多东西直接写死了，不太友好，欢迎板砖
 
-
-![小程序码](http://s2.mogucdn.com/mlcdn/c45406/171123_3i44i038f68gebkdk523021864f6l_320x320.jpg "图文小工具码")
+<img src="http://s2.mogucdn.com/mlcdn/c45406/171123_3i44i038f68gebkdk523021864f6l_320x320.jpg" style="max-width:160px"/>
