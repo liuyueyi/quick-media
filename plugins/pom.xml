@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <parent>
+        <artifactId>quick-media</artifactId>
+        <groupId>com.hust.hui.media</groupId>
+        <version>0.0.1-SNAPSHOT</version>
+    </parent>
+    <modelVersion>4.0.0</modelVersion>
+
+    <groupId>com.github.hui.quick</groupId>
+    <artifactId>plugins</artifactId>
+    <packaging>pom</packaging>
+    <modules>
+        <module>qrcode-plugin</module>
+        <module>image-plugin</module>
+        <module>svg-plugin</module>
+        <module>markdown-plugin</module>
+        <module>base-plugin</module>
+        <module>audio-plugin</module>
+        <module>date-plugin</module>
+        <module>html-plugin</module>
+    </modules>
+
+
+    <properties>
+        <qrcode-plugin.version>1.0</qrcode-plugin.version>
+        <image-plugin.version>1.0</image-plugin.version>
+        <svg-plugin.version>1.0</svg-plugin.version>
+        <markdonw-plugin.version>1.0</markdonw-plugin.version>
+        <base-plugin.version>1.0</base-plugin.version>
+        <audio-plugin.version>1.0</audio-plugin.version>
+        <date-plugin.version>1.0</date-plugin.version>
+        <html-plugin.version>1.0</html-plugin.version>
+    </properties>
+
+
+    <dependencyManagement>
+        <dependencies>
+            <dependency>
+                <groupId>org.apache.commons</groupId>
+                <artifactId>commons-lang3</artifactId>
+                <version>3.5</version>
+            </dependency>
+        </dependencies>
+    </dependencyManagement>
+</project>

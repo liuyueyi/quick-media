@@ -142,7 +142,7 @@
 
 打赏码
 
-![pay](https://s11.mogucdn.com/mlcdn/c45406/180211_1ic7ic78jf8ib5chae60lkab3271j_1220x478.png)
+![pay](https://s3.mogucdn.com/mlcdn/c45406/180211_3a9igegd1bghf1dl26f3777aldijk_1218x478.png)
 
 
 ---

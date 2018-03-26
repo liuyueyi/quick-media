@@ -11,6 +11,7 @@
 		<module>common</module>
         <module>svg-render</module>
         <module>self-batik-codec</module>
+        <module>plugins</module>
     </modules>
 	<packaging>pom</packaging>
 
