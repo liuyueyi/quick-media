@@ -10,10 +10,8 @@
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>com.github.hui.quick</groupId>
-    <artifactId>html-plugin</artifactId>
-
-    <version>${html-plugin.version}</version>
-
+    <artifactId>phantom-plugin</artifactId>
+    <version>${phantom-plugin.version}</version>
 
     <repositories>
         <repository>
@@ -21,7 +19,6 @@
             <url>https://jitpack.io</url>
         </repository>
     </repositories>
-
 
     <dependencies>
         <!--phantomjs -->
@@ -42,6 +39,25 @@
             <version>21.0</version>
         </dependency>
 
+
+        <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-api</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>commons-logging</groupId>
+            <artifactId>commons-logging</artifactId>
+            <version>1.2</version>
+        </dependency>
+
+        <dependency>
+            <groupId>ch.qos.logback</groupId>
+            <artifactId>logback-classic</artifactId>
+            <version>1.1.7</version>
+        </dependency>
+
     </dependencies>
+
 
 </project>

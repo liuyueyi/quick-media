@@ -20,7 +20,7 @@
         <module>base-plugin</module>
         <module>audio-plugin</module>
         <module>date-plugin</module>
-        <module>html-plugin</module>
+        <module>phantom-plugin</module>
     </modules>
 
 
@@ -32,7 +32,7 @@
         <base-plugin.version>1.0</base-plugin.version>
         <audio-plugin.version>1.0</audio-plugin.version>
         <date-plugin.version>1.0</date-plugin.version>
-        <html-plugin.version>1.0</html-plugin.version>
+        <phantom-plugin.version>1.0</phantom-plugin.version>
     </properties>
 
 
