@@ -1,6 +1,6 @@
 package com.hust.hui.quickmedia.web.wxapi.svg;
 
-import com.hust.hui.quickmedia.svg.SvgRenderWrapper;
+import com.github.hui.quick.plugin.svg.SvgRenderWrapper;
 import com.hust.hui.quickmedia.web.annotation.ValidateDot;
 import com.hust.hui.quickmedia.web.entity.ResponseWrapper;
 import com.hust.hui.quickmedia.web.entity.Status;

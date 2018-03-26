@@ -3,14 +3,12 @@
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 
-	<groupId>com.hust.hui.media</groupId>
+	<groupId>com.github.hui.media</groupId>
 	<artifactId>quick-media</artifactId>
-	<version>0.0.1-SNAPSHOT</version>
+	<version>${quick-media.version}</version>
 	<modules>
 		<module>web</module>
-		<module>common</module>
-        <module>svg-render</module>
-        <module>self-batik-codec</module>
+        <module>plugins</module>
     </modules>
 	<packaging>pom</packaging>
 
@@ -25,6 +23,17 @@
 	</parent>
 
 	<properties>
+		<quick-media.version>1.0</quick-media.version>
+
+		<qrcode-plugin.version>1.0</qrcode-plugin.version>
+		<image-plugin.version>1.0</image-plugin.version>
+		<svg-plugin.version>1.0</svg-plugin.version>
+		<markdonw-plugin.version>1.0</markdonw-plugin.version>
+		<base-plugin.version>1.0</base-plugin.version>
+		<audio-plugin.version>1.0</audio-plugin.version>
+		<date-plugin.version>1.0</date-plugin.version>
+		<phantom-plugin.version>1.0</phantom-plugin.version>
+
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
 		<java.version>1.8</java.version>
@@ -38,30 +47,6 @@
 			<scope>test</scope>
 		</dependency>
 	</dependencies>
-
-
-	<build>
-        <finalName>QuickMedia</finalName>
-		<plugins>
-			<plugin>
-				<groupId>org.springframework.boot</groupId>
-				<artifactId>spring-boot-maven-plugin</artifactId>
-				<configuration>
-					<mainClass>com.hust.hui.quickmedia.web.QuickMediaApplication</mainClass>
-				</configuration>
-				<executions>
-					<execution>
-						<goals>
-							<goal>repackage</goal>
-						</goals>
-						<configuration>
-							<classifier>exec</classifier>
-						</configuration>
-					</execution>
-				</executions>
-			</plugin>
-		</plugins>
-	</build>
 
 
 </project>

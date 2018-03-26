@@ -1,6 +1,6 @@
 package com.hust.hui.quickmedia.web.api.qrcode;
 
-import com.hust.hui.quickmedia.common.qrcode.QrCodeOptions;
+import com.github.hui.quick.plugin.qrcode.wrapper.QrCodeOptions;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;

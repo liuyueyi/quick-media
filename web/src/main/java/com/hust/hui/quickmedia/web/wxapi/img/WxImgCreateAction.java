@@ -1,11 +1,12 @@
 package com.hust.hui.quickmedia.web.wxapi.img;
 
-import com.hust.hui.quickmedia.common.img.create.ImgCreateOptions;
-import com.hust.hui.quickmedia.common.img.create.ImgCreateWrapper;
-import com.hust.hui.quickmedia.common.img.wartermark.WaterMarkOptions;
-import com.hust.hui.quickmedia.common.img.wartermark.WaterMarkWrapper;
-import com.hust.hui.quickmedia.common.tools.ChineseDataExTool;
-import com.hust.hui.quickmedia.common.util.FontUtil;
+
+import com.github.hui.quick.plugin.date.ChineseDateExtendTool;
+import com.github.hui.quick.plugin.image.util.FontUtil;
+import com.github.hui.quick.plugin.image.wrapper.create.ImgCreateOptions;
+import com.github.hui.quick.plugin.image.wrapper.create.ImgCreateWrapper;
+import com.github.hui.quick.plugin.image.wrapper.wartermark.WaterMarkOptions;
+import com.github.hui.quick.plugin.image.wrapper.wartermark.WaterMarkWrapper;
 import com.hust.hui.quickmedia.web.entity.ResponseWrapper;
 import com.hust.hui.quickmedia.web.entity.Status;
 import com.hust.hui.quickmedia.web.wxapi.WxBaseAction;
@@ -13,7 +14,7 @@ import com.hust.hui.quickmedia.web.wxapi.WxBaseResponse;
 import com.hust.hui.quickmedia.web.wxapi.common.WxImgCreateTemplateEnum;
 import com.hust.hui.quickmedia.web.wxapi.helper.ImgGenHelper;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
@@ -103,7 +104,7 @@ public class WxImgCreateAction extends WxBaseAction {
             ans = WaterMarkWrapper.of(ans)
                     .setStyle(WaterMarkOptions.WaterStyle.OVERRIDE_RIGHT_BOTTOM)
                     .setWaterFont(FontUtil.SMALLER_DEFAULT_ITALIC_FONT)
-                    .setWaterInfo("--" + ChineseDataExTool.getNowLunarDate())
+                    .setWaterInfo("--" + ChineseDateExtendTool.getNowLunarDate())
                     .setWaterColor(Color.BLACK)
                     .setInline(true)
                     .setWaterOpacity(1)
@@ -123,33 +124,6 @@ public class WxImgCreateAction extends WxBaseAction {
     }
 
 
-//    private BufferedImage getImg(HttpServletRequest request) {
-//        MultipartFile file = null;
-//        if (request instanceof MultipartHttpServletRequest) {
-//            file = ((MultipartHttpServletRequest) request).getFile("image");
-//        }
-//
-//        if (file == null) {
-//            throw new IllegalArgumentException("图片不能为空!");
-//        }
-//
-//
-//        // 目前只支持 jpg, png, webp 等静态图片格式
-//        String contentType = file.getContentType();
-//        if (!MediaValidate.validateStaticImg(contentType)) {
-//            throw new IllegalArgumentException("不支持的图片类型");
-//        }
-//
-//        // 获取BufferedImage对象
-//        try {
-//            BufferedImage bfImg = ImageIO.read(file.getInputStream());
-//            return bfImg;
-//        } catch (IOException e) {
-//            log.error("WxImgCreateAction!Parse img from httpRequest to BuferedImage error! e: {}", e);
-//            throw new IllegalArgumentException("不支持的图片类型!");
-//        }
-//    }
-
 
     private String getSign(WxImgCreateRequest request) {
         if(request.getSignStatus() == null || request.getSignStatus() <= 0) {
@@ -158,7 +132,7 @@ public class WxImgCreateAction extends WxBaseAction {
 
 
         if (StringUtils.isBlank(request.getSign())) {
-            return ChineseDataExTool.getNowLunarDate();
+            return ChineseDateExtendTool.getNowLunarDate();
         }
 
         return request.getSign();

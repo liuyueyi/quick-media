@@ -1,6 +1,6 @@
 package com.hust.hui.quickmedia.web.web;
 
-import com.hust.hui.quickmedia.common.util.ProcessUtil;
+import com.github.hui.quick.plugin.base.ProcessUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;

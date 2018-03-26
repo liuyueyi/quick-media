@@ -1,9 +1,9 @@
 package com.hust.hui.quickmedia.web.wxapi.qrcode;
 
+import com.github.hui.quick.plugin.qrcode.wrapper.QrCodeDeWrapper;
+import com.github.hui.quick.plugin.qrcode.wrapper.QrCodeGenWrapper;
+import com.github.hui.quick.plugin.qrcode.wrapper.QrCodeOptions;
 import com.google.zxing.qrcode.decoder.ErrorCorrectionLevel;
-import com.hust.hui.quickmedia.common.qrcode.QrCodeDeWrapper;
-import com.hust.hui.quickmedia.common.qrcode.QrCodeGenWrapper;
-import com.hust.hui.quickmedia.common.qrcode.QrCodeOptions;
 import com.hust.hui.quickmedia.web.entity.ResponseWrapper;
 import com.hust.hui.quickmedia.web.entity.Status;
 import com.hust.hui.quickmedia.web.wxapi.WxBaseAction;

@@ -1,13 +1,14 @@
 package com.hust.hui.quickmedia.web.wxapi.markdown;
 
-import com.hust.hui.quickmedia.common.html.Html2ImageWrapper;
-import com.hust.hui.quickmedia.common.markdown.MarkDown2HtmlWrapper;
-import com.hust.hui.quickmedia.common.markdown.MarkdownEntity;
-import com.hust.hui.quickmedia.common.util.DrawUtil;
-import com.hust.hui.quickmedia.common.util.FileReadUtil;
+
+import com.github.hui.quick.plugin.base.FileReadUtil;
+import com.github.hui.quick.plugin.md.Html2ImageWrapper;
+import com.github.hui.quick.plugin.md.MarkDown2HtmlWrapper;
+import com.github.hui.quick.plugin.md.entity.MarkdownEntity;
 import com.hust.hui.quickmedia.web.annotation.ValidateDot;
 import com.hust.hui.quickmedia.web.entity.ResponseWrapper;
 import com.hust.hui.quickmedia.web.entity.Status;
+import com.hust.hui.quickmedia.web.util.DrawUtil;
 import com.hust.hui.quickmedia.web.wxapi.WxBaseAction;
 import com.hust.hui.quickmedia.web.wxapi.WxBaseResponse;
 import lombok.extern.slf4j.Slf4j;

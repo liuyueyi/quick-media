@@ -1,7 +1,7 @@
 package com.hust.hui.quickmedia.web.api.audio;
 
-import com.hust.hui.quickmedia.common.audio.AudioWrapper;
-import com.hust.hui.quickmedia.common.util.HttpUtil;
+import com.github.hui.quick.plugin.audio.AudioWrapper;
+import com.github.hui.quick.plugin.base.HttpUtil;
 import com.hust.hui.quickmedia.web.entity.ResponseWrapper;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.RequestMapping;

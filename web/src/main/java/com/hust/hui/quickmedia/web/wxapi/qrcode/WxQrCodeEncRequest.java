@@ -2,7 +2,7 @@ package com.hust.hui.quickmedia.web.wxapi.qrcode;
 
 import com.hust.hui.quickmedia.web.wxapi.WxBaseRequest;
 import lombok.Data;
-import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang3.StringUtils;
 
 /**
  * Created by yihui on 2017/10/15.

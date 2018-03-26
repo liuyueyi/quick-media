@@ -1,11 +1,11 @@
 package com.hust.hui.quickmedia.web.api.image.create;
 
 import com.alibaba.fastjson.JSON;
-import com.hust.hui.quickmedia.common.constants.MediaType;
-import com.hust.hui.quickmedia.common.img.create.ImgCreateWrapper;
-import com.hust.hui.quickmedia.common.util.Base64Util;
-import com.hust.hui.quickmedia.common.util.DomUtil;
-import com.hust.hui.quickmedia.common.util.NumUtil;
+import com.github.hui.quick.plugin.base.Base64Util;
+import com.github.hui.quick.plugin.base.DomUtil;
+import com.github.hui.quick.plugin.base.NumUtil;
+import com.github.hui.quick.plugin.base.constants.MediaType;
+import com.github.hui.quick.plugin.image.wrapper.create.ImgCreateWrapper;
 import com.hust.hui.quickmedia.web.annotation.ValidateDot;
 import com.hust.hui.quickmedia.web.entity.ResponseWrapper;
 import lombok.extern.slf4j.Slf4j;

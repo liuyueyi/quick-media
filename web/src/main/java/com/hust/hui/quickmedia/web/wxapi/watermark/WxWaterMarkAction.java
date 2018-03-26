@@ -1,7 +1,8 @@
 package com.hust.hui.quickmedia.web.wxapi.watermark;
 
-import com.hust.hui.quickmedia.common.img.wartermark.WaterMarkWrapper;
-import com.hust.hui.quickmedia.common.util.ImageUtil;
+
+import com.github.hui.quick.plugin.base.ImageLoadUtil;
+import com.github.hui.quick.plugin.image.wrapper.wartermark.WaterMarkWrapper;
 import com.hust.hui.quickmedia.web.annotation.ValidateDot;
 import com.hust.hui.quickmedia.web.entity.ResponseWrapper;
 import com.hust.hui.quickmedia.web.entity.Status;
@@ -9,7 +10,7 @@ import com.hust.hui.quickmedia.web.wxapi.WxBaseAction;
 import com.hust.hui.quickmedia.web.wxapi.WxBaseResponse;
 import com.hust.hui.quickmedia.web.wxapi.helper.ImgGenHelper;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
@@ -39,7 +40,7 @@ public class WxWaterMarkAction extends WxBaseAction {
         BufferedImage logo = null;
         try {
             if (StringUtils.isNotBlank(wxWaterMarkRequest.getLogo())) {
-                logo = ImageUtil.getImageByPath(ImgGenHelper.TMP_UPLOAD_PATH + "/" + wxWaterMarkRequest.getLogo());
+                logo = ImageLoadUtil.getImageByPath(ImgGenHelper.TMP_UPLOAD_PATH + "/" + wxWaterMarkRequest.getLogo());
             }
         } catch (Exception e) {
             log.error("read logo from local disk error! path: {}, e", wxWaterMarkRequest.getLogo(), e);

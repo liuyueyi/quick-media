@@ -1,9 +1,9 @@
 package com.hust.hui.quickmedia.web.wxapi.helper;
 
-import com.hust.hui.quickmedia.common.util.FileUtil;
-import com.hust.hui.quickmedia.common.util.ProcessUtil;
+import com.github.hui.quick.plugin.base.FileWriteUtil;
+import com.github.hui.quick.plugin.base.ProcessUtil;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.commons.lang.time.DateFormatUtils;
+import org.apache.commons.lang3.time.DateFormatUtils;
 
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
@@ -41,7 +41,7 @@ public class ImgGenHelper {
         String path = ImgGenHelper.genTmpImg("png");
         try {
             File file = new File(ImgGenHelper.ABS_TMP_PATH + path);
-            FileUtil.mkDir(file);
+            FileWriteUtil.mkDir(file);
             ImageIO.write(bf, "png", file);
 
             ProcessUtil.instance().process("chmod -R 755 " + ABS_TMP_PATH + WEB_IMG_PATH);
@@ -57,7 +57,7 @@ public class ImgGenHelper {
         String fileName = System.currentTimeMillis() + "_" + ((int) (Math.random() * 100));
         String tmpPath = getTime();
 
-        FileUtil.saveFileByStream(stream, TMP_UPLOAD_PATH + "/" + tmpPath, fileName, fileExt);
+        FileWriteUtil.saveFileByStream(stream, TMP_UPLOAD_PATH + "/" + tmpPath, fileName, fileExt);
         return  tmpPath + "/" + fileName + "." + fileExt;
     }
 }

@@ -1,6 +1,6 @@
 package com.hust.hui.quickmedia.web.wxapi;
 
-import com.hust.hui.quickmedia.common.constants.MediaType;
+import com.github.hui.quick.plugin.base.constants.MediaType;
 import com.hust.hui.quickmedia.web.entity.IRequest;
 import com.hust.hui.quickmedia.web.entity.OutputEnum;
 import lombok.Data;

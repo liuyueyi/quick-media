@@ -1,6 +1,6 @@
 package com.hust.hui.quickmedia.web.wxapi.watermark;
 
-import com.hust.hui.quickmedia.common.img.wartermark.WaterMarkOptions;
+import com.github.hui.quick.plugin.image.wrapper.wartermark.WaterMarkOptions;
 import com.hust.hui.quickmedia.web.entity.IRequest;
 import lombok.Data;
 
