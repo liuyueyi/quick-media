@@ -1,6 +1,6 @@
 package com.hust.hui.quickmedia.web.wxapi.html;
 
-import com.hust.hui.quickmedia.common.html.Html2ImageByJsWrapper;
+import com.github.hui.quick.plugin.phantom.Html2ImageByJsWrapper;
 import com.hust.hui.quickmedia.web.annotation.ValidateDot;
 import com.hust.hui.quickmedia.web.entity.ResponseWrapper;
 import com.hust.hui.quickmedia.web.entity.Status;

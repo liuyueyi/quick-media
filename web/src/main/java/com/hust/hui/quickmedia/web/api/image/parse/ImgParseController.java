@@ -1,11 +1,12 @@
 package com.hust.hui.quickmedia.web.api.image.parse;
 
-import com.hust.hui.quickmedia.common.constants.MediaType;
-import com.hust.hui.quickmedia.common.html.Html2ImageWrapper;
-import com.hust.hui.quickmedia.common.markdown.MarkDown2HtmlWrapper;
-import com.hust.hui.quickmedia.common.markdown.MarkdownEntity;
-import com.hust.hui.quickmedia.common.util.Base64Util;
-import com.hust.hui.quickmedia.common.util.DomUtil;
+
+import com.github.hui.quick.plugin.base.Base64Util;
+import com.github.hui.quick.plugin.base.DomUtil;
+import com.github.hui.quick.plugin.base.constants.MediaType;
+import com.github.hui.quick.plugin.md.Html2ImageWrapper;
+import com.github.hui.quick.plugin.md.MarkDown2HtmlWrapper;
+import com.github.hui.quick.plugin.md.entity.MarkdownEntity;
 import com.hust.hui.quickmedia.web.annotation.ValidateDot;
 import com.hust.hui.quickmedia.web.entity.ResponseWrapper;
 import com.hust.hui.quickmedia.web.exception.Html2ImageError;

@@ -1,6 +1,6 @@
 package com.hust.hui.quickmedia.test;
 
-import com.hust.hui.quickmedia.common.audio.AudioWrapper;
+import com.github.hui.quick.plugin.audio.AudioWrapper;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.Test;
 

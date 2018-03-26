@@ -2,7 +2,7 @@ package com.hust.hui.quickmedia.web.api.image.parse;
 
 import com.hust.hui.quickmedia.web.entity.IRequest;
 import lombok.Data;
-import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang3.StringUtils;
 
 /**
  * markdown to image

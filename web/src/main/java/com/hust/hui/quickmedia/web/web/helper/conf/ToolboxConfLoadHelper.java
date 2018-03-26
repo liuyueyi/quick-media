@@ -2,7 +2,7 @@ package com.hust.hui.quickmedia.web.web.helper.conf;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.TypeReference;
-import com.hust.hui.quickmedia.common.util.YamlUtil;
+import com.hust.hui.quickmedia.web.util.YamlUtil;
 import com.hust.hui.quickmedia.web.web.entity.ToolBoxVO;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;

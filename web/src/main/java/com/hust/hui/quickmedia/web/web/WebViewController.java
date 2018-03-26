@@ -2,7 +2,7 @@ package com.hust.hui.quickmedia.web.web;
 
 import com.hust.hui.quickmedia.web.web.helper.conf.BannerConfLoadHelper;
 import com.hust.hui.quickmedia.web.web.helper.conf.ToolboxConfLoadHelper;
-import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;

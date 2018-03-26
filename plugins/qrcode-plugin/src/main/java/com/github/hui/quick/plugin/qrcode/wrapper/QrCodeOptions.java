@@ -3,7 +3,7 @@ package com.github.hui.quick.plugin.qrcode.wrapper;
 import com.google.zxing.EncodeHintType;
 import lombok.Builder;
 import lombok.Data;
-import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang3.StringUtils;
 
 import java.awt.*;
 import java.awt.geom.Ellipse2D;

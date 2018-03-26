@@ -1,6 +1,6 @@
 package com.hust.hui.quickmedia.web.wxapi.upload;
 
-import com.hust.hui.quickmedia.common.constants.MediaType;
+import com.github.hui.quick.plugin.base.constants.MediaType;
 import com.hust.hui.quickmedia.web.entity.ResponseWrapper;
 import com.hust.hui.quickmedia.web.entity.Status;
 import com.hust.hui.quickmedia.web.wxapi.WxBaseAction;

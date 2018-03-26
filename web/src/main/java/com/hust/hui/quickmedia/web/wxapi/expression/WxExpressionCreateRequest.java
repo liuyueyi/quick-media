@@ -1,6 +1,7 @@
 package com.hust.hui.quickmedia.web.wxapi.expression;
 
-import com.hust.hui.quickmedia.common.img.create.ImgCreateOptions;
+
+import com.github.hui.quick.plugin.image.wrapper.create.ImgCreateOptions;
 import com.hust.hui.quickmedia.web.entity.IRequest;
 import lombok.Data;
 

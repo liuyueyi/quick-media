@@ -1,13 +1,13 @@
 package com.hust.hui.quickmedia.web.api.qrcode;
 
+import com.github.hui.quick.plugin.base.NumUtil;
+import com.github.hui.quick.plugin.qrcode.wrapper.QrCodeDeWrapper;
+import com.github.hui.quick.plugin.qrcode.wrapper.QrCodeGenWrapper;
+import com.github.hui.quick.plugin.qrcode.wrapper.QrCodeOptions;
 import com.google.zxing.qrcode.decoder.ErrorCorrectionLevel;
-import com.hust.hui.quickmedia.common.qrcode.QrCodeDeWrapper;
-import com.hust.hui.quickmedia.common.qrcode.QrCodeGenWrapper;
-import com.hust.hui.quickmedia.common.qrcode.QrCodeOptions;
-import com.hust.hui.quickmedia.common.util.NumUtil;
 import com.hust.hui.quickmedia.web.entity.ResponseWrapper;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
