@@ -1,4 +1,4 @@
-## quick-media
+# quick-media
 > 多媒体处理web服务
 >
 > mult-media process Web Service by FFMPEG & ImageMagic & SpringMVC
@@ -8,7 +8,9 @@
 利用 spring-boot 来提供http接口实现多媒体的操作
 
 
-### 技术栈
+## I. 项目分析
+
+### 1. 技术栈
 
 - spring-boot 
 - ffmpeg
@@ -16,13 +18,123 @@
 - zxing
 - batik
 
+### 2. 结构分析
 
-### 已支持服务
+目前项目主要结构区分为web/plugins两个模块，
 
-#### 1. 音频转码
+#### web
+
+- 根据spring-boot可以迅速搭建一个web服务，提供http接口用于功能测试
+- 内部集成了一个简单的web网站，打开: [https://zbang.online/webs](https://zbang.online/webs) 查看
+- 内部实现了小程序【图文小工具】的后端逻辑
+
+
+#### plugins 
+
+插件工程，根据不同的场景，支持不同的服务功能，目前将所有的插件抽象出来，可以独立作为工具包提供给第三方依赖，外部使用方式
+
+添加源：
+
+```xml
+<repositories>
+    <repository>
+        <id>yihui-maven-repo</id>
+        <url>https://raw.githubusercontent.com/liuyueyi/maven-repository/master/repository</url>
+    </repository>
+</repositories>
+```
+
+**audio-plugin**
+
+提供音频转码服务，使用依赖如下，详细查看: [audio-plugin说明](plugins/audio-plugin/readme.md)
+
+```xml
+<dependency>
+    <groupId>com.github.hui.media</groupId>
+    <artifactId>audio-plugin</artifactId>
+    <version>1.0</version>
+</dependency>
+```
+
+**date-plugin**
+
+提供时间戳、日期转换为农历日期，详细查看：[date-plugin说明](plugins/date-plugin/readme.md)
+
+```xml
+<dependency>
+    <groupId>com.github.hui.media</groupId>
+    <artifactId>date-plugin</artifactId>
+    <version>1.0</version>
+</dependency>
+```
+
+
+**image-plugin**
+
+提供图片合成，提供gif图片生成等图片操作的封装类
+
+```xml
+<dependency>
+    <groupId>com.github.hui.media</groupId>
+    <artifactId>image-plugin</artifactId>
+    <version>1.0</version>
+</dependency>
+```
+
+**markdown-plugin**
+
+markdown转html，转图片的封装类
+
+```xml
+<dependency>
+    <groupId>com.github.hui.media</groupId>
+    <artifactId>markdown-plugin</artifactId>
+    <version>1.0</version>
+</dependency>
+```
+
+**phantom-plugin**
+
+提供根据phantomjs渲染html的封装
+
+```xml
+<dependency>
+    <groupId>com.github.hui.media</groupId>
+    <artifactId>phantom-plugin</artifactId>
+    <version>1.0</version>
+</dependency>
+```
+
+**qrcode-plugin**
+
+提供二维码生成和解析的封装
+
+```xml
+<dependency>
+    <groupId>com.github.hui.media</groupId>
+    <artifactId>qrcode-plugin</artifactId>
+    <version>1.0</version>
+</dependency>
+```
+
+**svg-plugin**
+
+提供svg文档的渲染，输出图片的封装
+
+```xml
+<dependency>
+    <groupId>com.github.hui.media</groupId>
+    <artifactId>svg-core</artifactId>
+    <version>1.0</version>
+</dependency>
+```
+
+## II. 已支持服务
+
+### 1. 音频转码
    - [x] 音频不同格式的相互转码
 
-#### 2. 二维码生成 & 解析
+### 2. 二维码生成 & 解析
 - [x] 二维码生成
 - [x] 个性二维码生成
     - 支持logo
@@ -43,9 +155,7 @@
 
 [查看更多二维码详情](doc/qrcode/QrGuide.md)
 
-
-
-#### 3. 图片
+### 3. 图片
 
 - [x] 长图文生成
    - [水平文字，上下布局长图文生成](doc/images/imgGenV1.md)
@@ -69,7 +179,7 @@
 
 [查看更多图片服务详情](doc/images/ImgGuide.md)
     
-#### 4. 视频相关
+### 4. 视频相关
 - [ ] 视频压缩
 - [ ] 转码
 - [ ] 截取
@@ -77,7 +187,7 @@
 - [ ] 生成gif
 
 
-### tag 记录
+## III. 阶段记录
 
 1. [v0.001](https://github.com/liuyueyi/quick-media/releases/tag/v0.001)
 
@@ -108,7 +218,11 @@
     - 利用phantomjs实现html渲染
     - 实现应用网站搭建
 
-### 文档
+7. [v0.007](https://github.com/liuyueyi/quick-media/releases/tag/v0.007)
+
+    - 结构调整
+
+## IV. 文档
 
 - [音频转码服务说明](doc/audio.md)
 - [二维码生成解析服务说明](doc/qrcode/QrGenV1.md)
@@ -129,6 +243,8 @@
 - [Batik渲染png图片异常的bug修复](https://zbang.online/hexblog/public/2018/01/20/Batik%E6%B8%B2%E6%9F%93png%E5%9B%BE%E7%89%87%E5%BC%82%E5%B8%B8%E7%9A%84bug%E4%BF%AE%E5%A4%8D/)
 
 
+## V. 其他
+
 ### 声明
 
 尽信书则不如，已上内容，纯属一家之言，因本人能力一般，见识有限，如发现bug或者有更好的建议，随时欢迎批评指正，我的微博地址: [小灰灰Blog](https://weibo.com/p/1005052169825577/home)
@@ -137,12 +253,12 @@
 
 公众号&博客
 
-![QrCode](https://s17.mogucdn.com/mlcdn/c45406/180209_74fic633aebgh5dgfhid2fiiggc99_1220x480.png)
+![QrCode](https://gitee.com/liuyueyi/Source/raw/master/img/info/blogInfoV2.png)
 
 
 打赏码
 
-![pay](https://s3.mogucdn.com/mlcdn/c45406/180211_3a9igegd1bghf1dl26f3777aldijk_1218x478.png)
+![pay](https://gitee.com/liuyueyi/Source/raw/master/img/pay/pay.png)
 
 
 ---
