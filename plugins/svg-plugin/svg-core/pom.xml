@@ -16,7 +16,7 @@
     <dependencies>
 
         <dependency>
-            <groupId>com.github.hui.quick</groupId>
+            <groupId>com.github.hui.media</groupId>
             <artifactId>batik-codec-fix</artifactId>
             <version>${batik-codec-fix.version}</version>
         </dependency>

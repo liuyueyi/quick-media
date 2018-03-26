@@ -23,13 +23,15 @@ deployFunc(){
 
   # deploy 完成,提交
   cd $DEPLOY_PATH
-  git commit -am 'deploy'
+  git add .
+  git commit -m 'deploy'
   git push origin $br
 
   # 合并master分支
   git checkout master
   git merge $br
-  git commit -am 'merge'
+  git add .
+  git commit -m 'merge'
   git push origin master
   cd $CURRENT_PATH
 }

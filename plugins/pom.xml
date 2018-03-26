@@ -26,6 +26,18 @@
     </modules>
 
 
+    <properties>
+        <qrcode-plugin.version>1.0</qrcode-plugin.version>
+        <image-plugin.version>1.0</image-plugin.version>
+        <svg-plugin.version>1.0</svg-plugin.version>
+        <markdonw-plugin.version>1.0</markdonw-plugin.version>
+        <base-plugin.version>1.0</base-plugin.version>
+        <audio-plugin.version>1.0</audio-plugin.version>
+        <date-plugin.version>1.0</date-plugin.version>
+        <phantom-plugin.version>1.0</phantom-plugin.version>
+    </properties>
+
+
     <dependencyManagement>
         <dependencies>
             <dependency>

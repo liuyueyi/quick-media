@@ -9,13 +9,13 @@
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
-    <groupId>com.github.hui.quick</groupId>
+    <groupId>com.github.hui.media</groupId>
     <artifactId>audio-plugin</artifactId>
     <version>${audio-plugin.version}</version>
 
     <dependencies>
         <dependency>
-            <groupId>com.github.hui.quick</groupId>
+            <groupId>com.github.hui.media</groupId>
             <artifactId>base-plugin</artifactId>
             <version>${base-plugin.version}</version>
         </dependency>

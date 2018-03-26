@@ -15,44 +15,44 @@
 
     <dependencies>
         <dependency>
-            <groupId>com.github.hui.quick</groupId>
+            <groupId>com.github.hui.media</groupId>
             <artifactId>svg-core</artifactId>
             <version>${svg-plugin.version}</version>
         </dependency>
 
 
         <dependency>
-            <groupId>com.github.hui.quick</groupId>
+            <groupId>com.github.hui.media</groupId>
             <artifactId>image-plugin</artifactId>
             <version>${image-plugin.version}</version>
         </dependency>
 
         <dependency>
-            <groupId>com.github.hui.quick</groupId>
+            <groupId>com.github.hui.media</groupId>
             <artifactId>qrcode-plugin</artifactId>
             <version>${qrcode-plugin.version}</version>
         </dependency>
 
         <dependency>
-            <groupId>com.github.hui.quick</groupId>
+            <groupId>com.github.hui.media</groupId>
             <artifactId>markdown-plugin</artifactId>
             <version>${markdonw-plugin.version}</version>
         </dependency>
 
         <dependency>
-            <groupId>com.github.hui.quick</groupId>
+            <groupId>com.github.hui.media</groupId>
             <artifactId>date-plugin</artifactId>
             <version>${date-plugin.version}</version>
         </dependency>
 
         <dependency>
-            <groupId>com.github.hui.quick</groupId>
+            <groupId>com.github.hui.media</groupId>
             <artifactId>phantom-plugin</artifactId>
             <version>${phantom-plugin.version}</version>
         </dependency>
 
         <dependency>
-            <groupId>com.github.hui.quick</groupId>
+            <groupId>com.github.hui.media</groupId>
             <artifactId>audio-plugin</artifactId>
             <version>${audio-plugin.version}</version>
         </dependency>
@@ -118,7 +118,25 @@
     </dependencies>
 
     <build>
+        <finalName>QuickMedia</finalName>
         <plugins>
+            <plugin>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-maven-plugin</artifactId>
+                <configuration>
+                    <mainClass>com.hust.hui.quickmedia.web.QuickMediaApplication</mainClass>
+                </configuration>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>repackage</goal>
+                        </goals>
+                        <configuration>
+                            <classifier>exec</classifier>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-deploy-plugin</artifactId>
