@@ -22,7 +22,6 @@ import java.util.Map;
 /**
  * Created by yihui on 2017/12/12.
  */
-@Slf4j
 public class SvgRenderWrapper {
 
     private static final Logger log = LoggerFactory.getLogger(SvgRenderWrapper.class);

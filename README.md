@@ -71,7 +71,7 @@
 
 **image-plugin**
 
-提供图片合成，提供gif图片生成等图片操作的封装类
+提供图片合成，提供gif图片生成等图片操作的封装类，详细查看： [image-plugin说明](plugins/image-plugin/readme.md)
 
 ```xml
 <dependency>
@@ -107,7 +107,7 @@ markdown转html，转图片的封装类
 
 **qrcode-plugin**
 
-提供二维码生成和解析的封装
+提供二维码生成和解析的封装，详细查看: [qrcode-plugin使用说明](plugins/qrcode-plugin/readme.md)
 
 ```xml
 <dependency>
@@ -119,7 +119,7 @@ markdown转html，转图片的封装类
 
 **svg-plugin**
 
-提供svg文档的渲染，输出图片的封装
+提供svg文档的渲染，输出图片的封装，详细查看: [svg-plugin使用说明](plugins/svg-plugin/readme.md)
 
 ```xml
 <dependency>
