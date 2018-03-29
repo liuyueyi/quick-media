@@ -47,7 +47,7 @@ public class ResponseWrapper<T> {
     @SuppressWarnings("unchecked")
     public static <T> ResponseWrapper<T> errorReturn(Status status, String... msgs) {
         String msg;
-        if (msgs.length == 0) {
+        if (msgs.length > 0) {
             msg = String.format(status.getMsg(), msgs);
         } else {
             msg = status.getMsg();
