@@ -15,6 +15,7 @@ import com.hust.hui.quickmedia.web.wxapi.common.WxImgCreateTemplateEnum;
 import com.hust.hui.quickmedia.web.wxapi.helper.ImgGenHelper;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
@@ -28,6 +29,7 @@ import java.awt.image.BufferedImage;
  */
 @RestController
 @Slf4j
+@CrossOrigin(origins = "*")
 public class WxImgCreateAction extends WxBaseAction {
 
     private static final int DEFAULT_SIZE = 640;

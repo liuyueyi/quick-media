@@ -7,6 +7,7 @@ import com.hust.hui.quickmedia.web.wxapi.WxBaseAction;
 import com.hust.hui.quickmedia.web.wxapi.WxBaseResponse;
 import com.hust.hui.quickmedia.web.wxapi.helper.ImgGenHelper;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
@@ -20,6 +21,7 @@ import javax.servlet.http.HttpServletRequest;
  */
 @Slf4j
 @RestController
+@CrossOrigin(origins = "*")
 public class WxImgUpload extends WxBaseAction {
 
     @RequestMapping(path = {"wx/upload", "wx/wx/upload"}, method = {RequestMethod.GET, RequestMethod.POST, RequestMethod.OPTIONS})

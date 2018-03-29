@@ -12,6 +12,7 @@ import com.hust.hui.quickmedia.web.util.DrawUtil;
 import com.hust.hui.quickmedia.web.wxapi.WxBaseAction;
 import com.hust.hui.quickmedia.web.wxapi.WxBaseResponse;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
@@ -25,6 +26,7 @@ import java.io.UnsupportedEncodingException;
  */
 @RestController
 @Slf4j
+@CrossOrigin(origins = "*")
 public class Markdown2ImgAction extends WxBaseAction {
 
     public static String MD_CSS = null;

@@ -4,6 +4,7 @@ import com.github.hui.quick.plugin.audio.AudioWrapper;
 import com.github.hui.quick.plugin.base.HttpUtil;
 import com.hust.hui.quickmedia.web.entity.ResponseWrapper;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
@@ -21,6 +22,7 @@ import java.io.InputStream;
  */
 @RestController
 @Slf4j
+@CrossOrigin(origins = "*")
 public class AudioController {
 
 

@@ -8,10 +8,7 @@ import com.google.zxing.qrcode.decoder.ErrorCorrectionLevel;
 import com.hust.hui.quickmedia.web.entity.ResponseWrapper;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
 
@@ -24,6 +21,7 @@ import java.io.IOException;
  */
 @RestController
 @Slf4j
+@CrossOrigin(origins = "*")
 public class QrCodeController {
 
     /**

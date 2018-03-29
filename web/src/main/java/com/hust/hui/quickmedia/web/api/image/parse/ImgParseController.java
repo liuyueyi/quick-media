@@ -12,6 +12,7 @@ import com.hust.hui.quickmedia.web.entity.ResponseWrapper;
 import com.hust.hui.quickmedia.web.exception.Html2ImageError;
 import com.hust.hui.quickmedia.web.exception.Markdown2HtmlError;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
@@ -24,6 +25,7 @@ import java.awt.image.BufferedImage;
  */
 @RestController
 @Slf4j
+@CrossOrigin(origins = "*")
 public class ImgParseController {
 
     private static final int DEFAULT_W = 600;

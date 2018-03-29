@@ -7,6 +7,7 @@ import com.hust.hui.quickmedia.web.entity.Status;
 import com.hust.hui.quickmedia.web.wxapi.WxBaseAction;
 import com.hust.hui.quickmedia.web.wxapi.WxBaseResponse;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
@@ -19,6 +20,7 @@ import java.awt.image.BufferedImage;
  */
 @RestController
 @Slf4j
+@CrossOrigin(origins = "*")
 public class Html2ImgAction extends WxBaseAction {
 
     @RequestMapping(path = {"wx/html2img", "wx/wx/html2img"}, method = {RequestMethod.GET, RequestMethod.POST, RequestMethod.OPTIONS})
