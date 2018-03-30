@@ -267,7 +267,21 @@ markdown转html，转图片的封装类
 
 #### 0. 应用网站
 
-Z+ : [https://zbang.online/webs](https://zbang.online/webs)
+基于thymeleaf实现的前端演示网站，相关代码写在本工程中：
+
+- Z+ : [https://zbang.online/webs](https://zbang.online/webs)
+
+
+使用react.js重构后的前端网站，实现前后端分离，前端网页借助gitee的pages直接部署，测试链接
+
+- Z+ | web : [http://liuyueyi.gitee.io/zweb](http://liuyueyi.gitee.io/zweb)
+
+
+web实际演示图: 
+
+![demo](doc/img/demo/zwebdemo.gif)
+
+
 
 #### 1. 小程序
 
