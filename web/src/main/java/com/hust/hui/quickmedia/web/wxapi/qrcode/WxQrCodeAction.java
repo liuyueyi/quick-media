@@ -8,7 +8,6 @@ import com.hust.hui.quickmedia.web.entity.ResponseWrapper;
 import com.hust.hui.quickmedia.web.entity.Status;
 import com.hust.hui.quickmedia.web.wxapi.WxBaseAction;
 import com.hust.hui.quickmedia.web.wxapi.WxBaseResponse;
-import com.hust.hui.quickmedia.web.wxapi.helper.ImgGenHelper;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -49,10 +48,8 @@ public class WxQrCodeAction extends WxBaseAction {
                     .setErrorCorrection(getError(qrCodeEncRequest.getErrorLevel()))
                     .setPadding(qrCodeEncRequest.getPadding())
                     .asBufferedImage();
-            String result = ImgGenHelper.saveImg(ans);
-            WxBaseResponse response = new WxBaseResponse();
-            response.setImg(result);
-            return ResponseWrapper.successReturn(response);
+
+            return buildReturn(qrCodeEncRequest, ans);
         } catch (Exception e) {
             log.error("create qrcode error!: {}", e);
             return ResponseWrapper.errorReturnMix(Status.StatusEnum.FAIL_MIX, "生成失败!");
