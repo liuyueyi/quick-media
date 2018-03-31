@@ -1,6 +1,7 @@
 package com.hust.hui.quickmedia.web.wxapi;
 
 import com.github.hui.quick.plugin.base.Base64Util;
+import com.github.hui.quick.plugin.base.ImageLoadUtil;
 import com.github.hui.quick.plugin.base.constants.MediaType;
 import com.hust.hui.quickmedia.web.entity.ResponseWrapper;
 import com.hust.hui.quickmedia.web.entity.Status;
@@ -33,6 +34,20 @@ public class WxBaseAction {
             file = ((MultipartHttpServletRequest) request).getFile("image");
         }
 
+
+        if (file == null) {
+            try {
+                String logo = request.getParameter("image");
+                if (logo != null && !logo.startsWith("/") && !logo.startsWith("http")) {
+                    logo = ImgGenHelper.TMP_UPLOAD_PATH + logo;
+                }
+                return ImageLoadUtil.getImageByPath(logo);
+            } catch (IOException e) {
+                log.error("load upload image error! e: {}", e);
+                throw new IllegalArgumentException("图片不能为空!");
+            }
+        }
+
         if (file == null) {
             throw new IllegalArgumentException("图片不能为空!");
         }
@@ -57,12 +72,13 @@ public class WxBaseAction {
 
     /**
      * 根据传入的参数，确定返回url格式图片还是base64格式的图片
+     *
      * @param request
      * @param bf
      * @return
      */
     protected ResponseWrapper<WxBaseResponse> buildReturn(WxBaseRequest request, BufferedImage bf) {
-        if(bf == null) {
+        if (bf == null) {
             return ResponseWrapper.errorReturnMix(Status.StatusEnum.FAIL);
         }
 

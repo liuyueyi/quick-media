@@ -1,5 +1,6 @@
 package com.hust.hui.quickmedia.web.wxapi.qrcode;
 
+import com.github.hui.quick.plugin.base.NumUtil;
 import com.github.hui.quick.plugin.qrcode.wrapper.QrCodeDeWrapper;
 import com.github.hui.quick.plugin.qrcode.wrapper.QrCodeGenWrapper;
 import com.github.hui.quick.plugin.qrcode.wrapper.QrCodeOptions;
@@ -17,6 +18,7 @@ import org.springframework.web.bind.annotation.RestController;
 import javax.servlet.http.HttpServletRequest;
 import java.awt.*;
 import java.awt.image.BufferedImage;
+import java.util.Optional;
 
 /**
  * Created by yihui on 2017/10/15.
@@ -28,7 +30,7 @@ public class WxQrCodeAction extends WxBaseAction {
 
 
     @RequestMapping(path = {"wx/qrcode/encode", "wx/wx/qrcode/encode"}, method = {RequestMethod.GET, RequestMethod.POST, RequestMethod.OPTIONS})
-    public ResponseWrapper<WxBaseResponse> parse(HttpServletRequest request, WxQrCodeEncRequest qrCodeEncRequest) {
+    public ResponseWrapper<WxBaseResponse> parse(HttpServletRequest request, WxQrCodeEncRequest codeReq) {
         BufferedImage logo;
         try {
              logo = getImg(request);
@@ -38,18 +40,23 @@ public class WxQrCodeAction extends WxBaseAction {
 
 
         try {
-            BufferedImage ans = QrCodeGenWrapper.of(qrCodeEncRequest.getContent())
-                    .setW(qrCodeEncRequest.getSize())
-                    .setH(qrCodeEncRequest.getSize())
+            BufferedImage ans = QrCodeGenWrapper.of(codeReq.getContent())
+                    .setW(codeReq.getSize())
+                    .setH(codeReq.getSize())
                     .setLogo(logo)
                     .setLogoStyle(QrCodeOptions.LogoStyle.ROUND)
                     .setLogoBorder(true)
                     .setLogoBgColor(Color.WHITE)
-                    .setErrorCorrection(getError(qrCodeEncRequest.getErrorLevel()))
-                    .setPadding(qrCodeEncRequest.getPadding())
+                    .setErrorCorrection(getError(codeReq.getErrorLevel()))
+                    .setPadding(codeReq.getPadding())
+                    .setDrawPreColor(NumUtil.decode2int(codeReq.getPreColor(), 0xFF000000))
+                    .setDrawBgColor(NumUtil.decode2int(codeReq.getBgColor(), 0xFFFFFFFF))
+                    .setDetectInColor(NumUtil.decode2int(codeReq.getDetectColor(), 0xFF000000))
+                    .setDrawStyle(codeReq.getStyle())
+                    .setDrawEnableScale(Optional.ofNullable(codeReq.getScale()).orElse(false))
                     .asBufferedImage();
 
-            return buildReturn(qrCodeEncRequest, ans);
+            return buildReturn(codeReq, ans);
         } catch (Exception e) {
             log.error("create qrcode error!: {}", e);
             return ResponseWrapper.errorReturnMix(Status.StatusEnum.FAIL_MIX, "生成失败!");

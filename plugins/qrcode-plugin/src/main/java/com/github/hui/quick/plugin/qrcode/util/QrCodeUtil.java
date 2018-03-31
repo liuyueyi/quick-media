@@ -135,6 +135,14 @@ public class QrCodeUtil {
         // 探测图形内圈的颜色
         Color detectInnerColor = qrCodeConfig.getDetectOptions().getInColor();
 
+        if (detectInnerColor != null || detectOutColor  != null) {
+            if (detectInnerColor == null) {
+                detectInnerColor = detectOutColor;
+            } else if (detectOutColor == null) {
+                detectOutColor = detectInnerColor;
+            }
+        }
+
 
         int leftPadding = bitMatrix.getLeftPadding();
         int topPadding = bitMatrix.getTopPadding();

@@ -20,6 +20,16 @@ public class WxQrCodeEncRequest extends WxBaseRequest {
 
     private int padding;
 
+    private String preColor;
+
+    private String bgColor;
+
+    private String detectColor;
+
+    private String style;
+
+    private Boolean scale;
+
     @Override
     public boolean validate() {
         return super.validate() && StringUtils.isNotBlank(content);

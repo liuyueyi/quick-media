@@ -2,6 +2,7 @@ package com.github.hui.quick.plugin.base;
 
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
+import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.util.Base64;
@@ -21,4 +22,10 @@ public class Base64Util {
         return Base64.getEncoder().encodeToString(outputStream.toByteArray());
     }
 
+
+    public static BufferedImage decode2Img(String base64) throws IOException {
+        byte[] bytes = Base64.getDecoder().decode(base64.getBytes("utf-8"));
+        ByteArrayInputStream inputStream = new ByteArrayInputStream(bytes);
+        return ImageIO.read(inputStream);
+    }
 }
