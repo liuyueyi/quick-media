@@ -23,6 +23,7 @@
         <module>audio-plugin</module>
         <module>date-plugin</module>
         <module>phantom-plugin</module>
+        <module>imagic-plugin</module>
     </modules>
 
 

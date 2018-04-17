@@ -5,9 +5,11 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang3.time.DateFormatUtils;
 
 import java.io.*;
 import java.net.URI;
+import java.util.Date;
 
 /**
  * Created by yihui on 2017/7/13.
@@ -15,7 +17,11 @@ import java.net.URI;
 @Slf4j
 public class FileWriteUtil {
 
-    public static String TEMP_PATH = "/tmp/audio";
+    public static String TEMP_PATH = "/tmp/quickmedia";
+
+    public static String getTmpPath() {
+        return TEMP_PATH + "/" + DateFormatUtils.format(new Date(), "yyyyMMdd");
+    }
 
     public static <T> FileInfo saveFile(T src, String inputType) throws Exception {
         if (src instanceof String) { // 给的文件路径，区分三中，本地绝对路径，相对路径，网络地址
@@ -73,7 +79,7 @@ public class FileWriteUtil {
 
         FileInfo fileInfo = new FileInfo();
         extraFileName(filename, fileInfo);
-        fileInfo.setPath(TEMP_PATH);
+        fileInfo.setPath(getTmpPath());
 
         try {
             InputStream inputStream = HttpUtil.downFile(uri);
@@ -88,7 +94,7 @@ public class FileWriteUtil {
 
     public static FileInfo saveFileByStream(InputStream inputStream, String fileType) throws Exception {
         // 临时文件生成规则  当前时间戳 + 随机数 + 后缀
-        return saveFileByStream(inputStream, TEMP_PATH, genTempFileName(), fileType);
+        return saveFileByStream(inputStream, getTmpPath(), genTempFileName(), fileType);
     }
 
 
@@ -191,7 +197,7 @@ public class FileWriteUtil {
         boolean ans = file.setExecutable(true, false);
         ans = file.setReadable(true, false) && ans;
         ans = file.setWritable(true, false) && ans;
-        if(log.isDebugEnabled()) {
+        if (log.isDebugEnabled()) {
             log.debug("create file auth : {}", ans);
         }
     }
@@ -220,7 +226,7 @@ public class FileWriteUtil {
     private static void extraFilePath(String absFilename, FileInfo fileInfo) {
         int index = absFilename.lastIndexOf("/");
         if (index < 0) {
-            fileInfo.setPath(TEMP_PATH);
+            fileInfo.setPath(getTmpPath());
             fileInfo.setFilename(absFilename);
         } else {
             fileInfo.setPath(absFilename.substring(0, index));

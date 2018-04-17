@@ -129,6 +129,20 @@ markdown转html，转图片的封装类
 </dependency>
 ```
 
+
+**imagic-plugin**
+
+基于imagic-magic实现的图片编辑插件封装，详细查看: [imagic-plugin使用说明](plugins/imagic-plugin/readme.md)
+
+```xml
+<dependency>
+    <groupId>com.github.hui.media</groupId>
+    <artifactId>imagic-core</artifactId>
+    <version>1.0</version>
+</dependency>
+```
+
+
 ## II. 已支持服务
 
 ### 1. 音频转码
@@ -170,10 +184,10 @@ markdown转html，转图片的封装类
     - [图片合成支持](doc/images/imgMerge.md)
 - [x] 水印
 - [x] svg渲染
-- [ ] 裁剪
-- [ ] 压缩
-- [ ] 旋转
-- [ ] 缩放
+- [x] 裁剪
+- [x] 压缩
+- [x] 旋转
+- [x] 缩放
 - [ ] 格式转换
 
 
@@ -221,6 +235,11 @@ markdown转html，转图片的封装类
 7. [v0.007](https://github.com/liuyueyi/quick-media/releases/tag/v0.007)
 
     - 结构调整
+
+8. [v0.008](https://github.com/liuyueyi/quick-media/releases/tag/v0.008)
+
+    - 实现imagic-plugin插件，封装imagic-magic使用姿势
+    - 完成图片旋转、裁剪、压缩等基本功能
 
 ## IV. 文档
 
