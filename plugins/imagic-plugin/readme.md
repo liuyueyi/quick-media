@@ -49,7 +49,7 @@ jar包引入，请注意使用最新的版本
 
 支持针对本地图片、远程图片、二进制流图片的编辑处理，将处理后的图片可以保存为文件、byte数组、BufferedImage、Stream等多种方式，适用于各种使用场景
 
-使用case: 详细使用可以参考: [WaterMarkWrapperTest](https://github.com/liuyueyi/quick-media/blob/master/plugins/imagic-plugin/src/test/java/com/github/hui/quick/plugin/test/ImgWrapperTest.java)
+使用case: 详细使用可以参考: [ImgWrapperTest](https://github.com/liuyueyi/quick-media/blob/master/plugins/imagic-plugin/src/test/java/com/github/hui/quick/plugin/test/ImgWrapperTest.java)
 
 ```java
 /**
