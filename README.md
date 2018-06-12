@@ -14,9 +14,11 @@
 
 - spring-boot 
 - ffmpeg
-- imageMagic
+- ImageMagic
 - zxing
 - batik
+- flexmark
+- phantomjs
 
 ### 2. 结构分析
 
@@ -25,7 +27,8 @@
 #### web
 
 - 根据spring-boot可以迅速搭建一个web服务，提供http接口用于功能测试
-- 内部集成了一个简单的web网站，打开: [https://zbang.online/webs](https://zbang.online/webs) 查看
+- 内部集成了一个简单的web网站，打开: [http://media.hhui.top:8080/media/webs](http://media.hhui.top:8080/media/webs) 查看
+- 使用ReactJS，前后端分离，写了一个更友好的网站，打开: [https://zweb.hhui.top/#/index](https://zweb.hhui.top/#/index) 查看
 - 内部实现了小程序【图文小工具】的后端逻辑
 
 
@@ -266,7 +269,10 @@ markdown转html，转图片的封装类
 
 ### 声明
 
-尽信书则不如，已上内容，纯属一家之言，因本人能力一般，见识有限，如发现bug或者有更好的建议，随时欢迎批评指正，我的微博地址: [小灰灰Blog](https://weibo.com/p/1005052169825577/home)
+尽信书则不如，已上内容，纯属一家之言，因个人能力有限，难免有疏漏和错误之处，如发现bug或者有更好的建议，欢迎批评指正，不吝感激
+
+- 微博地址: 小灰灰Blog
+- QQ： 一灰灰/3302797840
 
 ### 扫描关注
 
@@ -288,18 +294,18 @@ markdown转html，转图片的封装类
 
 基于thymeleaf实现的前端演示网站，相关代码写在本工程中：
 
-- Z+ : [https://zbang.online/webs](https://zbang.online/webs)
+- Z+ : [http://media.hhui.top:8080/media/webs](http://media.hhui.top:8080/media/webs)
 
 
 使用react.js重构后的前端网站，实现前后端分离，前端网页借助gitee的pages直接部署，测试链接
 
 - Z+ | web : [http://liuyueyi.gitee.io/zweb](http://liuyueyi.gitee.io/zweb)
+- Z+ | web : [https://zweb.hhui.top/#/index](https://zweb.hhui.top/#/index)
 
 
 web实际演示图: 
 
 ![demo](doc/img/demo/zwebdemo.gif)
-
 
 
 #### 1. 小程序
