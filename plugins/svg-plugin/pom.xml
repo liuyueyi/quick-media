@@ -5,13 +5,13 @@
     <parent>
         <artifactId>plugins</artifactId>
         <groupId>com.github.hui.media</groupId>
-        <version>${quick-media.version}</version>
+        <version>1.0</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>com.github.hui.media</groupId>
     <artifactId>svg-plugin</artifactId>
-    <version>${svg-plugin.version}</version>
+    <version>1.0</version>
 
     <packaging>pom</packaging>
 

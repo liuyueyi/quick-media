@@ -5,13 +5,13 @@
     <parent>
         <artifactId>plugins</artifactId>
         <groupId>com.github.hui.media</groupId>
-        <version>${quick-media.version}</version>
+        <version>1.0</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>com.github.hui.media</groupId>
     <artifactId>phantom-plugin</artifactId>
-    <version>${phantom-plugin.version}</version>
+    <version>1.0</version>
 
     <repositories>
         <repository>
@@ -25,6 +25,7 @@
         <dependency>
             <groupId>org.seleniumhq.selenium</groupId>
             <artifactId>selenium-java</artifactId>
+            <version>3.12.0</version>
         </dependency>
 
         <dependency>

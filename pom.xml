@@ -1,52 +1,41 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
-	<modelVersion>4.0.0</modelVersion>
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
 
-	<groupId>com.github.hui.media</groupId>
-	<artifactId>quick-media</artifactId>
-	<version>${quick-media.version}</version>
-	<modules>
-		<module>web</module>
+    <groupId>com.github.hui.media</groupId>
+    <artifactId>quick-media</artifactId>
+    <version>1.0</version>
+    <modules>
+        <module>web</module>
         <module>plugins</module>
     </modules>
-	<packaging>pom</packaging>
+    <packaging>pom</packaging>
 
-	<name>quick-media</name>
-	<description>Demo project for Spring Boot</description>
+    <name>quick-media</name>
+    <description>QuickMediaProject</description>
 
-	<parent>
-		<groupId>org.springframework.boot</groupId>
-		<artifactId>spring-boot-starter-parent</artifactId>
-		<version>1.5.4.RELEASE</version>
-		<relativePath/> <!-- lookup parent from repository -->
-	</parent>
+    <parent>
+        <groupId>org.springframework.boot</groupId>
+        <artifactId>spring-boot-starter-parent</artifactId>
+        <version>1.5.4.RELEASE</version>
+    </parent>
 
-	<properties>
-		<quick-media.version>1.0</quick-media.version>
-
-		<qrcode-plugin.version>1.0</qrcode-plugin.version>
-		<image-plugin.version>1.0</image-plugin.version>
-		<svg-plugin.version>1.0</svg-plugin.version>
-		<markdonw-plugin.version>1.0</markdonw-plugin.version>
-		<base-plugin.version>1.0</base-plugin.version>
-		<audio-plugin.version>1.0</audio-plugin.version>
-		<date-plugin.version>1.0</date-plugin.version>
-		<phantom-plugin.version>1.0</phantom-plugin.version>
-
-		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
-		<java.version>1.8</java.version>
-	</properties>
+    <properties>
+        <quick-media.version>1.0</quick-media.version>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+        <java.version>1.8</java.version>
+    </properties>
 
 
-	<dependencies>
-		<dependency>
-			<groupId>org.springframework.boot</groupId>
-			<artifactId>spring-boot-starter-test</artifactId>
-			<scope>test</scope>
-		</dependency>
-	</dependencies>
+    <dependencies>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-test</artifactId>
+            <scope>test</scope>
+        </dependency>
+    </dependencies>
 
 
 </project>
