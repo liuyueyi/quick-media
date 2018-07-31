@@ -32,7 +32,7 @@ public class QrDetectTest {
 
     @Test
     public void testBase642Ima() throws IOException {
-        BufferedImage bfimg = ImageIO.read(new File("/Users/yihui/22.png"));
+        BufferedImage bfimg = ImageIO.read(new File("bg.png"));
         String str = Base64Util.encode(bfimg, "png");
 
         try {

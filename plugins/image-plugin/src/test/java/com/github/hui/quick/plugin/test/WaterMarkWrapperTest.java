@@ -1,6 +1,8 @@
 package com.github.hui.quick.plugin.test;
 
+import com.github.hui.quick.plugin.base.DomUtil;
 import com.github.hui.quick.plugin.base.ImageLoadUtil;
+import com.github.hui.quick.plugin.base.constants.MediaType;
 import com.github.hui.quick.plugin.image.wrapper.wartermark.WaterMarkOptions;
 import com.github.hui.quick.plugin.image.wrapper.wartermark.WaterMarkWrapper;
 import org.junit.Test;
@@ -38,8 +40,7 @@ public class WaterMarkWrapperTest {
                         .build()
                         .asImage();
 
-                ImageIO.write(img, "jpg", new File("/Users/yihui/Desktop/FILL_BG.jpg"));
-                System.out.println(img);
+                ImageIO.write(img, "jpg", new File("/tmp/FILL_BG.jpg"));
             } catch (Exception e) {
                 e.printStackTrace();
             }
@@ -66,7 +67,7 @@ public class WaterMarkWrapperTest {
                     .build()
                     .asImage();
 
-            ImageIO.write(img, "png", new File("/Users/yihui/Desktop/mark.png"));
+            ImageIO.write(img, "png", new File("/tmp/mark.png"));
             System.out.println(img);
         } catch(Exception e) {
             e.printStackTrace();

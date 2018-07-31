@@ -1,6 +1,8 @@
 package com.github.hui.quick.plugin.test;
 
+import com.github.hui.quick.plugin.base.DomUtil;
 import com.github.hui.quick.plugin.base.FileReadUtil;
+import com.github.hui.quick.plugin.base.constants.MediaType;
 import com.github.hui.quick.plugin.image.wrapper.create.ImgCreateOptions;
 import com.github.hui.quick.plugin.image.wrapper.create.LineGifCreateWrapper;
 import com.github.hui.quick.plugin.image.wrapper.create.WordGifCreateWrapper;
@@ -50,11 +52,10 @@ public class LineCreateWrapperTest {
         build.setAlignStyle(ImgCreateOptions.AlignStyle.BOTTOM)
                 .drawImage(sign);
 
-        build.asGif("/Users/yihui/Desktop/out.gif");
-//        String str = build.asString();
-//
-//        String dom = "<img src=\"" + DomUtil.toDomSrc(str, MediaType.ImageGif) + "\"/>";
-//        System.out.println(dom);
+        String str = build.asString();
+
+        String dom = "<img src=\"" + DomUtil.toDomSrc(str, MediaType.ImageGif) + "\"/>";
+        System.out.println(dom);
     }
 
 
@@ -95,11 +96,10 @@ public class LineCreateWrapperTest {
         build.setAlignStyle(ImgCreateOptions.AlignStyle.CENTER)
                 .drawImage(sign);
 
-        build.asGif("/Users/yihui/Desktop/out_word.gif");
-//        String str = build.asString();
-//
-//        String dom = "<img src=\"" + DomUtil.toDomSrc(str, MediaType.ImageGif) + "\"/>";
-//        System.out.println(dom);
+        String str = build.asString();
+
+        String dom = "<img src=\"" + DomUtil.toDomSrc(str, MediaType.ImageGif) + "\"/>";
+        System.out.println(dom);
     }
 
 }
