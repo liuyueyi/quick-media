@@ -7,12 +7,12 @@
     <parent>
         <artifactId>quick-media</artifactId>
         <groupId>com.github.hui.media</groupId>
-        <version>1.0</version>
+        <version>1.0.1</version>
     </parent>
 
     <groupId>com.github.hui.media</groupId>
     <artifactId>plugins</artifactId>
-    <version>1.0</version>
+    <version>1.0.1</version>
 
     <packaging>pom</packaging>
     <modules>
@@ -29,16 +29,16 @@
 
 
     <properties>
-        <quick-media.version>1.0</quick-media.version>
+        <quick-media.version>1.0.1</quick-media.version>
 
-        <qrcode-plugin.version>1.0</qrcode-plugin.version>
-        <image-plugin.version>1.0</image-plugin.version>
-        <svg-plugin.version>1.0</svg-plugin.version>
-        <markdonw-plugin.version>1.0</markdonw-plugin.version>
-        <base-plugin.version>1.0</base-plugin.version>
-        <audio-plugin.version>1.0</audio-plugin.version>
-        <date-plugin.version>1.0</date-plugin.version>
-        <phantom-plugin.version>1.0</phantom-plugin.version>
+        <qrcode-plugin.version>1.0.1</qrcode-plugin.version>
+        <image-plugin.version>1.0.1</image-plugin.version>
+        <svg-plugin.version>1.0.1</svg-plugin.version>
+        <markdonw-plugin.version>1.0.1</markdonw-plugin.version>
+        <base-plugin.version>1.0.1</base-plugin.version>
+        <audio-plugin.version>1.0.1</audio-plugin.version>
+        <date-plugin.version>1.0.1</date-plugin.version>
+        <phantom-plugin.version>1.0.1</phantom-plugin.version>
     </properties>
 
 

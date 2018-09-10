@@ -5,13 +5,13 @@
     <parent>
         <artifactId>svg-plugin</artifactId>
         <groupId>com.github.hui.media</groupId>
-        <version>1.0</version>
+        <version>1.0.1</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>com.github.hui.media</groupId>
     <artifactId>batik-codec-fix</artifactId>
-    <version>1.0</version>
+    <version>1.0.1</version>
 
     <dependencies>
         <dependency>
