@@ -24,11 +24,14 @@ public class FileWriteUtil {
     }
 
     public static <T> FileInfo saveFile(T src, String inputType) throws Exception {
-        if (src instanceof String) { // 给的文件路径，区分三中，本地绝对路径，相对路径，网络地址
+        if (src instanceof String) {
+            // 给的文件路径，区分三中，本地绝对路径，相对路径，网络地址
             return saveFileByPath((String) src);
-        } else if (src instanceof URI) { // 网络资源文件时，需要下载到本地临时目录下
+        } else if (src instanceof URI) {
+            // 网络资源文件时，需要下载到本地临时目录下
             return saveFileByURI((URI) src);
-        } else if (src instanceof InputStream) { // 输入流保存在到临时目录
+        } else if (src instanceof InputStream) {
+            // 输入流保存在到临时目录
             return saveFileByStream((InputStream) src, inputType);
         } else {
             throw new IllegalStateException("save file parameter only support String/URI/InputStream type! but input type is: " + (src == null ? null : src.getClass()));
@@ -50,12 +53,15 @@ public class FileWriteUtil {
 
 
         String tmpAbsFile;
-        if (path.startsWith("/")) { // 绝对路径
+        if (BasicFileUtil.isAbsFile(path)) {
+            // 绝对路径
             tmpAbsFile = path;
+        } else if (path.startsWith("~")) {
+            // 绝对路径，只是前缀为用户的根据目录如 将 ~/test.temp 转换为 /home/yihui/test/temp
+            tmpAbsFile = BasicFileUtil.parseHomeDir2AbsDir(path);
         } else { // 相对路径
             tmpAbsFile = FileWriteUtil.class.getClassLoader().getResource(path).getFile();
         }
-
 
         return parseAbsFileToFileInfo(tmpAbsFile);
     }
