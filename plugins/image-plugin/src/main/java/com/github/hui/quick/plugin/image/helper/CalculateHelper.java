@@ -1,8 +1,12 @@
 package com.github.hui.quick.plugin.image.helper;
 
+import com.github.hui.quick.plugin.image.util.StrListUtil;
 import com.github.hui.quick.plugin.image.wrapper.create.ImgCreateOptions;
 
 import java.awt.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.function.Function;
 
 /**
  * Created by yihui on 2018/3/26.
@@ -19,11 +23,8 @@ public class CalculateHelper {
      * @param style        对其方式
      * @return 返回计算后的x坐标
      */
-    public static int calOffsetX(int leftPadding,
-                                 int rightPadding,
-                                 int width,
-                                 int strSize,
-                                 ImgCreateOptions.AlignStyle style) {
+    public static int calOffsetX(int leftPadding, int rightPadding, int width, int strSize,
+            ImgCreateOptions.AlignStyle style) {
         if (style == ImgCreateOptions.AlignStyle.LEFT) {
             return leftPadding;
         } else if (style == ImgCreateOptions.AlignStyle.RIGHT) {
@@ -47,11 +48,8 @@ public class CalculateHelper {
      * @param style         对其样式
      * @return
      */
-    public static int calOffsetY(int topPadding,
-                                 int bottomPadding,
-                                 int height,
-                                 int strSize,
-                                 ImgCreateOptions.AlignStyle style) {
+    public static int calOffsetY(int topPadding, int bottomPadding, int height, int strSize,
+            ImgCreateOptions.AlignStyle style) {
         if (style == ImgCreateOptions.AlignStyle.TOP) {
             return topPadding;
         } else if (style == ImgCreateOptions.AlignStyle.BOTTOM) {
@@ -60,7 +58,6 @@ public class CalculateHelper {
             return (height - strSize) >> 1;
         }
     }
-
 
 
     /**
@@ -73,66 +70,65 @@ public class CalculateHelper {
      */
     public static String[] splitStr(String str, int lineLen, FontMetrics fontMetrics) {
         int lineNum = (int) Math.ceil((fontMetrics.stringWidth(str)) / (float) lineLen);
-
-        if (lineNum == 1) {
-            return new String[]{str};
-        }
-
-
-        String[] ans = new String[lineNum];
-        int strLen = str.length();
-        int lastTotal = 0;
-        int lastIndex = 0;
-        int ansIndex = 0;
-        int tmpLen;
-        for (int i = 0; i < strLen; i++) {
-            tmpLen = fontMetrics.charWidth(str.charAt(i));
-            lastTotal += tmpLen;
-            if (lastTotal > lineLen) {
-                ans[ansIndex++] = str.substring(lastIndex, i);
-                lastIndex = i;
-                lastTotal = tmpLen;
-            }
-        }
-
-        if (lastIndex < strLen) {
-            ans[ansIndex] = str.substring(lastIndex);
-        }
-
-        return ans;
+        return doSplitStr(str, lineNum, lineLen, fontMetrics::charWidth);
     }
 
-
+    /**
+     * 竖排文本与横排主要区别在分行的计算以及一个字符的占位高度
+     *
+     * @param str
+     * @param lineLen
+     * @param fontMetrics
+     * @return
+     */
     public static String[] splitVerticalStr(String str, int lineLen, FontMetrics fontMetrics) {
         int l = fontMetrics.getDescent() * (str.length() - 1);
         int lineNum = (int) Math.ceil((fontMetrics.stringWidth(str) + l) / (float) lineLen);
 
+        return doSplitStr(str, lineNum, lineLen,
+                character -> fontMetrics.charWidth(character) + fontMetrics.getDescent());
+    }
+
+    /**
+     * 实现字符串根据每行容纳的长度进行分割
+     *
+     * @param str             待分割的字符串内容
+     * @param lineNum         分割后的行数（不一定完全准确，因此实现逻辑中用List替换了之前的数组，避免越界问题）
+     * @param lineLen         每行容纳的长度
+     * @param charLenCalcFunc 计算字符站位的方法
+     * @return
+     */
+    private static String[] doSplitStr(String str, int lineNum, int lineLen,
+            Function<Character, Integer> charLenCalcFunc) {
         if (lineNum == 1) {
             return new String[]{str};
         }
 
-
-        String[] ans = new String[lineNum];
+        List<String> ans = new ArrayList<>(lineNum);
         int strLen = str.length();
-        int lastTotal = 0;
-        int lastIndex = 0;
-        int ansIndex = 0;
+        // 保存当前行的站位长度
+        int currentLineTotalLen = 0;
+        // 保存当前行的起始位置
+        int currentLineStartIndex = 0;
         int tmpLen;
         for (int i = 0; i < strLen; i++) {
-            tmpLen = fontMetrics.charWidth(str.charAt(i)) + fontMetrics.getDescent();
-            lastTotal += tmpLen;
-            if (lastTotal > lineLen) {
-                ans[ansIndex++] = str.substring(lastIndex, i);
-                lastIndex = i;
-                lastTotal = tmpLen;
+            /**
+             * 因为每个文本的宽度不一样，所以需要采用遍历的方式来计算一行最终能容纳多少个字符
+             */
+            tmpLen = charLenCalcFunc.apply(str.charAt(i));
+            currentLineTotalLen += tmpLen;
+            if (currentLineTotalLen > lineLen) {
+                ans.add(str.substring(currentLineStartIndex, i));
+                currentLineStartIndex = i;
+                currentLineTotalLen = tmpLen;
             }
         }
 
-        if (lastIndex < strLen) {
-            ans[ansIndex] = str.substring(lastIndex);
+        if (currentLineStartIndex < strLen) {
+            ans.add(str.substring(currentLineStartIndex));
         }
 
-        return ans;
+        return StrListUtil.toArray(ans);
     }
 
 
@@ -157,7 +153,8 @@ public class CalculateHelper {
     public static int calVerticalLineNum(String[] strs, int lineLen, FontMetrics fontMetrics) {
         int totalLine = 0;
         for (String str : strs) {
-            totalLine += Math.ceil((fontMetrics.stringWidth(str) + (str.length() - 1) * fontMetrics.getDescent()) / (float) lineLen);
+            totalLine += Math.ceil(
+                    (fontMetrics.stringWidth(str) + (str.length() - 1) * fontMetrics.getDescent()) / (float) lineLen);
         }
         return totalLine;
     }

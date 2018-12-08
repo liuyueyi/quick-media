@@ -42,7 +42,7 @@ public class ImgCreateWrapper {
 
 
         /**
-         * 图片的高度基本增量值， 即每次扩容时，最少加 {@link #BASE_ADD_H} 的高度
+         * 图片的高度基本增量值， 即每次扩容时，最少加 BASE_ADD_H 的高度
          */
         private final int BASE_ADD_H = 400;
 

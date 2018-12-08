@@ -1,5 +1,6 @@
 package com.github.hui.quick.plugin.image.wrapper.create;
 
+import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
@@ -12,13 +13,10 @@ import java.util.Map;
 /**
  * Created by yihui on 2017/8/16.
  */
-@Getter
-@Setter
-@ToString
+@Data
 public class ImgCreateOptions {
 
     public static final Font DEFAULT_FONT = new Font("宋体", Font.PLAIN, 18);
-    ;
 
     /**
      * 绘制的背景图

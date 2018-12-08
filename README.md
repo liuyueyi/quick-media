@@ -11,6 +11,23 @@
 利用 spring-boot 来提供http接口实现多媒体的操作
 
 
+### 使用说明
+
+在下载本项目之后，有些常见事项需要注意一二
+
+- 工程中使用lombok简化大量的代码，因此使用idea的童鞋请装一下lombok的插件
+- 运行时，如果报某些依赖找不到，请在父pom文件中添加源
+
+    ```xml
+    <repositories>
+        <repository>
+            <id>yihui-maven-repo</id>
+            <url>https://raw.githubusercontent.com/liuyueyi/maven-repository/master/repository</url>
+        </repository>
+    </repositories>
+    ```
+- 部分插件依赖第三方库，如 ffmpge, phantomjs, image-magic，请确保已经安装
+
 ## I. 项目分析
 
 ### 1. 技术栈
