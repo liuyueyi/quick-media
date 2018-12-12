@@ -3,10 +3,12 @@ package com.github.hui.quick.plugin.test;
 
 import com.github.hui.quick.plugin.base.Base64Util;
 import com.github.hui.quick.plugin.base.FileReadUtil;
+import com.github.hui.quick.plugin.base.GraphicUtil;
 import com.github.hui.quick.plugin.base.ImageLoadUtil;
 import com.github.hui.quick.plugin.image.wrapper.create.ImgCreateOptions;
 import com.github.hui.quick.plugin.image.wrapper.create.ImgCreateWrapper;
 import com.github.hui.quick.plugin.image.util.FontUtil;
+import com.sun.imageio.plugins.common.ImageUtil;
 import org.junit.Test;
 
 import javax.imageio.ImageIO;

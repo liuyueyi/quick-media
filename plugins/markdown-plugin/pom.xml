@@ -11,7 +11,7 @@
 
     <groupId>com.github.hui.media</groupId>
     <artifactId>markdown-plugin</artifactId>
-    <version>1.0</version>
+    <version>1.0.1</version>
 
     <properties>
         <flexmark.version>0.26.4</flexmark.version>

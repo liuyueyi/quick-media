@@ -11,7 +11,7 @@
 
     <groupId>com.github.hui.media</groupId>
     <artifactId>imagic-plugin</artifactId>
-    <version>1.0</version>
+    <version>1.0.1</version>
 
     <properties>
         <im4java.version>1.4.0</im4java.version>

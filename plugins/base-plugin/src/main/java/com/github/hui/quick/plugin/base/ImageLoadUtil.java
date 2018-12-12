@@ -6,6 +6,7 @@ import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
 import java.net.URL;
 
 /**
@@ -25,13 +26,8 @@ public class ImageLoadUtil {
             return null;
         }
 
-        if (path.startsWith("http")) { // 从网络获取logo
-            return ImageIO.read(new URL(path));
-        } else if (path.startsWith("/")) { // 绝对地址获取logo
-            return ImageIO.read(new File(path));
-        } else { // 从资源目录下获取logo
-            return ImageIO.read(ImageLoadUtil.class.getClassLoader().getResourceAsStream(path));
-        }
+        InputStream stream = FileReadUtil.getStreamByFileName(path);
+        return ImageIO.read(stream);
     }
 
 

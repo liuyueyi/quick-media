@@ -1,6 +1,7 @@
 package com.github.hui.quick.plugin.base;
 
 import com.google.common.base.Joiner;
+import org.apache.commons.lang3.StringUtils;
 
 import java.io.*;
 import java.nio.charset.Charset;
@@ -18,8 +19,7 @@ public class FileReadUtil {
     public static String readAll(String fileName) throws IOException {
         BufferedReader reader = createLineRead(fileName);
         List<String> lines = reader.lines().collect(Collectors.toList());
-        String content = Joiner.on("\n").join(lines);
-        return content;
+        return Joiner.on("\n").join(lines);
     }
 
 
@@ -29,10 +29,6 @@ public class FileReadUtil {
      * @param fileName 文件的名
      */
     public static InputStream createByteRead(String fileName) throws IOException {
-
-//        File file = new File(fileName);
-//
-//        return new FileInputStream(file);
         return getStreamByFileName(fileName);
     }
 
@@ -43,9 +39,6 @@ public class FileReadUtil {
      * @param fileName 文件名
      */
     public static Reader createCharRead(String fileName) throws IOException {
-//        File file = new File(fileName);
-//        return new InputStreamReader(new FileInputStream(file), Charset.forName("UTF-8"));
-
         return new InputStreamReader(getStreamByFileName(fileName), Charset.forName("UTF-8"));
     }
 
@@ -56,10 +49,6 @@ public class FileReadUtil {
      * @param fileName 文件名
      */
     public static BufferedReader createLineRead(String fileName) throws IOException {
-//        File file = new File(fileName);
-////        return new BufferedReader(new FileReader(file));
-//        return new BufferedReader(new InputStreamReader(new FileInputStream(file), Charset.forName("UTF-8")));
-
         return new BufferedReader(new InputStreamReader(getStreamByFileName(fileName), Charset.forName("UTF-8")));
     }
 
@@ -70,21 +59,25 @@ public class FileReadUtil {
             throw new IllegalArgumentException("fileName should not be null!");
         }
 
-        if (fileName.startsWith("http")) { // 网络地址
+        if (fileName.startsWith("http")) {
+            // 网络地址
             return HttpUtil.downFile(fileName);
-        } else if (fileName.startsWith("/")) { // 绝对路径
+        } else if (BasicFileUtil.isAbsFile(fileName)) {
+            // 绝对路径
             Path path = Paths.get(fileName);
             return Files.newInputStream(path);
-        } else  { // 相对路径
+        } else if (fileName.startsWith("~")) {
+            // 用户目录下的绝对路径文件
+            fileName = BasicFileUtil.parseHomeDir2AbsDir(fileName);
+            return Files.newInputStream(Paths.get(fileName));
+        } else { // 相对路径
             return FileReadUtil.class.getClassLoader().getResourceAsStream(fileName);
         }
     }
 
-
-
     /** 将字节数组转换成16进制字符串 */
     private static String bytesToHex(byte[] src){
-        StringBuilder stringBuilder = new StringBuilder("");
+        StringBuilder stringBuilder = new StringBuilder();
         if (src == null || src.length <= 0) {
             return null;
         }
