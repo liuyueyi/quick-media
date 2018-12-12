@@ -12,15 +12,19 @@ public class FileReadUtilTest {
 
     @Test
     public void testGetAbsFile() throws IOException {
-        // linux or mac os
-        String fileName = "/tmp/ttt.txt";
-        String content = FileReadUtil.readAll(fileName);
-        System.out.println(content);
+        try {
+            // linux or mac os
+            String fileName = "/tmp/ttt.txt";
+            String content = FileReadUtil.readAll(fileName);
+            System.out.println(content);
 
 
-        fileName = "~/test.txt";
-        content = FileReadUtil.readAll(fileName);
-        System.out.println(content);
+            fileName = "~/test.txt";
+            content = FileReadUtil.readAll(fileName);
+            System.out.println(content);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
 }
