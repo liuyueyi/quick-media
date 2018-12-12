@@ -1,6 +1,7 @@
 package com.github.hui.quick.plugin.test;
 
 import com.github.hui.quick.plugin.base.Base64Util;
+import com.github.hui.quick.plugin.base.ImageLoadUtil;
 import com.github.hui.quick.plugin.qrcode.wrapper.QrCodeGenWrapper;
 import com.google.zxing.WriterException;
 import org.junit.Test;
@@ -32,10 +33,9 @@ public class QrDetectTest {
 
     @Test
     public void testBase642Ima() throws IOException {
-        BufferedImage bfimg = ImageIO.read(new File("bg.png"));
-        String str = Base64Util.encode(bfimg, "png");
-
         try {
+            BufferedImage bfimg = ImageLoadUtil.getImageByPath("logo.jpg");
+            String str = Base64Util.encode(bfimg, "png");
             BufferedImage img = Base64Util.decode2Img(str);
             System.out.println("img");
         } catch (IOException e) {
