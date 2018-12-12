@@ -15,6 +15,13 @@
     <name>quick-media</name>
     <description>QuickMediaProject create by bangzewu@126.com</description>
 
+    <repositories>
+        <repository>
+            <id>yihui-maven-repo</id>
+            <url>https://raw.githubusercontent.com/liuyueyi/maven-repository/master/repository</url>
+        </repository>
+    </repositories>
+
     <parent>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
@@ -36,13 +43,4 @@
             <scope>test</scope>
         </dependency>
     </dependencies>
-
-
-
-    <repositories>
-        <repository>
-            <id>yihui-maven-repo</id>
-            <url>https://raw.githubusercontent.com/liuyueyi/maven-repository/master/repository</url>
-        </repository>
-    </repositories>
 </project>
