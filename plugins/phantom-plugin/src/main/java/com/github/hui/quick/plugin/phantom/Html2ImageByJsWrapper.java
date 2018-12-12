@@ -20,7 +20,15 @@ import java.io.IOException;
  */
 public class Html2ImageByJsWrapper {
 
-    private static PhantomJSDriver webDriver = getPhantomJs();
+    private static PhantomJSDriver webDriver;
+
+    static {
+        try {
+            webDriver = getPhantomJs();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
 
     private static PhantomJSDriver getPhantomJs() {
         //设置必要参数
@@ -42,9 +50,13 @@ public class Html2ImageByJsWrapper {
 
 
     public static BufferedImage renderHtml2Image(String url) throws IOException {
-        webDriver.get(url);
-        File file = webDriver.getScreenshotAs(OutputType.FILE);
-        return ImageIO.read(file);
+        if (webDriver != null) {
+            webDriver.get(url);
+            File file = webDriver.getScreenshotAs(OutputType.FILE);
+            return ImageIO.read(file);
+        } else {
+            return null;
+        }
     }
 
 }

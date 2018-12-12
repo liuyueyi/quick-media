@@ -107,7 +107,7 @@ public class ImgMergeWrapperTest {
 
         System.out.println("---绘制完成---");
         try {
-            ImageIO.write(bg, "jpg", new File("/Users/yihui/Desktop/merge.jpg"));
+            ImageIO.write(bg, "jpg", new File("/tmp/merge.jpg"));
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -127,7 +127,7 @@ public class ImgMergeWrapperTest {
         BufferedImage bg = ImgMergeWrapper.merge(list, w, h);
 
         try {
-            ImageIO.write(bg, "jpg", new File("/Users/yihui/Desktop/merge.jpg"));
+            ImageIO.write(bg, "jpg", new File("/tmp/merge.jpg"));
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -167,6 +167,6 @@ public class ImgMergeWrapperTest {
                 img1.getWidth() / 2 + img2.getWidth(),
                 img1.getHeight() + 4 + img2.getHeight(),
                 Color.WHITE);
-        ImageIO.write(ans, "jpg", new File("/Users/yihui/Desktop/ansV3.jpg"));
+        ImageIO.write(ans, "jpg", new File("/tmp/ansV3.jpg"));
     }
 }

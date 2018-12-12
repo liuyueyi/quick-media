@@ -109,7 +109,7 @@ public class ImgCreateWrapperTest {
                 .drawImage("https://gitee.com/liuyueyi/Source/raw/master/img/info/blogInfoV2.png");
 
         BufferedImage img = build.asImage();
-        ImageIO.write(img, "png", new File("/Users/yihui/Desktop/2out.png"));
+        ImageIO.write(img, "png", new File("/tmp/2out.png"));
     }
 
 
@@ -154,6 +154,6 @@ public class ImgCreateWrapperTest {
 //        build.setFontColor(Color.BLUE).drawContent("后缀签名").drawContent("灰灰自动生成");
 
         BufferedImage img = build.asImage();
-        ImageIO.write(img, "png", new File("/Users/yihui/Desktop/2out.png"));
+        ImageIO.write(img, "png", new File("/tmp/2out.png"));
     }
 }
