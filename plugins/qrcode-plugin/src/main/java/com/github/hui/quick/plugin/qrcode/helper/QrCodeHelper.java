@@ -35,7 +35,8 @@ public class QrCodeHelper {
         int quietZone = 1;
         if (qrCodeConfig.getHints() != null) {
             if (qrCodeConfig.getHints().containsKey(EncodeHintType.ERROR_CORRECTION)) {
-                errorCorrectionLevel = ErrorCorrectionLevel.valueOf(qrCodeConfig.getHints().get(EncodeHintType.ERROR_CORRECTION).toString());
+                errorCorrectionLevel = ErrorCorrectionLevel
+                        .valueOf(qrCodeConfig.getHints().get(EncodeHintType.ERROR_CORRECTION).toString());
             }
             if (qrCodeConfig.getHints().containsKey(EncodeHintType.MARGIN)) {
                 quietZone = Integer.parseInt(qrCodeConfig.getHints().get(EncodeHintType.MARGIN).toString());
@@ -155,21 +156,18 @@ public class QrCodeHelper {
     public static BufferedImage toBufferedImage(QrCodeOptions qrCodeConfig, BitMatrixEx bitMatrix) throws IOException {
         int qrCodeWidth = bitMatrix.getWidth();
         int qrCodeHeight = bitMatrix.getHeight();
-//        BufferedImage qrCode = ImageUtil.drawQrInfo(qrCodeConfig, bitMatrix);
         BufferedImage qrCode = QrCodeUtil.drawQrInfo(qrCodeConfig, bitMatrix);
-
 
         // 若二维码的实际宽高和预期的宽高不一致, 则缩放
         int realQrCodeWidth = qrCodeConfig.getW();
         int realQrCodeHeight = qrCodeConfig.getH();
         if (qrCodeWidth != realQrCodeWidth || qrCodeHeight != realQrCodeHeight) {
             BufferedImage tmp = new BufferedImage(realQrCodeWidth, realQrCodeHeight, BufferedImage.TYPE_INT_RGB);
-            tmp.getGraphics().drawImage(
-                    qrCode.getScaledInstance(realQrCodeWidth, realQrCodeHeight,
-                            Image.SCALE_SMOOTH), 0, 0, null);
+            tmp.getGraphics()
+                    .drawImage(qrCode.getScaledInstance(realQrCodeWidth, realQrCodeHeight, Image.SCALE_SMOOTH), 0, 0,
+                            null);
             qrCode = tmp;
         }
-
 
 
         /**
@@ -177,14 +175,14 @@ public class QrCodeHelper {
          *  在覆盖模式下，先设置二维码的透明度，然后绘制在背景图的正中央，最后绘制logo，这样保证logo不会透明，显示清晰
          *  在填充模式下，先绘制logo，然后绘制在背景的指定位置上；若先绘制背景，再绘制logo，则logo大小偏移量的计算会有问题
          */
-        boolean logoDrawed = false;
+        boolean logoAlreadDraw = false;
         // 绘制背景图
         if (qrCodeConfig.getBgImgOptions() != null) {
-            if (qrCodeConfig.getBgImgOptions().getBgImgStyle() == QrCodeOptions.BgImgStyle.FILL
-                    && qrCodeConfig.getLogoOptions() != null) {
+            if (qrCodeConfig.getBgImgOptions().getBgImgStyle() == QrCodeOptions.BgImgStyle.FILL &&
+                    qrCodeConfig.getLogoOptions() != null) {
                 // 此种模式，先绘制logo
                 qrCode = QrCodeUtil.drawLogo(qrCode, qrCodeConfig.getLogoOptions());
-                logoDrawed = true;
+                logoAlreadDraw = true;
             }
 
             qrCode = QrCodeUtil.drawBackground(qrCode, qrCodeConfig.getBgImgOptions());
@@ -192,7 +190,7 @@ public class QrCodeHelper {
 
 
         // 插入logo
-        if (qrCodeConfig.getLogoOptions() != null && !logoDrawed) {
+        if (qrCodeConfig.getLogoOptions() != null && !logoAlreadDraw) {
             qrCode = QrCodeUtil.drawLogo(qrCode, qrCodeConfig.getLogoOptions());
         }
 

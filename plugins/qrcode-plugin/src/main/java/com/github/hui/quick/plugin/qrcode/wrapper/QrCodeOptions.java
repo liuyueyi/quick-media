@@ -1,13 +1,16 @@
 package com.github.hui.quick.plugin.qrcode.wrapper;
 
+import com.github.hui.quick.plugin.qrcode.entity.DotSize;
 import com.google.zxing.EncodeHintType;
 import lombok.Builder;
 import lombok.Data;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang3.tuple.ImmutablePair;
 
 import java.awt.*;
 import java.awt.geom.Ellipse2D;
 import java.awt.image.BufferedImage;
+import java.nio.Buffer;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -187,7 +190,6 @@ public class QrCodeOptions {
     /**
      * 绘制二维码的配置信息
      */
-    @Builder
     @Data
     public static class DrawOptions {
         /**
@@ -213,44 +215,85 @@ public class QrCodeOptions {
          */
         private boolean enableScale;
 
-
         /**
-         * 基础图片
+         * 渲染图
          */
-        private BufferedImage img;
+        private Map<DotSize, BufferedImage> imgMapper;
 
-        /**
-         * 同一行相邻的两个着色点对应绘制的图片
-         */
-        private BufferedImage row2Img;
+        public BufferedImage getImage(int row, int col) {
+            return imgMapper.get(DotSize.create(row, col));
+        }
 
-        /**
-         * 同一列相邻的两个着色点对应绘制的图片
-         */
-        private BufferedImage col2img;
+        public static DrawOptionsBuilder builder() {
+            return new DrawOptionsBuilder();
+        }
 
-        /**
-         * 以(x,y)为左定点的四个着色点对应绘制的图片
-         */
-        private BufferedImage size4Img;
+        public static class DrawOptionsBuilder {
+            /**
+             * 着色颜色
+             */
+            private Color preColor;
+
+            /**
+             * 背景颜色
+             */
+            private Color bgColor;
+
+            /**
+             * 绘制样式
+             */
+            private DrawStyle drawStyle;
 
 
-        public boolean enableScale(ExpandType expandType) {
-            if (!enableScale || !drawStyle.expand(expandType)) {
-                return false;
+            /**
+             * true 时表示支持对相邻的着色点进行合并处理 （即用一个大图来绘制相邻的两个着色点）
+             * <p>
+             * 说明： 三角形样式关闭该选项，因为留白过多，对识别有影响
+             */
+            private boolean enableScale;
+
+            /**
+             * 渲染图
+             */
+            private Map<DotSize, BufferedImage> imgMapper;
+
+            public DrawOptionsBuilder() {
+                imgMapper = new HashMap<>();
             }
 
-            if (drawStyle != DrawStyle.IMAGE) {
-                return true;
+            public DrawOptionsBuilder preColor(Color preColor) {
+                this.preColor = preColor;
+                return this;
             }
 
+            public DrawOptionsBuilder bgColor(Color bgColor) {
+                this.bgColor = bgColor;
+                return this;
+            }
 
-            if (expandType == ExpandType.SIZE4) {
-                return size4Img != null;
-            } else if (expandType == ExpandType.COL2) {
-                return col2img != null;
-            } else {
-                return row2Img != null;
+            public DrawOptionsBuilder drawStyle(DrawStyle drawStyle) {
+                this.drawStyle = drawStyle;
+                return this;
+            }
+
+            public DrawOptionsBuilder enableScale(boolean enableScale) {
+                this.enableScale = enableScale;
+                return this;
+            }
+
+            public DrawOptionsBuilder drawImg(int row, int column, BufferedImage image) {
+                imgMapper.put(new DotSize(row, column), image);
+                return this;
+            }
+
+            public DrawOptions build() {
+                DrawOptions drawOptions = new DrawOptions();
+                drawOptions.setBgColor(this.bgColor);
+                drawOptions.setPreColor(this.preColor);
+                drawOptions.setDrawStyle(this.drawStyle);
+                drawOptions.setEnableScale(this.enableScale);
+                drawOptions.setImgMapper(this.imgMapper);
+                return drawOptions;
             }
         }
     }
@@ -260,8 +303,7 @@ public class QrCodeOptions {
      * logo的样式
      */
     public enum LogoStyle {
-        ROUND,
-        NORMAL;
+        ROUND, NORMAL;
 
 
         public static LogoStyle getStyle(String name) {
@@ -288,8 +330,7 @@ public class QrCodeOptions {
         /**
          * 背景图穿透显示, 即二维码主题色为透明，由背景图的颜色进行填充
          */
-        PENETRATE,
-        ;
+        PENETRATE,;
 
 
         public static BgImgStyle getStyle(String name) {
@@ -313,9 +354,8 @@ public class QrCodeOptions {
             public boolean expand(ExpandType expandType) {
                 return true;
             }
-        },
-        CIRCLE {
-            // 圆点
+        }, CIRCLE { // 圆点
+
             @Override
             public void draw(Graphics2D g2d, int x, int y, int w, int h, BufferedImage img) {
                 g2d.fill(new Ellipse2D.Float(x, y, w, h));
@@ -325,9 +365,8 @@ public class QrCodeOptions {
             public boolean expand(ExpandType expandType) {
                 return expandType == ExpandType.SIZE4;
             }
-        },
-        TRIANGLE {
-            // 三角形
+        }, TRIANGLE { // 三角形
+
             @Override
             public void draw(Graphics2D g2d, int x, int y, int w, int h, BufferedImage img) {
                 int px[] = {x, x + (w >> 1), x + w};
@@ -339,9 +378,8 @@ public class QrCodeOptions {
             public boolean expand(ExpandType expandType) {
                 return false;
             }
-        },
-        DIAMOND {
-            // 五边形-钻石
+        }, DIAMOND { // 五边形-钻石
+
             @Override
             public void draw(Graphics2D g2d, int x, int y, int size, int h, BufferedImage img) {
                 int cell4 = size >> 2;
@@ -355,9 +393,8 @@ public class QrCodeOptions {
             public boolean expand(ExpandType expandType) {
                 return expandType == ExpandType.SIZE4;
             }
-        },
-        SEXANGLE {
-            // 六边形
+        }, SEXANGLE { // 六边形
+
             @Override
             public void draw(Graphics2D g2d, int x, int y, int size, int h, BufferedImage img) {
                 int add = size >> 2;
@@ -370,9 +407,8 @@ public class QrCodeOptions {
             public boolean expand(ExpandType expandType) {
                 return expandType == ExpandType.SIZE4;
             }
-        },
-        OCTAGON {
-            // 八边形
+        }, OCTAGON { // 八边形
+
             @Override
             public void draw(Graphics2D g2d, int x, int y, int size, int h, BufferedImage img) {
                 int add = size / 3;
@@ -385,9 +421,8 @@ public class QrCodeOptions {
             public boolean expand(ExpandType expandType) {
                 return expandType == ExpandType.SIZE4;
             }
-        },
-        IMAGE {
-            // 自定义图片
+        }, IMAGE { // 自定义图片
+
             @Override
             public void draw(Graphics2D g2d, int x, int y, int w, int h, BufferedImage img) {
                 g2d.drawImage(img, x, y, w, h, null);
@@ -423,7 +458,7 @@ public class QrCodeOptions {
 
 
         /**
-         * 返回是否支持绘制图形的扩展
+         * 返回是否支持绘制自定义图形的扩展
          *
          * @param expandType
          * @return
@@ -433,8 +468,6 @@ public class QrCodeOptions {
 
 
     public enum ExpandType {
-        ROW2,
-        COL2,
-        SIZE4;
+        ROW2, COL2, SIZE4;
     }
 }

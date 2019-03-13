@@ -261,9 +261,6 @@ public class QrCodeWrapperTest {
                     .setDrawStyle(QrCodeOptions.DrawStyle.CIRCLE.name())
                     .setDrawEnableScale(true)
                     .setDrawImg("xhrBase.jpg")
-                    .setDrawRow2Img("xhrr2.jpeg")
-                    .setDrawCol2Img("xhrc2.jpeg")
-                    .setDrawSize4Img("xhrSize4.jpg")
                     .setBgStyle(QrCodeOptions.BgImgStyle.PENETRATE)
                     .setBgOpacity(1.0f)
                     .setBgImg(bg)
@@ -304,6 +301,80 @@ public class QrCodeWrapperTest {
                     .setDrawEnableScale(true)
                     .asBufferedImage();
             ImageIO.write(img, "png", new File("src/test/qrcode/style.png"));
+        } catch (IOException e) {
+            e.printStackTrace();
+        } catch (WriterException e) {
+            e.printStackTrace();
+        }
+    }
+
+    @Test
+    public void testGenLoveQrCode() {
+        String msg = "http://weixin.qq.com/r/FS9waAPEg178rUcL93oH";
+
+        int size = 500;
+        try {
+            BufferedImage img = QrCodeGenWrapper.of(msg)
+                    .setW(size)
+                    .setH(size)
+                    .setDetectImg("jihe/PDP.png")
+                    .setErrorCorrection(ErrorCorrectionLevel.M)
+                    .setDrawEnableScale(true)
+                    .setDrawStyle(QrCodeOptions.DrawStyle.RECT)
+                    .addImg(1, 1, "love/003_02.png")
+                    .addImg(1, 4, "love/004.png")
+                    .addImg(4, 1, "love/004_02.png")
+                    .asBufferedImage();
+
+            ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+            ImageIO.write(img, "png", outputStream);
+            String img64 = Base64Util.encode(outputStream);
+            System.out.println("<img src=\"data:image/png;base64," + img64 + "\" />");
+        } catch (IOException e) {
+            e.printStackTrace();
+        } catch (WriterException e) {
+            e.printStackTrace();
+        }
+    }
+
+    @Test
+    public void testGenJiheQrCode() {
+//        String msg = "http://spring.hhui.top/spring-blog/2019/03/10/190310-SpringCloud%E5%9F%BA%E7%A1%80%E7%AF%87AOP%E4%B9%8B%E6%8B%A6%E6%88%AA%E4%BC%98%E5%85%88%E7%BA%A7%E8%AF%A6%E8%A7%A3/";
+        String msg = "http://weixin.qq.com/r/FS9waAPEg178rUcL93oH";
+
+        int size = 500;
+        try {
+//            String bg = "http://bpic.588ku.com/master_pic/00/10/04/8656612a16e2e6a.jpg";
+            String bg = "http://img11.hc360.cn/11/busin/109/955/b/11-109955021.jpg";
+
+            BufferedImage img = QrCodeGenWrapper.of(msg)
+                    .setW(size)
+                    .setH(size)
+                    .setDetectImg("jihe/PDP.png")
+//                    .setDetectImg("love/01.png")
+                    .setErrorCorrection(ErrorCorrectionLevel.H)
+                    .setDrawEnableScale(true)
+                    .setDrawStyle(QrCodeOptions.DrawStyle.IMAGE)
+                    .addImg(1, 1, "jihe/a.png")
+                    .addImg(3, 1, "jihe/b.png")
+                    .addImg(1, 3, "jihe/c.png")
+                    .addImg(3, 2, "jihe/e.png")
+                    .addImg(2, 3, "jihe/f.png")
+                    .addImg(2, 2, "jihe/g.png")
+                    .addImg(3, 4, "jihe/h.png")
+                    .setBgStyle(QrCodeOptions.BgImgStyle.PENETRATE)
+                    .setBgOpacity(1.0f)
+                    .setBgImg(bg)
+                    .setBgStartX(10)
+                    .setBgStartY(100)
+                    .asBufferedImage();
+
+         ImageIO.write(img, "png", new File("/tmp/q1.png"));
+
+//            ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+//            ImageIO.write(img, "png", outputStream);
+//            String img64 = Base64Util.encode(outputStream);
+//            System.out.println("<img src=\"data:image/png;base64," + img64 + "\" />");
         } catch (IOException e) {
             e.printStackTrace();
         } catch (WriterException e) {

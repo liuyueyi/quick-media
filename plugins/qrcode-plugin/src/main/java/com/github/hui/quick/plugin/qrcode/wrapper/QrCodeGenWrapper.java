@@ -50,7 +50,7 @@ public class QrCodeGenWrapper {
 
         BufferedImage bufferedImage = asBufferedImage(qrCodeConfig);
         if (!ImageIO.write(bufferedImage, qrCodeConfig.getPicType(), file)) {
-            throw new IOException("save qrcode image error!");
+            throw new IOException("save QrCode image to: " + absFileName + " error!");
         }
 
         return true;
@@ -114,24 +114,19 @@ public class QrCodeGenWrapper {
 
         public Builder() {
             // 背景图默认采用覆盖方式
-            bgImgOptions = QrCodeOptions.BgImgOptions.builder()
-                    .bgImgStyle(QrCodeOptions.BgImgStyle.OVERRIDE)
-                    .opacity(0.85f);
+            bgImgOptions =
+                    QrCodeOptions.BgImgOptions.builder().bgImgStyle(QrCodeOptions.BgImgStyle.OVERRIDE).opacity(0.85f);
 
 
             // 默认采用普通格式的logo， 无边框
-            logoOptions = QrCodeOptions.LogoOptions.builder()
-                    .logoStyle(QrCodeOptions.LogoStyle.NORMAL)
-                    .border(false)
+            logoOptions = QrCodeOptions.LogoOptions.builder().logoStyle(QrCodeOptions.LogoStyle.NORMAL).border(false)
                     .rate(12);
 
 
             // 绘制信息，默认黑白方块
-            drawOptions = QrCodeOptions.DrawOptions.builder()
-                    .drawStyle(QrCodeOptions.DrawStyle.RECT)
-                    .bgColor(Color.WHITE)
-                    .preColor(Color.BLACK)
-                    .enableScale(false);
+            drawOptions =
+                    QrCodeOptions.DrawOptions.builder().drawStyle(QrCodeOptions.DrawStyle.RECT).bgColor(Color.WHITE)
+                            .preColor(Color.BLACK).enableScale(false);
 
             // 探测图形
             detectOptions = QrCodeOptions.DetectOptions.builder();
@@ -452,94 +447,35 @@ public class QrCodeGenWrapper {
         }
 
         public Builder setDrawImg(BufferedImage img) {
-            drawOptions.img(img);
+            addImg(1, 1, img);
             return this;
         }
 
 
-        public Builder setDrawRow2Img(BufferedImage row2img) {
-            if (row2img == null) {
+        public Builder addImg(int row, int col, BufferedImage img) {
+            if (img == null) {
                 return this;
             }
-
             drawOptions.enableScale(true);
-            drawOptions.row2Img(row2img);
+            drawOptions.drawImg(row, col, img);
             return this;
         }
 
-        public Builder setDrawRow2Img(String row2img) throws IOException {
+        public Builder addImg(int row, int col, String img) throws IOException {
             try {
-                return setDrawRow2Img(ImageLoadUtil.getImageByPath(row2img));
-            } catch (IOException e) {
-                log.error("load draw row2img error! e: {}", e);
-                throw new IOException("load draw row2img error!", e);
-            }
-        }
-
-        public Builder setDrawRow2Img(InputStream row2img) throws IOException {
-            try {
-                return setDrawRow2Img(ImageIO.read(row2img));
-            } catch (IOException e) {
-                log.error("load draw row2img error! e: {}", e);
-                throw new IOException("load draw row2img error!", e);
-            }
-        }
-
-
-        public Builder setDrawCol2Img(BufferedImage col2img) {
-            if (col2img == null) {
-                return this;
-            }
-
-            drawOptions.enableScale(true);
-            drawOptions.col2img(col2img);
-            return this;
-        }
-
-        public Builder setDrawCol2Img(String col2img) throws IOException {
-            try {
-                return setDrawCol2Img(ImageLoadUtil.getImageByPath(col2img));
-            } catch (IOException e) {
-                log.error("load draw col2img error! e: {}", e);
-                throw new IOException("load draw col2img error!", e);
-            }
-        }
-
-        public Builder setDrawCol2Img(InputStream col2img) throws IOException {
-            try {
-                return setDrawCol2Img(ImageIO.read(col2img));
-            } catch (IOException e) {
-                log.error("load draw col2img error! e: {}", e);
-                throw new IOException("load draw col2img error!", e);
-            }
-        }
-
-
-        public Builder setDrawSize4Img(BufferedImage size4Img) {
-            if (size4Img == null) {
-                return this;
-            }
-
-            drawOptions.enableScale(true);
-            drawOptions.size4Img(size4Img);
-            return this;
-        }
-
-        public Builder setDrawSize4Img(String size4img) throws IOException {
-            try {
-                return setDrawSize4Img(ImageLoadUtil.getImageByPath(size4img));
+                return addImg(row, col, ImageLoadUtil.getImageByPath(img));
             } catch (IOException e) {
                 log.error("load draw size4img error! e: {}", e);
-                throw new IOException("load draw size4img error!", e);
+                throw new IOException("load draw row:" + row + ", col:" + col + " img error!", e);
             }
         }
 
-        public Builder setDrawSize4Img(InputStream size4img) throws IOException {
+        public Builder addImg(int row, int col, InputStream img) throws IOException {
             try {
-                return setDrawSize4Img(ImageIO.read(size4img));
+                return addImg(row, col, ImageIO.read(img));
             } catch (IOException e) {
                 log.error("load draw size4img error! e: {}", e);
-                throw new IOException("load draw size4img error!", e);
+                throw new IOException("load draw row:" + row + ", col:" + col + " img error!", e);
             }
         }
 
