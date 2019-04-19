@@ -79,7 +79,7 @@
 <dependency>
     <groupId>com.github.hui.media</groupId>
     <artifactId>audio-plugin</artifactId>
-    <version>1.0.1</version>
+    <version>1.1</version>
 </dependency>
 ```
 
@@ -91,7 +91,7 @@
 <dependency>
     <groupId>com.github.hui.media</groupId>
     <artifactId>date-plugin</artifactId>
-    <version>1.0</version>
+    <version>1.1</version>
 </dependency>
 ```
 
@@ -104,7 +104,7 @@
 <dependency>
     <groupId>com.github.hui.media</groupId>
     <artifactId>image-plugin</artifactId>
-    <version>1.0.1</version>
+    <version>1.1</version>
 </dependency>
 ```
 
@@ -116,7 +116,7 @@ markdown转html，转图片的封装类
 <dependency>
     <groupId>com.github.hui.media</groupId>
     <artifactId>markdown-plugin</artifactId>
-    <version>1.0</version>
+    <version>1.1</version>
 </dependency>
 ```
 
@@ -128,7 +128,7 @@ markdown转html，转图片的封装类
 <dependency>
     <groupId>com.github.hui.media</groupId>
     <artifactId>phantom-plugin</artifactId>
-    <version>1.0.1</version>
+    <version>1.1</version>
 </dependency>
 ```
 
@@ -140,7 +140,7 @@ markdown转html，转图片的封装类
 <dependency>
     <groupId>com.github.hui.media</groupId>
     <artifactId>qrcode-plugin</artifactId>
-    <version>1.0.1</version>
+    <version>1.2</version>
 </dependency>
 ```
 
@@ -152,7 +152,7 @@ markdown转html，转图片的封装类
 <dependency>
     <groupId>com.github.hui.media</groupId>
     <artifactId>svg-core</artifactId>
-    <version>1.0.1</version>
+    <version>1.1</version>
 </dependency>
 ```
 
@@ -165,7 +165,7 @@ markdown转html，转图片的封装类
 <dependency>
     <groupId>com.github.hui.media</groupId>
     <artifactId>imagic-core</artifactId>
-    <version>1.0.1</version>
+    <version>1.1</version>
 </dependency>
 ```
 
