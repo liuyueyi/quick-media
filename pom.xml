@@ -5,7 +5,7 @@
 
     <groupId>com.github.hui.media</groupId>
     <artifactId>quick-media</artifactId>
-    <version>1.0.1</version>
+    <version>1.1</version>
     <modules>
         <module>web</module>
         <module>plugins</module>
@@ -22,27 +22,12 @@
         </repository>
     </repositories>
 
-    <parent>
-        <groupId>org.springframework.boot</groupId>
-        <artifactId>spring-boot-starter-parent</artifactId>
-        <version>1.5.4.RELEASE</version>
-    </parent>
-
     <properties>
         <quick-media.version>1.0.1</quick-media.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
         <java.version>1.8</java.version>
     </properties>
-
-
-    <dependencies>
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-test</artifactId>
-            <scope>test</scope>
-        </dependency>
-    </dependencies>
 
     <build>
         <plugins>

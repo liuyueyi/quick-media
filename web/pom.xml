@@ -3,25 +3,30 @@
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <parent>
-        <artifactId>quick-media</artifactId>
-        <groupId>com.github.hui.media</groupId>
-        <version>1.0.1</version>
+        <groupId>org.springframework.boot</groupId>
+        <artifactId>spring-boot-starter-parent</artifactId>
+        <version>1.5.4.RELEASE</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
     <packaging>war</packaging>
-    <version>1.0.1</version>
+    <version>1.1</version>
 
     <artifactId>web</artifactId>
+    <repositories>
+        <repository>
+            <id>yihui-maven-repo</id>
+            <url>https://raw.githubusercontent.com/liuyueyi/maven-repository/master/repository</url>
+        </repository>
+    </repositories>
 
     <properties>
-        <qrcode-plugin.version>1.0.1</qrcode-plugin.version>
-        <image-plugin.version>1.0.1</image-plugin.version>
-        <svg-plugin.version>1.0.1</svg-plugin.version>
-        <markdonw-plugin.version>1.0.1</markdonw-plugin.version>
-        <base-plugin.version>1.0.1</base-plugin.version>
-        <audio-plugin.version>1.0.1</audio-plugin.version>
-        <date-plugin.version>1.0</date-plugin.version>
-        <phantom-plugin.version>1.0.1</phantom-plugin.version>
+        <qrcode-plugin.version>1.2</qrcode-plugin.version>
+        <image-plugin.version>1.1</image-plugin.version>
+        <svg-plugin.version>1.1</svg-plugin.version>
+        <markdonw-plugin.version>1.1</markdonw-plugin.version>
+        <audio-plugin.version>1.1</audio-plugin.version>
+        <date-plugin.version>1.1</date-plugin.version>
+        <phantom-plugin.version>1.1</phantom-plugin.version>
     </properties>
 
 
@@ -81,12 +86,6 @@
             <artifactId>spring-boot-starter-web</artifactId>
         </dependency>
 
-        <!--<dependency>-->
-        <!--<groupId>org.springframework.boot</groupId>-->
-        <!--<artifactId>spring-boot-starter-tomcat</artifactId>-->
-        <!--<scope>provided</scope>-->
-        <!--</dependency>-->
-
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-aop</artifactId>
@@ -115,7 +114,7 @@
         <dependency>
             <groupId>com.alibaba</groupId>
             <artifactId>fastjson</artifactId>
-            <version>1.2.29</version>
+            <version>1.2.45</version>
         </dependency>
 
 
@@ -123,6 +122,13 @@
         <dependency>
             <groupId>org.yaml</groupId>
             <artifactId>snakeyaml</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>junit</groupId>
+            <artifactId>junit</artifactId>
+            <version>4.12</version>
+            <scope>test</scope>
         </dependency>
 
 

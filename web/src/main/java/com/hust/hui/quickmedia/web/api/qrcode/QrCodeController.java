@@ -97,9 +97,9 @@ public class QrCodeController {
         builder.setDrawStyle(drawStyle);
         if (drawStyle == QrCodeOptions.DrawStyle.IMAGE) {
             builder.setDrawImg(request.getDrawImg())
-                    .setDrawSize4Img(request.getDrawSize4Img())
-                    .setDrawRow2Img(request.getDrawRow2Img())
-                    .setDrawCol2Img(request.getDrawCol2Img());
+                    .addImg(2,2, request.getDrawSize4Img())
+                    .addImg(2, 1, request.getDrawRow2Img())
+                    .addImg(1, 2, request.getDrawCol2Img());
         } else {
             builder.setDrawBgColor(NumUtil.decode2int(request.getBgColor(), 0xFFFFFFFF))
                     .setDrawPreColor(NumUtil.decode2int(request.getPreColor(), 0xFF000000));
