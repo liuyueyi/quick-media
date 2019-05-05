@@ -155,7 +155,7 @@ public class Html2ImageWrapper {
 
 
         public Builder setHtml(String html) {
-            this.html = new MarkdownEntity();
+            this.html = new MarkdownEntity(html);
             return this;
         }
 

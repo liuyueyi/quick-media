@@ -116,7 +116,7 @@ markdown转html，转图片的封装类
 <dependency>
     <groupId>com.github.hui.media</groupId>
     <artifactId>markdown-plugin</artifactId>
-    <version>1.1</version>
+    <version>1.2</version>
 </dependency>
 ```
 
