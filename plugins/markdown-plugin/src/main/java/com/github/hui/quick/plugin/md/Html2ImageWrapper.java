@@ -49,14 +49,35 @@ public class Html2ImageWrapper {
         return domParser.getDocument();
     }
 
-
+    /**
+     * html片段，可以额外指定css样式的渲染方式
+     *
+     * @param html
+     * @return
+     */
     public static Builder of(String html) {
         return new Builder().setHtml(html);
     }
 
-
+    /**
+     * 对markdown文档进行渲染
+     *
+     * @param entity
+     * @return
+     */
     public static Builder ofMd(MarkdownEntity entity) {
         return new Builder().setHtml(entity);
+    }
+
+    /**
+     * 对一个完整的html进行渲染
+     *
+     * @param html
+     * @return
+     * @throws Exception
+     */
+    public static Builder ofDoc(String html) throws Exception {
+        return new Builder().setDocument(html);
     }
 
 
@@ -121,11 +142,21 @@ public class Html2ImageWrapper {
          */
         private MarkdownEntity html;
 
+        /**
+         * 样式内容
+         */
+        private String css;
+
 
         private Font font = new Font("宋体", Font.PLAIN, 18);
 
 
         private Integer fontColor;
+
+        /**
+         * 如果想直接渲染整个html，则直接设置这个即可
+         */
+        private Document document;
 
 
         public Builder setW(Integer w) {
@@ -159,9 +190,13 @@ public class Html2ImageWrapper {
             return this;
         }
 
-
         public Builder setHtml(MarkdownEntity html) {
             this.html = html;
+            return this;
+        }
+
+        public Builder setCss(String css) {
+            this.css = css;
             return this;
         }
 
@@ -175,6 +210,10 @@ public class Html2ImageWrapper {
             return this;
         }
 
+        public Builder setDocument(String html) throws Exception {
+            this.document = parseDocument(html);
+            return this;
+        }
 
         public Html2ImageWrapper build() throws Exception {
             HtmlRenderOptions options = new HtmlRenderOptions();
@@ -186,18 +225,25 @@ public class Html2ImageWrapper {
             options.setAutoH(autoH);
             options.setOutType(outType);
 
+            if (document != null) {
+                options.setDocument(document);
+            } else {
+                if (css != null) {
+                    html.setCss(css);
+                } else {
+                    // 没有指定css时，默认配置
+                    if (fontColor != null) {
+                        html.addDivStyle("style", "color:" + options.getFontColor());
+                    }
+                    html.addDivStyle("style", "width:" + w + ";");
+                    html.addWidthCss("img");
+                    html.addWidthCss("code");
+                }
 
-            if (fontColor != null) {
-                html.addDivStyle("style", "color:" + options.getFontColor());
+                options.setDocument(parseDocument(html.toString()));
             }
-            html.addDivStyle("style", "width:" + w + ";");
-            html.addWidthCss("img");
-            html.addWidthCss("code");
-
-            options.setDocument(parseDocument(html.toString()));
 
             return new Html2ImageWrapper(options);
         }
-
     }
 }

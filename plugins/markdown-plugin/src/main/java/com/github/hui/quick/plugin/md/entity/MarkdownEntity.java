@@ -16,7 +16,7 @@ public class MarkdownEntity {
     // css 样式
     private String css = "";
 
-    // 最外网的div标签， 可以用来设置样式，宽高，字体等
+    // 最外层的div标签， 可以用来设置样式，宽高，字体等
     private Map<String, String> divStyle = new ConcurrentHashMap<>();
 
     // 转换后的html文档

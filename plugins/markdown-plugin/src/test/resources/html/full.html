@@ -1,0 +1,227 @@
+<html xmlns="http://www.w3.org/1999/html">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+    <title>通知</title>
+    <style type="text/css">
+        ul, li {
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            margin: 30px 5%;
+            background: #fff;
+        }
+
+        .html-fake {
+            background: #fff;
+            margin: 0 30px;
+            overflow: hidden;
+            font-family: "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", "Helvetica Neue", Helvetica, Arial, sans-serif;
+            min-height: 320px;
+            box-shadow: 0 0 8px 2px rgba(0, 0, 0, 0.08);
+            border-radius: 3px;
+        }
+
+        .body-container {
+            margin: 30px 30px 25px 37px;
+        }
+
+        .body-center .hi {
+            font-size: 18px;
+            color: #000000;
+        }
+
+        .body-center .text {
+            padding-left: 20px;
+            padding-top: 10px;
+            font-size: 14px;
+            color: #333;
+        }
+
+        .content .title {
+            zoom: 1;
+            padding-top: 20px;
+            display: -webkit-box;
+            display: -webkit-flex;
+            display: flex;
+        }
+
+        .content .title::after {
+            clear: both;
+            content: ".";
+            display: block;
+            width: 0;
+            height: 0;
+            visibility: hidden;
+        }
+
+        .content .title .mark {
+            display: inline-block;
+            background: #fc9153;
+            box-shadow: 0 0 13px 0 #fc9153;
+            width: 2px;
+            height: 14px;
+            vertical-align: sub;
+        }
+
+        .content .title .name {
+            color: black;
+            padding-left: 4px;
+            font-weight: bold;
+        }
+
+        .content .title .title-left {
+            font-family: PingFangSC-Medium;
+            font-size: 14px;
+            color: #666;
+            text-align: left;
+        }
+
+        .content .title .title-right {
+            padding-left: 8px;
+            -webkit-box-flex: 1;
+            -webkit-flex: 1;
+            flex: 1;
+        }
+
+        .content .title .title-right .line {
+            border-bottom: 1px solid #ddd;
+            height: 1px;
+            width: 100%;
+            position: relative;
+            top: 9px;
+        }
+
+        .content .block ul {
+            padding-left: 15px;
+        }
+
+        .content .lane-item ul {
+            padding-left: 35px;
+        }
+
+        .content .task-item a {
+            font-size: 14px;
+            color: #3aabff;
+            cursor: pointer;
+            text-decoration: none;
+        }
+
+        .content .no-task .count span {
+            display: inline-block;
+            padding: 0 5px;
+        }
+
+        .body-btn .btn a {
+            display: inline-block;
+            height: 38px;
+            line-height: 38px;
+            padding: 0 16px;
+            background: #fc9153;
+            color: #fff;
+            border-radius: 5px;
+            text-decoration: none;
+            font-size: 14px;
+        }
+
+        .body-bottom {
+            text-align: center;
+        }
+
+        .body-bottom a {
+            font-weight: bold;
+            color: #666666;
+            text-decoration: none;
+        }
+
+        .notice-hint {
+            margin-top: 35px;
+            color: #999;
+            text-align: center;
+            font-size: 14px;
+        }
+
+        .table-title {
+            font-size: 14px;
+            font-weight: bold;
+            color: #777777;
+            font-family: "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", "Helvetica Neue", Helvetica, Arial, sans-serif;
+        }
+
+        .table-body {
+            font-size: 14px;
+            color: #666666;
+            font-family: "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", "Helvetica Neue", Helvetica, Arial, sans-serif;
+        }
+        td {
+            padding-right: 12px;
+            padding-bottom: 12px;
+            width: 150px;
+        }
+
+        .positive {
+            color: green;
+        }
+
+        .negative {
+            color: red;
+        }
+
+    </style>
+</head>
+<body>
+<div class="html-fake">
+    <div class="body-container">
+        <div class="body-center">
+            <div class="hi">
+                Alg:<br/>
+            </div>
+            <div class="text">
+                您好！您所订阅的数据报表信息如下.<br/>
+            </div>
+
+            <div class="content">
+                <div class="title">
+                    <div class="title-left">
+                        <span class="mark"></span>
+                        <span class="name">消费数据</span>
+                    </div>
+                    <div class="title-right">
+                        <div class="line"></div>
+                    </div>
+                </div>
+
+                <div class="block">
+                    <table>
+                        <thead class="table-title">
+                        <td>指标</td>
+                        <td>group_a</td>
+                        <td>group_b</td>
+                        </thead>
+                        <tbody class="table-body">
+                        <tr>
+                            <td>Index_A</td>
+                            <td>0.92264</td>
+                            <td>0.73658<span class="negative">(-0.00069, -0.07500%)&nbsp;&#8595;</span></td>
+                        </tr>
+                        <tr>
+                            <td>Index_B</td>
+                            <td>0.92195</td>
+                            <td>0.73584<span class="negative">(-0.00074, -0.10000%)&nbsp;&#8595;</span></td>
+                        </tr>
+                        <tr>
+                            <td>Index_C</td>
+                            <td>1617.14677</td>
+                            <td>1636.57827<span class="positive">(19.4315, 1.20200%)&nbsp;&#8593;</span></td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>
