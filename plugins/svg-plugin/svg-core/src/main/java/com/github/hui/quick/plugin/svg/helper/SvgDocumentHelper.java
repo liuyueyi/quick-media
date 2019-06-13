@@ -1,7 +1,6 @@
 package com.github.hui.quick.plugin.svg.helper;
 
 import com.github.hui.quick.plugin.svg.util.UriUtil;
-import lombok.extern.slf4j.Slf4j;
 import org.apache.batik.anim.dom.SAXSVGDocumentFactory;
 import org.apache.batik.util.XMLResourceDescriptor;
 import org.w3c.dom.Document;
@@ -18,7 +17,6 @@ import java.util.concurrent.ConcurrentHashMap;
 /**
  * Created by yihui on 2018/1/14.
  */
-@Slf4j
 public class SvgDocumentHelper {
 
     private static final String SVG_CONTENT_TAG = "<svg";

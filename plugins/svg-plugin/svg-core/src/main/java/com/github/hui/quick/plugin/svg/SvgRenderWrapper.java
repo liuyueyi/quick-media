@@ -3,7 +3,6 @@ package com.github.hui.quick.plugin.svg;
 
 import com.github.hui.quick.plugin.svg.helper.SvgDocumentHelper;
 import com.github.hui.quick.plugin.svg.util.ImgParseUtil;
-import lombok.extern.slf4j.Slf4j;
 import org.apache.batik.transcoder.TranscoderException;
 import org.apache.batik.transcoder.TranscoderInput;
 import org.apache.batik.transcoder.TranscoderOutput;
