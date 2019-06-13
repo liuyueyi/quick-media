@@ -24,7 +24,7 @@ public class Md2ImgTest {
                 .setOutType("jpg")
                 .build()
                 .asImage();
-        ImageIO.write(bf, "jpg", new File("test_out.jpg"));
+        ImageIO.write(bf, "jpg", new File("md_out.jpg"));
         System.out.println("---over---");
     }
 

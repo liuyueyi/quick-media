@@ -1,301 +1,328 @@
-## ThreadLocal使用及原理介绍
-> 线程本地变量，每个线程保存变量的副本，对副本的改动，对其他的线程而言是透明的（即隔离的）
+大多涉及到数据的处理，无非CURD四种操作，对于搜索SOLR而言，基本操作也可以说就这么几种，在实际应用中，搜索条件的多样性才是重点，我们在进入复杂的搜索之前，先来看一下如何新增和修改文档
 
-### 1. 使用姿势一览
+<!-- more -->
 
-使用方式也比较简单，常用的三个方法
+## I. 环境准备
 
-```java
-// 设置当前线程的线程局部变量的值
-void set(Object value); 
+solr的基础环境需要准备好，如果对这一块有疑问的童鞋，可以参考下上一篇博文: 《[190510-SpringBoot高级篇搜索之Solr环境搭建与简单测试](http://spring.hhui.top/spring-blog/2019/05/10/190510-SpringBoot高级篇搜索之Solr环境搭建与简单测试/)》
 
-// 该方法返回当前线程所对应的线程局部变量
-public Object get();
+### 1. 环境配置
 
-// 将当前线程局部变量的值删除
-public void remove();
+在pom文件中，设置好对应的依赖
+
+```xml
+<parent>
+    <groupId>org.springframework.boot</groupId>
+    <artifactId>spring-boot-starter-parent</artifactId>
+    <version>2.0.4.RELEASE</version>
+    <relativePath/> <!-- lookup parent from update -->
+</parent>
+
+<properties>
+    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+    <spring-cloud.version>Finchley.RELEASE</spring-cloud.version>
+    <java.version>1.8</java.version>
+</properties>
+
+
+<build>
+    <pluginManagement>
+        <plugins>
+            <plugin>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-maven-plugin</artifactId>
+            </plugin>
+        </plugins>
+    </pluginManagement>
+</build>
+
+<repositories>
+    <repository>
+        <id>spring-milestones</id>
+        <name>Spring Milestones</name>
+        <url>https://repo.spring.io/milestone</url>
+        <snapshots>
+            <enabled>false</enabled>
+        </snapshots>
+    </repository>
+</repositories>
+
+
+<dependencies>
+    <dependency>
+        <groupId>org.springframework.boot</groupId>
+        <artifactId>spring-boot-starter-data-solr</artifactId>
+    </dependency>
+    <dependency>
+        <groupId>org.projectlombok</groupId>
+        <artifactId>lombok</artifactId>
+    </dependency>
+</dependencies>
 ```
 
-下面给个实例，来瞅一下，这个东西一般的使用姿势。通常要获取线程变量， 直接调用 `ParamsHolder.get()` 
+因为我们采用默认的solr访问姿势，所以配置文件中可以不加对应的参数，当然也可以加上
+
+打开 `application.yml` 配置文件
+
+```yaml
+spring:
+  data:
+    solr:
+      host: http://127.0.0.1:8983/solr
+```
+
+如果我们的solr加上了用户名密码访问条件，参数中并没有地方设置username和password，那应该怎么办?
+
+```yml
+spring:
+  data:
+    solr:
+      host: http://admin:admin@127.0.0.1:8983/solr
+```
+
+如上写法，将用户名和密码写入http的连接中
+
+### 2. 自动装配
+
+我们主要使用SolrTemplate来和Solr打交到，因此我们需要先注册这个bean，可以怎么办？
 
 ```java
-public class ParamsHolder {
-    private static final ThreadLocal<Params> PARAMS_INFO = new ThreadLocal<>();
+package com.git.hui.boot.solr.config;
 
-    @ToString
-    @Getter
-    @Setter
-    public static class Params {
-        private String mk;
-    }
+import org.apache.solr.client.solrj.SolrClient;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.data.solr.core.SolrTemplate;
 
-    public static void setParams(Params params) {
-        PARAMS_INFO.set(params);
-    }
+/**
+ * Created by @author yihui in 19:49 19/5/10.
+ */
+@Configuration
+public class SearchAutoConfig {
 
-    public static void clear() {
-        PARAMS_INFO.remove();
-    }
-    
-    public static Params get() {
-        return PARAMS_INFO.get();
-    }
-    
-    
-    public static void main(String[] args) {
-        Thread child = new Thread(new Runnable() {
-            @Override
-            public void run() {
-                System.out.println("child thread initial: " + ParamsHolder.get());
-                ParamsHolder.setParams(new ParamsHolder.Params("thread"));
-                System.out.println("child thread final: " + ParamsHolder.get());
-            }
-        });
-
-
-        child.start();
-
-        System.out.println("main thread initial: " + ParamsHolder.get());
-        ParamsHolder.setParams(new ParamsHolder.Params("main"));
-        System.out.println("main thread final: " + ParamsHolder.get());
+    @Bean
+    @ConditionalOnMissingBean(SolrTemplate.class)
+    public SolrTemplate solrTemplate(SolrClient solrClient) {
+        return new SolrTemplate(solrClient);
     }
 }
 ```
 
-输出结果
+上面的配置是条件注入，只有当SolrTemplate对应的bean没有被自动加载时，才会加载，为什么要怎么干？
 
-```
-child thread initial: null
-main thread initial: null
-child thread final: ParamsHolder.Params(mk=thread)
-main thread final: ParamsHolder.Params(mk=main)
-```
+（可以想一想原因...）
 
-### 2. 实现原理探究
+## II. 使用姿势示例
 
-直接看源码中的两个方法， get/set， 看下到底是如何实现线程变量的
+我们的操作主要依赖的是SolrTemplate，因此有必要在开始之前，看一下它的签名
+
+Spring的源码中，可以发现大多`xxxTemplate`都会实现一个`xxxOperations` 接口，而这个接口就是用来定义CURD的api，比如我们看下 `SolrOperations`中与修改相关的api
 
 ```java
-public void set(T value) {
-   Thread t = Thread.currentThread();
-   ThreadLocalMap map = getMap(t);
-   if (map != null)
-       map.set(this, value);
-   else
-       createMap(t, value);
+default UpdateResponse saveBean(String collection, Object obj) {
+	return saveBean(collection, obj, Duration.ZERO);
 }
 
-public T get() {
-   Thread t = Thread.currentThread();
-   ThreadLocalMap map = getMap(t);
-   if (map != null) {
-       ThreadLocalMap.Entry e = map.getEntry(this);
-       if (e != null) {
-           @SuppressWarnings("unchecked")
-           T result = (T)e.value;
-           return result;
-       }
-   }
-   return setInitialValue();
+/**
+ * Execute add operation against solr, which will do either insert or update with support for commitWithin strategy.
+ *
+ * @param collection must not be {@literal null}.
+ * @param obj must not be {@literal null}.
+ * @param commitWithin max time within server performs commit.
+ * @return {@link UpdateResponse} containing update result.
+ */
+UpdateResponse saveBean(String collection, Object obj, Duration commitWithin);
+
+default UpdateResponse saveBeans(String collection, Collection<?> beans) {
+	return saveBeans(collection, beans, Duration.ZERO);
 }
 
-ThreadLocalMap getMap(Thread t) {
-    return t.threadLocals;
+UpdateResponse saveBeans(String collection, Collection<?> beans, Duration commitWithin);
+
+default UpdateResponse saveDocument(String collection, SolrInputDocument document) {
+	return saveDocument(collection, document, Duration.ZERO);
 }
+
+/**
+ * Add a solrj input document to solr, which will do either insert or update with support for commitWithin strategy
+ *
+ * @param document must not be {@literal null}.
+ * @param commitWithin must not be {@literal null}.
+ * @return {@link UpdateResponse} containing update result.
+ * @since 3.0
+ */
+UpdateResponse saveDocument(String collection, SolrInputDocument document, Duration commitWithin);
+
+
+default UpdateResponse saveDocuments(String collection, Collection<SolrInputDocument> documents) {
+	return saveDocuments(collection, documents, Duration.ZERO);
+}
+
+UpdateResponse saveDocuments(String collection, Collection<SolrInputDocument> documents, Duration commitWithin);
 ```
 
-#### 主要以set方法进行讲解
+上面的api签名中，比较明确的说明了这个 `saveXXX` 既可以用来新增文档，也可以用来修改文档，主要有提供了两类
 
-逻辑比较清晰
+- 单个与批量
+- saveDocument 与 saveBean
 
-- 获取当前线程对象
-- 获取到线程对象中的`threadLocals` 属性
-- 将value塞入`ThreadLocalMap`
+### 1. 添加文档
 
-**threadLocals属性**
+从上面的api签名上看，`saveDocument` 应该是相对原始的操作方式了，因此我们先看下它的使用姿势
 
-这个属性的解释如下，简单来讲，这个里面的变量都是线程独享的，完全由线程自己hold住
+#### a. saveDocument
 
-> ThreadLocal values pertaining to this thread. This map is maintained by the ThreadLocal class.
-
-
-
-接下来需要了解的就是`ThreadLocalMap`这个对象的内部构造了，里面的有个table对象，维护了一个Entry的数组`table`，`Entry`的key为`ThreadLocal`对象，value为具体的值。
-
+首先就是创建文档 `SolrInputDocument` 对象，通过调用`addField`来设置成员值
 
 ```java
-//ThreadLocalMap.java
-static class Entry extends WeakReference<ThreadLocal<?>> {
-       /** The value associated with this ThreadLocal. */
-       Object value;
+public void testAddByDoc() {
+    SolrInputDocument document = new SolrInputDocument();
+    document.addField("id", 3);
+    document.addField("title", "testAddByDoc!");
+    document.addField("content", "通过solrTemplate新增文档");
+    document.addField("type", 2);
+    document.addField("create_at", System.currentTimeMillis() / 1000);
+    document.addField("publish_at", System.currentTimeMillis() / 1000);
 
-       Entry(ThreadLocal<?> k, Object v) {
-           super(k);
-           value = v;
-       }
-   }
-   
-   /**
-    * The table, resized as necessary.
-    * table.length MUST always be a power of two.
-    */
-private Entry[] table;
-   
-private void set(ThreadLocal<?> key, Object value) {
-    Entry[] tab = table;
-    int len = tab.length;
-    int i = key.threadLocalHashCode & (len-1);
-
-    for (Entry e = tab[i];
-         e != null;
-         e = tab[i = nextIndex(i, len)]) {
-        ThreadLocal<?> k = e.get();
-
-        if (k == key) {
-            e.value = value;
-            return;
-        }
-
-        if (k == null) {
-            replaceStaleEntry(key, value, i);
-            return;
-        }
-    }
-
-    tab[i] = new Entry(key, value);
-    int sz = ++size;
-    if (!cleanSomeSlots(i, sz) && sz >= threshold)
-        rehash();
+    UpdateResponse response = solrTemplate.saveDocument("yhh", document);
+    solrTemplate.commit("yhh");
+    System.out.println("over:" + response);
 }
 ```
 
-聚焦在  `int i = key.threadLocalHashCode & (table.length - 1);`  这一行，这个就是获取Entry对象在`table`中索引值的主要逻辑，主要利用当前线程的hashCode值
-
-假设出现两个不同的线程，这个code值一样，会如何？
-
-这种类似hash碰撞的场景，会调用 `nextIndex` 来获取下一个位置
-
----
-
-针对上面的逻辑，有点有必要继续研究下， `hashCode` 的计算方式， 为什么要和数组的长度进行与计算
+<font color="red">注意：保存文档之后，一定得调用commit提交</font>
 
 
-> 作为ThreadLocal实例的变量只有 threadLocalHashCode 这一个，`nextHashCode` 和`HASH_INCREMENT` 是ThreadLocal类的静态变量，实际上`HASH_INCREMENT`是一个常量，表示了连续分配的两个ThreadLocal实例的threadLocalHashCode值的增量，而nextHashCode 的表示了即将分配的下一个ThreadLocal实例的threadLocalHashCode 的值
+#### b. saveBean
 
-> 所有ThreadLocal对象共享一个AtomicInteger对象nextHashCode用于计算hashcode，一个新对象产生时它的hashcode就确定了，算法是从0开始，以HASH_INCREMENT = 0x61c88647为间隔递增，这是ThreadLocal唯一需要同步的地方。根据hashcode定位桶的算法是将其与数组长度-1进行与操作
+前面需要创建`SolrInputDocument`对象，我们更希望的使用case是直接传入一个POJO，然后自动与solr的filed进行关联
 
-> ThreadLocalMap的初始长度为16，每次扩容都增长为原来的2倍，即它的长度始终是2的n次方，上述算法中使用0x61c88647可以让hash的结果在2的n次方内尽可能均匀分布，减少冲突的概率
+因此一种使用方式可以如下
 
-
-### 3. 线程池中使用`ThreadLocal`的注意事项
-
-这里主要的一个问题是线程复用时， 如果不清除掉ThreadLocal 中的值，就会有可怕的事情发生， 先简单的演示一下
+- 定义pojo，成员上通过 @Field 注解来关联solr的field
+- pojo对象直接当做参数传入，保存之后，执行 commit 提交
 
 ```java
-private static final ThreadLocal<AtomicInteger> threadLocal =new ThreadLocal<AtomicInteger>() {
+@Data
+public static class DocDO {
+    @Field("id")
+    private Integer id;
+    @Field("title")
+    private String title;
+    @Field("content")
+    private String content;
+    @Field("type")
+    private Integer type;
+    @Field("create_at")
+    private Long createAt;
+    @Field("publish_at")
+    private Long publishAt;
+}
 
-        @Override
-        protected AtomicInteger initialValue() {
-            return new AtomicInteger(0);
-        }
-    };
+/**
+ * 新增
+ */
+private void testAddByBean() {
+    DocDO docDO = new DocDO();
+    docDO.setId(4);
+    docDO.setTitle("addByBean");
+    docDO.setContent("新增一个测试文档");
+    docDO.setType(1);
+    docDO.setCreateAt(System.currentTimeMillis() / 1000);
+    docDO.setPublishAt(System.currentTimeMillis() / 1000);
 
-
-    static class Task implements Runnable {
-
-        @Override
-        public void run() {
-            AtomicInteger s = threadLocal.get();
-            int initial = s.getAndIncrement();
-            // 期望初始为0
-            System.out.println(initial);
-        }
-    }
-
-
-    public static void main(String[] args) {
-
-        ExecutorService executor = Executors.newFixedThreadPool(2);
-        executor.execute(new Task());
-        executor.execute(new Task());
-        executor.execute(new Task());
-        executor.shutdown();
-    }
-```
-
-输出结果
-
-```
-0
-0
-1
-```
-
-说好的线程变量，这里居然没有按照我们预期的来玩，主要原因就是线程复用了，而线程中的局部变量没有清零，导致下一个使用这个线程的时候，这些局部变量也带过来，导致没有按照我们的预期使用
-
-这个最可能导致的一个超级严重的问题，就是web应用中的用户串掉的问题，如果我们将每个用户的信息保存在 `ThreadLocal` 中， 如果出现线程复用了，那么问题就会导致明明是张三用户，结果登录显示的是李四的帐号，这下就真的呵呵了
-
-**因此，强烈推荐，对于线程变量，一但不用了，就显示的调用 `remove()`方法进行清楚**
-
-### 4. 经典case
-
-`SimpleDataFormate` 是一个非线程安全的类，可以使用 ThreadLocal 完成的线程安全的使用
-
-```java
-public class ThreadLocalDateFormat {
-    static ThreadLocal<DateFormat> sdf = new ThreadLocal<DateFormat>() {
-
-        @Override
-        protected DateFormat initialValue() {
-            return new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-        }
-    };
-
-    public static String date2String(Date date) {
-        return sdf.get().format(date);
-    }
-
-    public static Date string2Date(String str) throws ParseException {
-        return sdf.get().parse(str);
-    }
+    UpdateResponse response = solrTemplate.saveBean("yhh", docDO);
+    solrTemplate.commit("yhh");
+    System.out.println(response);
 }
 ```
 
-**想一想，为什么这种方式是线程安全的呢？**
+#### c. 批量
 
-## II. 小结
-
-### 1. 一句话介绍
-
-ThreadLocal  线程本地变量，每个线程保存变量的副本，对副本的改动，对其他的线程而言是透明的（即隔离的）
-
-### 2. 常用方法
-
-三个常用的方法
+批量的方式就比较简单了，传入集合即可
 
 ```java
-// 设置当前线程的线程局部变量的值
-void set(Object value); 
+private void testBatchAddByBean() {
+    DocDO docDO = new DocDO();
+    docDO.setId(5);
+    docDO.setTitle("addBatchByBean - 1");
+    docDO.setContent("新增一个测试文档");
+    docDO.setType(1);
+    docDO.setCreateAt(System.currentTimeMillis() / 1000);
+    docDO.setPublishAt(System.currentTimeMillis() / 1000);
 
-// 该方法返回当前线程所对应的线程局部变量
-public Object get();
+    DocDO docDO2 = new DocDO();
+    docDO2.setId(6);
+    docDO2.setTitle("addBatchByBean - 2");
+    docDO2.setContent("新增一个测试文档");
+    docDO2.setType(1);
+    docDO2.setCreateAt(System.currentTimeMillis() / 1000);
+    docDO2.setPublishAt(System.currentTimeMillis() / 1000);
 
-// 将当前线程局部变量的值删除
-public void remove();
+    UpdateResponse response = solrTemplate.saveBeans("yhh", Arrays.asList(docDO, docDO2));
+    solrTemplate.commit("yhh");
+    System.out.println(response);
+}
 ```
 
-### 3. 实现原理
+#### d. 测试
 
-利用了HashMap的设计理念，一个map中存储Thread->线程变量的映射关系, 因此线程变量在多线程之间是隔离的
+上面的几个方法，我们执行之后，我们看下是否能查询到新增加的数据
+
+![output](http://upload-images.jianshu.io/upload_images/1405936-d42c94cf9e322772?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
 
 
-### 4. 注意事项
+### 2. 文档修改
 
-通常建议是线程执行完毕之后，主动去失效掉ThreadLocal中的变量，以防止线程复用导致变量被乱用了
+在看前面的接口签名时，就知道修改和新增用的是相同的api，所以修改文档和上面的使用实际上也没有什么特别的，下面简单的演示一下
+
+```java
+public void testUpdateDoc() {
+    DocDO docDO = new DocDO();
+    docDO.setId(5);
+    docDO.setTitle("修改之后!!!");
+    docDO.setType(1);
+    docDO.setCreateAt(System.currentTimeMillis() / 1000);
+    docDO.setPublishAt(System.currentTimeMillis() / 1000);
+
+    UpdateResponse response = solrTemplate.saveBean("yhh", docDO);
+    solrTemplate.commit("yhh");
+    System.out.println(response);
+}
+```
+
+上面的实例中，修改了id为5的文档标题，并删除了content内容，执行完毕之后，结果如何呢？
+
+![output](http://upload-images.jianshu.io/upload_images/1405936-89fcf22af5be3e07?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
+
+- title被替换
+- content没有了
+
+**到这里就有个疑问了，对于调用而言，怎么保证是修改还是新增呢？**
+
+- 这里主要是根据id来判断，这个id类似db中的唯一主键，当我们没有指定id时，会随机生成一个id
+- 如果存在相同的id，则修改文档；如果不存在，则新增文档
 
 
 ## III. 其他
 
-### 声明
+### 0. 项目
 
-尽信书则不如，已上内容，纯属一家之言，因本人能力一般，见识有限，如有问题，请不吝指正，感激
+- 项目源码：[https://github.com/liuyueyi/spring-boot-demo](https://github.com/liuyueyi/spring-boot-demo)
+- 工程源码: [https://github.com/liuyueyi/spring-boot-demo/blob/master/spring-boot/140-search-solr](https://github.com/liuyueyi/spring-boot-demo/blob/master/spring-boot/140-search-solr)
+
+### 1. 一灰灰Blog
+
+尽信书则不如，以上内容，纯属一家之言，因个人能力有限，难免有疏漏和错误之处，如发现bug或者有更好的建议，欢迎批评指正，不吝感激
+
+下面一灰灰的个人博客，记录所有学习和工作中的博文，欢迎大家前去逛逛
+
+- 一灰灰Blog个人博客 [https://blog.hhui.top](https://blog.hhui.top)
+- 一灰灰Blog-Spring专题博客 [http://spring.hhui.top](http://spring.hhui.top)
+
+
+![QrCode](http://upload-images.jianshu.io/upload_images/1405936-49b42ccb3f85fd8b?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
+
+
