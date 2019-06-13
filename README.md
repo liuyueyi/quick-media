@@ -108,9 +108,9 @@
 </dependency>
 ```
 
-**markdown-plugin**
+**markdown-plugin** 
 
-markdown转html，转图片的封装类
+markdown转html，转图片的封装类， 详细内容查看: [markdown-plugin](plugins/markdown-plugin/readme.md)
 
 ```xml
 <dependency>

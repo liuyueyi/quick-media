@@ -4,8 +4,8 @@
 
 这个插件，主要提供了两个功能
 
-- markdown 转 html 
-- html 转图片
+- [markdown 转 image](https://github.com/liuyueyi/quick-media/blob/master/doc/md/md2html.md) 
+- [html 转图片](https://github.com/liuyueyi/quick-media/blob/master/doc/md/html2image.md)
 
 ### 使用说明
 
@@ -48,7 +48,7 @@ public void testMd2Img() throws Exception {
 }
 ```
 
-输出结果直接放在项目中，可以点击查看 [md2img输出图片](test_out.jpg)
+输出结果直接放在项目中，可以点击查看 [md2img输出图片](md_out.jpg)
 
 
 #### 3. html 转图片使用示例
