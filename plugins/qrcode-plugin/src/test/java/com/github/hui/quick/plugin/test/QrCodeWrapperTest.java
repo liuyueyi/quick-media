@@ -77,6 +77,7 @@ public class QrCodeWrapperTest {
                     .setDrawBgColor(0xffffffff)
                     .setPadding(0)
                     .setLogo(logo)
+//                    当不指定logo的样式和边框时，如果logo为png，那么透明的地方会显示二维码信息
                     .setLogoBgColor(0xff808080)
                     .setLogoBorder(true)
                     .asFile("src/test/qrcode/gen_300x300_logo.png");
@@ -166,7 +167,7 @@ public class QrCodeWrapperTest {
         String msg = "https://liuyueyi.github.io/hexblog/";
         // 根据本地文件生成待logo的二维码， 重新着色位置探测图像
         try {
-            String logo = "mg.jpg";
+            String logo = "lobo_logo.png";
             String bg = "bg.png";
             BufferedImage img = QrCodeGenWrapper.of(msg)
                     .setW(500)
@@ -176,16 +177,18 @@ public class QrCodeWrapperTest {
                     .setPadding(1)
                     .setErrorCorrection(ErrorCorrectionLevel.H)
                     .setLogo(logo)
-                    .setLogoStyle(QrCodeOptions.LogoStyle.ROUND)
-                    .setLogoBgColor(0xff00cc00)
+                    .setLogoBorder(true)
+//                    .setLogoStyle(QrCodeOptions.LogoStyle.ROUND)
+//                    .setLogoBgColor(0xff000000)
                     .setBgImg(bg)
                     .setDrawStyle(QrCodeOptions.DrawStyle.IMAGE.name())
                     .setDrawImg("xhrSize4.jpg")
+                    .setPicType("jpg")
                     .asBufferedImage();
 
 
             ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
-            ImageIO.write(img, "png", outputStream);
+            ImageIO.write(img, "jpg", outputStream);
             String img64 = Base64Util.encode(outputStream);
             System.out.println("<img src=\"data:image/png;base64," + img64 + "\" />");
         } catch (Exception e) {
