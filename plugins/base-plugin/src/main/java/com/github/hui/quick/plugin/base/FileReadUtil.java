@@ -1,7 +1,6 @@
 package com.github.hui.quick.plugin.base;
 
 import com.google.common.base.Joiner;
-import org.apache.commons.lang3.StringUtils;
 
 import java.io.*;
 import java.nio.charset.Charset;
