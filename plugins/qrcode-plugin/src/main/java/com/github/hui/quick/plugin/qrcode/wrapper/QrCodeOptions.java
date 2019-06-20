@@ -5,12 +5,10 @@ import com.google.zxing.EncodeHintType;
 import lombok.Builder;
 import lombok.Data;
 import org.apache.commons.lang3.StringUtils;
-import org.apache.commons.lang3.tuple.ImmutablePair;
 
 import java.awt.*;
 import java.awt.geom.Ellipse2D;
 import java.awt.image.BufferedImage;
-import java.nio.Buffer;
 import java.util.HashMap;
 import java.util.Map;
 

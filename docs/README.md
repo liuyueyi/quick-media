@@ -193,3 +193,27 @@ maven的引入方式需要先添加一下`repository`
     <version>x.x</version>
 </dependency>
 ```
+
+## 1.4 实例操作
+
+在QuickMedia项目内部集成了一个建议的控制台，在直接捞出源码进行测试时，可以启动进行测试；此外也支持在线测试
+
+基于thymeleaf实现的前端演示网站，相关代码写在本工程中：
+
+- Z+ : [http://media.hhui.top:8080/media/webs](http://media.hhui.top:8080/media/webs)
+
+使用react.js重构后的前端网站，实现前后端分离，前端网页借助gitee的pages直接部署，测试链接
+
+- Z+ | web : [http://liuyueyi.gitee.io/zweb](http://liuyueyi.gitee.io/zweb)
+- Z+ | web : [https://zweb.hhui.top/#/index](https://zweb.hhui.top/#/index)
+
+web演示demo如
+
+![](https://raw.githubusercontent.com/liuyueyi/quick-media/master/doc/img/demo/zwebdemo.gif)
+
+小程序测试demo（较长时间没有更新了...)
+
+![](https://camo.githubusercontent.com/010cbb585ddcd073df7e3cfdad02860ce5eed7fe/687474703a2f2f73322e6d6f677563646e2e636f6d2f6d6c63646e2f6334353430362f3137313132335f33693434693033386636386765626b646b35323330323138363466366c5f333230783332302e6a7067)
+
+
+

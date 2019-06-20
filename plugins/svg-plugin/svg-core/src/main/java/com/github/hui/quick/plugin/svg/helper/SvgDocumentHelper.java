@@ -28,7 +28,7 @@ public class SvgDocumentHelper {
     private static Map<String, Document> cacheDocMap = new ConcurrentHashMap<>();
 
 
-    public static Document loadDocument(String path, Map<String, Object> paramMap) throws URISyntaxException, IOException, NoSuchFieldException, IllegalAccessException {
+    public static Document loadDocument(String path, Map<String, Object> paramMap) throws URISyntaxException, IOException {
         Document doc = getDocument(path);
         fillById(doc, paramMap);
         return doc;
