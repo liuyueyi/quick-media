@@ -30,6 +30,15 @@ public class Html2ImageByJsWrapper {
         }
     }
 
+    private static String getPhantomJsPath() {
+        String path = System.getProperty("phantomjs.binary.path");
+        if (path == null || "".endsWith(path)) {
+            return "/usr/local/bin/phantomjs";
+        } else {
+            return path;
+        }
+    }
+
     private static PhantomJSDriver getPhantomJs() {
         //设置必要参数
         DesiredCapabilities dcaps = new DesiredCapabilities();
@@ -43,7 +52,7 @@ public class Html2ImageByJsWrapper {
         dcaps.setJavascriptEnabled(true);
         //驱动支持（第二参数表明的是你的phantomjs引擎所在的路径，which/whereis phantomjs可以查看）
         // fixme 这里写了执行， 可以考虑判断系统是否有安装，并获取对应的路径 or 开放出来指定路径
-        dcaps.setCapability(PhantomJSDriverService.PHANTOMJS_EXECUTABLE_PATH_PROPERTY, "/usr/local/bin/phantomjs");
+        dcaps.setCapability(PhantomJSDriverService.PHANTOMJS_EXECUTABLE_PATH_PROPERTY, getPhantomJsPath());
         //创建无界面浏览器对象
         return new PhantomJSDriver(dcaps);
     }

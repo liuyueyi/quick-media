@@ -21,7 +21,7 @@ jar包引入，请注意使用最新的版本
 <dependency>
     <groupId>com.github.hui.media</groupId>
     <artifactId>date-plugin</artifactId>
-    <version>1.0</version>
+    <version>2.0</version>
 </dependency>
 ```
 
@@ -35,4 +35,23 @@ jar包引入，请注意使用最新的版本
 - 一个扩展类 `ChineseDateExtendTool` 封装了农历输出
 
 
-具体使用方法，可以参考方法签名
+具体使用方法，可以参考方法签名，下面是一个简单的case
+
+```java
+@Test
+public void testDate2Lunar() {
+    LocalDateTime now = LocalDateTime.now();
+    System.out.println(now + ">>>" + ChineseDateExtendTool.getNowLunarDate());
+
+    System.out.println(now + ">>>" +
+            ChineseDateExtendTool.getLunarDateByTimestamp(now.toInstant(ZoneOffset.ofHours(8)).toEpochMilli()));
+}
+```
+
+输出结果如下
+
+
+```bash
+2019-06-20T08:08:19.758>>>己亥年伍月壹捌 辰时
+2019-06-20T08:08:19.758>>>己亥年伍月壹捌 辰时
+```

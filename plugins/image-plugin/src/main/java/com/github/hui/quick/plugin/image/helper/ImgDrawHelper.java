@@ -297,8 +297,6 @@ public class ImgDrawHelper {
         return lastX + tmpCharOffsetX;
     }
 
-
-
     /**
      * 图片旋转
      * @param source

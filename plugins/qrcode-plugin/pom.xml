@@ -5,29 +5,23 @@
     <parent>
         <artifactId>plugins</artifactId>
         <groupId>com.github.hui.media</groupId>
-        <version>1.1</version>
+        <version>2.0</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
-    <groupId>com.github.hui.media</groupId>
     <artifactId>qrcode-plugin</artifactId>
-    <version>1.2</version>
-
-
+    <version>2.0</version>
 
     <properties>
         <zxing.version>3.3.0</zxing.version>
     </properties>
 
-
     <dependencies>
-
         <dependency>
             <groupId>com.github.hui.media</groupId>
             <artifactId>base-plugin</artifactId>
-            <version>1.1</version>
+            <version>2.0</version>
         </dependency>
-
 
         <dependency>
             <groupId>org.projectlombok</groupId>
@@ -40,8 +34,6 @@
             <version>2.6</version>
             <scope>provided</scope>
         </dependency>
-
-
         <dependency>
             <groupId>org.slf4j</groupId>
             <artifactId>slf4j-api</artifactId>

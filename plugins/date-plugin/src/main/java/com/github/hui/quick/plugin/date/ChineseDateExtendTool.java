@@ -1,16 +1,18 @@
 package com.github.hui.quick.plugin.date;
 
-import java.util.Calendar;
+import java.time.Instant;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
 
 /**
  * Created by yihui on 2017/9/17.
  */
 public class ChineseDateExtendTool {
 
-    private static final String[] tianGan = {"甲", "乙", "丙", "丁", "戊", "己", "庚", "辛", "壬", "癸"};
-    private static final String[] diZhi = {"子", "丑", "寅", "卯", "辰", "巳", "午", "未", "申", "酉", "戌", "亥"};
+    private static final String[] TIAN_GAN = {"甲", "乙", "丙", "丁", "戊", "己", "庚", "辛", "壬", "癸"};
+    private static final String[] DI_ZHI = {"子", "丑", "寅", "卯", "辰", "巳", "午", "未", "申", "酉", "戌", "亥"};
 
-    private static final String[] HANZI = {"壹", "贰", "叁", "肆", "伍", "陆", "柒", "捌", "玖", "拾"};
+    private static final String[] HAN_ZI = {"壹", "贰", "叁", "肆", "伍", "陆", "柒", "捌", "玖", "拾"};
 
 
     /**
@@ -19,7 +21,7 @@ public class ChineseDateExtendTool {
      * Dizhi: 子丑寅卯辰巳无为申酉戌亥
      */
     public static String lunarYearToGanZhi(int lunarYear) {
-        return tianGan[(lunarYear - 4) % 10] + diZhi[(lunarYear - 4) % 12] + "年";
+        return TIAN_GAN[(lunarYear - 4) % 10] + DI_ZHI[(lunarYear - 4) % 12] + "年";
     }
 
 
@@ -32,22 +34,22 @@ public class ChineseDateExtendTool {
     public static String lunarMonthToChinese(int month, boolean isleap) {
         String prefix = isleap ? "润" : "";
         if (month <= 10) {
-            return prefix + HANZI[month - 1] + "月";
+            return prefix + HAN_ZI[month - 1] + "月";
         } else {
-            return prefix + HANZI[9] + HANZI[month % 10 - 1] + "月";
+            return prefix + HAN_ZI[9] + HAN_ZI[month % 10 - 1] + "月";
         }
     }
 
 
     public static String lunarDayToChinese(int day) {
         if (day <= 10) {
-            return "初" + HANZI[day - 1];
+            return "初" + HAN_ZI[day - 1];
         } else if (day == 20) {
             return "贰拾";
-        } else if( day == 30) {
+        } else if (day == 30) {
             return "叁拾";
         } else {
-            return HANZI[day / 10 - 1] + HANZI[day % 10 - 1];
+            return HAN_ZI[day / 10 - 1] + HAN_ZI[day % 10 - 1];
         }
     }
 
@@ -60,9 +62,9 @@ public class ChineseDateExtendTool {
      */
     public static String hourToChinese(int hour) {
         if (hour == 23) {
-            return diZhi[0] + "时";
+            return DI_ZHI[0] + "时";
         } else {
-            return diZhi[(hour + 1) / 2] + "时";
+            return DI_ZHI[(hour + 1) / 2] + "时";
         }
     }
 
@@ -83,30 +85,40 @@ public class ChineseDateExtendTool {
 
 
     /**
-     * 获取当前的阴历日期
+     * 根据当前时间，转换为天干地支计时
      *
      * @return
      */
-    public static String getNowLunarDate(boolean containHour) {
-        Calendar rightNow = Calendar.getInstance();
-        int year = rightNow.get(Calendar.YEAR);
-        int month = rightNow.get(Calendar.MONTH) + 1; //第一个月从0开始，所以得到月份＋1
-        int day = rightNow.get(Calendar.DAY_OF_MONTH);
-        int hour = rightNow.get(Calendar.HOUR_OF_DAY);
-
-        ChineseDateTool.Solar solar = new ChineseDateTool.Solar(year, month, day);
+    public static String getNowLunarDate(LocalDateTime localDateTime, boolean containHour) {
+        ChineseDateTool.Solar solar = new ChineseDateTool.Solar(localDateTime.getYear(), localDateTime.getMonthValue(),
+                localDateTime.getDayOfMonth());
         ChineseDateTool.Lunar lunar = ChineseDateTool.solarToLunar(solar);
 
         if (containHour) {
-            return parseLunar(lunar) + " " + hourToChinese(hour);
+            return parseLunar(lunar) + " " + hourToChinese(localDateTime.getHour());
         } else {
             return parseLunar(lunar);
         }
     }
 
-
+    /**
+     * 将当前时间转为生辰八字方式
+     *
+     * @return
+     */
     public static String getNowLunarDate() {
-        return getNowLunarDate(true);
+        return getNowLunarDate(LocalDateTime.now(), true);
+    }
+
+    /**
+     * 根据ms时间，转为对应的天干地支计时
+     *
+     * @param timestamp
+     * @return
+     */
+    public static String getLunarDateByTimestamp(long timestamp) {
+        LocalDateTime time = Instant.ofEpochMilli(timestamp).atZone(ZoneId.systemDefault()).toLocalDateTime();
+        return getNowLunarDate(time, true);
     }
 
 }

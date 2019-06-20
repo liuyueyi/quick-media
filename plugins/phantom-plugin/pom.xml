@@ -5,13 +5,12 @@
     <parent>
         <artifactId>plugins</artifactId>
         <groupId>com.github.hui.media</groupId>
-        <version>1.1</version>
+        <version>2.0</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
-    <groupId>com.github.hui.media</groupId>
     <artifactId>phantom-plugin</artifactId>
-    <version>1.1</version>
+    <version>2.0</version>
 
     <repositories>
         <repository>
@@ -41,13 +40,6 @@
         </dependency>
 
         <dependency>
-            <groupId>com.google.guava</groupId>
-            <artifactId>guava</artifactId>
-            <version>21.0</version>
-        </dependency>
-
-
-        <dependency>
             <groupId>org.slf4j</groupId>
             <artifactId>slf4j-api</artifactId>
         </dependency>
@@ -61,7 +53,6 @@
         <dependency>
             <groupId>ch.qos.logback</groupId>
             <artifactId>logback-classic</artifactId>
-            <version>1.1.7</version>
         </dependency>
 
     </dependencies>

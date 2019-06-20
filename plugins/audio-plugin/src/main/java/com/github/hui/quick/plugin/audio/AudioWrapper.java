@@ -1,5 +1,6 @@
 package com.github.hui.quick.plugin.audio;
 
+import com.github.hui.quick.plugin.base.FileReadUtil;
 import com.github.hui.quick.plugin.base.FileWriteUtil;
 import com.github.hui.quick.plugin.base.ProcessUtil;
 import lombok.extern.slf4j.Slf4j;
@@ -20,20 +21,17 @@ import java.util.Map;
 public class AudioWrapper {
 
     public static Builder<String> of(String str) {
-        Builder<String> builder = new Builder<>();
-        return builder.setSource(str);
+        return new Builder<String>().setSource(str);
     }
 
 
     public static Builder<URI> of(URI uri) {
-        Builder<URI> builder = new Builder<>();
-        return builder.setSource(uri);
+        return new Builder<URI>().setSource(uri);
     }
 
 
     public static Builder<InputStream> of(InputStream inputStream) {
-        Builder<InputStream> builder = new Builder<>();
-        return builder.setSource(inputStream);
+        return new Builder<InputStream>().setSource(inputStream);
     }
 
 
@@ -75,7 +73,7 @@ public class AudioWrapper {
         /**
          * 命令行参数
          */
-        private Map<String, Object> options = new HashMap<>();
+        private Map<String, Object> options;
 
 
         /**
@@ -86,6 +84,18 @@ public class AudioWrapper {
 
         private String tempOutputFile;
 
+        public Builder() {
+            options = new HashMap<>(8);
+
+            // 添加兜底的配置信息
+
+            // 覆盖写
+            addOption("y", "")
+                    // 解决mac/ios 显示音频时间不对的问题
+                    .addOption("write_xing", 0)
+                    // 不输出日志
+                    .addOption("loglevel", "quiet");
+        }
 
         public Builder<T> setSource(T source) {
             this.source = source;
@@ -119,30 +129,18 @@ public class AudioWrapper {
 
             tempOutputFile = tempFileInfo.getPath() + "/" + tempFileInfo.getFilename() + "_out." + outputType;
 
-            return new AudioOptions().setSrc(tempFileInfo.getAbsFile())
-                    .setDest(tempOutputFile)
-                    .addOption("y", "") // 覆盖写
-                    .addOption("write_xing", 0) // 解决mac/ios 显示音频时间不对的问题
-                    .addOption("loglevel", "quiet") // 不输出日志
-                    .build();
+            return new AudioOptions().setSrc(tempFileInfo.getAbsFile()).setDest(tempOutputFile).build();
         }
 
 
         public InputStream asStream() throws Exception {
             String output = asFile();
-
-            if (output == null) {
-                return null;
-            }
-
-
-            return new FileInputStream(new File(output));
+            return output == null ? null : FileReadUtil.getStreamByFileName(output);
         }
-
 
         public String asFile() throws Exception {
             String cmd = builder();
-            return !run(cmd) ? null : tempOutputFile;
+            return run(cmd) ? tempOutputFile : null;
         }
     }
 

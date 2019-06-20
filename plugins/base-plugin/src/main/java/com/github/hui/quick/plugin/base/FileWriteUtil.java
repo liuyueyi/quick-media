@@ -10,6 +10,7 @@ import org.apache.commons.lang3.time.DateFormatUtils;
 import java.io.*;
 import java.net.URI;
 import java.util.Date;
+import java.util.Random;
 
 /**
  * Created by yihui on 2017/7/13.
@@ -17,10 +18,20 @@ import java.util.Date;
 @Slf4j
 public class FileWriteUtil {
 
-    public static String TEMP_PATH = "/tmp/quickmedia";
+    public static String TEMP_PATH = "/tmp/quickmedia/";
 
     public static String getTmpPath() {
-        return TEMP_PATH + "/" + DateFormatUtils.format(new Date(), "yyyyMMdd");
+        // 优先从系统配置中获取获取临时目录参数，不存在时，用兜底的目录
+        String tmpPathEnvProperties = System.getProperty("quick.media.tmp.path");
+        if (StringUtils.isNotBlank(tmpPathEnvProperties)) {
+            if (tmpPathEnvProperties.endsWith("/")) {
+                TEMP_PATH = tmpPathEnvProperties;
+            } else {
+                TEMP_PATH = tmpPathEnvProperties + "/";
+            }
+        }
+
+        return TEMP_PATH + DateFormatUtils.format(new Date(), "yyyyMMdd");
     }
 
     public static <T> FileInfo saveFile(T src, String inputType) throws Exception {
@@ -34,7 +45,9 @@ public class FileWriteUtil {
             // 输入流保存在到临时目录
             return saveFileByStream((InputStream) src, inputType);
         } else {
-            throw new IllegalStateException("save file parameter only support String/URI/InputStream type! but input type is: " + (src == null ? null : src.getClass()));
+            throw new IllegalStateException(
+                    "save file parameter only support String/URI/InputStream type! but input type is: " +
+                            (src == null ? null : src.getClass()));
         }
     }
 
@@ -68,7 +81,7 @@ public class FileWriteUtil {
 
 
     /**
-     * 下载远程文件， 保存到临时目录, 病生成文件信息
+     * 下载远程文件， 保存到临时目录, 生成文件信息
      *
      * @param uri
      * @return
@@ -111,7 +124,8 @@ public class FileWriteUtil {
      * @param filename
      * @return
      */
-    public static FileInfo saveFileByStream(InputStream stream, String path, String filename, String fileType) throws FileNotFoundException {
+    public static FileInfo saveFileByStream(InputStream stream, String path, String filename, String fileType)
+            throws FileNotFoundException {
         return saveFileByStream(stream, new FileInfo(path, filename, fileType));
     }
 
@@ -162,6 +176,10 @@ public class FileWriteUtil {
         }
     }
 
+    /**
+     * 用于生成临时文件名后缀的随机生成器
+     */
+    private static Random FILENAME_GEN_RANDOM = new Random();
 
     /**
      * 临时文件名生成： 时间戳 + 0-1000随机数
@@ -169,7 +187,7 @@ public class FileWriteUtil {
      * @return
      */
     private static String genTempFileName() {
-        return System.currentTimeMillis() + "_" + ((int) (Math.random() * 1000));
+        return System.currentTimeMillis() + "_" + FILENAME_GEN_RANDOM.nextInt(1000);
     }
 
 
@@ -199,6 +217,11 @@ public class FileWriteUtil {
         }
     }
 
+    /**
+     * 修改文件权限，设置为可读写
+     *
+     * @param file
+     */
     private static void modifyFileAuth(File file) {
         boolean ans = file.setExecutable(true, false);
         ans = file.setReadable(true, false) && ans;
