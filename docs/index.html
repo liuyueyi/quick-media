@@ -24,15 +24,43 @@
       repo: 'https://github.com/liuyueyi/quick-media',
       loadSidebar: true,
       subMaxLevel: 3,
-      coverpage: true
+      coverpage: true,
+      auto2top: true,
+      logo: '/_image/logo.png',
+      // 完整配置参数
+      search: {
+        maxAge: 86400000, // 过期时间，单位毫秒，默认一天
+        paths: 'auto', // or 'auto'
+        placeholder: 'Type to search',
+
+        // 支持本地化
+        placeholder: {
+          '/': '输入关键字站内搜索'
+        },
+
+        noData: 'No Results!',
+
+        // 支持本地化
+        noData: {
+          '/zh-cn/': '找不到结果',
+          '/': 'No Results'
+        },
+
+        // 搜索标题的最大程级, 1 - 6
+        depth: 2
+      }
+   
     }
   </script>
   <script src="//unpkg.com/docsify/lib/docsify.min.js"></script>
   <script src="//unpkg.com/docsify-copy-code"></script>
+  <script src="//unpkg.com/prismjs/components/prism-java.js"></script>
+  <script src="//unpkg.com/docsify/lib/plugins/zoom-image.js"></script>
+  <script src="//unpkg.com/docsify/lib/plugins/search.js"></script>
   
-<!-- <link rel="stylesheet" href="//unpkg.com/gitalk/dist/gitalk.css"> -->
+<link rel="stylesheet" href="//unpkg.com/gitalk/dist/gitalk.css">
  
-<!-- <script src="//unpkg.com/docsify/lib/plugins/gitalk.min.js"></script>
+<script src="//unpkg.com/docsify/lib/plugins/gitalk.min.js"></script>
 <script src="//unpkg.com/gitalk/dist/gitalk.min.js"></script>
 
 <script>
@@ -42,9 +70,8 @@
     repo: 'https://github.com/liuyueyi/quick-media',
     owner: 'liuyueyi',
     admin: ['liuyueyi'],
-    distractionFreeMode: false,
-    id:decodeURI(window.location.pathname)
+    distractionFreeMode: false
   })
-</script> -->
+</script>
 </body>
 </html>

@@ -10,10 +10,16 @@
 >
 > mult-media process Web Service by FFMPEG & ImageMagic & SpringMVC
  
-本项目为一个提供图片 + 音频 + 视频处理的Web项目，我们的目标是封装一套多媒体文件处理的公共类库，简化各种复杂的调用
+本项目为一个提供图片 + 音频 + 视频处理的Web项目，我们的目标是封装一套多媒体文件处理的公共类库，简化各种复杂的调用；利用 spring-boot 来提供http接口实现多媒体的操作实例功能
 
-利用 spring-boot 来提供http接口实现多媒体的操作
+整理了下QuickMedia的使用与技术文档，可以通过下面的链接进行查看
 
+- [http://liuyueyi.gitee.io/quick-media/#/](http://liuyueyi.gitee.io/quick-media/#/)
+- [https://liuyueyi.github.io/quick-media/#/](https://liuyueyi.github.io/quick-media/#/)
+
+线上体验地址
+
+- Z+ | web : [https://zweb.hhui.top/#/index](https://zweb.hhui.top/#/index)
 
 ### 使用说明
 
@@ -267,6 +273,10 @@ markdown转html，转图片的封装类， 详细内容查看: [markdown-plugin]
 
     - 实现imagic-plugin插件，封装imagic-magic使用姿势
     - 完成图片旋转、裁剪、压缩等基本功能
+    
+9. [v1.0](https://github.com/liuyueyi/quick-media/releases/tag/v1.0)
+
+    - 正式稳定版
 
 ## IV. 文档
 
