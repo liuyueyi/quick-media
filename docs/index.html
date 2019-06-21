@@ -65,6 +65,25 @@
 <script src="_assert/md5.min.js"></script>
 
 <script>
+  // https://liuyueyi.github.io/quick-media/#/%E5%85%B6%E4%BB%96/%E5%85%B6%E4%BB%96?id=_4-%E6%8D%90%E8%B5%A0
+  function url_parse(url) {
+      var left = url.indexOf('/#/');
+      if(left < 0) {
+        return url;
+      }
+
+      var right = url.lastIndexOf('?');
+      if (right <= 0 || right < left) {
+        right = url.length;
+      }
+      return url.substring(left, right);
+  }
+
+  gittalk_id = url_parse(location.href);
+  if(gittalk_id.length > 45) {
+    gittalk_id = md5(gittalk_id);
+  }
+
   const gitalk = new Gitalk({
     clientID: '31664aef1261e5d35dd1',
     clientSecret: '910d8622eead2036356acb2b09200367445cc04b',
@@ -72,7 +91,7 @@
     owner: 'liuyueyi',
     admin: ['liuyueyi'],
     distractionFreeMode: false,
-    id: md5(location.href)
+    id: gittalk_id
   })
 </script>
 </body>
