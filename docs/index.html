@@ -62,6 +62,7 @@
  
 <script src="//unpkg.com/docsify/lib/plugins/gitalk.min.js"></script>
 <script src="//unpkg.com/gitalk/dist/gitalk.min.js"></script>
+<script src="_assert/md5.min.js"></script>
 
 <script>
   const gitalk = new Gitalk({
@@ -70,7 +71,8 @@
     repo: 'quick-media',
     owner: 'liuyueyi',
     admin: ['liuyueyi'],
-    distractionFreeMode: false
+    distractionFreeMode: false,
+    id: md5(location.href)
   })
 </script>
 </body>
