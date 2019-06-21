@@ -8,6 +8,7 @@
   <meta name="description" content="Description">
   <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
   <link rel="stylesheet" href="//unpkg.com/docsify/lib/themes/vue.css">
+  <link rel="stylesheet" href="//unpkg.com/gitalk/dist/gitalk.css">
 </head>
 <body>
   <!--导航栏-->
@@ -30,6 +31,8 @@
       alias: {
         '/.*/_sidebar.md': '/_sidebar.md'
       },
+      formatUpdated: '{MM}/{DD} {HH}:{mm}',
+
       // 完整配置参数
       search: {
         maxAge: 86400000, // 过期时间，单位毫秒，默认一天
@@ -52,7 +55,6 @@
         // 搜索标题的最大程级, 1 - 6
         depth: 2
       }
-   
     }
   </script>
   <script src="//unpkg.com/docsify/lib/docsify.min.js"></script>
@@ -60,42 +62,44 @@
   <script src="//unpkg.com/prismjs/components/prism-java.js"></script>
   <script src="//unpkg.com/docsify/lib/plugins/zoom-image.js"></script>
   <script src="//unpkg.com/docsify/lib/plugins/search.js"></script>
-  
-<link rel="stylesheet" href="//unpkg.com/gitalk/dist/gitalk.css">
- 
-<script src="//unpkg.com/docsify/lib/plugins/gitalk.min.js"></script>
-<script src="//unpkg.com/gitalk/dist/gitalk.min.js"></script>
-<script src="_assert/md5.min.js"></script>
 
-<script>
-  // https://liuyueyi.github.io/quick-media/#/%E5%85%B6%E4%BB%96/%E5%85%B6%E4%BB%96?id=_4-%E6%8D%90%E8%B5%A0
-  function url_parse(url) {
-      var left = url.indexOf('/#/');
-      if(left < 0) {
-        return url;
+  <script src="//unpkg.com/docsify/lib/plugins/gitalk.min.js"></script>
+  <script src="//unpkg.com/gitalk/dist/gitalk.min.js"></script>
+  <script src="_assert/md5.min.js"></script>
+  <script src="//unpkg.com/docsify-pagination/dist/docsify-pagination.min.js"></script>
+
+  <script>
+    // https://liuyueyi.github.io/quick-media/#/%E5%85%B6%E4%BB%96/%E5%85%B6%E4%BB%96?id=_4-%E6%8D%90%E8%B5%A0
+    function url_parse(url) {
+        var left = url.indexOf('/#/');
+        if(left < 0) {
+          return url;
+        }
+
+        var right = url.lastIndexOf('?');
+        if (right <= 0 || right < left) {
+          right = url.length;
+        }
+        return url.substring(left, right);
+    }
+
+    function get_talk_id() {
+      gittalk_id = url_parse(location.href);
+      console.log('href', location.href, 'id', gittalk_id);
+      if(gittalk_id.length > 45) {
+        gittalk_id = md5(gittalk_id);
       }
+    }
 
-      var right = url.lastIndexOf('?');
-      if (right <= 0 || right < left) {
-        right = url.length;
-      }
-      return url.substring(left, right);
-  }
-
-  gittalk_id = url_parse(location.href);
-  if(gittalk_id.length > 45) {
-    gittalk_id = md5(gittalk_id);
-  }
-
-  const gitalk = new Gitalk({
-    clientID: '31664aef1261e5d35dd1',
-    clientSecret: '910d8622eead2036356acb2b09200367445cc04b',
-    repo: 'quick-media',
-    owner: 'liuyueyi',
-    admin: ['liuyueyi'],
-    distractionFreeMode: false,
-    id: gittalk_id
-  })
-</script>
+    const gitalk = new Gitalk({
+      clientID: '31664aef1261e5d35dd1',
+      clientSecret: '910d8622eead2036356acb2b09200367445cc04b',
+      repo: 'quick-media',
+      owner: 'liuyueyi',
+      admin: ['liuyueyi'],
+      distractionFreeMode: false,
+      id: 'QuickMedia-TechWebSite'
+    })
+  </script>
 </body>
 </html>
