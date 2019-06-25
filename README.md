@@ -85,7 +85,7 @@
 <dependency>
     <groupId>com.github.hui.media</groupId>
     <artifactId>audio-plugin</artifactId>
-    <version>1.1</version>
+    <version>2.0</version>
 </dependency>
 ```
 
@@ -97,7 +97,7 @@
 <dependency>
     <groupId>com.github.hui.media</groupId>
     <artifactId>date-plugin</artifactId>
-    <version>1.1</version>
+    <version>2.0</version>
 </dependency>
 ```
 
@@ -110,7 +110,7 @@
 <dependency>
     <groupId>com.github.hui.media</groupId>
     <artifactId>image-plugin</artifactId>
-    <version>1.1</version>
+    <version>2.0</version>
 </dependency>
 ```
 
@@ -122,7 +122,7 @@ markdown转html，转图片的封装类， 详细内容查看: [markdown-plugin]
 <dependency>
     <groupId>com.github.hui.media</groupId>
     <artifactId>markdown-plugin</artifactId>
-    <version>1.3</version>
+    <version>2.0</version>
 </dependency>
 ```
 
@@ -134,7 +134,7 @@ markdown转html，转图片的封装类， 详细内容查看: [markdown-plugin]
 <dependency>
     <groupId>com.github.hui.media</groupId>
     <artifactId>phantom-plugin</artifactId>
-    <version>1.1</version>
+    <version>2.0</version>
 </dependency>
 ```
 
@@ -146,7 +146,7 @@ markdown转html，转图片的封装类， 详细内容查看: [markdown-plugin]
 <dependency>
     <groupId>com.github.hui.media</groupId>
     <artifactId>qrcode-plugin</artifactId>
-    <version>1.2</version>
+    <version>2.0</version>
 </dependency>
 ```
 
@@ -158,7 +158,7 @@ markdown转html，转图片的封装类， 详细内容查看: [markdown-plugin]
 <dependency>
     <groupId>com.github.hui.media</groupId>
     <artifactId>svg-core</artifactId>
-    <version>1.1</version>
+    <version>2.0</version>
 </dependency>
 ```
 
@@ -171,7 +171,7 @@ markdown转html，转图片的封装类， 详细内容查看: [markdown-plugin]
 <dependency>
     <groupId>com.github.hui.media</groupId>
     <artifactId>imagic-core</artifactId>
-    <version>1.1</version>
+    <version>2.0</version>
 </dependency>
 ```
 
@@ -200,21 +200,21 @@ markdown转html，转图片的封装类， 详细内容查看: [markdown-plugin]
      - 自定义图片
 - [x] 二维码信息解析
 
-[查看更多二维码详情](doc/qrcode/QrGuide.md)
+[查看更多二维码详情](https://liuyueyi.github.io/quick-media/#/插件/二维码/使用zxing提供二维码生成解析服务)
 
 ### 3. 图片
 
 - [x] 长图文生成
-   - [水平文字，上下布局长图文生成](doc/images/imgGenV1.md)
-   - [垂直文字，左右布局长图文生成](doc/images/imgGenV2.md)
+   - [水平文字，上下布局长图文生成](https://liuyueyi.github.io/quick-media/#/插件/image/Java实现长图文生成)
+   - [垂直文字，左右布局长图文生成](https://liuyueyi.github.io/quick-media/#/插件/image/Java实现竖排长图文生成)
    - 第三方字体支持
 - [x] markdown 转 image
-    - [markdown 转 html](doc/md/md2html.md)
-    - [html 转 image](doc/md/html2image.md)
-    - [利用phantomjs实现html转image](doc/images/html2img.md)
+    - [markdown 转 html](https://liuyueyi.github.io/quick-media/#/插件/markdown/markdown转html)
+    - [html 转 image](https://liuyueyi.github.io/quick-media/#/markdown转image)
+    - [利用phantomjs实现html转image](https://liuyueyi.github.io/quick-media/#/插件/phantom/Java&PhantomJs实现html输出图片)
 - [x] gif图生成
 - [x] 合成
-    - [图片合成支持](doc/images/imgMerge.md)
+    - [图片合成支持](https://liuyueyi.github.io/quick-media/#/插件/image/图片合成)
 - [x] 水印
 - [x] svg渲染
 - [x] 裁剪
@@ -224,7 +224,7 @@ markdown转html，转图片的封装类， 详细内容查看: [markdown-plugin]
 - [ ] 格式转换
 
 
-[查看更多图片服务详情](doc/images/ImgGuide.md)
+[查看更多图片服务详情](https://liuyueyi.github.io/quick-media/#/插件/image/概览)
     
 ### 4. 视频相关
 - [ ] 视频压缩
@@ -280,23 +280,14 @@ markdown转html，转图片的封装类， 详细内容查看: [markdown-plugin]
 
 ## IV. 文档
 
-- [音频转码服务说明](doc/audio.md)
-- [二维码生成解析服务说明](doc/qrcode/QrGenV1.md)
-- [二维码服务拓展说明](doc/qrcode/QrGenV2.md)
-- [二维码生成深度定制](doc/qrcode/QrGenV3.md)
-- [长图文生成支持](doc/images/imgGenV1.md)
-- [竖排长图文生成支持](doc/images/imgGenV2.md)
-- [markdown 转 html](doc/md/md2html.md)
-- [html 转 image](doc/md/html2image.md)
-- [图片合成支持](doc/images/imgMerge.md)
-- [利用phantomjs实现html转image](doc/images/html2img.md)
+所有使用以及技术文档，开发过程中一些常见问题汇总，可以点击👉: [quick-media文档](https://liuyueyi.github.io/quick-media/#/) 
 
 ### 问题记录汇总
 
-- [图片旋转不生效问题](doc/questions/ImgRotate.md)
-- [markdonw转图片中文乱码问题](doc/questions/md2imgChineseMessyCode.md)
-- [兼容ImageIO读取jpeg图片变红](https://zbang.online/hexblog/public/2018/01/22/%E5%85%BC%E5%AE%B9ImageIO%E8%AF%BB%E5%8F%96jpeg%E5%9B%BE%E7%89%87%E5%8F%98%E7%BA%A2/)
-- [Batik渲染png图片异常的bug修复](https://zbang.online/hexblog/public/2018/01/20/Batik%E6%B8%B2%E6%9F%93png%E5%9B%BE%E7%89%87%E5%BC%82%E5%B8%B8%E7%9A%84bug%E4%BF%AE%E5%A4%8D/)
+- [图片旋转不生效问题](https://liuyueyi.github.io/quick-media/#/采坑/图片旋转问题修复)
+- [markdonw转图片中文乱码问题](https://liuyueyi.github.io/quick-media/#/采坑/markdown转图片中文乱码)
+- [兼容ImageIO读取jpeg图片变红](https://liuyueyi.github.io/quick-media/#/采坑/Batik渲染png图片异常的bug修复)
+- [Batik渲染png图片异常的bug修复](https://liuyueyi.github.io/quick-media/#/采坑/兼容ImageIO读取jpeg图片变红)
 
 
 ## V. 其他

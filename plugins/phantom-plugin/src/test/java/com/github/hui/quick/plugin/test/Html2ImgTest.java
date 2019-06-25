@@ -1,6 +1,8 @@
 package com.github.hui.quick.plugin.test;
 
 import com.github.hui.quick.plugin.phantom.Html2ImageByJsWrapper;
+import org.jsoup.Jsoup;
+import org.jsoup.nodes.Document;
 import org.junit.Test;
 
 import java.awt.image.BufferedImage;
