@@ -1,5 +1,8 @@
 language: java
 
+jdk:
+  - openjdk8
+
 script: "mvn cobertura:cobertura"
 CODECOV_TOKEN: "f174cf7c-7f64-45da-a1c5-891687ef9a37"
 
