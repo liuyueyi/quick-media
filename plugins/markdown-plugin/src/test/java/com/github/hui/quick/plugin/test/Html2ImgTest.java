@@ -13,10 +13,12 @@ public class Html2ImgTest {
 
     @Test
     public void testHtmp2Img() throws Exception {
-        String html = "<html>\n" + "<body>\n" + "\n" + "<span> hello world </span>\n" + "<hr/>\n" +
-                "<button> 按钮 </button>\n" + "\n" + "</body>\n" + "</html>";
+        String html =
+                "<html>\n" + "<body>\n" + "\n" + "<span> hello world 爱喝酒</br> 测试测试礼金卡打扫房间连咖啡 </span>\n" + "<hr/>\n" +
+                        "<button> 按钮 </button>\n" + "\n" + "</body>\n" + "</html>";
         BufferedImage img =
-                Html2ImageWrapper.of(html).setAutoW(false).setAutoH(true).setOutType("jpg").build().asImage();
+                Html2ImageWrapper.of(html).setFontColor(0xFFFF0000).setAutoW(false).setAutoH(true).setOutType("jpg")
+                        .setFontFamily("monospace").build().asImage();
         System.out.println(img);
     }
 

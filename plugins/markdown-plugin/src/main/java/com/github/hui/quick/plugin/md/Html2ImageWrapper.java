@@ -147,6 +147,10 @@ public class Html2ImageWrapper {
          */
         private String css;
 
+        /**
+         * css font-family: "Pingfang SC",STHeiti,"Lantinghei SC","Open Sans",Arial,"Hiragino Sans GB","Microsoft YaHei","WenQuanYi Micro Hei",SimSun,sans-serif;
+         */
+        private String fontFamily;
 
         private Font font = new Font("宋体", Font.PLAIN, 18);
 
@@ -205,6 +209,11 @@ public class Html2ImageWrapper {
             return this;
         }
 
+        public Builder setFontFamily(String fontFamily) {
+            this.fontFamily = fontFamily;
+            return this;
+        }
+
         public Builder setFontColor(int fontColor) {
             this.fontColor = fontColor;
             return this;
@@ -227,19 +236,20 @@ public class Html2ImageWrapper {
 
             if (document != null) {
                 options.setDocument(document);
+            } else if (css != null) {
+                html.setCss(css);
+                options.setDocument(parseDocument(html.toString()));
             } else {
-                if (css != null) {
-                    html.setCss(css);
-                } else {
-                    // 没有指定css时，默认配置
-                    if (fontColor != null) {
-                        html.addDivStyle("style", "color:" + options.getFontColor());
-                    }
-                    html.addDivStyle("style", "width:" + w + ";");
-                    html.addWidthCss("img");
-                    html.addWidthCss("code");
+                // 没有指定css时，默认配置
+                if (fontColor != null) {
+                    html.addDivStyle("style", "color:" + options.getFontColor() + ";");
                 }
-
+                if (fontFamily != null) {
+                    html.addDivStyle("style", "font-family:" + fontFamily + ";");
+                }
+                html.addDivStyle("style", "width:" + w + ";");
+                html.addWidthCss("img");
+                html.addWidthCss("code");
                 options.setDocument(parseDocument(html.toString()));
             }
 
