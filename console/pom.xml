@@ -59,6 +59,12 @@
             <groupId>com.github.hui.media</groupId>
             <artifactId>image-plugin</artifactId>
             <version>${image-plugin.version}</version>
+            <exclusions>
+                <exclusion>
+                    <groupId>com.google.guava</groupId>
+                    <artifactId>guava</artifactId>
+                </exclusion>
+            </exclusions>
         </dependency>
 
         <dependency>
@@ -83,6 +89,12 @@
             <groupId>com.github.hui.media</groupId>
             <artifactId>phantom-plugin</artifactId>
             <version>${phantom-plugin.version}</version>
+            <exclusions>
+                <exclusion>
+                    <groupId>com.google.guava</groupId>
+                    <artifactId>guava</artifactId>
+                </exclusion>
+            </exclusions>
         </dependency>
 
         <dependency>
@@ -121,6 +133,12 @@
             <artifactId>spring-webmvc</artifactId>
             <version>5.1.5.RELEASE</version>
             <scope>compile</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>com.google.guava</groupId>
+            <artifactId>guava</artifactId>
+            <version>27.0.1-jre</version>
         </dependency>
 
     </dependencies>
