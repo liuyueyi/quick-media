@@ -6,12 +6,10 @@ import org.apache.catalina.filters.CorsFilter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import javax.servlet.FilterChain;
-import javax.servlet.ServletException;
-import javax.servlet.ServletRequest;
-import javax.servlet.ServletResponse;
+import javax.servlet.*;
 import javax.servlet.annotation.WebFilter;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
 /**
@@ -19,16 +17,23 @@ import java.io.IOException;
  */
 @Slf4j
 @WebFilter(urlPatterns = "/*", filterName = "selfProcessBeforeFilter")
-public class SelfProcessBeforeFilter extends CorsFilter {
-    private static final long serialVersionUID = 8758617650082254209L;
+public class SelfProcessBeforeFilter implements Filter {
     private static Logger logger = LoggerFactory.getLogger("req");
 
     @Override
     public void doFilter(ServletRequest servletRequest, ServletResponse servletResponse, FilterChain filterChain)
             throws IOException, ServletException {
+        this.buildCors((HttpServletRequest) servletRequest, (HttpServletResponse) servletResponse);
         this.buildRequestLog((HttpServletRequest) servletRequest);
-        super.doFilter(servletRequest, servletResponse, filterChain);
+        filterChain.doFilter(servletRequest, servletResponse);
+    }
 
+    private void buildCors(HttpServletRequest request, HttpServletResponse response) {
+        response.setHeader("Access-Control-Allow-Origin", request.getHeader("Origin"));
+        response.setHeader("Access-Control-Allow-Credentials", "true");
+        response.setHeader("Access-Control-Allow-Methods", "POST, GET, OPTIONS, DELETE");
+        response.setHeader("Access-Control-Max-Age", "3600");
+        response.setHeader("Access-Control-Allow-Headers", "x-requested-with");
     }
 
     private void buildRequestLog(HttpServletRequest request) {
@@ -38,9 +43,9 @@ public class SelfProcessBeforeFilter extends CorsFilter {
         }
 
         StringBuilder msg = new StringBuilder();
+        msg.append("remoteIp=").append(getClientIP(request)).append("; ");
         msg.append("method=").append(request.getMethod()).append("; ");
         msg.append("uri=").append(request.getRequestURI());
-        msg.append("remoteIp=").append(getClientIP(request));
         if (request.getQueryString() != null) {
             msg.append('?').append(request.getQueryString());
         }
