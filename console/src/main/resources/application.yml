@@ -1,0 +1,8 @@
+spring:
+  application:
+    name: quick-media
+  resources:
+    add-mappings: true
+
+server:
+  port: 8089

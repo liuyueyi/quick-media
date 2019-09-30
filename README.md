@@ -19,7 +19,7 @@
 
 线上体验地址
 
-- Z+ | web : [https://zweb.hhui.top/#/index](https://zweb.hhui.top/#/index)
+- Z+ | web : [http://media.hhui.top](http://media.hhui.top)
 
 ### 使用说明
 
@@ -323,30 +323,17 @@ markdown转html，转图片的封装类， 详细内容查看: [markdown-plugin]
 
 #### 0. 应用网站
 
-基于thymeleaf实现的前端演示网站，相关代码写在本工程中：
+项目本身提供一个控制台，基于reactjs搭建，在console模块下，启动即可
 
-- Z+ : [http://media.hhui.top:8080/media/webs](http://media.hhui.top:8080/media/webs)
+- [http://localhost:8089](http://localhost:8089)
 
 
 使用react.js重构后的前端网站，实现前后端分离，前端网页借助gitee的pages直接部署，测试链接
 
 - Z+ | web : [http://liuyueyi.gitee.io/zweb](http://liuyueyi.gitee.io/zweb)
-- Z+ | web : [https://zweb.hhui.top/#/index](https://zweb.hhui.top/#/index)
+- Z+ | web : [https://media.hhui.top/#/index](https://media.hhui.top/#/index)
 
 
 web实际演示图: 
 
 ![demo](doc/img/demo/zwebdemo.gif)
-
-
-#### 1. 小程序
-
-以本项目提供的基本服务为蓝本，写了一个简单的小程序，欢迎各位小伙伴尝鲜
-
-后端服务都在本项目中，包目录 : 
-
-`com.hust.hui.quickmedia.web.wxapi`
-
-有很多东西直接写死了，不太友好，欢迎板砖
-
-<img src="http://s2.mogucdn.com/mlcdn/c45406/171123_3i44i038f68gebkdk523021864f6l_320x320.jpg" style="max-width:160px"/>
