@@ -1,5 +1,6 @@
 package com.github.hui.quick.plugin.qrcode.wrapper;
 
+import com.github.hui.quick.plugin.base.gif.GifDecoder;
 import com.github.hui.quick.plugin.qrcode.entity.DotSize;
 import com.google.zxing.EncodeHintType;
 import lombok.Builder;
@@ -69,6 +70,16 @@ public class QrCodeOptions {
 
 
     /**
+     * true 表示生成的是动图
+     *
+     * @return
+     */
+    public boolean gifQrCode() {
+        return bgImgOptions != null && bgImgOptions.getGifDecoder() != null;
+    }
+
+
+    /**
      * logo 的配置信息
      */
     @Builder
@@ -115,6 +126,11 @@ public class QrCodeOptions {
         private BufferedImage bgImg;
 
         /**
+         * 动态背景图
+         */
+        private GifDecoder gifDecoder;
+
+        /**
          * 背景图宽
          */
         private int bgW;
@@ -153,15 +169,23 @@ public class QrCodeOptions {
 
 
         public int getBgW() {
-            if (bgW == 0 && bgImg != null && bgImgStyle == BgImgStyle.FILL) {
-                return bgImg.getWidth();
+            if (bgImgStyle == BgImgStyle.FILL && bgW == 0) {
+                if (bgImg != null) {
+                    return bgImg.getWidth();
+                } else {
+                    return gifDecoder.getFrame(0).getWidth();
+                }
             }
             return bgW;
         }
 
         public int getBgH() {
-            if (bgH == 0 && bgImg != null && bgImgStyle == BgImgStyle.FILL) {
-                return bgImg.getHeight();
+            if (bgImgStyle == BgImgStyle.FILL && bgH == 0) {
+                if (bgImg != null) {
+                    return bgImg.getHeight();
+                } else {
+                    return gifDecoder.getFrame(0).getHeight();
+                }
             }
             return bgH;
         }

@@ -1,5 +1,6 @@
 package com.github.hui.quick.plugin.base;
 
+import com.github.hui.quick.plugin.base.gif.GifDecoder;
 import org.apache.commons.lang3.StringUtils;
 
 import javax.imageio.ImageIO;
@@ -28,5 +29,20 @@ public class ImageLoadUtil {
         return ImageIO.read(stream);
     }
 
+    /**
+     * 根据路径获取gif图片
+     *
+     * @param path
+     * @return
+     * @throws IOException
+     */
+    public static GifDecoder getGifByPath(String path) throws IOException {
+        if (StringUtils.isBlank(path)) {
+            return null;
+        }
 
+        GifDecoder decoder = new GifDecoder();
+        decoder.read(FileReadUtil.getStreamByFileName(path));
+        return decoder;
+    }
 }

@@ -1,5 +1,6 @@
 package com.github.hui.quick.plugin.qrcode.helper;
 
+import com.github.hui.quick.plugin.base.gif.GifDecoder;
 import com.github.hui.quick.plugin.qrcode.util.QrCodeUtil;
 import com.github.hui.quick.plugin.qrcode.wrapper.BitMatrixEx;
 import com.github.hui.quick.plugin.qrcode.wrapper.QrCodeOptions;
@@ -11,10 +12,13 @@ import com.google.zxing.qrcode.encoder.ByteMatrix;
 import com.google.zxing.qrcode.encoder.Encoder;
 import com.google.zxing.qrcode.encoder.QRCode;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.tuple.ImmutablePair;
 
 import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -175,14 +179,14 @@ public class QrCodeHelper {
          *  在覆盖模式下，先设置二维码的透明度，然后绘制在背景图的正中央，最后绘制logo，这样保证logo不会透明，显示清晰
          *  在填充模式下，先绘制logo，然后绘制在背景的指定位置上；若先绘制背景，再绘制logo，则logo大小偏移量的计算会有问题
          */
-        boolean logoAlreadDraw = false;
+        boolean logoAlreadyDraw = false;
         // 绘制背景图
         if (qrCodeConfig.getBgImgOptions() != null) {
             if (qrCodeConfig.getBgImgOptions().getBgImgStyle() == QrCodeOptions.BgImgStyle.FILL &&
                     qrCodeConfig.getLogoOptions() != null) {
                 // 此种模式，先绘制logo
                 qrCode = QrCodeUtil.drawLogo(qrCode, qrCodeConfig.getLogoOptions());
-                logoAlreadDraw = true;
+                logoAlreadyDraw = true;
             }
 
             qrCode = QrCodeUtil.drawBackground(qrCode, qrCodeConfig.getBgImgOptions());
@@ -190,11 +194,60 @@ public class QrCodeHelper {
 
 
         // 插入logo
-        if (qrCodeConfig.getLogoOptions() != null && !logoAlreadDraw) {
+        if (qrCodeConfig.getLogoOptions() != null && !logoAlreadyDraw) {
             qrCode = QrCodeUtil.drawLogo(qrCode, qrCodeConfig.getLogoOptions());
         }
 
         return qrCode;
     }
 
+
+    public static List<ImmutablePair<BufferedImage, Integer>> toGifImages(QrCodeOptions qrCodeConfig,
+            BitMatrixEx bitMatrix) {
+        if (qrCodeConfig.getBgImgOptions() == null ||
+                qrCodeConfig.getBgImgOptions().getGifDecoder().getFrameCount() <= 0) {
+            throw new IllegalArgumentException("animated background image should not be null!");
+        }
+
+        int qrCodeWidth = bitMatrix.getWidth();
+        int qrCodeHeight = bitMatrix.getHeight();
+        BufferedImage qrCode = QrCodeUtil.drawQrInfo(qrCodeConfig, bitMatrix);
+
+        // 若二维码的实际宽高和预期的宽高不一致, 则缩放
+        int realQrCodeWidth = qrCodeConfig.getW();
+        int realQrCodeHeight = qrCodeConfig.getH();
+        if (qrCodeWidth != realQrCodeWidth || qrCodeHeight != realQrCodeHeight) {
+            BufferedImage tmp = new BufferedImage(realQrCodeWidth, realQrCodeHeight, BufferedImage.TYPE_INT_RGB);
+            tmp.getGraphics()
+                    .drawImage(qrCode.getScaledInstance(realQrCodeWidth, realQrCodeHeight, Image.SCALE_SMOOTH), 0, 0,
+                            null);
+            qrCode = tmp;
+        }
+
+        boolean logoAlreadyDraw = false;
+        if (qrCodeConfig.getBgImgOptions().getBgImgStyle() == QrCodeOptions.BgImgStyle.FILL &&
+                qrCodeConfig.getLogoOptions() != null) {
+            // 此种模式，先绘制logo
+            qrCode = QrCodeUtil.drawLogo(qrCode, qrCodeConfig.getLogoOptions());
+            logoAlreadyDraw = true;
+        }
+
+
+        // 绘制动态背景图
+        List<ImmutablePair<BufferedImage, Integer>> bgList =
+                QrCodeUtil.drawGifBackground(qrCode, qrCodeConfig.getBgImgOptions());
+
+        // 插入logo
+
+        if (qrCodeConfig.getLogoOptions() != null && !logoAlreadyDraw) {
+            List<ImmutablePair<BufferedImage, Integer>> result = new ArrayList<>(bgList.size());
+            for (ImmutablePair<BufferedImage, Integer> pair : bgList) {
+                result.add(ImmutablePair
+                        .of(QrCodeUtil.drawLogo(pair.getLeft(), qrCodeConfig.getLogoOptions()), pair.getRight()));
+            }
+            return result;
+        } else {
+            return bgList;
+        }
+    }
 }

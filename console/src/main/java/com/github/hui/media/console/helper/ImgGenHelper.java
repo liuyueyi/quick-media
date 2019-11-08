@@ -50,7 +50,7 @@ public class ImgGenHelper {
         try {
             String path = ImgGenHelper.genTmpImg("png");
             File file = new File(ImgGenHelper.ABS_TMP_PATH + path);
-            FileWriteUtil.mkDir(file);
+            FileWriteUtil.mkDir(file.getParentFile());
             ImageIO.write(bf, "png", file);
 
             ProcessUtil.instance().process("chmod -R 755 " + ABS_TMP_PATH + WEB_IMG_PATH);

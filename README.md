@@ -198,6 +198,7 @@ markdown转html，转图片的封装类， 详细内容查看: [markdown-plugin]
      - 八边形
      - 圆
      - 自定义图片
+- [x] 动态二维码生成支持
 - [x] 二维码信息解析
 
 [查看更多二维码详情](https://liuyueyi.github.io/quick-media/#/插件/二维码/使用zxing提供二维码生成解析服务)
@@ -236,47 +237,7 @@ markdown转html，转图片的封装类， 详细内容查看: [markdown-plugin]
 
 ## III. 阶段记录
 
-1. [v0.001](https://github.com/liuyueyi/quick-media/releases/tag/v0.001)
-
-    - 实现音频转码服务
-    - 实现二维码基础服务，完成基于zxing的二维码深度定制
- 
-2. [v0.002](https://github.com/liuyueyi/quick-media/releases/tag/v0.002)
-
-    - 重写zxing的二维码渲染逻辑，只使用二维码矩阵的生成逻辑，支持二维码的全面定制化
-
-3. [v0.003](https://github.com/liuyueyi/quick-media/releases/tag/v0.003)
-
-    - 长图文生成的支持
-
-4. [v0.004](https://github.com/liuyueyi/quick-media/releases/tag/v0.004)
-   
-   - markdown 语法文本转html， 转image
-
-5. [v0.005](https://github.com/liuyueyi/quick-media/releases/tag/v0.005)
-
-    - fix markdown 转图片中文乱码
-    - 图片合成服务支持
-    - 微信小程序（图文小工具）服务端源码
-
-6. [v0.006](https://github.com/liuyueyi/quick-media/releases/tag/v0.006)
-
-    - svg渲染支持
-    - 利用phantomjs实现html渲染
-    - 实现应用网站搭建
-
-7. [v0.007](https://github.com/liuyueyi/quick-media/releases/tag/v0.007)
-
-    - 结构调整
-
-8. [v0.008](https://github.com/liuyueyi/quick-media/releases/tag/v0.008)
-
-    - 实现imagic-plugin插件，封装imagic-magic使用姿势
-    - 完成图片旋转、裁剪、压缩等基本功能
-    
-9. [v1.0](https://github.com/liuyueyi/quick-media/releases/tag/v1.0)
-
-    - 正式稳定版
+详情查看: [quick-media更新迭代日志](https://liuyueyi.github.io/quick-media/#/%E8%BF%AD%E4%BB%A3/%E6%9B%B4%E6%96%B0%E6%97%A5%E5%BF%97)
 
 ## IV. 文档
 

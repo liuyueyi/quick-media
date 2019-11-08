@@ -116,7 +116,6 @@ public class FileWriteUtil {
         return saveFileByStream(inputStream, getTmpPath(), genTempFileName(), fileType);
     }
 
-
     /**
      * 将字节流保存到文件中
      *
@@ -194,24 +193,23 @@ public class FileWriteUtil {
     /**
      * 递归创建文件夹
      *
-     * @param file 由目录创建的file对象
+     * @param path 由目录创建的file对象
      * @throws FileNotFoundException
      */
-    public static void mkDir(File file) throws FileNotFoundException {
-        if (file.getParentFile() == null) {
-            file = file.getAbsoluteFile();
+    public static void mkDir(File path) throws FileNotFoundException {
+        if (path.getParentFile() == null) {
+            path = path.getAbsoluteFile();
         }
 
-        boolean ans;
-        if (file.getParentFile().exists()) {
-            modifyFileAuth(file);
-            if (!file.exists() && !file.mkdir()) {
+        if (path.getParentFile().exists()) {
+            modifyFileAuth(path);
+            if (!path.exists() && !path.mkdir()) {
                 throw new FileNotFoundException();
             }
         } else {
-            mkDir(file.getParentFile());
-            modifyFileAuth(file);
-            if (!file.exists() && !file.mkdir()) {
+            mkDir(path.getParentFile());
+            modifyFileAuth(path);
+            if (!path.exists() && !path.mkdir()) {
                 throw new FileNotFoundException();
             }
         }

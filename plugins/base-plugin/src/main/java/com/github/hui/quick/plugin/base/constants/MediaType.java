@@ -92,4 +92,14 @@ public enum MediaType {
 
         return "";
     }
+
+    public static MediaType typeOfMagicNum(String magicNum) {
+        magicNum = magicNum.toUpperCase();
+        for (MediaType mediaType : MediaType.values()) {
+            if (magicNum.startsWith(mediaType.getMagic())) {
+                return mediaType;
+            }
+        }
+        return null;
+    }
 }

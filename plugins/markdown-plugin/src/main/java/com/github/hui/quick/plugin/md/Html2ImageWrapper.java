@@ -89,7 +89,7 @@ public class Html2ImageWrapper {
 
     public boolean asFile(String absFileName) throws IOException {
         File file = new File(absFileName);
-        FileWriteUtil.mkDir(file);
+        FileWriteUtil.mkDir(file.getParentFile());
 
         BufferedImage bufferedImage = asImage();
         if (!ImageIO.write(bufferedImage, options.getOutType(), file)) {

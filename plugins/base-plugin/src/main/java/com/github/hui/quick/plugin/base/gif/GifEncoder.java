@@ -1,4 +1,4 @@
-package com.github.hui.quick.plugin.image.gif;
+package com.github.hui.quick.plugin.base.gif;
 
 import java.awt.*;
 import java.awt.image.BufferedImage;
@@ -9,11 +9,11 @@ import java.io.IOException;
 import java.io.OutputStream;
 
 /**
- * Class AnimatedGifEncoder - Encodes a GIF file consisting of one or
+ * Class GifEncoder - Encodes a GIF file consisting of one or
  * more frames.
  * <pre>
  * Example:
- *    AnimatedGifEncoder e = new AnimatedGifEncoder();
+ *    GifEncoder e = new GifEncoder();
  *    e.start(outputFileName);
  *    e.setDelay(1000);   // 1 frame per sec
  *    e.addFrame(image1);
@@ -30,7 +30,7 @@ import java.io.OutputStream;
  *
  */
 
-public class AnimatedGifEncoder {
+public class GifEncoder {
 
     protected int width; // image size
     protected int height;

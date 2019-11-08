@@ -1,7 +1,7 @@
-package com.github.hui.quick.plugin.image.gif;
+package com.github.hui.quick.plugin.base.gif;
 
 /**
- * 从网上下载
+ * 从网上下载 <a href="https://github.com/rtyley/animated-gif-lib-for-java">源码地址</a>
  * 原作者 @Kevin Weiner
  */
 public class NeuQuant {

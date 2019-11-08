@@ -1,4 +1,4 @@
-package com.github.hui.quick.plugin.image.gif;
+package com.github.hui.quick.plugin.base.gif;
 
 import java.awt.*;
 import java.awt.image.BufferedImage;

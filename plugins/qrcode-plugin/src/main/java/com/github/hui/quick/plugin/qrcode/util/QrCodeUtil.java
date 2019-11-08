@@ -120,6 +120,61 @@ public class QrCodeUtil {
 
 
     /**
+     * 动态背景图绘制
+     *
+     * @param qrImg
+     * @param bgImgOptions
+     * @return
+     */
+    public static List<ImmutablePair<BufferedImage, Integer>> drawGifBackground(BufferedImage qrImg,
+            QrCodeOptions.BgImgOptions bgImgOptions) {
+        final int qrWidth = qrImg.getWidth();
+        final int qrHeight = qrImg.getHeight();
+
+        // 背景的图宽高不应该小于原图
+        int bgW = bgImgOptions.getBgW() < qrWidth ? qrWidth : bgImgOptions.getBgW();
+        int bgH = bgImgOptions.getBgH() < qrHeight ? qrHeight : bgImgOptions.getBgH();
+
+        // 覆盖方式
+        boolean fillMode = bgImgOptions.getBgImgStyle() == QrCodeOptions.BgImgStyle.FILL;
+        int bgOffsetX = fillMode ? bgImgOptions.getStartX() : (bgW - qrWidth) >> 1;
+        int bgOffsetY = fillMode ? bgImgOptions.getStartY() : (bgH - qrHeight) >> 1;
+
+        int gifImgLen = bgImgOptions.getGifDecoder().getFrameCount();
+        List<ImmutablePair<BufferedImage, Integer>> result = new ArrayList<>(gifImgLen);
+        // 背景图缩放
+        for (int index = 0, len = bgImgOptions.getGifDecoder().getFrameCount(); index < len; index++) {
+            BufferedImage bgImg = bgImgOptions.getGifDecoder().getFrame(index);
+            // fixme 当背景图为png时，最终透明的地方会是黑色，这里兼容处理成白色
+            BufferedImage temp = new BufferedImage(bgW, bgH, BufferedImage.TYPE_INT_RGB);
+            temp.getGraphics().setColor(Color.WHITE);
+            temp.getGraphics().fillRect(0, 0, bgW, bgH);
+            temp.getGraphics().drawImage(bgImg.getScaledInstance(bgW, bgH, Image.SCALE_SMOOTH), 0, 0, null);
+            bgImg = temp;
+
+            Graphics2D bgGraphic = bgImg.createGraphics();
+            if (bgImgOptions.getBgImgStyle() == QrCodeOptions.BgImgStyle.FILL) {
+                // 选择一块区域进行填充
+                bgGraphic.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_ATOP, 1.0f));
+                bgGraphic.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+                bgGraphic.drawImage(qrImg, bgOffsetX, bgOffsetY, qrWidth, qrHeight, null);
+            } else {
+                // 全覆盖模式, 设置透明度， 避免看不到背景
+                bgGraphic.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_ATOP, bgImgOptions.getOpacity()));
+                bgGraphic.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+                bgGraphic.drawImage(qrImg, bgOffsetX, bgOffsetY, qrWidth, qrHeight, null);
+                bgGraphic.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_ATOP, 1.0f));
+            }
+            bgGraphic.dispose();
+            bgImg.flush();
+
+            result.add(ImmutablePair.of(bgImg, bgImgOptions.getGifDecoder().getDelay(index)));
+        }
+        return result;
+    }
+
+
+    /**
      * 根据二维码矩阵，生成对应的二维码推片
      *
      * @param qrCodeConfig

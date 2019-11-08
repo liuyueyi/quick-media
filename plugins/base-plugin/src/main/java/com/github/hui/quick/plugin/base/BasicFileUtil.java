@@ -1,5 +1,6 @@
 package com.github.hui.quick.plugin.base;
 
+import com.github.hui.quick.plugin.base.constants.MediaType;
 import org.apache.commons.lang3.StringUtils;
 
 /**
@@ -26,5 +27,19 @@ public class BasicFileUtil {
     public static String parseHomeDir2AbsDir(String path) {
         String homeDir = System.getProperties().getProperty("user.home");
         return StringUtils.replace(path, "~", homeDir);
+    }
+
+    /**
+     * 根据文件的mime获取文件类型
+     *
+     * @return
+     */
+    public static MediaType getMediaType(String path) {
+        String magicNum = FileReadUtil.getMagicNum(path);
+        if (magicNum == null) {
+            return null;
+        }
+
+        return MediaType.typeOfMagicNum(magicNum);
     }
 }

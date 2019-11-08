@@ -3,6 +3,7 @@ package com.github.hui.quick.plugin.base;
 import com.google.common.base.Joiner;
 
 import java.io.*;
+import java.net.URL;
 import java.nio.charset.Charset;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -52,7 +53,6 @@ public class FileReadUtil {
     }
 
 
-
     public static InputStream getStreamByFileName(String fileName) throws IOException {
         if (fileName == null) {
             throw new IllegalArgumentException("fileName should not be null!");
@@ -74,8 +74,10 @@ public class FileReadUtil {
         }
     }
 
-    /** 将字节数组转换成16进制字符串 */
-    private static String bytesToHex(byte[] src){
+    /**
+     * 将字节数组转换成16进制字符串
+     */
+    private static String bytesToHex(byte[] src) {
         StringBuilder stringBuilder = new StringBuilder();
         if (src == null || src.length <= 0) {
             return null;
@@ -96,6 +98,7 @@ public class FileReadUtil {
 
     /**
      * 获取文件对应的魔数
+     *
      * @param file
      * @return
      */
@@ -110,5 +113,17 @@ public class FileReadUtil {
             e.printStackTrace();
             return null;
         }
+    }
+
+    /**
+     * 获取流文件对应的魔数
+     * @param inputStream
+     * @return
+     */
+    public static String getMagicNum(ByteArrayInputStream inputStream) {
+        byte[] bytes = new byte[28];
+        inputStream.read(bytes, 0, 28);
+        inputStream.reset();
+        return bytesToHex(bytes);
     }
 }

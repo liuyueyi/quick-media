@@ -1,7 +1,8 @@
-package com.github.hui.quick.plugin.image.gif;
+package com.github.hui.quick.plugin.base.gif;
 
 import com.github.hui.quick.plugin.base.FileReadUtil;
 import com.github.hui.quick.plugin.base.FileWriteUtil;
+import org.apache.commons.lang3.tuple.ImmutablePair;
 
 import java.awt.image.BufferedImage;
 import java.io.*;
@@ -41,17 +42,28 @@ public class GifHelper {
 
 
     public static void saveGif(List<BufferedImage> frames, int delay, OutputStream out) {
-        AnimatedGifEncoder e = new AnimatedGifEncoder();
-        e.setRepeat(0);
-        e.start(out);
+        GifEncoder encoder = new GifEncoder();
+        encoder.setRepeat(0);
+        encoder.start(out);
 
-        e.setDelay(delay);
+        encoder.setDelay(delay);
         for (BufferedImage img : frames) {
-            e.setDelay(delay);
-            e.addFrame(img);
+            encoder.setDelay(delay);
+            encoder.addFrame(img);
         }
-//        e.setDelay(3000);
-        e.addFrame(frames.get(frames.size() - 1));
-        e.finish();
+        encoder.addFrame(frames.get(frames.size() - 1));
+        encoder.finish();
+    }
+
+    public static void saveGif(List<ImmutablePair<BufferedImage, Integer>> frames, OutputStream out) {
+        GifEncoder encoder = new GifEncoder();
+        encoder.setRepeat(0);
+        encoder.start(out);
+
+        for (ImmutablePair<BufferedImage, Integer> frame : frames) {
+            encoder.setDelay(frame.getRight());
+            encoder.addFrame(frame.getLeft());
+        }
+        encoder.finish();
     }
 }
