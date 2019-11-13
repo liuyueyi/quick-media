@@ -182,6 +182,7 @@ markdown转html，转图片的封装类， 详细内容查看: [markdown-plugin]
    - [x] 音频不同格式的相互转码
 
 ### 2. 二维码生成 & 解析
+
 - [x] 二维码生成
 - [x] 个性二维码生成
     - 支持logo
@@ -201,7 +202,11 @@ markdown转html，转图片的封装类， 详细内容查看: [markdown-plugin]
 - [x] 动态二维码生成支持
 - [x] 二维码信息解析
 
-[查看更多二维码详情](https://liuyueyi.github.io/quick-media/#/插件/二维码/使用zxing提供二维码生成解析服务)
+[查看更多二维码详情](https://liuyueyi.github.io/quick-media/#/插件/二维码/二维码插件概览)
+
+给出一个实际生成的case如下:
+
+<img src="http://ww1.sinaimg.cn/large/8154e929gy1g8w9hvk2ubg21fy0hyhdt.gif" height="323px"/>
 
 ### 3. 图片
 

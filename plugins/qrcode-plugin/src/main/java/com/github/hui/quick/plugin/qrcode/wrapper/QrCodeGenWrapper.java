@@ -3,10 +3,8 @@ package com.github.hui.quick.plugin.qrcode.wrapper;
 import com.github.hui.quick.plugin.base.*;
 import com.github.hui.quick.plugin.base.constants.MediaType;
 import com.github.hui.quick.plugin.base.gif.GifDecoder;
-import com.github.hui.quick.plugin.base.gif.GifEncoder;
 import com.github.hui.quick.plugin.base.gif.GifHelper;
-import com.github.hui.quick.plugin.qrcode.helper.QrCodeHelper;
-import com.github.hui.quick.plugin.qrcode.util.QrCodeUtil;
+import com.github.hui.quick.plugin.qrcode.helper.QrCodeGenerateHelper;
 import com.google.zxing.EncodeHintType;
 import com.google.zxing.WriterException;
 import com.google.zxing.client.j2se.MatrixToImageConfig;
@@ -32,16 +30,16 @@ public class QrCodeGenWrapper {
     }
 
     private static ByteArrayOutputStream asGif(QrCodeOptions qrCodeOptions) throws WriterException {
-        BitMatrixEx bitMatrix = QrCodeHelper.encode(qrCodeOptions);
-        List<ImmutablePair<BufferedImage, Integer>> list = QrCodeHelper.toGifImages(qrCodeOptions, bitMatrix);
+        BitMatrixEx bitMatrix = QrCodeGenerateHelper.encode(qrCodeOptions);
+        List<ImmutablePair<BufferedImage, Integer>> list = QrCodeGenerateHelper.toGifImages(qrCodeOptions, bitMatrix);
         ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
         GifHelper.saveGif(list, outputStream);
         return outputStream;
     }
 
     private static BufferedImage asBufferedImage(QrCodeOptions qrCodeOptions) throws WriterException, IOException {
-        BitMatrixEx bitMatrix = QrCodeHelper.encode(qrCodeOptions);
-        return QrCodeHelper.toBufferedImage(qrCodeOptions, bitMatrix);
+        BitMatrixEx bitMatrix = QrCodeGenerateHelper.encode(qrCodeOptions);
+        return QrCodeGenerateHelper.toBufferedImage(qrCodeOptions, bitMatrix);
     }
 
     private static String asString(QrCodeOptions qrCodeOptions) throws WriterException, IOException {
@@ -269,9 +267,35 @@ public class QrCodeGenWrapper {
             return setLogoBgColor(ColorUtil.int2color(color));
         }
 
+        /**
+         * logo 背景颜色
+         *
+         * @param color
+         * @return
+         */
         public Builder setLogoBgColor(Color color) {
             logoOptions.border(true);
             logoOptions.borderColor(color);
+            return this;
+        }
+
+        public Builder setLogoBorderBgColor(Integer color) {
+            if (color == null) {
+                return this;
+            }
+            return setLogoBorderBgColor(ColorUtil.int2color(color));
+        }
+
+        /**
+         * logo 外层边框颜色
+         *
+         * @param color
+         * @return
+         */
+
+        public Builder setLogoBorderBgColor(Color color) {
+            logoOptions.border(true);
+            logoOptions.outerBorderColor(color);
             return this;
         }
 
@@ -282,6 +306,16 @@ public class QrCodeGenWrapper {
 
         public Builder setLogoRate(int rate) {
             logoOptions.rate(rate);
+            return this;
+        }
+
+        /**
+         * logo透明度
+         * @param opacity
+         * @return
+         */
+        public Builder setLogoOpacity(float opacity) {
+            logoOptions.opacity(opacity);
             return this;
         }
 
@@ -570,6 +604,15 @@ public class QrCodeGenWrapper {
             }
             qrCodeConfig.setDetectOptions(detectOp);
 
+
+            if (qrCodeConfig.getBgImgOptions() != null &&
+                    qrCodeConfig.getBgImgOptions().getBgImgStyle() == QrCodeOptions.BgImgStyle.PENETRATE) {
+                // 透传，用背景图颜色进行绘制时
+                drawOp.setPreColor(ColorUtil.OPACITY);
+                qrCodeConfig.getBgImgOptions().setOpacity(1);
+                qrCodeConfig.getDetectOptions().setInColor(ColorUtil.OPACITY);
+                qrCodeConfig.getDetectOptions().setOutColor(ColorUtil.OPACITY);
+            }
 
             // 设置输出图片格式
             qrCodeConfig.setPicType(picType);

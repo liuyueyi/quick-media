@@ -1,27 +1,25 @@
-package com.github.hui.quick.plugin.qrcode.util;
+package com.github.hui.quick.plugin.qrcode.helper;
 
-import com.github.hui.quick.plugin.base.ColorUtil;
 import com.github.hui.quick.plugin.base.ImageOperateUtil;
 import com.github.hui.quick.plugin.qrcode.entity.DotSize;
 import com.github.hui.quick.plugin.qrcode.wrapper.BitMatrixEx;
 import com.github.hui.quick.plugin.qrcode.wrapper.QrCodeOptions;
 import com.google.zxing.qrcode.encoder.ByteMatrix;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.tuple.ImmutablePair;
 
 import java.awt.*;
 import java.awt.image.BufferedImage;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 /**
+ * 二维码渲染辅助类，主要用于绘制背景，logo，定位点，二维码信息
  * Created by yihui on 2017/4/7.
  */
 @Slf4j
-public class QrCodeUtil {
+public class QrCodeRenderHelper {
 
 
     /**
@@ -48,6 +46,10 @@ public class QrCodeUtil {
 
         // 绘制边框
         if (logoOptions.isBorder()) {
+            if (logoOptions.getOuterBorderColor() != null) {
+                logoImg = ImageOperateUtil.makeRoundBorder(logoImg, radius, logoOptions.getOuterBorderColor());
+            }
+
             logoImg = ImageOperateUtil.makeRoundBorder(logoImg, radius, logoOptions.getBorderColor());
         }
 
@@ -65,7 +67,9 @@ public class QrCodeUtil {
         // 插入LOGO
         Graphics2D qrImgGraphic = qrImg.createGraphics();
 
-        qrImgGraphic.setComposite(AlphaComposite.SrcAtop);
+        if (logoOptions.getOpacity() != null) {
+            qrImgGraphic.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_ATOP, logoOptions.getOpacity()));
+        }
         qrImgGraphic.drawImage(logoImg, logoOffsetX, logoOffsetY, logoWidth, logoHeight, null);
         qrImgGraphic.dispose();
         logoImg.flush();
@@ -193,12 +197,6 @@ public class QrCodeUtil {
         // 绘制前置色
         Color preColor = qrCodeConfig.getDrawOptions().getPreColor();
 
-        if (qrCodeConfig.getBgImgOptions() != null &&
-                qrCodeConfig.getBgImgOptions().getBgImgStyle() == QrCodeOptions.BgImgStyle.PENETRATE) {
-            // 透传，用背景图颜色进行绘制时
-            preColor = ColorUtil.OPACITY;
-        }
-
         // 探测图形外圈的颜色
         Color detectOutColor = qrCodeConfig.getDetectOptions().getOutColor();
         // 探测图形内圈的颜色
@@ -235,7 +233,6 @@ public class QrCodeUtil {
         for (int x = 0; x < matrixW; x++) {
             for (int y = 0; y < matrixH; y++) {
                 if (bitMatrix.getByteMatrix().get(x, y) == 0) {
-                    // 忽略不用渲染的像素点
                     continue;
                 }
 

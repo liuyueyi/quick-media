@@ -1,7 +1,5 @@
 package com.github.hui.quick.plugin.qrcode.helper;
 
-import com.github.hui.quick.plugin.base.gif.GifDecoder;
-import com.github.hui.quick.plugin.qrcode.util.QrCodeUtil;
 import com.github.hui.quick.plugin.qrcode.wrapper.BitMatrixEx;
 import com.github.hui.quick.plugin.qrcode.wrapper.QrCodeOptions;
 import com.google.zxing.BarcodeFormat;
@@ -22,10 +20,11 @@ import java.util.List;
 import java.util.Map;
 
 /**
+ * 二维码生成辅助类，主要两个方法，一个是生成二维码矩阵，一个是渲染矩阵为图片
  * Created by yihui on 2018/3/23.
  */
 @Slf4j
-public class QrCodeHelper {
+public class QrCodeGenerateHelper {
     private static final int QUIET_ZONE_SIZE = 4;
 
 
@@ -160,7 +159,7 @@ public class QrCodeHelper {
     public static BufferedImage toBufferedImage(QrCodeOptions qrCodeConfig, BitMatrixEx bitMatrix) throws IOException {
         int qrCodeWidth = bitMatrix.getWidth();
         int qrCodeHeight = bitMatrix.getHeight();
-        BufferedImage qrCode = QrCodeUtil.drawQrInfo(qrCodeConfig, bitMatrix);
+        BufferedImage qrCode = QrCodeRenderHelper.drawQrInfo(qrCodeConfig, bitMatrix);
 
         // 若二维码的实际宽高和预期的宽高不一致, 则缩放
         int realQrCodeWidth = qrCodeConfig.getW();
@@ -185,17 +184,17 @@ public class QrCodeHelper {
             if (qrCodeConfig.getBgImgOptions().getBgImgStyle() == QrCodeOptions.BgImgStyle.FILL &&
                     qrCodeConfig.getLogoOptions() != null) {
                 // 此种模式，先绘制logo
-                qrCode = QrCodeUtil.drawLogo(qrCode, qrCodeConfig.getLogoOptions());
+                qrCode = QrCodeRenderHelper.drawLogo(qrCode, qrCodeConfig.getLogoOptions());
                 logoAlreadyDraw = true;
             }
 
-            qrCode = QrCodeUtil.drawBackground(qrCode, qrCodeConfig.getBgImgOptions());
+            qrCode = QrCodeRenderHelper.drawBackground(qrCode, qrCodeConfig.getBgImgOptions());
         }
 
 
         // 插入logo
         if (qrCodeConfig.getLogoOptions() != null && !logoAlreadyDraw) {
-            qrCode = QrCodeUtil.drawLogo(qrCode, qrCodeConfig.getLogoOptions());
+            qrCode = QrCodeRenderHelper.drawLogo(qrCode, qrCodeConfig.getLogoOptions());
         }
 
         return qrCode;
@@ -211,7 +210,7 @@ public class QrCodeHelper {
 
         int qrCodeWidth = bitMatrix.getWidth();
         int qrCodeHeight = bitMatrix.getHeight();
-        BufferedImage qrCode = QrCodeUtil.drawQrInfo(qrCodeConfig, bitMatrix);
+        BufferedImage qrCode = QrCodeRenderHelper.drawQrInfo(qrCodeConfig, bitMatrix);
 
         // 若二维码的实际宽高和预期的宽高不一致, 则缩放
         int realQrCodeWidth = qrCodeConfig.getW();
@@ -228,22 +227,22 @@ public class QrCodeHelper {
         if (qrCodeConfig.getBgImgOptions().getBgImgStyle() == QrCodeOptions.BgImgStyle.FILL &&
                 qrCodeConfig.getLogoOptions() != null) {
             // 此种模式，先绘制logo
-            qrCode = QrCodeUtil.drawLogo(qrCode, qrCodeConfig.getLogoOptions());
+            qrCode = QrCodeRenderHelper.drawLogo(qrCode, qrCodeConfig.getLogoOptions());
             logoAlreadyDraw = true;
         }
 
 
         // 绘制动态背景图
         List<ImmutablePair<BufferedImage, Integer>> bgList =
-                QrCodeUtil.drawGifBackground(qrCode, qrCodeConfig.getBgImgOptions());
+                QrCodeRenderHelper.drawGifBackground(qrCode, qrCodeConfig.getBgImgOptions());
 
         // 插入logo
 
         if (qrCodeConfig.getLogoOptions() != null && !logoAlreadyDraw) {
             List<ImmutablePair<BufferedImage, Integer>> result = new ArrayList<>(bgList.size());
             for (ImmutablePair<BufferedImage, Integer> pair : bgList) {
-                result.add(ImmutablePair
-                        .of(QrCodeUtil.drawLogo(pair.getLeft(), qrCodeConfig.getLogoOptions()), pair.getRight()));
+                result.add(ImmutablePair.of(QrCodeRenderHelper.drawLogo(pair.getLeft(), qrCodeConfig.getLogoOptions()),
+                        pair.getRight()));
             }
             return result;
         } else {

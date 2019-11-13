@@ -111,6 +111,16 @@ public class QrCodeOptions {
          * 边框颜色
          */
         private Color borderColor;
+
+        /**
+         * 外围边框颜色
+         */
+        private Color outerBorderColor;
+
+        /**
+         * 用于设置logo的透明度
+         */
+        private Float opacity;
     }
 
 

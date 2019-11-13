@@ -62,7 +62,6 @@ public class ImgQrCodeTest {
                     .setH(size)
                     .setDetectImg("jihe/PDP.png")
                     .setErrorCorrection(ErrorCorrectionLevel.H)
-                    .setDrawEnableScale(true)
                     .setDrawStyle(QrCodeOptions.DrawStyle.IMAGE)
                     .addImg(1, 1, "jihe/a.png")
                     .addImg(3, 1, "jihe/b.png")
