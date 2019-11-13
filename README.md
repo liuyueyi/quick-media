@@ -206,7 +206,7 @@ markdown转html，转图片的封装类， 详细内容查看: [markdown-plugin]
 
 给出一个实际生成的case如下:
 
-<img src="http://ww1.sinaimg.cn/large/8154e929gy1g8w9hvk2ubg21fy0hyhdt.gif" height="323px"/>
+<img src="http://ww1.sinaimg.cn/large/8154e929gy1g8wadvkt56g20pz08zwl5.gif"/>
 
 ### 3. 图片
 
