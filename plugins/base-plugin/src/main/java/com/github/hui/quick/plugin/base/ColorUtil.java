@@ -26,7 +26,7 @@ public class ColorUtil {
      * @return
      */
     public static Color int2color(int color) {
-        int a = ((0x7f000000 & color) >> 24) | 0x00000080;
+        int a = (0xff000000 & color) >>> 24;
         int r = (0x00ff0000 & color) >> 16;
         int g = (0x0000ff00 & color) >> 8;
         int b = (0x000000ff & color);
@@ -43,9 +43,10 @@ public class ColorUtil {
      * @return
      */
     public static String int2htmlColor(int color) {
+        int a = (0xff000000 & color) >>> 24;
         int r = (0x00ff0000 & color) >> 16;
         int g = (0x0000ff00 & color) >> 8;
         int b = (0x000000ff & color);
-        return "#" + NumUtil.toHex(r) + NumUtil.toHex(g) + NumUtil.toHex(b);
+        return "#" + NumUtil.toHex(r) + NumUtil.toHex(g) + NumUtil.toHex(b) + NumUtil.toHex(a);
     }
 }
