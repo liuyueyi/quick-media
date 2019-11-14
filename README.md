@@ -260,8 +260,9 @@ markdown转html，转图片的封装类， 详细内容查看: [markdown-plugin]
 
 ### 其他
 
-拒绝单机，欢迎start或者加好友支持
+看到下面的star走势图，难道真的没有动心点点🖱小小的👍一下么 
 
+[![Stargazers over time](https://starchart.cc/liuyueyi/quick-media.svg)](https://starchart.cc/liuyueyi/quick-media)
 
 ### 声明
 
