@@ -3,6 +3,11 @@ spring:
     name: quick-media
   resources:
     add-mappings: true
+  freemarker:
+      charset: UTF-8
+      # 本机测试时建议设置为false，上线时设置为true
+      cache: true
+      suffix: .ftl
 
 server:
   port: 8089
