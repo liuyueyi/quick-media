@@ -2,6 +2,7 @@
 
 [![Join the chat at https://gitter.im/quick-media/Lobby](https://badges.gitter.im/quick-media/Lobby.svg)](https://gitter.im/quick-media/Lobby?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
 [![Builder](https://travis-ci.org/liuyueyi/quick-media.svg?branch=master)](https://travis-ci.org/liuyueyi/quick-media)
+[![JitPack](https://jitpack.io/v/liuyueyi/quick-media.svg)](https://jitpack.io/#liuyueyi/quick-media)
 [![codecov](https://codecov.io/gh/liuyueyi/quick-media/branch/master/graph/badge.svg)](https://codecov.io/gh/liuyueyi/quick-media)
 [![Average time to resolve an issue](http://isitmaintained.com/badge/resolution/liuyueyi/quick-media.svg)](http://isitmaintained.com/project/liuyueyi/quick-media "Average time to resolve an issue")
 [![Percentage of issues still open](http://isitmaintained.com/badge/open/liuyueyi/quick-media.svg)](http://isitmaintained.com/project/liuyueyi/quick-media "Percentage of issues still open")
@@ -10,7 +11,7 @@
 >
 > mult-media process Web Service by FFMPEG & ImageMagic & SpringMVC
  
-本项目为一个提供图片 + 音频 + 视频处理的Web项目，我们的目标是封装一套多媒体文件处理的公共类库，简化各种复杂的调用；利用 spring-boot 来提供http接口实现多媒体的操作实例功能
+本项目为一个提供图片 + 音频 + 视频 + 二维码 + 网页 + markdown处理的Web项目，我们的目标是封装一套多媒体文件处理的公共类库，简化各种复杂的调用；利用 spring-boot 来提供http接口实现多媒体的操作实例功能
 
 整理了下QuickMedia的使用与技术文档，可以通过下面的链接进行查看
 
@@ -53,6 +54,30 @@
 </mirror>
 ```
 
+**注意**
+
+由于某些原因，导致github访问太慢，无法下载依赖包时，这里也给出了第二种选择方案，借助`jitpack`仓库，详情使用文档，请查看：[quick-media jitpack-仓库导入](https://github.com/liuyueyi/quick-media/#/%E8%BF%AD%E4%BB%A3/%E6%9B%B4%E6%96%B0%E6%97%A5%E5%BF%97?id=b-jitpack-%e4%bb%93%e5%ba%93)
+
+
+一个简单的示例如下:
+
+```xml
+<repositories>
+    <repository>
+        <id>jitpack.io</id>
+        <url>https://jitpack.io</url>
+    </repository>
+</repositories>
+
+
+<!-- 请注意groupId和github的方式有一些区别哦 -->
+<dependency>
+    <groupId>com.github.liuyueyi.quick-media</groupId>
+    <artifactId>qrcode-plugin</artifactId>
+    <version>2.2</version>
+</dependency>
+```
+
 ## I. 项目分析
 
 ### 1. 技术栈
@@ -72,7 +97,7 @@
 #### web
 
 - 根据spring-boot可以迅速搭建一个web服务，提供http接口用于功能测试
-- 内部集成了一个简单的web网站，打开: [http://media.hhui.top:8080/media/webs](http://media.hhui.top:8080/media/webs) 查看
+- 内部集成了一个简单的web网站，打开: [http://media.hhui.top:8089/media/webs](http://media.hhui.top:8080/media/webs) 查看
 - 使用ReactJS，前后端分离，写了一个更友好的网站，打开: [https://zweb.hhui.top/#/index](https://zweb.hhui.top/#/index) 查看
 - 内部实现了小程序【图文小工具】的后端逻辑
 
