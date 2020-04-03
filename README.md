@@ -38,6 +38,21 @@
     ```
 - 部分插件依赖第三方库，如 ffmpge, phantomjs, image-magic，请确保已经安装
 
+**注意**
+
+如果出现配置了上面的仓库地址，但是依然下载不到jar包（如二维码包，可以到`~/.m2/repository/com/github/hui/media/qrcode-plugin`目录下查看是否存在jar）
+
+可能是由于maven的镜像配置原因，可以在<mirrors>标签下，添加如下依赖解决
+
+```xml
+<mirror>
+    <id>yihui-maven-repo</id>
+    <mirrorOf>yihui-maven-repo</mirrorOf>
+    <name>yihui-maven-repo</name>
+    <url>https://raw.githubusercontent.com/liuyueyi/maven-repository/master/repository</url>
+</mirror>
+```
+
 ## I. 项目分析
 
 ### 1. 技术栈
