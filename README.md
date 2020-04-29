@@ -74,7 +74,7 @@
 <dependency>
     <groupId>com.github.liuyueyi.quick-media</groupId>
     <artifactId>qrcode-plugin</artifactId>
-    <version>2.2</version>
+    <version>2.3</version>
 </dependency>
 ```
 
@@ -186,7 +186,7 @@ markdown转html，转图片的封装类， 详细内容查看: [markdown-plugin]
 <dependency>
     <groupId>com.github.hui.media</groupId>
     <artifactId>qrcode-plugin</artifactId>
-    <version>2.0</version>
+    <version>2.3</version>
 </dependency>
 ```
 
@@ -229,6 +229,7 @@ markdown转html，转图片的封装类， 详细内容查看: [markdown-plugin]
     - 支持logo样式 （圆角logo， 边框）
     - 支持二维码颜色设置
     - 支持探测图形颜色设置
+    - 支持探测图形图片定制
     - 支持背景图
     - 支持base64格式的二维码图片
     - 支持二维码定制绘制信息样式
@@ -242,7 +243,9 @@ markdown转html，转图片的封装类， 详细内容查看: [markdown-plugin]
 - [x] 动态二维码生成支持
 - [x] 二维码信息解析
 
-[查看更多二维码详情](https://liuyueyi.github.io/quick-media/#/插件/二维码/二维码插件概览)
+[查看更多二维码详情](https://liuyueyi.github.io/quick-media/#/插件/二维码/二维码插件使用手册)
+
+<font color="red">最新版本2.3，详情查看 [迭代日志](https://liuyueyi.github.io/quick-media/#/%E8%BF%AD%E4%BB%A3/%E6%9B%B4%E6%96%B0%E6%97%A5%E5%BF%97?id=_27-qrcode-plugin)</font>
 
 给出一个实际生成的case如下:
 
@@ -270,7 +273,7 @@ markdown转html，转图片的封装类， 详细内容查看: [markdown-plugin]
 - [ ] 格式转换
 
 
-[查看更多图片服务详情](https://liuyueyi.github.io/quick-media/#/插件/image/概览)
+[查看更多图片服务详情](https://liuyueyi.github.io/quick-media/#/插件/image/使用手册)
     
 ### 4. 视频相关
 - [ ] 视频压缩

@@ -2,6 +2,7 @@ package com.github.hui.quick.plugin.qrcode.wrapper;
 
 import com.github.hui.quick.plugin.base.gif.GifDecoder;
 import com.github.hui.quick.plugin.qrcode.entity.DotSize;
+import com.github.hui.quick.plugin.qrcode.helper.QrCodeRenderHelper;
 import com.google.zxing.EncodeHintType;
 import lombok.Builder;
 import lombok.Data;
@@ -213,9 +214,38 @@ public class QrCodeOptions {
         private Color inColor;
 
         /**
-         * 探测图形，优先级高于颜色的定制（即存在图片时，用图片绘制探测图形）
+         * 默认探测图形，优先级高于颜色的定制（即存在图片时，用图片绘制探测图形）
          */
         private BufferedImage detectImg;
+
+        /**
+         * 左上角的探测图形
+         */
+        private BufferedImage detectImgLT;
+
+        /**
+         * 右上角的探测图形
+         */
+        private BufferedImage detectImgRT;
+
+        /**
+         * 左下角的探测图形
+         */
+        private BufferedImage detectImgLD;
+
+        public BufferedImage chooseDetectedImg(QrCodeRenderHelper.DetectLocation detectLocation) {
+            switch (detectLocation) {
+                case LD:
+                    return detectImgLD == null ? detectImg : detectImgLD;
+                case LT:
+                    return detectImgLT == null ? detectImg : detectImgLT;
+                case RT:
+                    return detectImgRT == null ? detectImg : detectImgRT;
+                default:
+                    return null;
+            }
+        }
+
     }
 
 
@@ -235,6 +265,11 @@ public class QrCodeOptions {
         private Color bgColor;
 
         /**
+         * 背景图
+         */
+        private BufferedImage bgImg;
+
+        /**
          * 绘制样式
          */
         private DrawStyle drawStyle;
@@ -246,6 +281,11 @@ public class QrCodeOptions {
          * 说明： 三角形样式关闭该选项，因为留白过多，对识别有影响
          */
         private boolean enableScale;
+
+        /**
+         * 图片透明处填充，true则表示透明处用bgColor填充； false则透明处依旧透明
+         */
+        private boolean diaphaneityFill;
 
         /**
          * 渲染图
@@ -270,6 +310,16 @@ public class QrCodeOptions {
              * 背景颜色
              */
             private Color bgColor;
+
+            /**
+             * 透明度填充，如绘制二维码的图片中存在透明区域，若这个参数为true，则会用bgColor填充透明的区域；若为false，则透明区域依旧是透明的
+             */
+            private boolean diaphaneityFill;
+
+            /**
+             * 绘制的背景图片
+             */
+            private BufferedImage bgImg;
 
             /**
              * 绘制样式
@@ -303,6 +353,16 @@ public class QrCodeOptions {
                 return this;
             }
 
+            public DrawOptionsBuilder diaphaneityFill(boolean fill) {
+                this.diaphaneityFill = fill;
+                return this;
+            }
+
+            public DrawOptionsBuilder bgImg(BufferedImage image) {
+                this.bgImg = image;
+                return this;
+            }
+
             public DrawOptionsBuilder drawStyle(DrawStyle drawStyle) {
                 this.drawStyle = drawStyle;
                 return this;
@@ -321,10 +381,12 @@ public class QrCodeOptions {
             public DrawOptions build() {
                 DrawOptions drawOptions = new DrawOptions();
                 drawOptions.setBgColor(this.bgColor);
+                drawOptions.setBgImg(this.bgImg);
                 drawOptions.setPreColor(this.preColor);
                 drawOptions.setDrawStyle(this.drawStyle);
                 drawOptions.setEnableScale(this.enableScale);
                 drawOptions.setImgMapper(this.imgMapper);
+                drawOptions.setDiaphaneityFill(this.diaphaneityFill);
                 return drawOptions;
             }
         }

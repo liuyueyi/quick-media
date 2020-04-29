@@ -182,7 +182,7 @@ public class QrCodeWrapperTest {
 //                    .setLogoBgColor(0xff000000)
                     .setBgImg(bg)
                     .setDrawStyle(QrCodeOptions.DrawStyle.IMAGE.name())
-                    .setDrawImg("xhrSize4.jpg")
+                    .setDrawImg("xhr/xhrSize4.jpg")
                     .setPicType("jpg")
                     .asBufferedImage();
 
@@ -223,7 +223,7 @@ public class QrCodeWrapperTest {
                         .setBgImg(bg)
                         .setBgOpacity(0.93f)
                         .setDrawStyle(style.name())
-                        .setDrawImg("xhrBase.jpg")
+                        .setDrawImg("xhr/xhrBase.jpg")
                         .setDrawEnableScale(true)
                         .asBufferedImage();
 
@@ -263,7 +263,7 @@ public class QrCodeWrapperTest {
                     .setLogoRate(15)
                     .setDrawStyle(QrCodeOptions.DrawStyle.CIRCLE.name())
                     .setDrawEnableScale(true)
-                    .setDrawImg("xhrBase.jpg")
+                    .setDrawImg("xhr/xhrBase.jpg")
                     .setBgStyle(QrCodeOptions.BgImgStyle.PENETRATE)
                     .setBgOpacity(1.0f)
                     .setBgImg(bg)

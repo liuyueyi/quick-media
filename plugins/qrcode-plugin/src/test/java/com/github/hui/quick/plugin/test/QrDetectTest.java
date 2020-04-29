@@ -1,6 +1,7 @@
 package com.github.hui.quick.plugin.test;
 
 import com.github.hui.quick.plugin.base.Base64Util;
+import com.github.hui.quick.plugin.base.GraphicUtil;
 import com.github.hui.quick.plugin.base.ImageLoadUtil;
 import com.github.hui.quick.plugin.qrcode.wrapper.QrCodeGenWrapper;
 import com.github.hui.quick.plugin.qrcode.wrapper.QrCodeOptions;
@@ -70,6 +71,17 @@ public class QrDetectTest {
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+
+    @Test
+    public void testDrawPng() throws IOException {
+        BufferedImage img = ImageLoadUtil.getImageByPath("love/01.png");
+        BufferedImage bg = GraphicUtil.createImg(img.getWidth(), img.getHeight(), null);
+        Graphics2D g2d = GraphicUtil.getG2d(bg);
+        g2d.setColor(Color.WHITE);
+        g2d.fillRect(0, 0, img.getWidth(), img.getHeight());
+        g2d.drawImage(img, 0, 0, img.getWidth(), img.getHeight(), null);
+        g2d.dispose();
     }
 
 }

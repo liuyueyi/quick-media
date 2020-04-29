@@ -1,5 +1,7 @@
 ## qrcode-plugin
 
+> 更丰富的使用教程，请参考: [二维码插件使用手册](https://liuyueyi.github.io/quick-media/#/%E6%8F%92%E4%BB%B6/%E4%BA%8C%E7%BB%B4%E7%A0%81/%E4%BA%8C%E7%BB%B4%E7%A0%81%E6%8F%92%E4%BB%B6%E4%BD%BF%E7%94%A8%E6%89%8B%E5%86%8C)
+
 封装了二维码的生成和解析，深度定制了二维码的生成，支持各种酷炫二维码的产生
 
 - [x] 二维码生成
@@ -39,7 +41,7 @@ jar包引入，请注意使用最新的版本
 <dependency>
     <groupId>com.github.hui.media</groupId>
     <artifactId>qrcode-plugin</artifactId>
-    <version>1.0</version>
+    <version>2.3</version>
 </dependency>
 ```
 

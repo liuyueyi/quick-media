@@ -3,13 +3,17 @@ package com.github.hui.quick.plugin.test;
 import com.github.hui.quick.plugin.base.ColorUtil;
 import com.github.hui.quick.plugin.qrcode.wrapper.QrCodeGenWrapper;
 import com.github.hui.quick.plugin.qrcode.wrapper.QrCodeOptions;
+import com.google.zxing.WriterException;
 import com.google.zxing.qrcode.decoder.ErrorCorrectionLevel;
 import org.junit.Test;
 
 import java.awt.*;
+import java.awt.image.BufferedImage;
+import java.io.IOException;
 
 /**
- * 二维码插件用户使用实例
+ * 二维码插件用户使用实例，教程说明文档参考：
+ *  <a href="https://liuyueyi.github.io/quick-media/#/%E6%8F%92%E4%BB%B6/%E4%BA%8C%E7%BB%B4%E7%A0%81/%E4%BA%8C%E7%BB%B4%E7%A0%81%E6%8F%92%E4%BB%B6%E6%A6%82%E8%A7%88">二维码插件概览</a>
  * Created by @author yihui in 21:05 19/11/11.
  */
 public class QrCodeGenUserGuide {
@@ -129,6 +133,9 @@ public class QrCodeGenUserGuide {
     }
 
 
+    /**
+     *  指定为填充模式，在背景图的坐标(startX, startY)处绘制二维码(左上角坐标为0,0)
+     */
     @Test
     public void bgQr2() {
         try {
@@ -150,6 +157,9 @@ public class QrCodeGenUserGuide {
         }
     }
 
+    /**
+     * 背景渲染方式，用背景图来填充二维码
+     */
     @Test
     public void bgQr3() {
         try {
@@ -162,6 +172,67 @@ public class QrCodeGenUserGuide {
                     .setBgH(500)
                     .setW(500)
                     .asFile("/tmp/bqr3.png");
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    /**
+     * 全覆盖背景，并设置二维码的前置渲染图，后置渲染图片
+     */
+    @Test
+    public void bgQr4() {
+        String msg = "https://blog.hhui.top";
+        String bg = "overbg/bg.jpg";
+        String cell = "overbg/a.png";
+        String bgCell = "overbg/b.png";
+
+        try {
+            Boolean ans = QrCodeGenWrapper.of(msg)
+                    .setBgImg(bg)
+                    .setW(500)
+                    .setErrorCorrection(ErrorCorrectionLevel.H)
+                    .setBgStyle(QrCodeOptions.BgImgStyle.OVERRIDE)
+                    .setDrawStyle(QrCodeOptions.DrawStyle.IMAGE)
+                    .setDrawImg(cell)
+                    .setDrawBgImg(bgCell)
+                    .asFile("/tmp/bqr4.png");
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+
+    /**
+     * 探测图形，用指定图片替换
+     */
+    @Test
+    public void detectedQr1() {
+        String msg = "http://weixin.qq.com/r/FS9waAPEg178rUcL93oH";
+        try {
+            QrCodeGenWrapper.of(msg)
+                    .setW(500)
+                    .setDetectImg("detect.png")
+                    .asFile("/tmp/tqr1.png");
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    /**
+     * 三个探测图形，用三张不同的图片
+     */
+    @Test
+    public void detectedQr2() {
+        String msg = "http://weixin.qq.com/r/FS9waAPEg178rUcL93oH";
+        try {
+            QrCodeGenWrapper.of(msg)
+                    .setW(500)
+                    .setLTDetectImg("leaf/eye.png")
+                    .setLDDetectImg("jihe/PDP.png")
+                    .setRTDetectImg("love/01.png")
+                    .setDiaphaneityFill(true)
+                    .asFile("/tmp/tqr2.png");
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -345,6 +416,25 @@ public class QrCodeGenUserGuide {
                     .addImg(4, 1, "love/004.png")
                     .addImg(1, 4, "love/004_02.png")
                     .asFile("/tmp/imgQr2.png");
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    @Test
+    public void imgQr3() {
+        try {
+            String msg = "http://weixin.qq.com/r/FS9waAPEg178rUcL93oH";
+            int size = 500;
+            boolean ans = QrCodeGenWrapper.of(msg)
+                    .setW(size)
+                    .setH(size)
+                    .setErrorCorrection(ErrorCorrectionLevel.M)
+                    .setDrawBgColor(ColorUtil.OPACITY)
+                    .setDrawBgImg("overbg/b.png")
+                    .setDrawStyle(QrCodeOptions.DrawStyle.IMAGE)
+                    .setDrawImg("overbg/a.png")
+                    .asFile("/tmp/imgQr3.png");
         } catch (Exception e) {
             e.printStackTrace();
         }

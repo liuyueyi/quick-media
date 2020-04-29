@@ -152,7 +152,7 @@ public class QrCodeGenWrapper {
             // 绘制信息，默认黑白方块
             drawOptions =
                     QrCodeOptions.DrawOptions.builder().drawStyle(QrCodeOptions.DrawStyle.RECT).bgColor(Color.WHITE)
-                            .preColor(Color.BLACK).enableScale(false);
+                            .preColor(Color.BLACK).diaphaneityFill(false).enableScale(false);
 
             // 探测图形
             detectOptions = QrCodeOptions.DetectOptions.builder();
@@ -311,6 +311,7 @@ public class QrCodeGenWrapper {
 
         /**
          * logo透明度
+         *
          * @param opacity
          * @return
          */
@@ -428,6 +429,137 @@ public class QrCodeGenWrapper {
             return this;
         }
 
+        /**
+         * 左上角探测图形
+         *
+         * @param detectImg
+         * @return
+         * @throws IOException
+         */
+        public Builder setLTDetectImg(String detectImg) throws IOException {
+            try {
+                return setLTDetectImg(ImageLoadUtil.getImageByPath(detectImg));
+            } catch (IOException e) {
+                log.error("load detectImage error! e:{}", e);
+                throw new IOException("load detectImage error!", e);
+            }
+        }
+
+        /**
+         * 左上角探测图形
+         *
+         * @param detectImg
+         * @return
+         * @throws IOException
+         */
+        public Builder setLTDetectImg(InputStream detectImg) throws IOException {
+            try {
+                return setLTDetectImg(ImageIO.read(detectImg));
+            } catch (IOException e) {
+                log.error("load detectImage error! e:{}", e);
+                throw new IOException("load detectImage error!", e);
+            }
+        }
+
+        /**
+         * 左上角探测图形
+         *
+         * @param detectImg
+         * @return
+         * @throws IOException
+         */
+        public Builder setLTDetectImg(BufferedImage detectImg) {
+            detectOptions.detectImgLT(detectImg);
+            return this;
+        }
+
+        /**
+         * 左上角探测图形
+         *
+         * @param detectImg
+         * @return
+         * @throws IOException
+         */
+        public Builder setRTDetectImg(String detectImg) throws IOException {
+            try {
+                return setRTDetectImg(ImageLoadUtil.getImageByPath(detectImg));
+            } catch (IOException e) {
+                log.error("load detectImage error! e:{}", e);
+                throw new IOException("load detectImage error!", e);
+            }
+        }
+
+        /**
+         * 左上角探测图形
+         *
+         * @param detectImg
+         * @return
+         * @throws IOException
+         */
+        public Builder setRTDetectImg(InputStream detectImg) throws IOException {
+            try {
+                return setRTDetectImg(ImageIO.read(detectImg));
+            } catch (IOException e) {
+                log.error("load detectImage error! e:{}", e);
+                throw new IOException("load detectImage error!", e);
+            }
+        }
+
+        /**
+         * 右上角探测图形
+         *
+         * @param detectImg
+         * @return
+         * @throws IOException
+         */
+        public Builder setRTDetectImg(BufferedImage detectImg) {
+            detectOptions.detectImgRT(detectImg);
+            return this;
+        }
+
+        /**
+         * 左上角探测图形
+         *
+         * @param detectImg
+         * @return
+         * @throws IOException
+         */
+        public Builder setLDDetectImg(String detectImg) throws IOException {
+            try {
+                return setLDDetectImg(ImageLoadUtil.getImageByPath(detectImg));
+            } catch (IOException e) {
+                log.error("load detectImage error! e:{}", e);
+                throw new IOException("load detectImage error!", e);
+            }
+        }
+
+        /**
+         * 左上角探测图形
+         *
+         * @param detectImg
+         * @return
+         * @throws IOException
+         */
+        public Builder setLDDetectImg(InputStream detectImg) throws IOException {
+            try {
+                return setLDDetectImg(ImageIO.read(detectImg));
+            } catch (IOException e) {
+                log.error("load detectImage error! e:{}", e);
+                throw new IOException("load detectImage error!", e);
+            }
+        }
+
+        /**
+         * 左上角探测图形
+         *
+         * @param detectImg
+         * @return
+         * @throws IOException
+         */
+        public Builder setLDDetectImg(BufferedImage detectImg) {
+            detectOptions.detectImgLD(detectImg);
+            return this;
+        }
 
         public Builder setDetectOutColor(Integer outColor) {
             if (outColor == null) {
@@ -474,6 +606,11 @@ public class QrCodeGenWrapper {
         }
 
 
+        public Builder setDiaphaneityFill(boolean fill) {
+            drawOptions.diaphaneityFill(fill);
+            return this;
+        }
+
         public Builder setDrawPreColor(int color) {
             return setDrawPreColor(ColorUtil.int2color(color));
         }
@@ -490,6 +627,29 @@ public class QrCodeGenWrapper {
 
         public Builder setDrawBgColor(Color color) {
             drawOptions.bgColor(color);
+            return this;
+        }
+
+        public Builder setDrawBgImg(String img) throws IOException {
+            try {
+                return setDrawBgImg(ImageLoadUtil.getImageByPath(img));
+            } catch (IOException e) {
+                log.error("load drawBgImg error! e:{}", e);
+                throw new IOException("load drawBgImg error!", e);
+            }
+        }
+
+        public Builder setDrawBgImg(InputStream img) throws IOException {
+            try {
+                return setDrawBgImg(ImageIO.read(img));
+            } catch (IOException e) {
+                log.error("load drawBgImg error! e:{}", e);
+                throw new IOException("load drawBgImg error!", e);
+            }
+        }
+
+        public Builder setDrawBgImg(BufferedImage img) {
+            drawOptions.bgImg(img);
             return this;
         }
 
