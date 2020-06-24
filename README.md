@@ -74,7 +74,7 @@
 <dependency>
     <groupId>com.github.liuyueyi.quick-media</groupId>
     <artifactId>qrcode-plugin</artifactId>
-    <version>2.3</version>
+    <version>2.4</version>
 </dependency>
 ```
 
@@ -125,7 +125,6 @@
 <dependency>
     <groupId>com.github.hui.media</groupId>
     <artifactId>audio-plugin</artifactId>
-    <version>2.0</version>
 </dependency>
 ```
 
@@ -137,7 +136,6 @@
 <dependency>
     <groupId>com.github.hui.media</groupId>
     <artifactId>date-plugin</artifactId>
-    <version>2.0</version>
 </dependency>
 ```
 
@@ -150,7 +148,6 @@
 <dependency>
     <groupId>com.github.hui.media</groupId>
     <artifactId>image-plugin</artifactId>
-    <version>2.0</version>
 </dependency>
 ```
 
@@ -162,7 +159,6 @@ markdown转html，转图片的封装类， 详细内容查看: [markdown-plugin]
 <dependency>
     <groupId>com.github.hui.media</groupId>
     <artifactId>markdown-plugin</artifactId>
-    <version>2.0</version>
 </dependency>
 ```
 
@@ -170,11 +166,11 @@ markdown转html，转图片的封装类， 详细内容查看: [markdown-plugin]
 
 提供根据phantomjs渲染html的封装
 
+
 ```xml
 <dependency>
     <groupId>com.github.hui.media</groupId>
     <artifactId>phantom-plugin</artifactId>
-    <version>2.0</version>
 </dependency>
 ```
 
@@ -182,11 +178,12 @@ markdown转html，转图片的封装类， 详细内容查看: [markdown-plugin]
 
 提供二维码生成和解析的封装，详细查看: [qrcode-plugin使用说明](plugins/qrcode-plugin/readme.md)
 
+> [qrcode使用手册](https://liuyueyi.github.io/quick-media/#/%E6%8F%92%E4%BB%B6/%E4%BA%8C%E7%BB%B4%E7%A0%81/%E4%BA%8C%E7%BB%B4%E7%A0%81%E6%8F%92%E4%BB%B6%E4%BD%BF%E7%94%A8%E6%89%8B%E5%86%8C)
+
 ```xml
 <dependency>
     <groupId>com.github.hui.media</groupId>
     <artifactId>qrcode-plugin</artifactId>
-    <version>2.3</version>
 </dependency>
 ```
 
@@ -198,7 +195,6 @@ markdown转html，转图片的封装类， 详细内容查看: [markdown-plugin]
 <dependency>
     <groupId>com.github.hui.media</groupId>
     <artifactId>svg-core</artifactId>
-    <version>2.0</version>
 </dependency>
 ```
 
@@ -211,7 +207,6 @@ markdown转html，转图片的封装类， 详细内容查看: [markdown-plugin]
 <dependency>
     <groupId>com.github.hui.media</groupId>
     <artifactId>imagic-core</artifactId>
-    <version>2.0</version>
 </dependency>
 ```
 
@@ -245,7 +240,7 @@ markdown转html，转图片的封装类， 详细内容查看: [markdown-plugin]
 
 [查看更多二维码详情](https://liuyueyi.github.io/quick-media/#/插件/二维码/二维码插件使用手册)
 
-<font color="red">最新版本2.3，详情查看 [迭代日志](https://liuyueyi.github.io/quick-media/#/%E8%BF%AD%E4%BB%A3/%E6%9B%B4%E6%96%B0%E6%97%A5%E5%BF%97?id=_27-qrcode-plugin)</font>
+<font color="red">最新版本2.4，详情查看 [迭代日志](https://liuyueyi.github.io/quick-media/#/%E8%BF%AD%E4%BB%A3/%E6%9B%B4%E6%96%B0%E6%97%A5%E5%BF%97?id=_27-qrcode-plugin)</font>
 
 给出一个实际生成的case如下:
 
