@@ -1,328 +1,91 @@
-大多涉及到数据的处理，无非CURD四种操作，对于搜索SOLR而言，基本操作也可以说就这么几种，在实际应用中，搜索条件的多样性才是重点，我们在进入复杂的搜索之前，先来看一下如何新增和修改文档
-
-<!-- more -->
-
-## I. 环境准备
-
-solr的基础环境需要准备好，如果对这一块有疑问的童鞋，可以参考下上一篇博文: 《[190510-SpringBoot高级篇搜索之Solr环境搭建与简单测试](http://spring.hhui.top/spring-blog/2019/05/10/190510-SpringBoot高级篇搜索之Solr环境搭建与简单测试/)》
-
-### 1. 环境配置
-
-在pom文件中，设置好对应的依赖
-
-```xml
-<parent>
-    <groupId>org.springframework.boot</groupId>
-    <artifactId>spring-boot-starter-parent</artifactId>
-    <version>2.0.4.RELEASE</version>
-    <relativePath/> <!-- lookup parent from update -->
-</parent>
-
-<properties>
-    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-    <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
-    <spring-cloud.version>Finchley.RELEASE</spring-cloud.version>
-    <java.version>1.8</java.version>
-</properties>
-
-
-<build>
-    <pluginManagement>
-        <plugins>
-            <plugin>
-                <groupId>org.springframework.boot</groupId>
-                <artifactId>spring-boot-maven-plugin</artifactId>
-            </plugin>
-        </plugins>
-    </pluginManagement>
-</build>
-
-<repositories>
-    <repository>
-        <id>spring-milestones</id>
-        <name>Spring Milestones</name>
-        <url>https://repo.spring.io/milestone</url>
-        <snapshots>
-            <enabled>false</enabled>
-        </snapshots>
-    </repository>
-</repositories>
-
-
-<dependencies>
-    <dependency>
-        <groupId>org.springframework.boot</groupId>
-        <artifactId>spring-boot-starter-data-solr</artifactId>
-    </dependency>
-    <dependency>
-        <groupId>org.projectlombok</groupId>
-        <artifactId>lombok</artifactId>
-    </dependency>
-</dependencies>
-```
-
-因为我们采用默认的solr访问姿势，所以配置文件中可以不加对应的参数，当然也可以加上
-
-打开 `application.yml` 配置文件
-
-```yaml
-spring:
-  data:
-    solr:
-      host: http://127.0.0.1:8983/solr
-```
-
-如果我们的solr加上了用户名密码访问条件，参数中并没有地方设置username和password，那应该怎么办?
-
-```yml
-spring:
-  data:
-    solr:
-      host: http://admin:admin@127.0.0.1:8983/solr
-```
-
-如上写法，将用户名和密码写入http的连接中
-
-### 2. 自动装配
-
-我们主要使用SolrTemplate来和Solr打交到，因此我们需要先注册这个bean，可以怎么办？
-
-```java
-package com.git.hui.boot.solr.config;
-
-import org.apache.solr.client.solrj.SolrClient;
-import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
-import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
-import org.springframework.data.solr.core.SolrTemplate;
-
-/**
- * Created by @author yihui in 19:49 19/5/10.
- */
-@Configuration
-public class SearchAutoConfig {
-
-    @Bean
-    @ConditionalOnMissingBean(SolrTemplate.class)
-    public SolrTemplate solrTemplate(SolrClient solrClient) {
-        return new SolrTemplate(solrClient);
-    }
-}
-```
-
-上面的配置是条件注入，只有当SolrTemplate对应的bean没有被自动加载时，才会加载，为什么要怎么干？
-
-（可以想一想原因...）
-
-## II. 使用姿势示例
-
-我们的操作主要依赖的是SolrTemplate，因此有必要在开始之前，看一下它的签名
-
-Spring的源码中，可以发现大多`xxxTemplate`都会实现一个`xxxOperations` 接口，而这个接口就是用来定义CURD的api，比如我们看下 `SolrOperations`中与修改相关的api
-
-```java
-default UpdateResponse saveBean(String collection, Object obj) {
-	return saveBean(collection, obj, Duration.ZERO);
-}
-
-/**
- * Execute add operation against solr, which will do either insert or update with support for commitWithin strategy.
- *
- * @param collection must not be {@literal null}.
- * @param obj must not be {@literal null}.
- * @param commitWithin max time within server performs commit.
- * @return {@link UpdateResponse} containing update result.
- */
-UpdateResponse saveBean(String collection, Object obj, Duration commitWithin);
-
-default UpdateResponse saveBeans(String collection, Collection<?> beans) {
-	return saveBeans(collection, beans, Duration.ZERO);
-}
-
-UpdateResponse saveBeans(String collection, Collection<?> beans, Duration commitWithin);
-
-default UpdateResponse saveDocument(String collection, SolrInputDocument document) {
-	return saveDocument(collection, document, Duration.ZERO);
-}
-
-/**
- * Add a solrj input document to solr, which will do either insert or update with support for commitWithin strategy
- *
- * @param document must not be {@literal null}.
- * @param commitWithin must not be {@literal null}.
- * @return {@link UpdateResponse} containing update result.
- * @since 3.0
- */
-UpdateResponse saveDocument(String collection, SolrInputDocument document, Duration commitWithin);
-
-
-default UpdateResponse saveDocuments(String collection, Collection<SolrInputDocument> documents) {
-	return saveDocuments(collection, documents, Duration.ZERO);
-}
-
-UpdateResponse saveDocuments(String collection, Collection<SolrInputDocument> documents, Duration commitWithin);
-```
-
-上面的api签名中，比较明确的说明了这个 `saveXXX` 既可以用来新增文档，也可以用来修改文档，主要有提供了两类
-
-- 单个与批量
-- saveDocument 与 saveBean
-
-### 1. 添加文档
-
-从上面的api签名上看，`saveDocument` 应该是相对原始的操作方式了，因此我们先看下它的使用姿势
-
-#### a. saveDocument
-
-首先就是创建文档 `SolrInputDocument` 对象，通过调用`addField`来设置成员值
-
-```java
-public void testAddByDoc() {
-    SolrInputDocument document = new SolrInputDocument();
-    document.addField("id", 3);
-    document.addField("title", "testAddByDoc!");
-    document.addField("content", "通过solrTemplate新增文档");
-    document.addField("type", 2);
-    document.addField("create_at", System.currentTimeMillis() / 1000);
-    document.addField("publish_at", System.currentTimeMillis() / 1000);
-
-    UpdateResponse response = solrTemplate.saveDocument("yhh", document);
-    solrTemplate.commit("yhh");
-    System.out.println("over:" + response);
-}
-```
-
-<font color="red">注意：保存文档之后，一定得调用commit提交</font>
-
-
-#### b. saveBean
-
-前面需要创建`SolrInputDocument`对象，我们更希望的使用case是直接传入一个POJO，然后自动与solr的filed进行关联
-
-因此一种使用方式可以如下
-
-- 定义pojo，成员上通过 @Field 注解来关联solr的field
-- pojo对象直接当做参数传入，保存之后，执行 commit 提交
-
-```java
-@Data
-public static class DocDO {
-    @Field("id")
-    private Integer id;
-    @Field("title")
-    private String title;
-    @Field("content")
-    private String content;
-    @Field("type")
-    private Integer type;
-    @Field("create_at")
-    private Long createAt;
-    @Field("publish_at")
-    private Long publishAt;
-}
-
-/**
- * 新增
- */
-private void testAddByBean() {
-    DocDO docDO = new DocDO();
-    docDO.setId(4);
-    docDO.setTitle("addByBean");
-    docDO.setContent("新增一个测试文档");
-    docDO.setType(1);
-    docDO.setCreateAt(System.currentTimeMillis() / 1000);
-    docDO.setPublishAt(System.currentTimeMillis() / 1000);
-
-    UpdateResponse response = solrTemplate.saveBean("yhh", docDO);
-    solrTemplate.commit("yhh");
-    System.out.println(response);
-}
-```
-
-#### c. 批量
-
-批量的方式就比较简单了，传入集合即可
-
-```java
-private void testBatchAddByBean() {
-    DocDO docDO = new DocDO();
-    docDO.setId(5);
-    docDO.setTitle("addBatchByBean - 1");
-    docDO.setContent("新增一个测试文档");
-    docDO.setType(1);
-    docDO.setCreateAt(System.currentTimeMillis() / 1000);
-    docDO.setPublishAt(System.currentTimeMillis() / 1000);
-
-    DocDO docDO2 = new DocDO();
-    docDO2.setId(6);
-    docDO2.setTitle("addBatchByBean - 2");
-    docDO2.setContent("新增一个测试文档");
-    docDO2.setType(1);
-    docDO2.setCreateAt(System.currentTimeMillis() / 1000);
-    docDO2.setPublishAt(System.currentTimeMillis() / 1000);
-
-    UpdateResponse response = solrTemplate.saveBeans("yhh", Arrays.asList(docDO, docDO2));
-    solrTemplate.commit("yhh");
-    System.out.println(response);
-}
-```
-
-#### d. 测试
-
-上面的几个方法，我们执行之后，我们看下是否能查询到新增加的数据
-
-![output](http://upload-images.jianshu.io/upload_images/1405936-d42c94cf9e322772?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
-
-
-### 2. 文档修改
-
-在看前面的接口签名时，就知道修改和新增用的是相同的api，所以修改文档和上面的使用实际上也没有什么特别的，下面简单的演示一下
-
-```java
-public void testUpdateDoc() {
-    DocDO docDO = new DocDO();
-    docDO.setId(5);
-    docDO.setTitle("修改之后!!!");
-    docDO.setType(1);
-    docDO.setCreateAt(System.currentTimeMillis() / 1000);
-    docDO.setPublishAt(System.currentTimeMillis() / 1000);
-
-    UpdateResponse response = solrTemplate.saveBean("yhh", docDO);
-    solrTemplate.commit("yhh");
-    System.out.println(response);
-}
-```
-
-上面的实例中，修改了id为5的文档标题，并删除了content内容，执行完毕之后，结果如何呢？
-
-![output](http://upload-images.jianshu.io/upload_images/1405936-89fcf22af5be3e07?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
-
-- title被替换
-- content没有了
-
-**到这里就有个疑问了，对于调用而言，怎么保证是修改还是新增呢？**
-
-- 这里主要是根据id来判断，这个id类似db中的唯一主键，当我们没有指定id时，会随机生成一个id
-- 如果存在相同的id，则修改文档；如果不存在，则新增文档
-
-
-## III. 其他
-
-### 0. 项目
-
-- 项目源码：[https://github.com/liuyueyi/spring-boot-demo](https://github.com/liuyueyi/spring-boot-demo)
-- 工程源码: [https://github.com/liuyueyi/spring-boot-demo/blob/master/spring-boot/140-search-solr](https://github.com/liuyueyi/spring-boot-demo/blob/master/spring-boot/140-search-solr)
-
-### 1. 一灰灰Blog
-
-尽信书则不如，以上内容，纯属一家之言，因个人能力有限，难免有疏漏和错误之处，如发现bug或者有更好的建议，欢迎批评指正，不吝感激
-
-下面一灰灰的个人博客，记录所有学习和工作中的博文，欢迎大家前去逛逛
-
-- 一灰灰Blog个人博客 [https://blog.hhui.top](https://blog.hhui.top)
-- 一灰灰Blog-Spring专题博客 [http://spring.hhui.top](http://spring.hhui.top)
-
-
-![QrCode](http://upload-images.jianshu.io/upload_images/1405936-49b42ccb3f85fd8b?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
-
-
+## 一灰灰晨间简讯 2020-04-04
+> 一文带你了解科技界24小时内最新要闻
+### 区块链新闻
+- 谷歌、Kraken等公司高管加入Apifiny 推出API平台GlobalX
+- Apifiny推出API平台GlobalX 高管成员来自谷歌、Kraken等公司
+### IT资讯
+- IDC发中国企业级存储2019四季度报告：华为排名
+- 苹果美国所有实体零售店继续停业 计划5月初再开
+- 苹果美国所有实体零售店继续停止运营 关闭到5月
+- 苹果与乔布斯遗孀等捐1200万美元 为美国人发食
+- 特斯拉宣布一季度交车8.8万辆，盘后股价大涨17%
+- 美国股市反弹：苹果微软上涨2%，蔚来跟谁学下挫
+- 拆车大神评特斯拉Model Y：这才像马斯克的车
+- 疫情让笔电在美国大卖，幸好去年从中国进口很多
+- Gartner报告：阿里云成全球容器产品最完善云服
+### 人工智能
+- 非接触时代，佳都科技发布商用智能人脸识别测温新品
+### VR科技
+- 最坏结果是关门！瑞幸咖啡还能喝到吗？
+- 实探瑞幸门店：消费者买到爆单，店员累到流汗
+### 移动互联网
+- 传入门级新iPhone即将发布：有红白黑三色 有256
+- 荣耀终端有限公司成立 赵明：运作没变化 无需特
+- 专访高通徐：2022年5G手机出货量将达7.5亿部
+### 创业新闻
+- AOFAX的12345服务电话呼叫中心软件系统
+- 小程序不等于流量，喜推营销SaaS解决企业流量危机
+- 龙兵智能名片AI获客商城是什么？
+- 云蚁科技：小程序直播带货,商家小程序销售突破2000万
+- 美国云主机丨SugarHosts美国云服务器新品上线，限时选购三五折！
+- 警惕“二次过草地” 猎豹移动大数据教你如何做“后疫情防控”
+- 零售业跌入冰点如何自救？Smartbi为您揭秘数据运营“主战场”
+- 唐桥科技全球抗疫日记——传授“中国经验”，云会议平台远程驰援
+- 「豆柴宠物」完成数千万元A轮融资，青桐资本担任独家财务顾问
+- 中智关爱通赋能企业管理，共战疫情
+- 8MSaaS远程办公：后疫情时代，如何守住你的业务？
+- 突然发现，微擎市场的智伍应用很适合做坑位，低价用正版！
+- 工资汇总表怎么做？薪人薪事教你1分钟搞定！
+### 科技新闻
+- 疫情之下 那些“高冷”的大型物理学设施还好吗？
+- 10亿不够再加10亿，阿里亩产一千美金计划全面驰援湖北
+- 促进快递业与制造业 深度融合发展意见印发
+- “新基建”丰富应用场景 指向“汽车革命”
+### 互联网资讯
+- 人民日报：瑞幸咖啡的自欺欺人是在折损中国企业
+- 市值暴跌8成董事长却元气满满，瑞幸还能幸存
+- 瑞幸造假冲击波：造假高管最高可被判25年入狱
+- 3月快递业务量预计完成57亿件 淘宝包裹量超其他
+- 安永：在审计瑞幸2019年度财报过程中发现造假问
+- 瑞幸咖啡开盘涨超10%，昨日承认伪造交易22亿元
+- 浑水回应做空瑞幸咖啡：卖空者有存在必要性
+- 瑞幸承认财务造假前：黎辉减持回本 刘二海一股
+- 百度即将上线电商直播，今年发力直播业务
+- 腾讯购入1600万股虎牙股票 成为最大股东
+- 腾讯5000万美元增持拼多多 占股达29.2%_
+- 自爆造假前一天仍被大肆吹捧 瑞幸打了哪些机构
+- 瑞幸涉嫌造假事实若实锤 中介机构或将面临巨额
+- 滴滴：疫情中有15城市近16万司机加入医护车队
+- 亚马逊：美国站将不再销售N95口罩  优先向医院
+- 起底瑞幸：背靠神州系铁三角，最快IPO难破盈利
+- 分众传媒回应金主瑞幸咖啡造假：广告款流程正
+- 财报造假用户买爆瑞幸APP和小程序 暂无法正常使
+- 愉悦资本回应瑞幸事件：一股没卖，刘二海正常卸
+- 证监会：高度关注瑞幸咖啡财务造假事件 强烈谴
+### 游戏资讯
+- 《生化危机3：重制版》steam发售即好评 玩家好评率90%
+- 小岛秀夫：当初完全没想到《合金装备》影响力会这么大
+- 《三国志14》4.9日更新内容：修复BUG以及增加新武将
+- 因物流影响而跳票？外媒分析《美国末日2》跳票原因
+- 还有大招没放出来？白金工作室将在近期公布神秘企划
+- 《生化危机：抵抗计划》IGN评分：6.0分 游戏平衡度不足
+- PS港行上架《生化危机2+3重制版》整合版 仅售570.6元
+- I社公布《Honey Select 2》新情报 女性角色特殊状态增加
+- 手机配件公司 Gamevice再次上诉 起诉任天堂专利侵权
+- 《南瓜先生2：九龙城寨》评测：感受城寨的人情冷暖
+- 模拟经营新作《末日地带：与世隔绝》抢先登陆Steam
+- 《最终幻想7：重制版》公布终极中文预告片 众主角亮相
+- 《辐射76》steam版本即将发售 B社版玩家可免费领取
+- 微软旗下海盗游戏《盗贼之海》宣布正式登陆steam
+- 小岛秀夫：未来会做一款恐怖游戏 能把玩家吓到失禁
+- 《生化危机3：重制版》steam版正式发售 国区售价414元
+- 《龙珠Z：卡卡罗特》steam版开启折扣活动 国区售价199元
+- 《生化危机:抵抗计划》IGN评分：6.0分 游戏平衡度不足
+- Xbox第一方游戏开启Steam特卖 《光环》合集仅售92元
+- 《全境封锁2：纽约军阀》MC评分跌至0.5 成为史上最低分
+
+### 一灰灰Blog
+
+更多资讯 + 技术干货，请扫码关注
+
+![](https://spring.hhui.top/spring-blog/imgs/info/info.png)

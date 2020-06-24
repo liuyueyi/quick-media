@@ -115,6 +115,29 @@ public class QrCodeGenUserGuide {
 
 
     /**
+     * 带外边框的圆形logo
+     */
+    @Test
+    public void logoQr4() {
+        try {
+            String msg = "http://weixin.qq.com/r/FS9waAPEg178rUcL93oH";
+            String logo = "logo.jpg";
+            boolean ans = QrCodeGenWrapper.of(msg)
+                    .setW(400)
+                    .setLogo(logo)
+                    // 圆形logo支持
+                    .setLogoStyle(QrCodeOptions.LogoStyle.CIRCLE)
+                    .setLogoBgColor(0xfffefefe)
+                    .setLogoBorderBgColor(0xffc7c7c7)
+                    .setLogoBorder(true)
+                    .asFile("/tmp/lqr4.png");
+        }catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+
+    /**
      * 背景图的二维码，默认全覆盖模式
      */
     @Test
@@ -233,6 +256,33 @@ public class QrCodeGenUserGuide {
                     .setRTDetectImg("love/01.png")
                     .setDiaphaneityFill(true)
                     .asFile("/tmp/tqr2.png");
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    @Test
+    public void detectedQr3() {
+        String msg = "http://weixin.qq.com/r/FS9waAPEg178rUcL93oH";
+        try {
+            QrCodeGenWrapper.of(msg)
+                    .setDrawStyle(QrCodeOptions.DrawStyle.CIRCLE)
+                    .setDrawEnableScale(true)
+                    .asFile("/tmp/tqr3.png");
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    @Test
+    public void detectedQr4() {
+        String msg = "http://weixin.qq.com/r/FS9waAPEg178rUcL93oH";
+        try {
+            QrCodeGenWrapper.of(msg)
+                    .setDetectSpecial()
+                    .setDrawStyle(QrCodeOptions.DrawStyle.CIRCLE)
+                    .setDrawEnableScale(true)
+                    .asFile("/tmp/tqr4.png");
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -373,6 +423,30 @@ public class QrCodeGenUserGuide {
         }
     }
 
+    /**
+     * 文字二维码
+     */
+    @Test
+    public void fontQr1() {
+        String msg = "http://weixin.qq.com/r/FS9waAPEg178rUcL93oH";
+
+        int size = 500;
+        try {
+            boolean ans = QrCodeGenWrapper.of(msg)
+                    .setW(size)
+                    .setH(size)
+                    .setQrText("我是一灰灰欢迎关注")
+                    // true 则探测图形有自己的绘制规则
+                    .setDetectSpecial()
+                    .setErrorCorrection(ErrorCorrectionLevel.H)
+                    .setDrawStyle(QrCodeOptions.DrawStyle.TXT)
+                    .setPicType("png")
+                    .asFile("/tmp/fontQr1.png");
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
     @Test
     public void imgQr1() {
         String msg = "http://weixin.qq.com/r/FS9waAPEg178rUcL93oH";
@@ -383,7 +457,6 @@ public class QrCodeGenUserGuide {
                     .setW(size)
                     .setH(size)
                     .setErrorCorrection(ErrorCorrectionLevel.H)
-                    .setDrawBgColor(ColorUtil.OPACITY)
                     .setDetectImg("jihe/PDP.png")
                     .setDrawStyle(QrCodeOptions.DrawStyle.IMAGE)
                     .addImg(1, 1, "jihe/a.png")

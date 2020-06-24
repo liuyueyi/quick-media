@@ -1,11 +1,13 @@
 package com.github.hui.quick.plugin.qrcode.wrapper;
 
 import com.github.hui.quick.plugin.base.gif.GifDecoder;
+import com.github.hui.quick.plugin.qrcode.constants.QuickQrUtil;
 import com.github.hui.quick.plugin.qrcode.entity.DotSize;
 import com.github.hui.quick.plugin.qrcode.helper.QrCodeRenderHelper;
 import com.google.zxing.EncodeHintType;
 import lombok.Builder;
 import lombok.Data;
+import org.apache.commons.lang.BooleanUtils;
 import org.apache.commons.lang3.StringUtils;
 
 import java.awt.*;
@@ -233,6 +235,16 @@ public class QrCodeOptions {
          */
         private BufferedImage detectImgLD;
 
+        /**
+         * true 表示探测图形单独处理
+         * false 表示探测图形的样式更随二维码的主样式
+         */
+        private Boolean special;
+
+        public Boolean getSpecial() {
+            return BooleanUtils.isTrue(special);
+        }
+
         public BufferedImage chooseDetectedImg(QrCodeRenderHelper.DetectLocation detectLocation) {
             switch (detectLocation) {
                 case LD:
@@ -274,6 +286,24 @@ public class QrCodeOptions {
          */
         private DrawStyle drawStyle;
 
+        /**
+         * 生成文字二维码时的候字符池
+         */
+        private String text;
+
+        /**
+         * 生成文字二维码时的字体
+         */
+        private String fontName;
+
+        /**
+         * 字体样式
+         *
+         * {@link Font#PLAIN} 0
+         * {@link Font#BOLD}  1
+         * {@link Font#ITALIC} 2
+         */
+        private int fontStyle;
 
         /**
          * true 时表示支持对相邻的着色点进行合并处理 （即用一个大图来绘制相邻的两个着色点）
@@ -293,7 +323,20 @@ public class QrCodeOptions {
         private Map<DotSize, BufferedImage> imgMapper;
 
         public BufferedImage getImage(int row, int col) {
-            return imgMapper.get(DotSize.create(row, col));
+            return getImage(DotSize.create(row, col));
+        }
+
+        public BufferedImage getImage(DotSize dotSize) {
+            return imgMapper.get(dotSize);
+        }
+
+        /**
+         * 获取二维码绘制的文字
+         *
+         * @return
+         */
+        public String getDrawQrTxt() {
+            return QuickQrUtil.qrTxt(text);
         }
 
         public static DrawOptionsBuilder builder() {
@@ -315,6 +358,25 @@ public class QrCodeOptions {
              * 透明度填充，如绘制二维码的图片中存在透明区域，若这个参数为true，则会用bgColor填充透明的区域；若为false，则透明区域依旧是透明的
              */
             private boolean diaphaneityFill;
+
+            /**
+             * 绘制的二维码文字
+             */
+            private String text;
+
+            /**
+             * 生成文字二维码时的字体
+             */
+            private String fontName;
+
+            /**
+             * 字体样式
+             *
+             * {@link Font#PLAIN} 0
+             * {@link Font#BOLD}  1
+             * {@link Font#ITALIC} 2
+             */
+            private Integer fontStyle;
 
             /**
              * 绘制的背景图片
@@ -368,6 +430,21 @@ public class QrCodeOptions {
                 return this;
             }
 
+            public DrawOptionsBuilder text(String text) {
+                this.text = text;
+                return this;
+            }
+
+            public DrawOptionsBuilder fontName(String fontName) {
+                this.fontName = fontName;
+                return this;
+            }
+
+            public DrawOptionsBuilder fontStyle(int fontStyle) {
+                this.fontStyle = fontStyle;
+                return this;
+            }
+
             public DrawOptionsBuilder enableScale(boolean enableScale) {
                 this.enableScale = enableScale;
                 return this;
@@ -387,6 +464,9 @@ public class QrCodeOptions {
                 drawOptions.setEnableScale(this.enableScale);
                 drawOptions.setImgMapper(this.imgMapper);
                 drawOptions.setDiaphaneityFill(this.diaphaneityFill);
+                drawOptions.setText(text == null ? QuickQrUtil.DEFAULT_QR_TXT : text);
+                drawOptions.setFontName(fontName == null ? QuickQrUtil.DEFAULT_FONT_NAME : fontName);
+                drawOptions.setFontStyle(fontStyle == null ? QuickQrUtil.DEFAULT_FONT_STYLE : fontStyle);
                 return drawOptions;
             }
         }
@@ -397,11 +477,11 @@ public class QrCodeOptions {
      * logo的样式
      */
     public enum LogoStyle {
-        ROUND, NORMAL;
+        ROUND, NORMAL, CIRCLE;
 
 
         public static LogoStyle getStyle(String name) {
-            return "ROUND".equalsIgnoreCase(name) ? ROUND : NORMAL;
+            return LogoStyle.valueOf(name.toUpperCase());
         }
     }
 
@@ -440,42 +520,42 @@ public class QrCodeOptions {
         RECT { // 矩形
 
             @Override
-            public void draw(Graphics2D g2d, int x, int y, int w, int h, BufferedImage img) {
+            public void draw(Graphics2D g2d, int x, int y, int w, int h, BufferedImage img, String txt) {
                 g2d.fillRect(x, y, w, h);
             }
 
             @Override
-            public boolean expand(ExpandType expandType) {
-                return true;
+            public boolean expand(DotSize dotSize) {
+                return dotSize.getRow() == dotSize.getCol();
             }
         }, CIRCLE { // 圆点
 
             @Override
-            public void draw(Graphics2D g2d, int x, int y, int w, int h, BufferedImage img) {
+            public void draw(Graphics2D g2d, int x, int y, int w, int h, BufferedImage img, String txt) {
                 g2d.fill(new Ellipse2D.Float(x, y, w, h));
             }
 
             @Override
-            public boolean expand(ExpandType expandType) {
-                return expandType == ExpandType.SIZE4;
+            public boolean expand(DotSize dotSize) {
+                return dotSize.getRow() == dotSize.getCol();
             }
         }, TRIANGLE { // 三角形
 
             @Override
-            public void draw(Graphics2D g2d, int x, int y, int w, int h, BufferedImage img) {
+            public void draw(Graphics2D g2d, int x, int y, int w, int h, BufferedImage img, String txt) {
                 int px[] = {x, x + (w >> 1), x + w};
                 int py[] = {y + w, y, y + w};
                 g2d.fillPolygon(px, py, 3);
             }
 
             @Override
-            public boolean expand(ExpandType expandType) {
+            public boolean expand(DotSize expandType) {
                 return false;
             }
         }, DIAMOND { // 五边形-钻石
 
             @Override
-            public void draw(Graphics2D g2d, int x, int y, int size, int h, BufferedImage img) {
+            public void draw(Graphics2D g2d, int x, int y, int size, int h, BufferedImage img, String txt) {
                 int cell4 = size >> 2;
                 int cell2 = size >> 1;
                 int px[] = {x + cell4, x + size - cell4, x + size, x + cell2, x};
@@ -484,13 +564,13 @@ public class QrCodeOptions {
             }
 
             @Override
-            public boolean expand(ExpandType expandType) {
-                return expandType == ExpandType.SIZE4;
+            public boolean expand(DotSize dotSize) {
+                return dotSize.getRow() == dotSize.getCol();
             }
         }, SEXANGLE { // 六边形
 
             @Override
-            public void draw(Graphics2D g2d, int x, int y, int size, int h, BufferedImage img) {
+            public void draw(Graphics2D g2d, int x, int y, int size, int h, BufferedImage img, String txt) {
                 int add = size >> 2;
                 int px[] = {x + add, x + size - add, x + size, x + size - add, x + add, x};
                 int py[] = {y, y, y + add + add, y + size, y + size, y + add + add};
@@ -498,13 +578,13 @@ public class QrCodeOptions {
             }
 
             @Override
-            public boolean expand(ExpandType expandType) {
-                return expandType == ExpandType.SIZE4;
+            public boolean expand(DotSize dotSize) {
+                return dotSize.getRow() == dotSize.getCol();
             }
         }, OCTAGON { // 八边形
 
             @Override
-            public void draw(Graphics2D g2d, int x, int y, int size, int h, BufferedImage img) {
+            public void draw(Graphics2D g2d, int x, int y, int size, int h, BufferedImage img, String txt) {
                 int add = size / 3;
                 int px[] = {x + add, x + size - add, x + size, x + size, x + size - add, x + add, x, x};
                 int py[] = {y, y, y + add, y + size - add, y + size, y + size, y + size - add, y + add};
@@ -512,21 +592,34 @@ public class QrCodeOptions {
             }
 
             @Override
-            public boolean expand(ExpandType expandType) {
-                return expandType == ExpandType.SIZE4;
+            public boolean expand(DotSize dotSize) {
+                return dotSize.getRow() == dotSize.getCol();
             }
         }, IMAGE { // 自定义图片
 
             @Override
-            public void draw(Graphics2D g2d, int x, int y, int w, int h, BufferedImage img) {
+            public void draw(Graphics2D g2d, int x, int y, int w, int h, BufferedImage img, String txt) {
                 g2d.drawImage(img, x, y, w, h, null);
             }
 
             @Override
-            public boolean expand(ExpandType expandType) {
+            public boolean expand(DotSize expandType) {
                 return true;
             }
-        },;
+        },
+
+        TXT { // 文字绘制
+
+            @Override
+            public void draw(Graphics2D g2d, int x, int y, int w, int h, BufferedImage img, String txt) {
+                g2d.drawString(txt, x, y + w);
+            }
+
+            @Override
+            public boolean expand(DotSize dotSize) {
+                return dotSize.getRow() == dotSize.getCol();
+            }
+        };
 
         private static Map<String, DrawStyle> map;
 
@@ -548,20 +641,15 @@ public class QrCodeOptions {
         }
 
 
-        public abstract void draw(Graphics2D g2d, int x, int y, int w, int h, BufferedImage img);
+        public abstract void draw(Graphics2D g2d, int x, int y, int w, int h, BufferedImage img, String txt);
 
 
         /**
          * 返回是否支持绘制自定义图形的扩展
          *
-         * @param expandType
+         * @param dotSize
          * @return
          */
-        public abstract boolean expand(ExpandType expandType);
-    }
-
-
-    public enum ExpandType {
-        ROW2, COL2, SIZE4;
+        public abstract boolean expand(DotSize dotSize);
     }
 }

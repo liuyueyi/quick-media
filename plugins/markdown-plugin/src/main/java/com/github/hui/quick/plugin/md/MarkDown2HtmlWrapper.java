@@ -29,12 +29,18 @@ public class MarkDown2HtmlWrapper {
     public static String MD_CSS = null;
 
     static {
+        MD_CSS = buildCssContent("md/huimarkdown.css");
+    }
+
+    public static String buildCssContent(String file) {
+        String css;
         try {
-            MD_CSS = FileReadUtil.readAll("md/huimarkdown.css");
-            MD_CSS = "<style type=\"text/css\">\n" + MD_CSS + "\n</style>\n";
+            css = FileReadUtil.readAll(file);
+            css = "<style type=\"text/css\">\n" + css + "\n</style>\n";
         } catch (Exception e) {
-            MD_CSS = "";
+            css = "";
         }
+        return css;
     }
 
 

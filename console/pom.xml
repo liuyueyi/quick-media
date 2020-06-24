@@ -18,13 +18,13 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
         <java.version>1.8</java.version>
-        <qrcode-plugin.version>2.2</qrcode-plugin.version>
-        <image-plugin.version>2.0</image-plugin.version>
-        <svg-plugin.version>2.0</svg-plugin.version>
-        <markdonw-plugin.version>2.0</markdonw-plugin.version>
-        <audio-plugin.version>2.0</audio-plugin.version>
-        <date-plugin.version>2.0</date-plugin.version>
-        <phantom-plugin.version>2.0</phantom-plugin.version>
+        <qrcode-plugin.version>2.4</qrcode-plugin.version>
+        <image-plugin.version>2.4</image-plugin.version>
+        <svg-plugin.version>2.4</svg-plugin.version>
+        <markdonw-plugin.version>2.4</markdonw-plugin.version>
+        <audio-plugin.version>2.4</audio-plugin.version>
+        <date-plugin.version>2.4</date-plugin.version>
+        <phantom-plugin.version>2.4</phantom-plugin.version>
     </properties>
 
     <repositories>

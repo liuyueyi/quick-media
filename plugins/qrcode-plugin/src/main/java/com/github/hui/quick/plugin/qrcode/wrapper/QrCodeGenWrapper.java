@@ -426,6 +426,7 @@ public class QrCodeGenWrapper {
 
         public Builder setDetectImg(BufferedImage detectImg) {
             detectOptions.detectImg(detectImg);
+            detectOptions.special(true);
             return this;
         }
 
@@ -470,6 +471,7 @@ public class QrCodeGenWrapper {
          */
         public Builder setLTDetectImg(BufferedImage detectImg) {
             detectOptions.detectImgLT(detectImg);
+            detectOptions.special(true);
             return this;
         }
 
@@ -514,6 +516,7 @@ public class QrCodeGenWrapper {
          */
         public Builder setRTDetectImg(BufferedImage detectImg) {
             detectOptions.detectImgRT(detectImg);
+            detectOptions.special(true);
             return this;
         }
 
@@ -558,6 +561,7 @@ public class QrCodeGenWrapper {
          */
         public Builder setLDDetectImg(BufferedImage detectImg) {
             detectOptions.detectImgLD(detectImg);
+            detectOptions.special(true);
             return this;
         }
 
@@ -587,6 +591,16 @@ public class QrCodeGenWrapper {
             return this;
         }
 
+        /**
+         * 设置探测图形样式，不跟随二维码主样式
+         *
+         * @return
+         */
+        public Builder setDetectSpecial() {
+            detectOptions.special(true);
+            return this;
+        }
+
         /////////////// 探测图形 配置结束 ///////////////
 
 
@@ -606,6 +620,9 @@ public class QrCodeGenWrapper {
         }
 
 
+        /**
+         * 透明度填充，如绘制二维码的图片中存在透明区域，若这个参数为true，则会用bgColor填充透明的区域；若为false，则透明区域依旧是透明的
+         */
         public Builder setDiaphaneityFill(boolean fill) {
             drawOptions.diaphaneityFill(fill);
             return this;
@@ -708,6 +725,39 @@ public class QrCodeGenWrapper {
                 log.error("load draw size4img error! e: {}", e);
                 throw new IOException("load draw row:" + row + ", col:" + col + " img error!", e);
             }
+        }
+
+        /**
+         * 文字二维码的渲染字符串
+         *
+         * @param text
+         * @return
+         */
+        public Builder setQrText(String text) {
+            drawOptions.text(text);
+            return this;
+        }
+
+        /**
+         * 字体名
+         *
+         * @param fontName
+         * @return
+         */
+        public Builder setQrDotFontName(String fontName) {
+            drawOptions.fontName(fontName);
+            return this;
+        }
+
+        /**
+         * 字体样式
+         *
+         * @param fontStyle 0 {@link Font#PLAIN} 1 {@link Font#BOLD} 2 {@link Font#ITALIC}
+         * @return
+         */
+        public Builder setQrDotFontStyle(int fontStyle) {
+            drawOptions.fontStyle(fontStyle);
+            return this;
         }
 
         /////////////// 二维码绘制 配置结束 ///////////////

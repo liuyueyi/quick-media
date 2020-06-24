@@ -2,6 +2,7 @@ package com.github.hui.quick.plugin.qrcode.helper;
 
 import com.github.hui.quick.plugin.base.GraphicUtil;
 import com.github.hui.quick.plugin.base.ImageOperateUtil;
+import com.github.hui.quick.plugin.qrcode.constants.QuickQrUtil;
 import com.github.hui.quick.plugin.qrcode.entity.DotSize;
 import com.github.hui.quick.plugin.qrcode.wrapper.BitMatrixEx;
 import com.github.hui.quick.plugin.qrcode.wrapper.QrCodeOptions;
@@ -37,13 +38,18 @@ public class QrCodeRenderHelper {
         // 获取logo图片
         BufferedImage logoImg = logoOptions.getLogo();
 
-        // 绘制圆角图片
+
+        // 默认不处理logo
         int radius = 0;
         if (logoOptions.getLogoStyle() == QrCodeOptions.LogoStyle.ROUND) {
+            // 绘制圆角图片
             radius = logoImg.getWidth() >> 2;
             logoImg = ImageOperateUtil.makeRoundedCorner(logoImg, radius);
+        } else if (logoOptions.getLogoStyle() == QrCodeOptions.LogoStyle.CIRCLE) {
+            // 绘制圆形logo
+            radius = Math.min(logoImg.getWidth(), logoImg.getHeight());
+            logoImg = ImageOperateUtil.makeRoundImg(logoImg, false, null);
         }
-
 
         // 绘制边框
         if (logoOptions.isBorder()) {
@@ -225,6 +231,13 @@ public class QrCodeRenderHelper {
         g2.setColor(bgColor);
         g2.fillRect(0, 0, qrWidth, qrHeight);
 
+        if (qrCodeConfig.getDrawOptions().getDrawStyle() == QrCodeOptions.DrawStyle.TXT) {
+            // 绘制文字时，需要设置字体
+            g2.setFont(QuickQrUtil
+                    .font(qrCodeConfig.getDrawOptions().getFontName(), qrCodeConfig.getDrawOptions().getFontStyle(),
+                            infoSize));
+        }
+
         // 探测图形的大小
         int detectCornerSize = bitMatrix.getByteMatrix().get(0, 5) == 1 ? 7 : 5;
 
@@ -239,13 +252,13 @@ public class QrCodeRenderHelper {
                 if (bitMatrix.getByteMatrix().get(x, y) == 0) {
                     // 探测图形内部的元素与二维码的01点图绘制逻辑分开
                     // 绘制二维码中不在探测图形内部的0点图
-                    if (!detectLocation.detectedArea()) {
+                    if (!detectLocation.detectedArea() && qrCodeConfig.getDetectOptions().getSpecial()) {
                         drawQrDotBgImg(qrCodeConfig, g2, leftPadding, topPadding, infoSize, x, y);
                     }
                     continue;
                 }
 
-                if (detectLocation.detectedArea()) {
+                if (detectLocation.detectedArea() && qrCodeConfig.getDetectOptions().getSpecial()) {
                     // 绘制三个位置探测图形
                     drawDetectImg(qrCodeConfig, g2, bitMatrix, matrixW, matrixH, leftPadding, topPadding, infoSize,
                             detectCornerSize, x, y, detectOutColor, detectInnerColor, detectLocation);
@@ -432,36 +445,33 @@ public class QrCodeRenderHelper {
         if (!qrCodeConfig.getDrawOptions().isEnableScale()) {
             // 用几何图形进行填充时，如果不支持多个像素点渲染一个几何图形时，直接返回即可
             drawStyle.draw(g2, leftPadding + x * infoSize, topPadding + y * infoSize, infoSize, infoSize,
-                    qrCodeConfig.getDrawOptions().getImage(1, 1));
+                    qrCodeConfig.getDrawOptions().getImage(1, 1), qrCodeConfig.getDrawOptions().getDrawQrTxt());
             return;
         }
 
-        // todo 针对非图片的二维码扩展，先保留原来的扩展逻辑，后续优化
-        boolean row2 = x + 1 < bitMatrix.getByteMatrix().getWidth() && bitMatrix.getByteMatrix().get(x + 1, y) == 1;
-        boolean col2 = y + 1 < bitMatrix.getByteMatrix().getHeight() && bitMatrix.getByteMatrix().get(x, y + 1) == 1;
+        int maxRow = getMaxRow(bitMatrix.getByteMatrix(), x, y);
+        int maxCol = getMaxCol(bitMatrix.getByteMatrix(), x, y);
+        List<DotSize> availableSize = getAvailableSize(bitMatrix.getByteMatrix(), x, y, maxRow, maxCol);
+        for (DotSize dotSize : availableSize) {
+            if (!drawStyle.expand(dotSize)) {
+                continue;
+            }
 
-        if (row2 && col2 && bitMatrix.getByteMatrix().get(x + 1, y + 1) == 1 &&
-                drawStyle.expand(QrCodeOptions.ExpandType.SIZE4)) {
-            // 四个相等
-            bitMatrix.getByteMatrix().set(x + 1, y, 0);
-            bitMatrix.getByteMatrix().set(x + 1, y + 1, 0);
-            bitMatrix.getByteMatrix().set(x, y + 1, 0);
-            drawStyle.draw(g2, leftPadding + x * infoSize, topPadding + y * infoSize, infoSize << 1, infoSize << 1,
-                    qrCodeConfig.getDrawOptions().getImage(2, 2));
-        } else if (row2 && drawStyle.expand(QrCodeOptions.ExpandType.ROW2)) {
-            // 横向相同
-            bitMatrix.getByteMatrix().set(x + 1, y, 0);
-            drawStyle.draw(g2, leftPadding + x * infoSize, topPadding + y * infoSize, infoSize << 1, infoSize,
-                    qrCodeConfig.getDrawOptions().getImage(2, 1));
-        } else if (col2 && drawStyle.expand(QrCodeOptions.ExpandType.COL2)) {
-            // 列的两个
-            bitMatrix.getByteMatrix().set(x, y + 1, 0);
-            drawStyle.draw(g2, leftPadding + x * infoSize, topPadding + y * infoSize, infoSize, infoSize << 1,
-                    qrCodeConfig.getDrawOptions().getImage(1, 2));
-        } else {
-            drawStyle.draw(g2, leftPadding + x * infoSize, topPadding + y * infoSize, infoSize, infoSize,
-                    qrCodeConfig.getDrawOptions().getImage(1, 1));
+            // 开始绘制，并将已经绘制过得地方置空
+            drawStyle.draw(g2, leftPadding + x * infoSize, topPadding + y * infoSize, dotSize.getCol() * infoSize,
+                    dotSize.getRow() * infoSize, qrCodeConfig.getDrawOptions().getImage(dotSize),
+                    qrCodeConfig.getDrawOptions().getDrawQrTxt());
+            for (int col = 0; col < dotSize.getCol(); col++) {
+                for (int row = 0; row < dotSize.getRow(); row++) {
+                    bitMatrix.getByteMatrix().set(x + col, y + row, 0);
+                }
+            }
+            return;
+
         }
+
+        drawStyle.draw(g2, leftPadding + x * infoSize, topPadding + y * infoSize, infoSize, infoSize,
+                qrCodeConfig.getDrawOptions().getImage(1, 1), qrCodeConfig.getDrawOptions().getDrawQrTxt());
     }
 
 
@@ -487,14 +497,14 @@ public class QrCodeRenderHelper {
         // 获取对应的图片
         BufferedImage drawImg;
         for (DotSize dotSize : availableSize) {
-            drawImg = qrCodeConfig.getDrawOptions().getImgMapper().get(dotSize);
+            drawImg = qrCodeConfig.getDrawOptions().getImage(dotSize);
             if (drawImg == null) {
                 continue;
             }
 
             // 开始绘制，并将已经绘制过得地方置空
             drawStyle.draw(g2, leftPadding + x * infoSize, topPadding + y * infoSize, dotSize.getCol() * infoSize,
-                    dotSize.getRow() * infoSize, drawImg);
+                    dotSize.getRow() * infoSize, drawImg, qrCodeConfig.getDrawOptions().getDrawQrTxt());
             for (int col = 0; col < dotSize.getCol(); col++) {
                 for (int row = 0; row < dotSize.getRow(); row++) {
                     bitMatrix.getByteMatrix().set(x + col, y + row, 0);
@@ -505,7 +515,7 @@ public class QrCodeRenderHelper {
 
         // 如果上面全部没有满足，则使用兜底的绘制
         drawStyle.draw(g2, leftPadding + x * infoSize, topPadding + y * infoSize, infoSize, infoSize,
-                qrCodeConfig.getDrawOptions().getImage(1, 1));
+                qrCodeConfig.getDrawOptions().getImage(DotSize.SIZE_1_1), qrCodeConfig.getDrawOptions().getDrawQrTxt());
     }
 
     /**
