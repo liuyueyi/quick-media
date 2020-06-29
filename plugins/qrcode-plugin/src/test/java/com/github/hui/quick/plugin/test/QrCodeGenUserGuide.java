@@ -1,8 +1,11 @@
 package com.github.hui.quick.plugin.test;
 
 import com.github.hui.quick.plugin.base.ColorUtil;
+import com.github.hui.quick.plugin.base.GraphicUtil;
+import com.github.hui.quick.plugin.base.ImageOperateUtil;
 import com.github.hui.quick.plugin.qrcode.wrapper.QrCodeGenWrapper;
 import com.github.hui.quick.plugin.qrcode.wrapper.QrCodeOptions;
+import com.github.jaiimageio.impl.common.ImageUtil;
 import com.google.zxing.WriterException;
 import com.google.zxing.qrcode.decoder.ErrorCorrectionLevel;
 import org.junit.Test;
@@ -195,6 +198,34 @@ public class QrCodeGenUserGuide {
                     .setBgH(500)
                     .setW(500)
                     .asFile("/tmp/bqr3.png");
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+
+    @Test
+    public void bgQrTxt() {
+        try {
+            String msg = "http://weixin.qq.com/r/FS9waAPEg178rUcL93oH";
+            BufferedImage bgImg = GraphicUtil.createImg(500, 500, null);
+            Graphics2D g2d = GraphicUtil.getG2d(bgImg);
+            g2d.setColor(Color.LIGHT_GRAY);
+            g2d.fillRect(0, 0, 500, 500);
+
+            Font font = new Font("宋体", Font.BOLD, 500);
+            g2d.setFont(font);
+            g2d.setColor(Color.RED);
+            g2d.drawString("码", 0, 500 - g2d.getFontMetrics().getDescent() / 2);
+            g2d.dispose();
+
+            boolean ans = QrCodeGenWrapper.of(msg)
+                    .setBgImg(bgImg)
+                    .setBgStyle(QrCodeOptions.BgImgStyle.PENETRATE)
+                    .setBgW(500)
+                    .setBgH(500)
+                    .setW(500)
+                    .asFile("/tmp/bqrTxt.png");
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -423,25 +454,80 @@ public class QrCodeGenUserGuide {
         }
     }
 
+    @Test
+    public void fontQr0() {
+        String msg = "http://weixin.qq.com/r/FS9waAPEg178rUcL93oH";
+        try {
+            boolean ans = QrCodeGenWrapper.of(msg)
+                    .setErrorCorrection(ErrorCorrectionLevel.H)
+                    .setDrawStyle(QrCodeOptions.DrawStyle.TXT)
+                    .setDrawEnableScale(true)
+                    .setPicType("png")
+                    .asFile("/tmp/fontQr0.png");
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
     /**
-     * 文字二维码
+     * 文字二维码，顺序方式渲染
      */
     @Test
     public void fontQr1() {
         String msg = "http://weixin.qq.com/r/FS9waAPEg178rUcL93oH";
-
-        int size = 500;
         try {
             boolean ans = QrCodeGenWrapper.of(msg)
-                    .setW(size)
-                    .setH(size)
-                    .setQrText("我是一灰灰欢迎关注")
+                    .setErrorCorrection(ErrorCorrectionLevel.H)
+                    .setDrawStyle(QrCodeOptions.DrawStyle.TXT)
+                    .setPicType("png")
+                    .asFile("/tmp/fontQr1.png");
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    /**
+     * 文字二维码，顺序方式渲染
+     */
+    @Test
+    public void fontQr2() {
+        String msg = "http://weixin.qq.com/r/FS9waAPEg178rUcL93oH";
+
+        try {
+            boolean ans = QrCodeGenWrapper.of(msg)
+                    // 不输入文字时，默认采用千字文
+                    // 默认文字顺序渲染
                     // true 则探测图形有自己的绘制规则
                     .setDetectSpecial()
                     .setErrorCorrection(ErrorCorrectionLevel.H)
                     .setDrawStyle(QrCodeOptions.DrawStyle.TXT)
                     .setPicType("png")
-                    .asFile("/tmp/fontQr1.png");
+                    .asFile("/tmp/fontQr2.png");
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    /**
+     * 文字二维码
+     */
+    @Test
+    public void fontQr3() {
+        String msg = "http://weixin.qq.com/r/FS9waAPEg178rUcL93oH";
+
+        try {
+            boolean ans = QrCodeGenWrapper.of(msg)
+                    .setQrText("欢迎关注一灰灰")
+                    // 指定文字随机渲染方式
+                    .setQrTxtMode(QrCodeOptions.TxtMode.RANDOM)
+                    // true 则探测图形有自己的绘制规则
+                    .setDetectSpecial()
+                    .setErrorCorrection(ErrorCorrectionLevel.H)
+                    .setDrawStyle(QrCodeOptions.DrawStyle.TXT)
+                    // 当相邻的NxN都是黑色小方块时，放大（慎用，因为部分汉子如 `一` 无法友好的填充2x2的方块）
+                    .setDrawEnableScale(true)
+                    .setPicType("png")
+                    .asFile("/tmp/fontQr3.png");
         } catch (Exception e) {
             e.printStackTrace();
         }

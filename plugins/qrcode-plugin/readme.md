@@ -41,7 +41,7 @@ jar包引入，请注意使用最新的版本
 <dependency>
     <groupId>com.github.hui.media</groupId>
     <artifactId>qrcode-plugin</artifactId>
-    <version>2.3</version>
+    <version>2.4.1</version>
 </dependency>
 ```
 

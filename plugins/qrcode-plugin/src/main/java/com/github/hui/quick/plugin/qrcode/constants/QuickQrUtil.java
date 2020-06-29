@@ -1,9 +1,13 @@
 package com.github.hui.quick.plugin.qrcode.constants;
 
 import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang3.tuple.Triple;
 
 import java.awt.*;
+import java.util.Map;
 import java.util.Random;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.atomic.AtomicInteger;
 
 /**
  * Created by @author yihui in 21:13 20/6/23.
@@ -20,22 +24,58 @@ public class QuickQrUtil {
                     "烹宰饥厌糟糠亲戚故旧老少异粮妾御绩纺侍巾帷房纨扇圆洁银烛炜煌昼眠夕寐蓝笋象床弦歌酒宴接杯举殇矫手顿足悦豫且康嫡后嗣续祭祀烝尝稽颡再拜悚惧恐惶笺牒简要顾答审详骸垢想浴执热愿凉驴骡犊特骇跃超骧诛斩贼盗捕获叛亡布射僚丸嵇琴阮箫恬笔伦纸钧巧任钓释纷利俗并皆佳妙毛施淑姿工颦妍笑年\n" +
                     "矢每催曦晖朗曜璇玑悬斡晦魄环照指薪修祜永绥吉劭矩步引领俯仰廊庙束带矜庄徘徊瞻眺孤陋寡闻愚蒙等诮谓语助者焉哉乎也";
 
-    public static Font DEFAULT_FONT = new Font("宋体", Font.BOLD, 5);
+    public static Font DEFAULT_FONT;
     public static String DEFAULT_FONT_NAME = "宋体";
     public static int DEFAULT_FONT_STYLE = Font.BOLD;
 
-    private static Random random = new Random();
+    private static Map<Triple<String, Integer, Integer>, Font> fontCache = new ConcurrentHashMap<>();
 
-    public static Font font(String name, int style, int fontSize) {
-        return new Font(name, style, fontSize);
+    static {
+        DEFAULT_FONT = new Font(DEFAULT_FONT_NAME, DEFAULT_FONT_STYLE, 5);
+        fontCache.put(Triple.of(DEFAULT_FONT_NAME, DEFAULT_FONT_STYLE, 5), DEFAULT_FONT);
     }
 
-    public static String qrTxt(String txt) {
+    public static Font font(String name, int style, int fontSize) {
+        Triple<String, Integer, Integer> triple = Triple.of(name, style, fontSize);
+        return fontCache.computeIfAbsent(triple, (k) -> new Font(k.getLeft(), k.getMiddle(), k.getRight()));
+    }
+
+
+    private static Random RANDOM = new Random();
+
+    public static ThreadLocal<AtomicInteger> TXT_INDEX_LOCAL = new ThreadLocal<>();
+
+    private static int getIndex() {
+        // 实际上是否加锁，对业务影响并不大
+        AtomicInteger integer = TXT_INDEX_LOCAL.get();
+        if (integer == null) {
+            synchronized (QuickQrUtil.class) {
+                integer = TXT_INDEX_LOCAL.get();
+                if (integer == null) {
+                    integer = new AtomicInteger();
+                    TXT_INDEX_LOCAL.set(integer);
+                }
+            }
+        }
+        return integer.getAndIncrement();
+    }
+
+    public static void clear() {
+        TXT_INDEX_LOCAL.remove();
+    }
+
+    public static String qrTxt(String txt, boolean random) {
         if (StringUtils.isBlank(txt)) {
             return "";
         }
 
-        int index = random.nextInt(txt.length());
+        int index;
+        if (random) {
+            index = RANDOM.nextInt(txt.length());
+        } else {
+            index = getIndex() % txt.length();
+        }
+
         return txt.substring(index, index + 1);
     }
 }

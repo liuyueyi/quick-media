@@ -297,6 +297,11 @@ public class QrCodeOptions {
         private String fontName;
 
         /**
+         * 文字二维码渲染模式
+         */
+        private TxtMode txtMode;
+
+        /**
          * 字体样式
          *
          * {@link Font#PLAIN} 0
@@ -336,7 +341,7 @@ public class QrCodeOptions {
          * @return
          */
         public String getDrawQrTxt() {
-            return QuickQrUtil.qrTxt(text);
+            return QuickQrUtil.qrTxt(text, txtMode != null && txtMode == TxtMode.RANDOM);
         }
 
         public static DrawOptionsBuilder builder() {
@@ -363,6 +368,8 @@ public class QrCodeOptions {
              * 绘制的二维码文字
              */
             private String text;
+
+            private TxtMode txtMode;
 
             /**
              * 生成文字二维码时的字体
@@ -435,6 +442,11 @@ public class QrCodeOptions {
                 return this;
             }
 
+            public DrawOptionsBuilder txtMode(TxtMode txtMode) {
+                this.txtMode = txtMode;
+                return this;
+            }
+
             public DrawOptionsBuilder fontName(String fontName) {
                 this.fontName = fontName;
                 return this;
@@ -465,6 +477,7 @@ public class QrCodeOptions {
                 drawOptions.setImgMapper(this.imgMapper);
                 drawOptions.setDiaphaneityFill(this.diaphaneityFill);
                 drawOptions.setText(text == null ? QuickQrUtil.DEFAULT_QR_TXT : text);
+                drawOptions.setTxtMode(txtMode == null ? TxtMode.ORDER : txtMode);
                 drawOptions.setFontName(fontName == null ? QuickQrUtil.DEFAULT_FONT_NAME : fontName);
                 drawOptions.setFontStyle(fontStyle == null ? QuickQrUtil.DEFAULT_FONT_STYLE : fontStyle);
                 return drawOptions;
@@ -612,7 +625,13 @@ public class QrCodeOptions {
 
             @Override
             public void draw(Graphics2D g2d, int x, int y, int w, int h, BufferedImage img, String txt) {
+                Font oldFont = g2d.getFont();
+                if (oldFont.getSize() != w) {
+                    Font newFont = QuickQrUtil.font(oldFont.getName(), oldFont.getStyle(), w);
+                    g2d.setFont(newFont);
+                }
                 g2d.drawString(txt, x, y + w);
+                g2d.setFont(oldFont);
             }
 
             @Override
@@ -651,5 +670,16 @@ public class QrCodeOptions {
          * @return
          */
         public abstract boolean expand(DotSize dotSize);
+    }
+
+
+    public enum TxtMode {
+        /***
+         * 文字二维码，随机模式
+         */
+        RANDOM, /**
+         * 文字二维码，顺序模式
+         */
+        ORDER;
     }
 }

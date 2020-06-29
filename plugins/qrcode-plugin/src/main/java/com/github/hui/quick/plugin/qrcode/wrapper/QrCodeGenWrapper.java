@@ -4,6 +4,7 @@ import com.github.hui.quick.plugin.base.*;
 import com.github.hui.quick.plugin.base.constants.MediaType;
 import com.github.hui.quick.plugin.base.gif.GifDecoder;
 import com.github.hui.quick.plugin.base.gif.GifHelper;
+import com.github.hui.quick.plugin.qrcode.constants.QuickQrUtil;
 import com.github.hui.quick.plugin.qrcode.helper.QrCodeGenerateHelper;
 import com.google.zxing.EncodeHintType;
 import com.google.zxing.WriterException;
@@ -30,16 +31,25 @@ public class QrCodeGenWrapper {
     }
 
     private static ByteArrayOutputStream asGif(QrCodeOptions qrCodeOptions) throws WriterException {
-        BitMatrixEx bitMatrix = QrCodeGenerateHelper.encode(qrCodeOptions);
-        List<ImmutablePair<BufferedImage, Integer>> list = QrCodeGenerateHelper.toGifImages(qrCodeOptions, bitMatrix);
-        ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
-        GifHelper.saveGif(list, outputStream);
-        return outputStream;
+        try {
+            BitMatrixEx bitMatrix = QrCodeGenerateHelper.encode(qrCodeOptions);
+            List<ImmutablePair<BufferedImage, Integer>> list =
+                    QrCodeGenerateHelper.toGifImages(qrCodeOptions, bitMatrix);
+            ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+            GifHelper.saveGif(list, outputStream);
+            return outputStream;
+        } finally {
+            QuickQrUtil.clear();
+        }
     }
 
     private static BufferedImage asBufferedImage(QrCodeOptions qrCodeOptions) throws WriterException, IOException {
-        BitMatrixEx bitMatrix = QrCodeGenerateHelper.encode(qrCodeOptions);
-        return QrCodeGenerateHelper.toBufferedImage(qrCodeOptions, bitMatrix);
+        try {
+            BitMatrixEx bitMatrix = QrCodeGenerateHelper.encode(qrCodeOptions);
+            return QrCodeGenerateHelper.toBufferedImage(qrCodeOptions, bitMatrix);
+        } finally {
+            QuickQrUtil.clear();
+        }
     }
 
     private static String asString(QrCodeOptions qrCodeOptions) throws WriterException, IOException {
@@ -735,6 +745,11 @@ public class QrCodeGenWrapper {
          */
         public Builder setQrText(String text) {
             drawOptions.text(text);
+            return this;
+        }
+
+        public Builder setQrTxtMode(QrCodeOptions.TxtMode txtMode) {
+            drawOptions.txtMode(txtMode);
             return this;
         }
 
