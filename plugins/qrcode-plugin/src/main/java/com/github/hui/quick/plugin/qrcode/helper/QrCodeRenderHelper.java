@@ -72,12 +72,14 @@ public class QrCodeRenderHelper {
 
 
         // 插入LOGO
-        Graphics2D qrImgGraphic = qrImg.createGraphics();
+        Graphics2D qrImgGraphic = GraphicUtil.getG2d(qrImg);
 
         if (logoOptions.getOpacity() != null) {
             qrImgGraphic.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_ATOP, logoOptions.getOpacity()));
         }
-        qrImgGraphic.drawImage(logoImg, logoOffsetX, logoOffsetY, logoWidth, logoHeight, null);
+        qrImgGraphic
+                .drawImage(logoImg.getScaledInstance(logoWidth, logoHeight, BufferedImage.SCALE_SMOOTH), logoOffsetX,
+                        logoOffsetY, null);
         qrImgGraphic.dispose();
         logoImg.flush();
         return qrImg;
@@ -108,12 +110,16 @@ public class QrCodeRenderHelper {
             bgImg = temp;
         }
 
-        Graphics2D bgImgGraphic = bgImg.createGraphics();
+        Graphics2D bgImgGraphic = GraphicUtil.getG2d(bgImg);
         if (bgImgOptions.getBgImgStyle() == QrCodeOptions.BgImgStyle.FILL) {
             // 选择一块区域进行填充
             bgImgGraphic.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_ATOP, 1.0f));
             bgImgGraphic.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
-            bgImgGraphic.drawImage(qrImg, bgImgOptions.getStartX(), bgImgOptions.getStartY(), qrWidth, qrHeight, null);
+            bgImgGraphic
+                    .drawImage(qrImg.getScaledInstance(qrWidth, qrHeight, Image.SCALE_SMOOTH), bgImgOptions.getStartX(),
+                            bgImgOptions.getStartY(),
+
+                            null);
         } else {
             // 全覆盖方式
             int bgOffsetX = (bgW - qrWidth) >> 1;
@@ -121,7 +127,8 @@ public class QrCodeRenderHelper {
             // 设置透明度， 避免看不到背景
             bgImgGraphic.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_ATOP, bgImgOptions.getOpacity()));
             bgImgGraphic.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
-            bgImgGraphic.drawImage(qrImg, bgOffsetX, bgOffsetY, qrWidth, qrHeight, null);
+            bgImgGraphic.drawImage(qrImg.getScaledInstance(qrWidth, qrHeight, Image.SCALE_SMOOTH), bgOffsetX, bgOffsetY,
+                    null);
             bgImgGraphic.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_ATOP, 1.0f));
         }
         bgImgGraphic.dispose();
@@ -163,17 +170,21 @@ public class QrCodeRenderHelper {
             temp.getGraphics().drawImage(bgImg.getScaledInstance(bgW, bgH, Image.SCALE_SMOOTH), 0, 0, null);
             bgImg = temp;
 
-            Graphics2D bgGraphic = bgImg.createGraphics();
+            Graphics2D bgGraphic = GraphicUtil.getG2d(bgImg);
             if (bgImgOptions.getBgImgStyle() == QrCodeOptions.BgImgStyle.FILL) {
                 // 选择一块区域进行填充
                 bgGraphic.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_ATOP, 1.0f));
                 bgGraphic.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
-                bgGraphic.drawImage(qrImg, bgOffsetX, bgOffsetY, qrWidth, qrHeight, null);
+                bgGraphic
+                        .drawImage(qrImg.getScaledInstance(qrWidth, qrHeight, Image.SCALE_SMOOTH), bgOffsetX, bgOffsetY,
+                                null);
             } else {
                 // 全覆盖模式, 设置透明度， 避免看不到背景
                 bgGraphic.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_ATOP, bgImgOptions.getOpacity()));
                 bgGraphic.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
-                bgGraphic.drawImage(qrImg, bgOffsetX, bgOffsetY, qrWidth, qrHeight, null);
+                bgGraphic
+                        .drawImage(qrImg.getScaledInstance(qrWidth, qrHeight, Image.SCALE_SMOOTH), bgOffsetX, bgOffsetY,
+                                null);
                 bgGraphic.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_ATOP, 1.0f));
             }
             bgGraphic.dispose();
@@ -252,7 +263,7 @@ public class QrCodeRenderHelper {
                 if (bitMatrix.getByteMatrix().get(x, y) == 0) {
                     // 探测图形内部的元素与二维码的01点图绘制逻辑分开
                     // 绘制二维码中不在探测图形内部的0点图
-                    if (!detectLocation.detectedArea() && qrCodeConfig.getDetectOptions().getSpecial()) {
+                    if (!detectLocation.detectedArea() || !qrCodeConfig.getDetectOptions().getSpecial()) {
                         drawQrDotBgImg(qrCodeConfig, g2, leftPadding, topPadding, infoSize, x, y);
                     }
                     continue;
@@ -369,8 +380,9 @@ public class QrCodeRenderHelper {
         BufferedImage detectedImg = qrCodeConfig.getDetectOptions().chooseDetectedImg(detectLocation);
         if (detectedImg != null) {
             // 使用探测图形的图片来渲染
-            g2.drawImage(detectedImg, leftPadding + x * infoSize, topPadding + y * infoSize,
-                    infoSize * detectCornerSize, infoSize * detectCornerSize, null);
+            g2.drawImage(detectedImg
+                            .getScaledInstance(infoSize * detectCornerSize, infoSize * detectCornerSize, Image.SCALE_SMOOTH),
+                    leftPadding + x * infoSize, topPadding + y * infoSize, null);
 
             // 图片直接渲染完毕之后，将其他探测图形的点设置为0，表示不需要再次渲染
             for (int addX = 0; addX < detectCornerSize; addX++) {
@@ -394,13 +406,15 @@ public class QrCodeRenderHelper {
 
     private static void drawQrDotBgImg(QrCodeOptions qrCodeConfig, Graphics2D g2, int leftPadding, int topPadding,
             int infoSize, int x, int y) {
+        // 如果没有指定二维码中0点对应的背景图，则不做任何处理
         if (qrCodeConfig.getDrawOptions().getBgImg() == null) {
             return;
         }
 
         // 绘制二维码背景图
-        g2.drawImage(qrCodeConfig.getDrawOptions().getBgImg(), leftPadding + x * infoSize, topPadding + y * infoSize,
-                infoSize, infoSize, null);
+        QrCodeOptions.DrawStyle.IMAGE
+                .draw(g2, leftPadding + x * infoSize, topPadding + y * infoSize, infoSize, infoSize,
+                        qrCodeConfig.getDrawOptions().getBgImg(), null);
     }
 
 

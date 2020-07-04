@@ -74,7 +74,7 @@
 <dependency>
     <groupId>com.github.liuyueyi.quick-media</groupId>
     <artifactId>qrcode-plugin</artifactId>
-    <version>2.4</version>
+    <version>2.4.2</version>
 </dependency>
 ```
 
@@ -240,7 +240,7 @@ markdown转html，转图片的封装类， 详细内容查看: [markdown-plugin]
 
 [查看更多二维码详情](https://liuyueyi.github.io/quick-media/#/插件/二维码/二维码插件使用手册)
 
-<font color="red">最新版本2.4，详情查看 [迭代日志](https://liuyueyi.github.io/quick-media/#/%E8%BF%AD%E4%BB%A3/%E6%9B%B4%E6%96%B0%E6%97%A5%E5%BF%97?id=_27-qrcode-plugin)</font>
+<font color="red">最新版本2.4.2，详情查看 [迭代日志](https://liuyueyi.github.io/quick-media/#/%E8%BF%AD%E4%BB%A3/%E6%9B%B4%E6%96%B0%E6%97%A5%E5%BF%97?id=_27-qrcode-plugin)</font>
 
 给出一个实际生成的case如下:
 

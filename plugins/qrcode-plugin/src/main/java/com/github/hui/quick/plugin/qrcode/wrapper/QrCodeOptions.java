@@ -350,12 +350,12 @@ public class QrCodeOptions {
 
         public static class DrawOptionsBuilder {
             /**
-             * 着色颜色
+             * 二维码居中 1对应的着色颜色
              */
             private Color preColor;
 
             /**
-             * 背景颜色
+             * 二维码矩阵中 0对应的背景颜色
              */
             private Color bgColor;
 
@@ -365,14 +365,17 @@ public class QrCodeOptions {
             private boolean diaphaneityFill;
 
             /**
-             * 绘制的二维码文字
+             * 文字二维码中，用于渲染的文字库，支持按字符顺序or随机两种展现方式（说明：英文不友好）
              */
             private String text;
 
+            /**
+             * 文字二维码，渲染模式
+             */
             private TxtMode txtMode;
 
             /**
-             * 生成文字二维码时的字体
+             * 文字二维码，字体名
              */
             private String fontName;
 
@@ -386,12 +389,12 @@ public class QrCodeOptions {
             private Integer fontStyle;
 
             /**
-             * 绘制的背景图片
+             * 二维码矩阵中，0点对应绘制的背景图片， 1点对应绘制的图片在 imgMapper 中
              */
             private BufferedImage bgImg;
 
             /**
-             * 绘制样式
+             * 二维码绘制样式
              */
             private DrawStyle drawStyle;
 
@@ -612,7 +615,7 @@ public class QrCodeOptions {
 
             @Override
             public void draw(Graphics2D g2d, int x, int y, int w, int h, BufferedImage img, String txt) {
-                g2d.drawImage(img, x, y, w, h, null);
+                g2d.drawImage(img.getScaledInstance(w, h, Image.SCALE_SMOOTH), x, y, null);
             }
 
             @Override

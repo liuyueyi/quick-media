@@ -599,6 +599,27 @@ public class QrCodeGenUserGuide {
         }
     }
 
+    @Test
+    public void imgQr4() {
+        try {
+            String msg = "http://weixin.qq.com/r/FS9waAPEg178rUcL93oH";
+            int size = 500;
+            boolean ans = QrCodeGenWrapper.of(msg)
+                    .setW(size)
+                    .setH(size)
+                    .setErrorCorrection(ErrorCorrectionLevel.M)
+                    .setDrawBgColor(ColorUtil.OPACITY)
+                    .setDrawBgImg("overbg/b.png")
+                    .setDrawStyle(QrCodeOptions.DrawStyle.IMAGE)
+                    .setDrawImg("overbg/a.png")
+//                    .setDetectSpecial()
+                    .asFile("/tmp/imgQr4.png");
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+
     /**
      * 动态二维码，和背景图的使用姿势一样，唯一的区别就是背景图是动态的
      */
