@@ -116,6 +116,7 @@ public class LineGifCreateWrapper {
         }
 
 
+        @Override
         public String asString() {
             ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
             GifHelper.saveGif(asImages(), delay, outputStream);

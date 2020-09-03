@@ -7,8 +7,9 @@ import com.github.hui.quick.plugin.qrcode.entity.DotSize;
 import com.github.hui.quick.plugin.qrcode.wrapper.BitMatrixEx;
 import com.github.hui.quick.plugin.qrcode.wrapper.QrCodeOptions;
 import com.google.zxing.qrcode.encoder.ByteMatrix;
-import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.tuple.ImmutablePair;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.awt.*;
 import java.awt.image.BufferedImage;
@@ -20,9 +21,8 @@ import java.util.List;
  * 二维码渲染辅助类，主要用于绘制背景，logo，定位点，二维码信息
  * Created by yihui on 2017/4/7.
  */
-@Slf4j
 public class QrCodeRenderHelper {
-
+    private static Logger log = LoggerFactory.getLogger(QrCodeGenerateHelper.class);
 
     /**
      * 绘制logo图片

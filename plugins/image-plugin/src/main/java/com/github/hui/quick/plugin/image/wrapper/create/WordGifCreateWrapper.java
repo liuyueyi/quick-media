@@ -19,6 +19,7 @@ public class WordGifCreateWrapper {
 
 
     public static class Builder extends LineGifCreateWrapper.Builder {
+        @Override
         public ImgCreateWrapper.Builder drawContent(String content) {
             switch (getOptions().getDrawStyle()) {
                 case HORIZONTAL:
@@ -61,7 +62,7 @@ public class WordGifCreateWrapper {
             }
         }
 
-
+        @Override
         protected void doDrawVerticalLeftContent(String[] strs, int fontSize) {
             BufferedImage result = getResult();
             int contentW = getContentW();
@@ -93,7 +94,7 @@ public class WordGifCreateWrapper {
             }
         }
 
-
+        @Override
         protected void doDrawVerticalRightContent(String[] strs, int fontSize) {
 
             BufferedImage result = getResult();

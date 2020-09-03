@@ -5,7 +5,6 @@ import com.github.hui.quick.plugin.base.ImageLoadUtil;
 import com.github.hui.quick.plugin.base.gif.GifHelper;
 import com.github.hui.quick.plugin.image.util.FontUtil;
 import com.github.hui.quick.plugin.image.wrapper.create.ImgCreateOptions;
-import lombok.Getter;
 
 import java.awt.*;
 import java.awt.image.BufferedImage;
@@ -52,7 +51,6 @@ public class ExpressionCreateWrapper {
     }
 
 
-    @Getter
     public static class Builder {
 
         private List<BufferedImage> globalImgs = new ArrayList<>();
@@ -170,6 +168,53 @@ public class ExpressionCreateWrapper {
             return this;
         }
 
+        public List<BufferedImage> getGlobalImgs() {
+            return globalImgs;
+        }
+
+        public List<String> getContents() {
+            return contents;
+        }
+
+        public Integer getBgW() {
+            return bgW;
+        }
+
+        public Integer getBgH() {
+            return bgH;
+        }
+
+        public Color getBgColor() {
+            return bgColor;
+        }
+
+        public BufferedImage getBgImg() {
+            return bgImg;
+        }
+
+        public ImgCreateOptions.DrawStyle getStyle() {
+            return style;
+        }
+
+        public Font getFont() {
+            return font;
+        }
+
+        public Color getFontColor() {
+            return fontColor;
+        }
+
+        public int getDelay() {
+            return delay;
+        }
+
+        public int getLastImgIndex() {
+            return lastImgIndex;
+        }
+
+        public List<ExpressionFrameEntity> getFrameEntities() {
+            return frameEntities;
+        }
 
         public ExpressionCreateWrapper builder() {
             ExpressionCreateOptions options = new ExpressionCreateOptions();

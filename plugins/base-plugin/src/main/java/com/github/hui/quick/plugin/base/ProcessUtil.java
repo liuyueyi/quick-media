@@ -1,6 +1,7 @@
 package com.github.hui.quick.plugin.base;
 
-import lombok.extern.slf4j.Slf4j;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -12,8 +13,8 @@ import java.util.concurrent.atomic.AtomicInteger;
 /**
  * Created by yihui on 2017/7/13.
  */
-@Slf4j
 public class ProcessUtil {
+    private static Logger log = LoggerFactory.getLogger(ProcessUtil.class);
 
     /**
      * Buffer size of process input-stream (used for reading the

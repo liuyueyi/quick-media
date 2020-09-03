@@ -10,8 +10,9 @@ import com.google.zxing.NotFoundException;
 import com.google.zxing.WriterException;
 import com.google.zxing.qrcode.decoder.ErrorCorrectionLevel;
 import junit.framework.Assert;
-import lombok.extern.slf4j.Slf4j;
 import org.junit.Test;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import javax.imageio.ImageIO;
 import java.awt.*;
@@ -23,8 +24,8 @@ import java.io.IOException;
 /**
  * Created by yihui on 2017/7/17.
  */
-@Slf4j
 public class QrCodeWrapperTest {
+    private static final Logger log = LoggerFactory.getLogger(QrCodeWrapperTest.class);
 
     private String msg = "https://liuyueyi.github.io/hexblog/2018/03/23/mysql之锁与事务详解/";
 

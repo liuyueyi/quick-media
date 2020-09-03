@@ -1,6 +1,5 @@
 package com.github.hui.quick.plugin.test;
 
-import com.github.hui.quick.plugin.base.FileWriteUtil;
 import com.github.hui.quick.plugin.md.Html2ImageWrapper;
 import com.github.hui.quick.plugin.md.MarkDown2HtmlWrapper;
 import com.github.hui.quick.plugin.md.entity.MarkdownEntity;

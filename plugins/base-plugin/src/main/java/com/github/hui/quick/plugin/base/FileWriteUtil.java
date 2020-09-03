@@ -1,22 +1,21 @@
 package com.github.hui.quick.plugin.base;
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.time.DateFormatUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.*;
 import java.net.URI;
 import java.util.Date;
+import java.util.Objects;
 import java.util.Random;
 
 /**
  * Created by yihui on 2017/7/13.
  */
-@Slf4j
 public class FileWriteUtil {
+    private static final Logger log = LoggerFactory.getLogger(FileWriteUtil.class);
 
     public static String TEMP_PATH = "/tmp/quickmedia/";
 
@@ -279,9 +278,6 @@ public class FileWriteUtil {
         }
     }
 
-    @Data
-    @NoArgsConstructor
-    @AllArgsConstructor
     public static class FileInfo {
         /**
          * 文件所在的目录
@@ -300,9 +296,66 @@ public class FileWriteUtil {
          */
         private String fileType;
 
+        public FileInfo() {
+        }
+
+        public FileInfo(String path, String filename, String fileType) {
+            this.path = path;
+            this.filename = filename;
+            this.fileType = fileType;
+        }
 
         public String getAbsFile() {
             return path + "/" + filename + "." + fileType;
+        }
+
+        public String getPath() {
+            return path;
+        }
+
+        public void setPath(String path) {
+            this.path = path;
+        }
+
+        public String getFilename() {
+            return filename;
+        }
+
+        public void setFilename(String filename) {
+            this.filename = filename;
+        }
+
+        public String getFileType() {
+            return fileType;
+        }
+
+        public void setFileType(String fileType) {
+            this.fileType = fileType;
+        }
+
+        @Override
+        public boolean equals(Object o) {
+            if (this == o) {
+                return true;
+            }
+            if (o == null || getClass() != o.getClass()) {
+                return false;
+            }
+            FileInfo fileInfo = (FileInfo) o;
+            return Objects.equals(path, fileInfo.path) && Objects.equals(filename, fileInfo.filename) &&
+                    Objects.equals(fileType, fileInfo.fileType);
+        }
+
+        @Override
+        public int hashCode() {
+
+            return Objects.hash(path, filename, fileType);
+        }
+
+        @Override
+        public String toString() {
+            return "FileInfo{" + "path='" + path + '\'' + ", filename='" + filename + '\'' + ", fileType='" + fileType +
+                    '\'' + '}';
         }
     }
 

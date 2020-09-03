@@ -7,9 +7,9 @@ import com.github.hui.quick.plugin.base.GraphicUtil;
 import com.github.hui.quick.plugin.base.ImageLoadUtil;
 import com.github.hui.quick.plugin.image.helper.CalculateHelper;
 import com.github.hui.quick.plugin.image.helper.ImgDrawHelper;
-import lombok.Getter;
-import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.awt.*;
 import java.awt.image.BufferedImage;
@@ -18,8 +18,9 @@ import java.io.IOException;
 /**
  * Created by yihui on 2017/8/16.
  */
-@Slf4j
 public class ImgCreateWrapper {
+
+    private static final Logger log = LoggerFactory.getLogger(ImgCreateWrapper.class);
 
 
     public static Builder build() {
@@ -27,7 +28,6 @@ public class ImgCreateWrapper {
     }
 
 
-    @Getter
     public static class Builder {
         /**
          * 生成的图片创建参数
@@ -226,6 +226,53 @@ public class ImgCreateWrapper {
             return this;
         }
 
+        public ImgCreateOptions getOptions() {
+            return options;
+        }
+
+        public BufferedImage getResult() {
+            return result;
+        }
+
+        public int getContentH() {
+            return contentH;
+        }
+
+        public int getContentW() {
+            return contentW;
+        }
+
+        public Color getBgColor() {
+            return bgColor;
+        }
+
+        public boolean isBorder() {
+            return border;
+        }
+
+        public Color getBorderColor() {
+            return borderColor;
+        }
+
+        public BufferedImage getBorderImage() {
+            return borderImage;
+        }
+
+        public int getBorderTopPadding() {
+            return borderTopPadding;
+        }
+
+        public int getBorderLeftPadding() {
+            return borderLeftPadding;
+        }
+
+        public int getBorderBottomPadding() {
+            return borderBottomPadding;
+        }
+
+        public String getBorderSignText() {
+            return borderSignText;
+        }
 
         public Builder drawContent(String content) {
             if(content == null) {

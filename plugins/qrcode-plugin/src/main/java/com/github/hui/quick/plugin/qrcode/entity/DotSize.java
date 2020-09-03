@@ -1,17 +1,10 @@
 package com.github.hui.quick.plugin.qrcode.entity;
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
-
 import java.util.Objects;
 
 /**
  * Created by @author yihui in 19:31 19/3/12.
  */
-@Data
-@NoArgsConstructor
-@AllArgsConstructor
 public class DotSize {
     public static final DotSize SIZE_1_1 = new DotSize(1, 1);
     public static final DotSize SIZE_2_1 = new DotSize(2, 1);
@@ -37,5 +30,52 @@ public class DotSize {
         } else {
             return new DotSize(row, col);
         }
+    }
+
+    public DotSize() {
+    }
+
+    public DotSize(int row, int col) {
+        this.row = row;
+        this.col = col;
+    }
+
+    public int getRow() {
+        return row;
+    }
+
+    public void setRow(int row) {
+        this.row = row;
+    }
+
+    public int getCol() {
+        return col;
+    }
+
+    public void setCol(int col) {
+        this.col = col;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
+        DotSize dotSize = (DotSize) o;
+        return row == dotSize.row && col == dotSize.col;
+    }
+
+    @Override
+    public int hashCode() {
+
+        return Objects.hash(row, col);
+    }
+
+    @Override
+    public String toString() {
+        return "DotSize{" + "row=" + row + ", col=" + col + '}';
     }
 }

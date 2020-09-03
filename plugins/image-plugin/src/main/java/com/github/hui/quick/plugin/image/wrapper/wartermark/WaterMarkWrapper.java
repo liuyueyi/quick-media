@@ -5,8 +5,6 @@ import com.github.hui.quick.plugin.base.ImageLoadUtil;
 import com.github.hui.quick.plugin.image.helper.ImgDrawHelper;
 import com.github.hui.quick.plugin.image.util.FontUtil;
 import com.google.common.base.Splitter;
-import lombok.Getter;
-import lombok.ToString;
 
 import java.awt.*;
 import java.awt.image.BufferedImage;
@@ -52,8 +50,6 @@ public class WaterMarkWrapper {
     }
 
 
-    @Getter
-    @ToString
     public static class Builder {
         /**
          * 水印绘制的 x 坐标
@@ -203,6 +199,66 @@ public class WaterMarkWrapper {
         public Builder setPaddingY(int paddingY) {
             this.paddingY = paddingY;
             return this;
+        }
+
+        public int getX() {
+            return x;
+        }
+
+        public int getY() {
+            return y;
+        }
+
+        public BufferedImage getSource() {
+            return source;
+        }
+
+        public BufferedImage getWaterLogo() {
+            return waterLogo;
+        }
+
+        public int getWaterLogoHeight() {
+            return waterLogoHeight;
+        }
+
+        public List<String> getWaterInfo() {
+            return waterInfo;
+        }
+
+        public Font getWaterFont() {
+            return waterFont;
+        }
+
+        public Color getWaterColor() {
+            return waterColor;
+        }
+
+        public boolean isInline() {
+            return inline;
+        }
+
+        public float getWaterOpacity() {
+            return waterOpacity;
+        }
+
+        public WaterMarkOptions.WaterStyle getStyle() {
+            return style;
+        }
+
+        public int getRotate() {
+            return rotate;
+        }
+
+        public int getPaddingX() {
+            return paddingX;
+        }
+
+        public int getPaddingY() {
+            return paddingY;
+        }
+
+        public BufferedImage getTmpWater() {
+            return tmpWater;
         }
 
         public WaterMarkWrapper build() {
@@ -400,6 +456,15 @@ public class WaterMarkWrapper {
                 case FILL_BG:
                     return;
             }
+        }
+
+        @Override
+        public String toString() {
+            return "Builder{" + "x=" + x + ", y=" + y + ", source=" + source + ", waterLogo=" + waterLogo +
+                    ", waterLogoHeight=" + waterLogoHeight + ", waterInfo=" + waterInfo + ", waterFont=" + waterFont +
+                    ", waterColor=" + waterColor + ", inline=" + inline + ", waterOpacity=" + waterOpacity +
+                    ", style=" + style + ", rotate=" + rotate + ", paddingX=" + paddingX + ", paddingY=" + paddingY +
+                    ", tmpWater=" + tmpWater + '}';
         }
     }
 

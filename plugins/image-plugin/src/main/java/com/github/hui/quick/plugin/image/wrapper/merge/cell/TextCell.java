@@ -1,21 +1,20 @@
 package com.github.hui.quick.plugin.image.wrapper.merge.cell;
 
 
-import com.github.hui.quick.plugin.image.wrapper.create.ImgCreateOptions;
 import com.github.hui.quick.plugin.image.helper.CalculateHelper;
 import com.github.hui.quick.plugin.image.util.FontUtil;
 import com.github.hui.quick.plugin.image.util.PunctuationUtil;
-import lombok.Data;
+import com.github.hui.quick.plugin.image.wrapper.create.ImgCreateOptions;
 
 import java.awt.*;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Objects;
 
 /**
  * Created by yihui on 2017/10/13.
  */
-@Data
 public class TextCell implements IMergeCell {
 
     private List<String> texts;
@@ -40,6 +39,86 @@ public class TextCell implements IMergeCell {
     private ImgCreateOptions.AlignStyle alignStyle = ImgCreateOptions.AlignStyle.LEFT;
 
 
+    public List<String> getTexts() {
+        return texts;
+    }
+
+    public void setTexts(List<String> texts) {
+        this.texts = texts;
+    }
+
+    public Color getColor() {
+        return color;
+    }
+
+    public void setColor(Color color) {
+        this.color = color;
+    }
+
+    public Font getFont() {
+        return font;
+    }
+
+    public void setFont(Font font) {
+        this.font = font;
+    }
+
+    public int getLineSpace() {
+        return lineSpace;
+    }
+
+    public void setLineSpace(int lineSpace) {
+        this.lineSpace = lineSpace;
+    }
+
+    public int getStartX() {
+        return startX;
+    }
+
+    public void setStartX(int startX) {
+        this.startX = startX;
+    }
+
+    public int getStartY() {
+        return startY;
+    }
+
+    public void setStartY(int startY) {
+        this.startY = startY;
+    }
+
+    public int getEndX() {
+        return endX;
+    }
+
+    public void setEndX(int endX) {
+        this.endX = endX;
+    }
+
+    public int getEndY() {
+        return endY;
+    }
+
+    public void setEndY(int endY) {
+        this.endY = endY;
+    }
+
+    public ImgCreateOptions.DrawStyle getDrawStyle() {
+        return drawStyle;
+    }
+
+    public void setDrawStyle(ImgCreateOptions.DrawStyle drawStyle) {
+        this.drawStyle = drawStyle;
+    }
+
+    public ImgCreateOptions.AlignStyle getAlignStyle() {
+        return alignStyle;
+    }
+
+    public void setAlignStyle(ImgCreateOptions.AlignStyle alignStyle) {
+        this.alignStyle = alignStyle;
+    }
+
     public void addText(String text) {
         if (texts == null) {
             texts = new ArrayList<>();
@@ -57,9 +136,9 @@ public class TextCell implements IMergeCell {
         FontMetrics fontMetrics = FontUtil.getFontMetric(font);
         int tmpHeight = fontMetrics.getHeight(), tmpW = font.getSize() >>> 1;
         int tmpY = startY, tmpX = startX;
-        int offsetX = drawStyle == ImgCreateOptions.DrawStyle.VERTICAL_LEFT
-                ? (font.getSize() + fontMetrics.getDescent() + lineSpace)
-                : -(font.getSize() + fontMetrics.getDescent() + lineSpace);
+        int offsetX = drawStyle == ImgCreateOptions.DrawStyle.VERTICAL_LEFT ?
+                (font.getSize() + fontMetrics.getDescent() + lineSpace) :
+                -(font.getSize() + fontMetrics.getDescent() + lineSpace);
         List<String> splitText = batchSplitText(texts, fontMetrics);
         for (String info : splitText) {
             if (drawStyle == ImgCreateOptions.DrawStyle.HORIZONTAL) {
@@ -73,9 +152,7 @@ public class TextCell implements IMergeCell {
                 tmpY = calculateY(info, fontMetrics);
                 for (int i = 0; i < chars.length; i++) {
                     tmpX = PunctuationUtil.isPunctuation(chars[i]) ? tmpW : 0;
-                    g2d.drawString(chars[i] + "",
-                            tmpX + (PunctuationUtil.isPunctuation(chars[i]) ? tmpW : 0),
-                            tmpY);
+                    g2d.drawString(chars[i] + "", tmpX + (PunctuationUtil.isPunctuation(chars[i]) ? tmpW : 0), tmpY);
                     tmpY += tmpHeight;
                 }
 
@@ -91,12 +168,12 @@ public class TextCell implements IMergeCell {
         List<String> ans = new ArrayList<>();
         if (drawStyle == ImgCreateOptions.DrawStyle.HORIZONTAL) {
             int lineLen = Math.abs(endX - startX);
-            for(String t: texts) {
+            for (String t : texts) {
                 ans.addAll(Arrays.asList(CalculateHelper.splitStr(t, lineLen, fontMetrics)));
             }
         } else {
             int lineLen = Math.abs(endY - startY);
-            for(String t: texts) {
+            for (String t : texts) {
                 ans.addAll(Arrays.asList(CalculateHelper.splitVerticalStr(t, lineLen, fontMetrics)));
             }
         }
@@ -126,5 +203,33 @@ public class TextCell implements IMergeCell {
             int size = fontMetrics.stringWidth(text) + fontMetrics.getDescent() * (text.length() - 1);
             return startY + ((endY - endX - size) >>> 1);
         }
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
+        TextCell textCell = (TextCell) o;
+        return lineSpace == textCell.lineSpace && startX == textCell.startX && startY == textCell.startY &&
+                endX == textCell.endX && endY == textCell.endY && Objects.equals(texts, textCell.texts) &&
+                Objects.equals(color, textCell.color) && Objects.equals(font, textCell.font) &&
+                drawStyle == textCell.drawStyle && alignStyle == textCell.alignStyle;
+    }
+
+    @Override
+    public int hashCode() {
+
+        return Objects.hash(texts, color, font, lineSpace, startX, startY, endX, endY, drawStyle, alignStyle);
+    }
+
+    @Override
+    public String toString() {
+        return "TextCell{" + "texts=" + texts + ", color=" + color + ", font=" + font + ", lineSpace=" + lineSpace +
+                ", startX=" + startX + ", startY=" + startY + ", endX=" + endX + ", endY=" + endY + ", drawStyle=" +
+                drawStyle + ", alignStyle=" + alignStyle + '}';
     }
 }
