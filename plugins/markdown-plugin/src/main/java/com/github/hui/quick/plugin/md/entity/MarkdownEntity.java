@@ -1,14 +1,12 @@
 package com.github.hui.quick.plugin.md.entity;
 
-import lombok.Data;
-
 import java.util.Map;
+import java.util.Objects;
 import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * Created by yihui on 2017/9/11.
  */
-@Data
 public class MarkdownEntity {
 
     public static String TAG_WIDTH = "<style type=\"text/css\"> %s { width:85%%} </style>";
@@ -56,6 +54,49 @@ public class MarkdownEntity {
     public void addWidthCss(String tag) {
         String wcss = String.format(TAG_WIDTH, tag);
         css += wcss;
+    }
+
+    public String getCss() {
+        return css;
+    }
+
+    public void setCss(String css) {
+        this.css = css;
+    }
+
+    public Map<String, String> getDivStyle() {
+        return divStyle;
+    }
+
+    public void setDivStyle(Map<String, String> divStyle) {
+        this.divStyle = divStyle;
+    }
+
+    public String getHtml() {
+        return html;
+    }
+
+    public void setHtml(String html) {
+        this.html = html;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
+        MarkdownEntity entity = (MarkdownEntity) o;
+        return Objects.equals(css, entity.css) && Objects.equals(divStyle, entity.divStyle) &&
+                Objects.equals(html, entity.html);
+    }
+
+    @Override
+    public int hashCode() {
+
+        return Objects.hash(css, divStyle, html);
     }
 }
 

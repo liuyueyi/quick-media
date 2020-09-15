@@ -5,8 +5,6 @@ import com.github.hui.quick.plugin.qrcode.constants.QuickQrUtil;
 import com.github.hui.quick.plugin.qrcode.entity.DotSize;
 import com.github.hui.quick.plugin.qrcode.helper.QrCodeRenderHelper;
 import com.google.zxing.EncodeHintType;
-import lombok.Builder;
-import lombok.Data;
 import org.apache.commons.lang.BooleanUtils;
 import org.apache.commons.lang3.StringUtils;
 
@@ -15,11 +13,11 @@ import java.awt.geom.Ellipse2D;
 import java.awt.image.BufferedImage;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Objects;
 
 /**
  * Created by yihui on 2017/7/17.
  */
-@Data
 public class QrCodeOptions {
     /**
      * 塞入二维码的信息
@@ -82,11 +80,111 @@ public class QrCodeOptions {
     }
 
 
+    public String getMsg() {
+        return msg;
+    }
+
+    public void setMsg(String msg) {
+        this.msg = msg;
+    }
+
+    public Integer getW() {
+        return w;
+    }
+
+    public void setW(Integer w) {
+        this.w = w;
+    }
+
+    public Integer getH() {
+        return h;
+    }
+
+    public void setH(Integer h) {
+        this.h = h;
+    }
+
+    public DrawOptions getDrawOptions() {
+        return drawOptions;
+    }
+
+    public void setDrawOptions(DrawOptions drawOptions) {
+        this.drawOptions = drawOptions;
+    }
+
+    public BgImgOptions getBgImgOptions() {
+        return bgImgOptions;
+    }
+
+    public void setBgImgOptions(BgImgOptions bgImgOptions) {
+        this.bgImgOptions = bgImgOptions;
+    }
+
+    public LogoOptions getLogoOptions() {
+        return logoOptions;
+    }
+
+    public void setLogoOptions(LogoOptions logoOptions) {
+        this.logoOptions = logoOptions;
+    }
+
+    public DetectOptions getDetectOptions() {
+        return detectOptions;
+    }
+
+    public void setDetectOptions(DetectOptions detectOptions) {
+        this.detectOptions = detectOptions;
+    }
+
+    public Map<EncodeHintType, Object> getHints() {
+        return hints;
+    }
+
+    public void setHints(Map<EncodeHintType, Object> hints) {
+        this.hints = hints;
+    }
+
+    public String getPicType() {
+        return picType;
+    }
+
+    public void setPicType(String picType) {
+        this.picType = picType;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
+        QrCodeOptions options = (QrCodeOptions) o;
+        return Objects.equals(msg, options.msg) && Objects.equals(w, options.w) && Objects.equals(h, options.h) &&
+                Objects.equals(drawOptions, options.drawOptions) &&
+                Objects.equals(bgImgOptions, options.bgImgOptions) &&
+                Objects.equals(logoOptions, options.logoOptions) &&
+                Objects.equals(detectOptions, options.detectOptions) && Objects.equals(hints, options.hints) &&
+                Objects.equals(picType, options.picType);
+    }
+
+    @Override
+    public int hashCode() {
+
+        return Objects.hash(msg, w, h, drawOptions, bgImgOptions, logoOptions, detectOptions, hints, picType);
+    }
+
+    @Override
+    public String toString() {
+        return "QrCodeOptions{" + "msg='" + msg + '\'' + ", w=" + w + ", h=" + h + ", drawOptions=" + drawOptions +
+                ", bgImgOptions=" + bgImgOptions + ", logoOptions=" + logoOptions + ", detectOptions=" + detectOptions +
+                ", hints=" + hints + ", picType='" + picType + '\'' + '}';
+    }
+
     /**
      * logo 的配置信息
      */
-    @Builder
-    @Data
     public static class LogoOptions {
 
         /**
@@ -124,14 +222,190 @@ public class QrCodeOptions {
          * 用于设置logo的透明度
          */
         private Float opacity;
+
+        public LogoOptions() {
+        }
+
+        public LogoOptions(BufferedImage logo, LogoStyle logoStyle, int rate, boolean border, Color borderColor,
+                Color outerBorderColor, Float opacity) {
+            this.logo = logo;
+            this.logoStyle = logoStyle;
+            this.rate = rate;
+            this.border = border;
+            this.borderColor = borderColor;
+            this.outerBorderColor = outerBorderColor;
+            this.opacity = opacity;
+        }
+
+        public BufferedImage getLogo() {
+            return logo;
+        }
+
+        public void setLogo(BufferedImage logo) {
+            this.logo = logo;
+        }
+
+        public LogoStyle getLogoStyle() {
+            return logoStyle;
+        }
+
+        public void setLogoStyle(LogoStyle logoStyle) {
+            this.logoStyle = logoStyle;
+        }
+
+        public int getRate() {
+            return rate;
+        }
+
+        public void setRate(int rate) {
+            this.rate = rate;
+        }
+
+        public boolean isBorder() {
+            return border;
+        }
+
+        public void setBorder(boolean border) {
+            this.border = border;
+        }
+
+        public Color getBorderColor() {
+            return borderColor;
+        }
+
+        public void setBorderColor(Color borderColor) {
+            this.borderColor = borderColor;
+        }
+
+        public Color getOuterBorderColor() {
+            return outerBorderColor;
+        }
+
+        public void setOuterBorderColor(Color outerBorderColor) {
+            this.outerBorderColor = outerBorderColor;
+        }
+
+        public Float getOpacity() {
+            return opacity;
+        }
+
+        public void setOpacity(Float opacity) {
+            this.opacity = opacity;
+        }
+
+        @Override
+        public boolean equals(Object o) {
+            if (this == o) {
+                return true;
+            }
+            if (o == null || getClass() != o.getClass()) {
+                return false;
+            }
+            LogoOptions that = (LogoOptions) o;
+            return rate == that.rate && border == that.border && Objects.equals(logo, that.logo) &&
+                    logoStyle == that.logoStyle && Objects.equals(borderColor, that.borderColor) &&
+                    Objects.equals(outerBorderColor, that.outerBorderColor) && Objects.equals(opacity, that.opacity);
+        }
+
+        @Override
+        public int hashCode() {
+
+            return Objects.hash(logo, logoStyle, rate, border, borderColor, outerBorderColor, opacity);
+        }
+
+        @Override
+        public String toString() {
+            return "LogoOptions{" + "logo=" + logo + ", logoStyle=" + logoStyle + ", rate=" + rate + ", border=" +
+                    border + ", borderColor=" + borderColor + ", outerBorderColor=" + outerBorderColor + ", opacity=" +
+                    opacity + '}';
+        }
+
+        public static LogoOptionsBuilder builder() {
+            return new LogoOptionsBuilder();
+        }
+
+        public static class LogoOptionsBuilder {
+            /**
+             * logo 图片
+             */
+            private BufferedImage logo;
+
+            /**
+             * logo 样式
+             */
+            private LogoStyle logoStyle;
+
+            /**
+             * logo 占二维码的比例
+             */
+            private int rate;
+
+            /**
+             * true 表示有边框，
+             * false 表示无边框
+             */
+            private boolean border;
+
+            /**
+             * 边框颜色
+             */
+            private Color borderColor;
+
+            /**
+             * 外围边框颜色
+             */
+            private Color outerBorderColor;
+
+            /**
+             * 用于设置logo的透明度
+             */
+            private Float opacity;
+
+            public LogoOptionsBuilder logo(BufferedImage logo) {
+                this.logo = logo;
+                return this;
+            }
+
+            public LogoOptionsBuilder logoStyle(LogoStyle logoStyle) {
+                this.logoStyle = logoStyle;
+                return this;
+            }
+
+            public LogoOptionsBuilder rate(int rate) {
+                this.rate = rate;
+                return this;
+            }
+
+            public LogoOptionsBuilder border(boolean border) {
+                this.border = border;
+                return this;
+            }
+
+            public LogoOptionsBuilder borderColor(Color borderColor) {
+                this.borderColor = borderColor;
+                return this;
+            }
+
+            public LogoOptionsBuilder outerBorderColor(Color outerBorderColor) {
+                this.outerBorderColor = outerBorderColor;
+                return this;
+            }
+
+            public LogoOptionsBuilder opacity(Float opacity) {
+                this.opacity = opacity;
+                return this;
+            }
+
+            public LogoOptions build() {
+                return new LogoOptions(logo, logoStyle, rate, border, borderColor, outerBorderColor, opacity);
+            }
+        }
     }
 
 
     /**
      * 背景图的配置信息
      */
-    @Builder
-    @Data
     public static class BgImgOptions {
         /**
          * 背景图
@@ -180,6 +454,20 @@ public class QrCodeOptions {
          */
         private int startY;
 
+        public BgImgOptions() {
+        }
+
+        public BgImgOptions(BufferedImage bgImg, GifDecoder gifDecoder, int bgW, int bgH, BgImgStyle bgImgStyle,
+                float opacity, int startX, int startY) {
+            this.bgImg = bgImg;
+            this.gifDecoder = gifDecoder;
+            this.bgW = bgW;
+            this.bgH = bgH;
+            this.bgImgStyle = bgImgStyle;
+            this.opacity = opacity;
+            this.startX = startX;
+            this.startY = startY;
+        }
 
         public int getBgW() {
             if (bgImgStyle == BgImgStyle.FILL && bgW == 0) {
@@ -202,14 +490,192 @@ public class QrCodeOptions {
             }
             return bgH;
         }
+
+        public BufferedImage getBgImg() {
+            return bgImg;
+        }
+
+        public void setBgImg(BufferedImage bgImg) {
+            this.bgImg = bgImg;
+        }
+
+        public GifDecoder getGifDecoder() {
+            return gifDecoder;
+        }
+
+        public void setGifDecoder(GifDecoder gifDecoder) {
+            this.gifDecoder = gifDecoder;
+        }
+
+        public void setBgW(int bgW) {
+            this.bgW = bgW;
+        }
+
+        public void setBgH(int bgH) {
+            this.bgH = bgH;
+        }
+
+        public BgImgStyle getBgImgStyle() {
+            return bgImgStyle;
+        }
+
+        public void setBgImgStyle(BgImgStyle bgImgStyle) {
+            this.bgImgStyle = bgImgStyle;
+        }
+
+        public float getOpacity() {
+            return opacity;
+        }
+
+        public void setOpacity(float opacity) {
+            this.opacity = opacity;
+        }
+
+        public int getStartX() {
+            return startX;
+        }
+
+        public void setStartX(int startX) {
+            this.startX = startX;
+        }
+
+        public int getStartY() {
+            return startY;
+        }
+
+        public void setStartY(int startY) {
+            this.startY = startY;
+        }
+
+        @Override
+        public boolean equals(Object o) {
+            if (this == o) {
+                return true;
+            }
+            if (o == null || getClass() != o.getClass()) {
+                return false;
+            }
+            BgImgOptions that = (BgImgOptions) o;
+            return bgW == that.bgW && bgH == that.bgH && Float.compare(that.opacity, opacity) == 0 &&
+                    startX == that.startX && startY == that.startY && Objects.equals(bgImg, that.bgImg) &&
+                    Objects.equals(gifDecoder, that.gifDecoder) && bgImgStyle == that.bgImgStyle;
+        }
+
+        @Override
+        public int hashCode() {
+
+            return Objects.hash(bgImg, gifDecoder, bgW, bgH, bgImgStyle, opacity, startX, startY);
+        }
+
+        @Override
+        public String toString() {
+            return "BgImgOptions{" + "bgImg=" + bgImg + ", gifDecoder=" + gifDecoder + ", bgW=" + bgW + ", bgH=" + bgH +
+                    ", bgImgStyle=" + bgImgStyle + ", opacity=" + opacity + ", startX=" + startX + ", startY=" +
+                    startY + '}';
+        }
+
+        public static BgImgOptionsBuilder builder() {
+            return new BgImgOptionsBuilder();
+        }
+
+        public static class BgImgOptionsBuilder {
+            /**
+             * 背景图
+             */
+            private BufferedImage bgImg;
+
+            /**
+             * 动态背景图
+             */
+            private GifDecoder gifDecoder;
+
+            /**
+             * 背景图宽
+             */
+            private int bgW;
+
+            /**
+             * 背景图高
+             */
+            private int bgH;
+
+            /**
+             * 背景图样式
+             */
+            private BgImgStyle bgImgStyle;
+
+            /**
+             * if {@link #bgImgStyle} ==  QrCodeOptions.BgImgStyle.OVERRIDE，
+             * 用于设置二维码的透明度
+             */
+            private float opacity;
+
+
+            /**
+             * if {@link #bgImgStyle} ==  QrCodeOptions.BgImgStyle.FILL
+             * <p>
+             * 用于设置二维码的绘制在背景图上的x坐标
+             */
+            private int startX;
+
+
+            /**
+             * if {@link #bgImgStyle} ==  QrCodeOptions.BgImgStyle.FILL
+             * <p>
+             * 用于设置二维码的绘制在背景图上的y坐标
+             */
+            private int startY;
+
+            public BgImgOptionsBuilder bgImg(BufferedImage bgImg) {
+                this.bgImg = bgImg;
+                return this;
+            }
+
+            public BgImgOptionsBuilder gifDecoder(GifDecoder gifDecoder) {
+                this.gifDecoder = gifDecoder;
+                return this;
+            }
+
+            public BgImgOptionsBuilder bgW(int bgW) {
+                this.bgW = bgW;
+                return this;
+            }
+
+            public BgImgOptionsBuilder bgH(int bgH) {
+                this.bgH = bgH;
+                return this;
+            }
+
+            public BgImgOptionsBuilder bgImgStyle(BgImgStyle bgImgStyle) {
+                this.bgImgStyle = bgImgStyle;
+                return this;
+            }
+
+            public BgImgOptionsBuilder opacity(float opacity) {
+                this.opacity = opacity;
+                return this;
+            }
+
+            public BgImgOptionsBuilder startX(int startX) {
+                this.startX = startX;
+                return this;
+            }
+
+            public BgImgOptionsBuilder startY(int startY) {
+                this.startY = startY;
+                return this;
+            }
+
+            public BgImgOptions build() {
+                return new BgImgOptions(bgImg, gifDecoder, bgW, bgH, bgImgStyle, opacity, startX, startY);
+            }
+        }
     }
 
 
     /**
      * 探测图形的配置信息
      */
-    @Builder
-    @Data
     public static class DetectOptions {
         private Color outColor;
 
@@ -245,6 +711,72 @@ public class QrCodeOptions {
             return BooleanUtils.isTrue(special);
         }
 
+        public DetectOptions() {
+        }
+
+        public DetectOptions(Color outColor, Color inColor, BufferedImage detectImg, BufferedImage detectImgLT,
+                BufferedImage detectImgRT, BufferedImage detectImgLD, Boolean special) {
+            this.outColor = outColor;
+            this.inColor = inColor;
+            this.detectImg = detectImg;
+            this.detectImgLT = detectImgLT;
+            this.detectImgRT = detectImgRT;
+            this.detectImgLD = detectImgLD;
+            this.special = special;
+        }
+
+        public Color getOutColor() {
+            return outColor;
+        }
+
+        public void setOutColor(Color outColor) {
+            this.outColor = outColor;
+        }
+
+        public Color getInColor() {
+            return inColor;
+        }
+
+        public void setInColor(Color inColor) {
+            this.inColor = inColor;
+        }
+
+        public BufferedImage getDetectImg() {
+            return detectImg;
+        }
+
+        public void setDetectImg(BufferedImage detectImg) {
+            this.detectImg = detectImg;
+        }
+
+        public BufferedImage getDetectImgLT() {
+            return detectImgLT;
+        }
+
+        public void setDetectImgLT(BufferedImage detectImgLT) {
+            this.detectImgLT = detectImgLT;
+        }
+
+        public BufferedImage getDetectImgRT() {
+            return detectImgRT;
+        }
+
+        public void setDetectImgRT(BufferedImage detectImgRT) {
+            this.detectImgRT = detectImgRT;
+        }
+
+        public BufferedImage getDetectImgLD() {
+            return detectImgLD;
+        }
+
+        public void setDetectImgLD(BufferedImage detectImgLD) {
+            this.detectImgLD = detectImgLD;
+        }
+
+        public void setSpecial(Boolean special) {
+            this.special = special;
+        }
+
         public BufferedImage chooseDetectedImg(QrCodeRenderHelper.DetectLocation detectLocation) {
             switch (detectLocation) {
                 case LD:
@@ -258,13 +790,98 @@ public class QrCodeOptions {
             }
         }
 
+        @Override
+        public boolean equals(Object o) {
+            if (this == o) {
+                return true;
+            }
+            if (o == null || getClass() != o.getClass()) {
+                return false;
+            }
+            DetectOptions that = (DetectOptions) o;
+            return Objects.equals(outColor, that.outColor) && Objects.equals(inColor, that.inColor) &&
+                    Objects.equals(detectImg, that.detectImg) && Objects.equals(detectImgLT, that.detectImgLT) &&
+                    Objects.equals(detectImgRT, that.detectImgRT) && Objects.equals(detectImgLD, that.detectImgLD) &&
+                    Objects.equals(special, that.special);
+        }
+
+        @Override
+        public int hashCode() {
+
+            return Objects.hash(outColor, inColor, detectImg, detectImgLT, detectImgRT, detectImgLD, special);
+        }
+
+        @Override
+        public String toString() {
+            return "DetectOptions{" + "outColor=" + outColor + ", inColor=" + inColor + ", detectImg=" + detectImg +
+                    ", detectImgLT=" + detectImgLT + ", detectImgRT=" + detectImgRT + ", detectImgLD=" + detectImgLD +
+                    ", special=" + special + '}';
+        }
+
+        public static DetectOptionsBuilder builder() {
+            return new DetectOptionsBuilder();
+        }
+
+        public static class DetectOptionsBuilder {
+            private Color outColor;
+
+            private Color inColor;
+
+            private BufferedImage detectImg;
+
+            private BufferedImage detectImgLT;
+
+            private BufferedImage detectImgRT;
+
+            private BufferedImage detectImgLD;
+
+            private Boolean special;
+
+            public DetectOptionsBuilder outColor(Color outColor) {
+                this.outColor = outColor;
+                return this;
+            }
+
+            public DetectOptionsBuilder inColor(Color inColor) {
+                this.inColor = inColor;
+                return this;
+            }
+
+            public DetectOptionsBuilder detectImg(BufferedImage detectImg) {
+                this.detectImg = detectImg;
+                return this;
+            }
+
+            public DetectOptionsBuilder detectImgLT(BufferedImage detectImgLT) {
+                this.detectImgLT = detectImgLT;
+                return this;
+            }
+
+            public DetectOptionsBuilder detectImgRT(BufferedImage detectImgRT) {
+                this.detectImgRT = detectImgRT;
+                return this;
+            }
+
+            public DetectOptionsBuilder detectImgLD(BufferedImage detectImgLD) {
+                this.detectImgLD = detectImgLD;
+                return this;
+            }
+
+            public DetectOptionsBuilder special(Boolean special) {
+                this.special = special;
+                return this;
+            }
+
+            public DetectOptions build() {
+                return new DetectOptions(outColor, inColor, detectImg, detectImgLT, detectImgRT, detectImgLD, special);
+            }
+        }
     }
 
 
     /**
      * 绘制二维码的配置信息
      */
-    @Data
     public static class DrawOptions {
         /**
          * 着色颜色
@@ -342,6 +959,126 @@ public class QrCodeOptions {
          */
         public String getDrawQrTxt() {
             return QuickQrUtil.qrTxt(text, txtMode != null && txtMode == TxtMode.RANDOM);
+        }
+
+        public Color getPreColor() {
+            return preColor;
+        }
+
+        public void setPreColor(Color preColor) {
+            this.preColor = preColor;
+        }
+
+        public Color getBgColor() {
+            return bgColor;
+        }
+
+        public void setBgColor(Color bgColor) {
+            this.bgColor = bgColor;
+        }
+
+        public BufferedImage getBgImg() {
+            return bgImg;
+        }
+
+        public void setBgImg(BufferedImage bgImg) {
+            this.bgImg = bgImg;
+        }
+
+        public DrawStyle getDrawStyle() {
+            return drawStyle;
+        }
+
+        public void setDrawStyle(DrawStyle drawStyle) {
+            this.drawStyle = drawStyle;
+        }
+
+        public String getText() {
+            return text;
+        }
+
+        public void setText(String text) {
+            this.text = text;
+        }
+
+        public String getFontName() {
+            return fontName;
+        }
+
+        public void setFontName(String fontName) {
+            this.fontName = fontName;
+        }
+
+        public TxtMode getTxtMode() {
+            return txtMode;
+        }
+
+        public void setTxtMode(TxtMode txtMode) {
+            this.txtMode = txtMode;
+        }
+
+        public int getFontStyle() {
+            return fontStyle;
+        }
+
+        public void setFontStyle(int fontStyle) {
+            this.fontStyle = fontStyle;
+        }
+
+        public boolean isEnableScale() {
+            return enableScale;
+        }
+
+        public void setEnableScale(boolean enableScale) {
+            this.enableScale = enableScale;
+        }
+
+        public boolean isDiaphaneityFill() {
+            return diaphaneityFill;
+        }
+
+        public void setDiaphaneityFill(boolean diaphaneityFill) {
+            this.diaphaneityFill = diaphaneityFill;
+        }
+
+        public Map<DotSize, BufferedImage> getImgMapper() {
+            return imgMapper;
+        }
+
+        public void setImgMapper(Map<DotSize, BufferedImage> imgMapper) {
+            this.imgMapper = imgMapper;
+        }
+
+        @Override
+        public boolean equals(Object o) {
+            if (this == o) {
+                return true;
+            }
+            if (o == null || getClass() != o.getClass()) {
+                return false;
+            }
+            DrawOptions that = (DrawOptions) o;
+            return fontStyle == that.fontStyle && enableScale == that.enableScale &&
+                    diaphaneityFill == that.diaphaneityFill && Objects.equals(preColor, that.preColor) &&
+                    Objects.equals(bgColor, that.bgColor) && Objects.equals(bgImg, that.bgImg) &&
+                    drawStyle == that.drawStyle && Objects.equals(text, that.text) &&
+                    Objects.equals(fontName, that.fontName) && txtMode == that.txtMode &&
+                    Objects.equals(imgMapper, that.imgMapper);
+        }
+
+        @Override
+        public int hashCode() {
+
+            return Objects.hash(preColor, bgColor, bgImg, drawStyle, text, fontName, txtMode, fontStyle, enableScale,
+                    diaphaneityFill, imgMapper);
+        }
+
+        @Override
+        public String toString() {
+            return "DrawOptions{" + "preColor=" + preColor + ", bgColor=" + bgColor + ", bgImg=" + bgImg +
+                    ", drawStyle=" + drawStyle + ", text='" + text + '\'' + ", fontName='" + fontName + '\'' +
+                    ", txtMode=" + txtMode + ", fontStyle=" + fontStyle + ", enableScale=" + enableScale +
+                    ", diaphaneityFill=" + diaphaneityFill + ", imgMapper=" + imgMapper + '}';
         }
 
         public static DrawOptionsBuilder builder() {

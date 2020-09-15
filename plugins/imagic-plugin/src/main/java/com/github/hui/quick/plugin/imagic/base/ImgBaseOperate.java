@@ -2,10 +2,11 @@ package com.github.hui.quick.plugin.imagic.base;
 
 import com.github.hui.quick.plugin.imagic.ImgWrapper;
 import com.github.hui.quick.plugin.imagic.exception.ImgOperateException;
-import lombok.extern.slf4j.Slf4j;
 import org.im4java.core.ConvertCmd;
 import org.im4java.core.IM4JavaException;
 import org.im4java.core.IMOperation;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 import java.util.List;
@@ -13,8 +14,9 @@ import java.util.List;
 /**
  * Created by yihui on 18/04/17.
  */
-@Slf4j
 public class ImgBaseOperate {
+
+    private static final Logger log = LoggerFactory.getLogger(ImgBaseOperate.class);
 
     /**
      * 执行图片的复合操作

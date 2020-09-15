@@ -10,9 +10,9 @@ import com.google.zxing.EncodeHintType;
 import com.google.zxing.WriterException;
 import com.google.zxing.client.j2se.MatrixToImageConfig;
 import com.google.zxing.qrcode.decoder.ErrorCorrectionLevel;
-import lombok.ToString;
-import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.tuple.ImmutablePair;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import javax.imageio.ImageIO;
 import java.awt.*;
@@ -93,9 +93,8 @@ public class QrCodeGenWrapper {
     }
 
 
-    @ToString
-    @Slf4j
     public static class Builder {
+        private static Logger log = LoggerFactory.getLogger(QrCodeGenWrapper.Builder.class);
         private static final MatrixToImageConfig DEFAULT_CONFIG = new MatrixToImageConfig();
 
         /**
@@ -876,6 +875,14 @@ public class QrCodeGenWrapper {
 
         public boolean asFile(String absFileName) throws IOException, WriterException {
             return QrCodeGenWrapper.asFile(build(), absFileName);
+        }
+
+        @Override
+        public String toString() {
+            return "Builder{" + "msg='" + msg + '\'' + ", w=" + w + ", h=" + h + ", code='" + code + '\'' +
+                    ", padding=" + padding + ", errorCorrection=" + errorCorrection + ", picType='" + picType + '\'' +
+                    ", bgImgOptions=" + bgImgOptions + ", logoOptions=" + logoOptions + ", drawOptions=" + drawOptions +
+                    ", detectOptions=" + detectOptions + '}';
         }
     }
 }

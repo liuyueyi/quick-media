@@ -12,7 +12,6 @@ import com.github.hui.quick.plugin.image.util.PunctuationUtil;
 import com.github.hui.quick.plugin.image.wrapper.create.ImgCreateOptions;
 import com.github.hui.quick.plugin.image.wrapper.create.LineGifCreateWrapper;
 import com.github.hui.quick.plugin.image.wrapper.create.WordGifCreateWrapper;
-import lombok.Getter;
 import org.apache.commons.lang3.StringUtils;
 
 import java.awt.*;
@@ -64,7 +63,8 @@ public class EmotionWrapper {
     private void draw(OutputStream outputStream) {
         int w = options.getW(), h = options.getH();
         int gifW = options.getGifW(), gifH = options.getGifH();
-        int leftPadding = options.getLeftPadding(), rightPadding = options.getRightPadding(), topPadding = options.getTopPadding(), bottomPadding = options.getBottomPadding();
+        int leftPadding = options.getLeftPadding(), rightPadding = options.getRightPadding(), topPadding =
+                options.getTopPadding(), bottomPadding = options.getBottomPadding();
         int contentSize = options.getContentSize();
 
         BufferedImage result = new BufferedImage(options.getW(), options.getH(), BufferedImage.TYPE_INT_ARGB);
@@ -83,10 +83,12 @@ public class EmotionWrapper {
             imgX = (options.getW() - options.getGifW()) >> 1;
             if (options.isImgFirst()) {
                 imgY = options.getTopPadding();
-                contentY = ((h - topPadding - bottomPadding - contentSize - gifH) >> 1) + topPadding + gifH + g2d.getFont().getSize();
+                contentY = ((h - topPadding - bottomPadding - contentSize - gifH) >> 1) + topPadding + gifH +
+                        g2d.getFont().getSize();
             } else {
                 imgY = options.getH() - options.getBottomPadding() - options.getGifH();
-                contentY = ((h - topPadding - bottomPadding - contentSize - gifH) >> 1) + topPadding + g2d.getFont().getSize();
+                contentY = ((h - topPadding - bottomPadding - contentSize - gifH) >> 1) + topPadding +
+                        g2d.getFont().getSize();
             }
         } else if (options.getDrawStyle() == ImgCreateOptions.DrawStyle.VERTICAL_LEFT) {
             imgY = (options.getH() - options.getGifH()) >> 1;
@@ -102,10 +104,12 @@ public class EmotionWrapper {
             imgY = (options.getH() - options.getGifH()) >> 1;
             if (options.isImgFirst()) {
                 imgX = w - rightPadding - gifW;
-                contentX = imgX - ((imgX - leftPadding - contentSize) >> 1) - g2d.getFont().getSize() - options.getLinePadding();
+                contentX = imgX - ((imgX - leftPadding - contentSize) >> 1) - g2d.getFont().getSize() -
+                        options.getLinePadding();
             } else {
                 imgX = options.getLeftPadding();
-                contentX = w - rightPadding - ((w - rightPadding - gifW - leftPadding - contentSize) >> 1) - g2d.getFont().getSize() - options.getLinePadding();
+                contentX = w - rightPadding - ((w - rightPadding - gifW - leftPadding - contentSize) >> 1) -
+                        g2d.getFont().getSize() - options.getLinePadding();
             }
         }
 
@@ -168,12 +172,8 @@ public class EmotionWrapper {
     }
 
 
-    public int doDrawVerticalContent(Graphics2D g2d,
-                                     String content,
-                                     int lineLen,
-                                     int x,
-                                     int linePadding,
-                                     boolean isRight) {
+    public int doDrawVerticalContent(Graphics2D g2d, String content, int lineLen, int x, int linePadding,
+            boolean isRight) {
 
         FontMetrics fontMetrics = g2d.getFontMetrics();
 
@@ -195,9 +195,7 @@ public class EmotionWrapper {
             for (int i = 0; i < tmp.length(); i++) {
                 tmpCharOffsetX = PunctuationUtil.isPunctuation(tmp.charAt(i)) ? fontSize >> 1 : 0;
 
-                g2d.drawString(tmp.charAt(i) + "",
-                        lastX + tmpCharOffsetX,
-                        startY + lastY);
+                g2d.drawString(tmp.charAt(i) + "", lastX + tmpCharOffsetX, startY + lastY);
 
                 lastY += fontMetrics.charWidth(tmp.charAt(i)) + fontMetrics.getDescent();
             }
@@ -208,13 +206,23 @@ public class EmotionWrapper {
     }
 
 
-    @Getter
     public static class Builder {
         private EmotionOptions options = new EmotionOptions();
 
         private int tempGifW;
         private int tempGifH;
 
+        public EmotionOptions getOptions() {
+            return options;
+        }
+
+        public int getTempGifW() {
+            return tempGifW;
+        }
+
+        public int getTempGifH() {
+            return tempGifH;
+        }
 
         public Builder setW(int w) {
             this.options.setW(w);
@@ -274,14 +282,14 @@ public class EmotionWrapper {
         }
 
         public Builder setGif(List<BufferedImage> imgs) {
-            int tmpW = Integer.MAX_VALUE,  tmpH = Integer.MAX_VALUE;
+            int tmpW = Integer.MAX_VALUE, tmpH = Integer.MAX_VALUE;
 
             for (BufferedImage img : imgs) {
                 if (tmpW < img.getWidth()) {
                     tmpW = img.getWidth();
                 }
 
-                if(tmpH < img.getHeight()) {
+                if (tmpH < img.getHeight()) {
                     tmpH = img.getHeight();
                 }
             }

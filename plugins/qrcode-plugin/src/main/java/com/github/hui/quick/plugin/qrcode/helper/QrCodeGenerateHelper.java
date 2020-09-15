@@ -9,8 +9,9 @@ import com.google.zxing.qrcode.decoder.ErrorCorrectionLevel;
 import com.google.zxing.qrcode.encoder.ByteMatrix;
 import com.google.zxing.qrcode.encoder.Encoder;
 import com.google.zxing.qrcode.encoder.QRCode;
-import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.tuple.ImmutablePair;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.awt.*;
 import java.awt.image.BufferedImage;
@@ -23,8 +24,8 @@ import java.util.Map;
  * 二维码生成辅助类，主要两个方法，一个是生成二维码矩阵，一个是渲染矩阵为图片
  * Created by yihui on 2018/3/23.
  */
-@Slf4j
 public class QrCodeGenerateHelper {
+    private static Logger log = LoggerFactory.getLogger(QrCodeGenerateHelper.class);
     private static final int QUIET_ZONE_SIZE = 4;
 
 

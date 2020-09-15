@@ -5,7 +5,6 @@ import com.github.hui.quick.plugin.base.FileWriteUtil;
 import com.github.hui.quick.plugin.imagic.base.ImgBaseOperate;
 import com.github.hui.quick.plugin.imagic.exception.ImgOperateException;
 import com.github.hui.quick.plugin.imagic.tool.BytesTool;
-import lombok.Data;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 
@@ -17,6 +16,7 @@ import java.io.InputStream;
 import java.net.URI;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 /**
  * 图片转换的操作类 (裁剪+旋转+伸缩+水印+边框+)
@@ -371,7 +371,6 @@ public class ImgWrapper {
         }
 
 
-        @Data
         public static class Operate<T> {
             /**
              * 操作类型
@@ -471,6 +470,135 @@ public class ImgWrapper {
                     e.printStackTrace();
                     return null;
                 }
+            }
+
+            public OperateType getOperateType() {
+                return operateType;
+            }
+
+            public void setOperateType(OperateType operateType) {
+                this.operateType = operateType;
+            }
+
+            public Integer getWidth() {
+                return width;
+            }
+
+            public void setWidth(Integer width) {
+                this.width = width;
+            }
+
+            public Integer getHeight() {
+                return height;
+            }
+
+            public void setHeight(Integer height) {
+                this.height = height;
+            }
+
+            public Integer getX() {
+                return x;
+            }
+
+            public void setX(Integer x) {
+                this.x = x;
+            }
+
+            public Integer getY() {
+                return y;
+            }
+
+            public void setY(Integer y) {
+                this.y = y;
+            }
+
+            public Double getRotate() {
+                return rotate;
+            }
+
+            public void setRotate(Double rotate) {
+                this.rotate = rotate;
+            }
+
+            public Double getRadio() {
+                return radio;
+            }
+
+            public void setRadio(Double radio) {
+                this.radio = radio;
+            }
+
+            public Integer getQuality() {
+                return quality;
+            }
+
+            public void setQuality(Integer quality) {
+                this.quality = quality;
+            }
+
+            public String getColor() {
+                return color;
+            }
+
+            public void setColor(String color) {
+                this.color = color;
+            }
+
+            public T getWater() {
+                return water;
+            }
+
+            public void setWater(T water) {
+                this.water = water;
+            }
+
+            public String getWaterImgType() {
+                return waterImgType;
+            }
+
+            public void setWaterImgType(String waterImgType) {
+                this.waterImgType = waterImgType;
+            }
+
+            public boolean isForceScale() {
+                return forceScale;
+            }
+
+            public void setForceScale(boolean forceScale) {
+                this.forceScale = forceScale;
+            }
+
+            @Override
+            public boolean equals(Object o) {
+                if (this == o) {
+                    return true;
+                }
+                if (o == null || getClass() != o.getClass()) {
+                    return false;
+                }
+                Operate<?> operate = (Operate<?>) o;
+                return forceScale == operate.forceScale && operateType == operate.operateType &&
+                        Objects.equals(width, operate.width) && Objects.equals(height, operate.height) &&
+                        Objects.equals(x, operate.x) && Objects.equals(y, operate.y) &&
+                        Objects.equals(rotate, operate.rotate) && Objects.equals(radio, operate.radio) &&
+                        Objects.equals(quality, operate.quality) && Objects.equals(color, operate.color) &&
+                        Objects.equals(water, operate.water) && Objects.equals(waterImgType, operate.waterImgType);
+            }
+
+            @Override
+            public int hashCode() {
+
+                return Objects
+                        .hash(operateType, width, height, x, y, rotate, radio, quality, color, water, waterImgType,
+                                forceScale);
+            }
+
+            @Override
+            public String toString() {
+                return "Operate{" + "operateType=" + operateType + ", width=" + width + ", height=" + height + ", x=" +
+                        x + ", y=" + y + ", rotate=" + rotate + ", radio=" + radio + ", quality=" + quality +
+                        ", color='" + color + '\'' + ", water=" + water + ", waterImgType='" + waterImgType + '\'' +
+                        ", forceScale=" + forceScale + '}';
             }
         }
 

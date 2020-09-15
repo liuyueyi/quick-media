@@ -5,12 +5,12 @@
     <parent>
         <artifactId>plugins</artifactId>
         <groupId>com.github.hui.media</groupId>
-        <version>2.4</version>
+        <version>2.5</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
     <artifactId>markdown-plugin</artifactId>
-    <version>2.4</version>
+    <version>2.5</version>
 
     <properties>
         <flexmark.version>0.26.4</flexmark.version>
@@ -20,7 +20,7 @@
         <dependency>
             <groupId>com.github.hui.media</groupId>
             <artifactId>base-plugin</artifactId>
-            <version>2.4</version>
+            <version>2.5</version>
         </dependency>
 
 

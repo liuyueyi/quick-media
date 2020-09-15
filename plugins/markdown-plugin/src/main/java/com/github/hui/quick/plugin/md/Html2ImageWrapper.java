@@ -6,7 +6,6 @@ import com.github.hui.quick.plugin.base.FileWriteUtil;
 import com.github.hui.quick.plugin.md.entity.HtmlRenderOptions;
 import com.github.hui.quick.plugin.md.entity.MarkdownEntity;
 import com.github.hui.quick.plugin.md.helper.HtmlRenderHelper;
-import lombok.Getter;
 import org.apache.xerces.parsers.DOMParser;
 import org.cyberneko.html.HTMLConfiguration;
 import org.w3c.dom.Document;
@@ -106,7 +105,6 @@ public class Html2ImageWrapper {
     }
 
 
-    @Getter
     public static class Builder {
         /**
          * 输出图片的宽
@@ -222,6 +220,50 @@ public class Html2ImageWrapper {
         public Builder setDocument(String html) throws Exception {
             this.document = parseDocument(html);
             return this;
+        }
+
+        public Integer getW() {
+            return w;
+        }
+
+        public Integer getH() {
+            return h;
+        }
+
+        public boolean isAutoW() {
+            return autoW;
+        }
+
+        public boolean isAutoH() {
+            return autoH;
+        }
+
+        public String getOutType() {
+            return outType;
+        }
+
+        public MarkdownEntity getHtml() {
+            return html;
+        }
+
+        public String getCss() {
+            return css;
+        }
+
+        public String getFontFamily() {
+            return fontFamily;
+        }
+
+        public Font getFont() {
+            return font;
+        }
+
+        public Integer getFontColor() {
+            return fontColor;
+        }
+
+        public Document getDocument() {
+            return document;
         }
 
         public Html2ImageWrapper build() throws Exception {

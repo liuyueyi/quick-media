@@ -3,10 +3,9 @@ package com.github.hui.quick.plugin.audio;
 import com.github.hui.quick.plugin.base.FileReadUtil;
 import com.github.hui.quick.plugin.base.FileWriteUtil;
 import com.github.hui.quick.plugin.base.ProcessUtil;
-import lombok.extern.slf4j.Slf4j;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
-import java.io.File;
-import java.io.FileInputStream;
 import java.io.InputStream;
 import java.net.URI;
 import java.util.HashMap;
@@ -17,8 +16,9 @@ import java.util.Map;
  * <p>
  * Created by yihui on 2017/7/13.
  */
-@Slf4j
 public class AudioWrapper {
+
+    private static final Logger log = LoggerFactory.getLogger(AudioWrapper.class);
 
     public static Builder<String> of(String str) {
         return new Builder<String>().setSource(str);
