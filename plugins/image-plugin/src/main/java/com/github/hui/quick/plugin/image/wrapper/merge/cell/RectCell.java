@@ -26,13 +26,7 @@ public class RectCell implements IMergeCell {
 
 
     /**
-     * 是否为虚线
-     */
-    private boolean dashed;
-
-
-    /**
-     * 虚线样式
+     * 虚线样式，指定线宽等，如 {@link CellConstants#RECT_DEFAULT_DASH}
      */
     private Stroke stroke;
 
@@ -45,13 +39,12 @@ public class RectCell implements IMergeCell {
     public RectCell() {
     }
 
-    public RectCell(int x, int y, int w, int h, Color color, boolean dashed, Stroke stroke, int radius) {
+    public RectCell(int x, int y, int w, int h, Color color, Stroke stroke, int radius) {
         this.x = x;
         this.y = y;
         this.w = w;
         this.h = h;
         this.color = color;
-        this.dashed = dashed;
         this.stroke = stroke;
         this.radius = radius;
     }
@@ -59,11 +52,11 @@ public class RectCell implements IMergeCell {
     @Override
     public void draw(Graphics2D g2d) {
         g2d.setColor(color);
-        if (!dashed) {
+        if (stroke == null) {
             g2d.drawRoundRect(x, y, w, h, radius, radius);
         } else {
             Stroke stroke = g2d.getStroke();
-            g2d.setStroke(stroke);
+            g2d.setStroke(this.stroke);
             g2d.drawRoundRect(x, y, w, h, radius, radius);
             g2d.setStroke(stroke);
         }
@@ -109,14 +102,6 @@ public class RectCell implements IMergeCell {
         this.color = color;
     }
 
-    public boolean isDashed() {
-        return dashed;
-    }
-
-    public void setDashed(boolean dashed) {
-        this.dashed = dashed;
-    }
-
     public Stroke getStroke() {
         return stroke;
     }
@@ -142,21 +127,20 @@ public class RectCell implements IMergeCell {
             return false;
         }
         RectCell rectCell = (RectCell) o;
-        return x == rectCell.x && y == rectCell.y && w == rectCell.w && h == rectCell.h && dashed == rectCell.dashed &&
-                radius == rectCell.radius && Objects.equals(color, rectCell.color) &&
-                Objects.equals(stroke, rectCell.stroke);
+        return x == rectCell.x && y == rectCell.y && w == rectCell.w && h == rectCell.h && radius == rectCell.radius &&
+                Objects.equals(color, rectCell.color) && Objects.equals(stroke, rectCell.stroke);
     }
 
     @Override
     public int hashCode() {
 
-        return Objects.hash(x, y, w, h, color, dashed, stroke, radius);
+        return Objects.hash(x, y, w, h, color, stroke, radius);
     }
 
     @Override
     public String toString() {
-        return "RectCell{" + "x=" + x + ", y=" + y + ", w=" + w + ", h=" + h + ", color=" + color + ", dashed=" +
-                dashed + ", stroke=" + stroke + ", radius=" + radius + '}';
+        return "RectCell{" + "x=" + x + ", y=" + y + ", w=" + w + ", h=" + h + ", color=" + color + ", stroke=" +
+                stroke + ", radius=" + radius + '}';
     }
 
     public static Builder builder() {
@@ -179,13 +163,6 @@ public class RectCell implements IMergeCell {
          * 颜色
          */
         private Color color;
-
-
-        /**
-         * 是否为虚线
-         */
-        private boolean dashed;
-
 
         /**
          * 虚线样式
@@ -223,11 +200,6 @@ public class RectCell implements IMergeCell {
             return this;
         }
 
-        public Builder dashed(boolean dashed) {
-            this.dashed = dashed;
-            return this;
-        }
-
         public Builder stroke(Stroke stroke) {
             this.stroke = stroke;
             return this;
@@ -239,7 +211,7 @@ public class RectCell implements IMergeCell {
         }
 
         public RectCell build() {
-            return new RectCell(x, y, w, h, color, dashed, stroke, radius);
+            return new RectCell(x, y, w, h, color, stroke, radius);
         }
     }
 }

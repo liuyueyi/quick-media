@@ -1,18 +1,16 @@
 package com.github.hui.quick.plugin.test;
 
 
+import com.github.hui.quick.plugin.base.ColorUtil;
 import com.github.hui.quick.plugin.base.GraphicUtil;
 import com.github.hui.quick.plugin.base.ImageLoadUtil;
 import com.github.hui.quick.plugin.base.ImageOperateUtil;
+import com.github.hui.quick.plugin.image.util.FontUtil;
 import com.github.hui.quick.plugin.image.wrapper.create.ImgCreateOptions;
 import com.github.hui.quick.plugin.image.wrapper.merge.ImgMergeWrapper;
-import com.github.hui.quick.plugin.image.wrapper.merge.cell.IMergeCell;
-import com.github.hui.quick.plugin.image.wrapper.merge.cell.ImgCell;
-import com.github.hui.quick.plugin.image.wrapper.merge.cell.LineCell;
-import com.github.hui.quick.plugin.image.wrapper.merge.cell.TextCell;
+import com.github.hui.quick.plugin.image.wrapper.merge.cell.*;
 import com.github.hui.quick.plugin.image.wrapper.merge.template.QrCodeCardTemplate;
 import com.github.hui.quick.plugin.image.wrapper.merge.template.QrCodeCardTemplateBuilder;
-import com.github.hui.quick.plugin.image.util.FontUtil;
 import org.junit.Test;
 
 import javax.imageio.ImageIO;
@@ -30,6 +28,72 @@ import java.util.List;
 public class ImgMergeWrapperTest {
 
     @Test
+    public void gen() throws IOException {
+        try {
+            testCover("我师兄实在太稳健了", "cover");
+            testCover("射雕英雄传", "cover2");
+        } catch (Exception e) {
+        }
+    }
+
+    public void testCover(String text, String out) throws IOException {
+        int w = 276, h = 402;
+        BufferedImage bg = ImageLoadUtil.getImageByPath("cover.jpg");
+
+
+        TextCell textCell = new TextCell();
+        textCell.setColor(ColorUtil.int2color(0xFFB49876));
+        textCell.addText(text);
+        textCell.setFont(new Font("苹方", Font.PLAIN, 32));
+        int textX = 13 * w / (13 + 12 + 67);
+        textCell.setStartX(textX);
+        int textY = (int) (23.5 * h / (23.5 + 13 + 86)) + 28;
+        textCell.setStartY(textY);
+        textCell.setEndX(w - textX);
+        textCell.setEndY(textY);
+        textCell.setDrawStyle(ImgCreateOptions.DrawStyle.HORIZONTAL);
+        textCell.setAlignStyle(ImgCreateOptions.AlignStyle.CENTER);
+        int textHeight = textCell.getDrawHeight();
+
+
+        RectFillCell fillCell = new RectFillCell();
+        textY = textY - 32;
+        fillCell.setX(textX - 15);
+        fillCell.setY(textY - 15);
+        fillCell.setW(w - 2 * textX + 30);
+        fillCell.setH(textHeight + 30);
+        fillCell.setRadius(8);
+        fillCell.setColor(Color.LIGHT_GRAY);
+
+
+        RectCell rectCell = new RectCell();
+        rectCell.setX(textX - 21);
+        rectCell.setY(textY - 21);
+        rectCell.setW(w - 2 * textX + 42);
+        rectCell.setH(textHeight + 42);
+        rectCell.setColor(Color.LIGHT_GRAY);
+        rectCell.setRadius(12);
+        rectCell.setStroke(new BasicStroke(2));
+
+
+        Graphics2D g2d = GraphicUtil.getG2d(bg);
+        List<IMergeCell> list = new ArrayList<>();
+        list.add(rectCell);
+        list.add(fillCell);
+        list.add(textCell);
+        list.stream().forEach(s -> s.draw(g2d));
+
+        System.out.println("---绘制完成---");
+        try {
+            ImageIO.write(bg, "png", new File("/tmp/cover/" + out + ".png"));
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+    }
+
+
+    @Test
     public void testCell() throws IOException {
         int w = 520, h = 260;
         BufferedImage bg = new BufferedImage(520, 260, BufferedImage.TYPE_INT_RGB);
@@ -43,13 +107,7 @@ public class ImgMergeWrapperTest {
         // logo
         BufferedImage logo = ImageLoadUtil.getImageByPath("bg.png");
         logo = ImageOperateUtil.makeRoundImg(logo, false, null);
-        ImgCell logoCell = ImgCell.builder()
-                .img(logo)
-                .x(60)
-                .y(20)
-                .w(100)
-                .h(100)
-                .build();
+        ImgCell logoCell = ImgCell.builder().img(logo).x(60).y(20).w(100).h(100).build();
         list.add(logoCell);
 
 
@@ -83,23 +141,12 @@ public class ImgMergeWrapperTest {
 
 
         // line
-        LineCell line = LineCell.builder().x1(280)
-                .y1(20)
-                .x2(240)
-                .y2(240)
-                .color(Color.GRAY)
-                .build();
+        LineCell line = LineCell.builder().x1(280).y1(20).x2(240).y2(240).color(Color.GRAY).build();
         list.add(line);
 
 
         BufferedImage qrCode = ImageLoadUtil.getImageByPath("xcx.jpg");
-        ImgCell imgCell = ImgCell.builder()
-                .img(qrCode)
-                .x(300)
-                .y(30)
-                .w(200)
-                .h(200)
-                .build();
+        ImgCell imgCell = ImgCell.builder().img(qrCode).x(300).y(30).w(200).h(200).build();
         list.add(imgCell);
 
 
@@ -140,33 +187,19 @@ public class ImgMergeWrapperTest {
         BufferedImage img2 = ImageLoadUtil.getImageByPath("blogQrcode.png");
 
 
-        ImgCell imgCell = ImgCell.builder()
-                .img(img1)
-                .x(0)
-                .y(0)
-                .build();
+        ImgCell imgCell = ImgCell.builder().img(img1).x(0).y(0).build();
 
 
-        LineCell lineCell = LineCell.builder()
-                .x1(img1.getWidth() / 3)
-                .x2(img1.getWidth() * 7 / 6)
-                .y1(img1.getHeight() + 4)
-                .y2(img1.getHeight() + 4)
-                . color(Color.LIGHT_GRAY)
-                .dashed(true)
-                .build();
+        LineCell lineCell =
+                LineCell.builder().x1(img1.getWidth() / 3).x2(img1.getWidth() * 7 / 6).y1(img1.getHeight() + 4)
+                        .y2(img1.getHeight() + 4).color(Color.LIGHT_GRAY).dashed(true).build();
 
 
-        ImgCell imgCell2 = ImgCell.builder()
-                .img(img2)
-                .x(img1.getWidth() / 2)
-                .y(img1.getHeight() + 4)
-                .build();
+        ImgCell imgCell2 = ImgCell.builder().img(img2).x(img1.getWidth() / 2).y(img1.getHeight() + 4).build();
 
-        BufferedImage ans = ImgMergeWrapper.merge(Arrays.asList(imgCell, lineCell, imgCell2),
-                img1.getWidth() / 2 + img2.getWidth(),
-                img1.getHeight() + 4 + img2.getHeight(),
-                Color.WHITE);
+        BufferedImage ans = ImgMergeWrapper
+                .merge(Arrays.asList(imgCell, lineCell, imgCell2), img1.getWidth() / 2 + img2.getWidth(),
+                        img1.getHeight() + 4 + img2.getHeight(), Color.WHITE);
         ImageIO.write(ans, "jpg", new File("/tmp/ansV3.jpg"));
     }
 }

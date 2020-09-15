@@ -18,13 +18,13 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
         <java.version>1.8</java.version>
-        <qrcode-plugin.version>2.4.2</qrcode-plugin.version>
-        <image-plugin.version>2.4</image-plugin.version>
-        <svg-plugin.version>2.4</svg-plugin.version>
-        <markdonw-plugin.version>2.4</markdonw-plugin.version>
-        <audio-plugin.version>2.4</audio-plugin.version>
-        <date-plugin.version>2.4</date-plugin.version>
-        <phantom-plugin.version>2.4</phantom-plugin.version>
+        <qrcode-plugin.version>2.5</qrcode-plugin.version>
+        <image-plugin.version>2.5</image-plugin.version>
+        <svg-plugin.version>2.5</svg-plugin.version>
+        <markdonw-plugin.version>2.5</markdonw-plugin.version>
+        <audio-plugin.version>2.5</audio-plugin.version>
+        <date-plugin.version>2.5</date-plugin.version>
+        <phantom-plugin.version>2.5</phantom-plugin.version>
     </properties>
 
     <repositories>
@@ -41,13 +41,6 @@
             </snapshots>
         </repository>
     </repositories>
-    <pluginRepositories>
-        <pluginRepository>
-            <id>spring-releases</id>
-            <url>https://repo.spring.io/libs-release-local</url>
-        </pluginRepository>
-    </pluginRepositories>
-
     <dependencies>
 
         <dependency>

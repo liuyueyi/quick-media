@@ -17,24 +17,31 @@ public class RectFillCell implements IMergeCell {
 
     private int x, y, w, h;
 
+    private int radius;
+
     @Override
     public void draw(Graphics2D g2d) {
         g2d.setFont(font);
         g2d.setColor(color);
-        ;
-        g2d.fillRect(x, y, w, h);
+
+        if (radius <= 0) {
+            g2d.fillRect(x, y, w, h);
+        } else {
+            g2d.fillRoundRect(x, y, w, h, radius, radius);
+        }
     }
 
     public RectFillCell() {
     }
 
-    public RectFillCell(Font font, Color color, int x, int y, int w, int h) {
+    public RectFillCell(Font font, Color color, int x, int y, int w, int h, int radius) {
         this.font = font;
         this.color = color;
         this.x = x;
         this.y = y;
         this.w = w;
         this.h = h;
+        this.radius = radius;
     }
 
     public Font getFont() {
@@ -85,6 +92,14 @@ public class RectFillCell implements IMergeCell {
         this.h = h;
     }
 
+    public int getRadius() {
+        return radius;
+    }
+
+    public void setRadius(int radius) {
+        this.radius = radius;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) {
@@ -94,20 +109,19 @@ public class RectFillCell implements IMergeCell {
             return false;
         }
         RectFillCell that = (RectFillCell) o;
-        return x == that.x && y == that.y && w == that.w && h == that.h && Objects.equals(font, that.font) &&
-                Objects.equals(color, that.color);
+        return x == that.x && y == that.y && w == that.w && h == that.h && radius == that.radius &&
+                Objects.equals(font, that.font) && Objects.equals(color, that.color);
     }
 
     @Override
     public int hashCode() {
-
-        return Objects.hash(font, color, x, y, w, h);
+        return Objects.hash(font, color, x, y, w, h, radius);
     }
 
     @Override
     public String toString() {
         return "RectFillCell{" + "font=" + font + ", color=" + color + ", x=" + x + ", y=" + y + ", w=" + w + ", h=" +
-                h + '}';
+                h + ", radius=" + radius + '}';
     }
 
     public static Builder builder() {
@@ -120,7 +134,7 @@ public class RectFillCell implements IMergeCell {
         private Color color;
 
 
-        private int x, y, w, h;
+        private int x, y, w, h, radius;
 
         public Builder font(Font font) {
             this.font = font;
@@ -152,8 +166,13 @@ public class RectFillCell implements IMergeCell {
             return this;
         }
 
+        public Builder radius(int radius) {
+            this.radius = radius;
+            return this;
+        }
+
         public RectFillCell build() {
-            return new RectFillCell(font, color, x, y, w, h);
+            return new RectFillCell(font, color, x, y, w, h, radius);
         }
     }
 }

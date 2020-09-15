@@ -250,6 +250,7 @@ public class QrCodeGenUserGuide {
                     .setDrawStyle(QrCodeOptions.DrawStyle.IMAGE)
                     .setDrawImg(cell)
                     .setDrawBgImg(bgCell)
+                    .setDetectSpecial()
                     .asFile("/tmp/bqr4.png");
         } catch (Exception e) {
             e.printStackTrace();
@@ -612,7 +613,7 @@ public class QrCodeGenUserGuide {
                     .setDrawBgImg("overbg/b.png")
                     .setDrawStyle(QrCodeOptions.DrawStyle.IMAGE)
                     .setDrawImg("overbg/a.png")
-//                    .setDetectSpecial()
+                    .setDetectSpecial()
                     .asFile("/tmp/imgQr4.png");
         } catch (Exception e) {
             e.printStackTrace();

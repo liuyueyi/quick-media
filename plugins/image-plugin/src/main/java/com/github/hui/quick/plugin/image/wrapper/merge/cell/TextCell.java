@@ -127,6 +127,16 @@ public class TextCell implements IMergeCell {
         texts.add(text);
     }
 
+    /**
+     * 文本框占用的高度, 水平绘制时有效
+     *
+     * @return
+     */
+    public int getDrawHeight() {
+        FontMetrics fontMetrics = FontUtil.getFontMetric(font);
+        int size = batchSplitText(texts, fontMetrics).size();
+        return size * (fontMetrics.getHeight() + lineSpace);
+    }
 
     @Override
     public void draw(Graphics2D g2d) {
