@@ -18,7 +18,7 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
         <java.version>1.8</java.version>
-        <qrcode-plugin.version>2.5</qrcode-plugin.version>
+        <qrcode-plugin.version>2.5.0</qrcode-plugin.version>
         <image-plugin.version>2.5</image-plugin.version>
         <svg-plugin.version>2.5</svg-plugin.version>
         <markdonw-plugin.version>2.5</markdonw-plugin.version>

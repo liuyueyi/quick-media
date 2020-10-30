@@ -8,8 +8,6 @@ import com.github.hui.quick.plugin.qrcode.wrapper.BitMatrixEx;
 import com.github.hui.quick.plugin.qrcode.wrapper.QrCodeOptions;
 import com.google.zxing.qrcode.encoder.ByteMatrix;
 import org.apache.commons.lang3.tuple.ImmutablePair;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import java.awt.*;
 import java.awt.image.BufferedImage;
@@ -22,8 +20,6 @@ import java.util.List;
  * Created by yihui on 2017/4/7.
  */
 public class QrCodeRenderHelper {
-    private static Logger log = LoggerFactory.getLogger(QrCodeGenerateHelper.class);
-
     /**
      * 绘制logo图片
      *
@@ -60,13 +56,24 @@ public class QrCodeRenderHelper {
             logoImg = ImageOperateUtil.makeRoundBorder(logoImg, radius, logoOptions.getBorderColor());
         }
 
-
-        // logo的宽高
+        // logo的宽高，避免长图的变形，这里采用等比例缩放的策略
         int logoRate = logoOptions.getRate();
-        int logoWidth = logoImg.getWidth() > (qrWidth << 1) / logoRate ? (qrWidth << 1) / logoRate : logoImg.getWidth();
-        int logoHeight =
-                logoImg.getHeight() > (qrHeight << 1) / logoRate ? (qrHeight << 1) / logoRate : logoImg.getHeight();
-
+        int calculateQrLogoWidth = (qrWidth << 1) / logoRate;
+        int calculateQrLogoHeight = (qrHeight << 1) / logoRate;
+        int logoWidth, logoHeight;
+        if (calculateQrLogoWidth < logoImg.getWidth()) {
+            // logo实际宽大于计算的宽度，则需要等比例缩放
+            logoWidth = calculateQrLogoWidth;
+            logoHeight = logoWidth * logoImg.getHeight() / logoImg.getWidth();
+        } else if (calculateQrLogoHeight < logoImg.getHeight()) {
+            // logo实际高大于计算的高度，则需要等比例缩放
+            logoHeight = calculateQrLogoHeight;
+            logoWidth = logoHeight * logoImg.getWidth() / logoImg.getHeight();
+        } else {
+            // logo 宽高比计算的要小，不拉伸
+            logoWidth = logoImg.getWidth();
+            logoHeight = logoImg.getHeight();
+        }
         int logoOffsetX = (qrWidth - logoWidth) >> 1;
         int logoOffsetY = (qrHeight - logoHeight) >> 1;
 
@@ -101,7 +108,6 @@ public class QrCodeRenderHelper {
         int bgW = bgImgOptions.getBgW() < qrWidth ? qrWidth : bgImgOptions.getBgW();
         int bgH = bgImgOptions.getBgH() < qrHeight ? qrHeight : bgImgOptions.getBgH();
 
-
         // 背景图缩放
         BufferedImage bgImg = bgImgOptions.getBgImg();
         if (bgImg.getWidth() != bgW || bgImg.getHeight() != bgH) {
@@ -115,11 +121,8 @@ public class QrCodeRenderHelper {
             // 选择一块区域进行填充
             bgImgGraphic.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_ATOP, 1.0f));
             bgImgGraphic.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
-            bgImgGraphic
-                    .drawImage(qrImg.getScaledInstance(qrWidth, qrHeight, Image.SCALE_SMOOTH), bgImgOptions.getStartX(),
-                            bgImgOptions.getStartY(),
-
-                            null);
+            bgImgGraphic.drawImage(qrImg.getScaledInstance(qrWidth, qrHeight, Image.SCALE_SMOOTH), bgImgOptions.getStartX(),
+                            bgImgOptions.getStartY(), null);
         } else {
             // 全覆盖方式
             int bgOffsetX = (bgW - qrWidth) >> 1;
@@ -127,8 +130,7 @@ public class QrCodeRenderHelper {
             // 设置透明度， 避免看不到背景
             bgImgGraphic.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_ATOP, bgImgOptions.getOpacity()));
             bgImgGraphic.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
-            bgImgGraphic.drawImage(qrImg.getScaledInstance(qrWidth, qrHeight, Image.SCALE_SMOOTH), bgOffsetX, bgOffsetY,
-                    null);
+            bgImgGraphic.drawImage(qrImg.getScaledInstance(qrWidth, qrHeight, Image.SCALE_SMOOTH), bgOffsetX, bgOffsetY, null);
             bgImgGraphic.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_ATOP, 1.0f));
         }
         bgImgGraphic.dispose();
@@ -288,10 +290,12 @@ public class QrCodeRenderHelper {
         /**
          * 左上角
          */
-        LT, /**
+        LT,
+        /**
          * 左下角
          */
-        LD, /**
+        LD,
+        /**
          * 右上角
          */
         RT, NONE {

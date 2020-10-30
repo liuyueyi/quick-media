@@ -65,7 +65,7 @@
 <repositories>
     <repository>
         <id>jitpack.io</id>
-        <url>https://jitpack.io</url>
+        <url>http://jitpack.io</url>
     </repository>
 </repositories>
 
@@ -74,7 +74,7 @@
 <dependency>
     <groupId>com.github.liuyueyi.quick-media</groupId>
     <artifactId>qrcode-plugin</artifactId>
-    <version>2.5</version>
+    <version>2.5.1</version>
 </dependency>
 ```
 

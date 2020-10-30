@@ -139,6 +139,51 @@ public class QrCodeGenUserGuide {
         }
     }
 
+    /**
+     * 非矩形的logo
+     */
+    @Test
+    public void logoQr5() {
+        try {
+            String msg = "http://weixin.qq.com/r/FS9waAPEg178rUcL93oH";
+            String logo = "logo/rec_logo.jpg";
+            BufferedImage img = QrCodeGenWrapper.of(msg)
+                    .setW(400)
+                    .setLogo(logo)
+                    // 圆形logo支持
+                    .setLogoStyle(QrCodeOptions.LogoStyle.ROUND)
+                    .setLogoBgColor(0xfffefefe)
+                    .setLogoBorderBgColor(0xffc7c7c7)
+                    .setLogoBorder(true)
+                    .asBufferedImage();
+//                    .asFile("/tmp/lqr5.png");
+            System.out.println(img);
+        }catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    /**
+     * 带外边框的圆形logo
+     */
+    @Test
+    public void logoQr6() {
+        try {
+            String msg = "http://weixin.qq.com/r/FS9waAPEg178rUcL93oH";
+            String logo = "logo.jpg";
+            boolean ans = QrCodeGenWrapper.of(msg)
+                    .setW(400)
+                    .setLogo(logo)
+                    // 圆形logo支持
+                    .setLogoStyle(QrCodeOptions.LogoStyle.ROUND)
+                    .setLogoBgColor(0xfffefefe)
+                    .setLogoBorderBgColor(0xffc7c7c7)
+                    .setLogoBorder(true)
+                    .asFile("/tmp/lqr6.png");
+        }catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
 
     /**
      * 背景图的二维码，默认全覆盖模式
