@@ -237,6 +237,16 @@ public class QrCodeGenWrapper {
             return this;
         }
 
+        public Builder setQrStyle(QrCodeOptions.ImgStyle qrStyle) {
+            this.drawOptions.qrStyle(qrStyle);
+            return this;
+        }
+
+        public Builder setQrCornerRadiusRate(float radius) {
+            this.drawOptions.cornerRadius(radius);
+            return this;
+        }
+
 
         /////////////// logo 相关配置 ///////////////
 
@@ -244,7 +254,7 @@ public class QrCodeGenWrapper {
             try {
                 return setLogo(ImageLoadUtil.getImageByPath(logo));
             } catch (IOException e) {
-                log.error("load logo error! e:{}", e);
+                log.error("load logo error!", e);
                 throw new IOException("load logo error!", e);
             }
         }
@@ -253,7 +263,7 @@ public class QrCodeGenWrapper {
             try {
                 return setLogo(ImageIO.read(inputStream));
             } catch (IOException e) {
-                log.error("load backgroundImg error! e:{}", e);
+                log.error("load backgroundImg error!", e);
                 throw new IOException("load backgroundImg error!", e);
             }
         }
@@ -341,7 +351,7 @@ public class QrCodeGenWrapper {
             try {
                 return setBgImg(FileReadUtil.getStreamByFileName(bgImg));
             } catch (IOException e) {
-                log.error("load backgroundImg error! e:{}", e);
+                log.error("load backgroundImg error!", e);
                 throw new IOException("load backgroundImg error!", e);
             }
         }
@@ -360,7 +370,7 @@ public class QrCodeGenWrapper {
                     return setBgImg(ImageIO.read(target));
                 }
             } catch (IOException e) {
-                log.error("load backgroundImg error! e:{}", e);
+                log.error("load backgroundImg error!", e);
                 throw new IOException("load backgroundImg error!", e);
             }
         }
@@ -371,6 +381,27 @@ public class QrCodeGenWrapper {
             return this;
         }
 
+        /**
+         * 背景图样式
+         *
+         * @param imgStyle
+         * @return
+         */
+        public Builder setBgImgStyle(QrCodeOptions.ImgStyle imgStyle) {
+            bgImgOptions.imgStyle(imgStyle);
+            return this;
+        }
+
+        /**
+         * 背景圆角弧度占比
+         *
+         * @param radius
+         * @return
+         */
+        public Builder setBgCornerRadiusRate(float radius) {
+            bgImgOptions.cornerRadius(radius);
+            return this;
+        }
 
         public Builder setBgStyle(QrCodeOptions.BgImgStyle bgImgStyle) {
             bgImgOptions.bgImgStyle(bgImgStyle);

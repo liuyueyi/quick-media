@@ -105,8 +105,8 @@ public class QrCodeRenderHelper {
         final int qrHeight = qrImg.getHeight();
 
         // 背景的图宽高不应该小于原图
-        int bgW = bgImgOptions.getBgW() < qrWidth ? qrWidth : bgImgOptions.getBgW();
-        int bgH = bgImgOptions.getBgH() < qrHeight ? qrHeight : bgImgOptions.getBgH();
+        int bgW = Math.max(bgImgOptions.getBgW(), qrWidth);
+        int bgH = Math.max(bgImgOptions.getBgH(), qrHeight);
 
         // 背景图缩放
         BufferedImage bgImg = bgImgOptions.getBgImg();
@@ -116,12 +116,21 @@ public class QrCodeRenderHelper {
             bgImg = temp;
         }
 
+        // 背景图支持设置圆角 or 圆形设置
+        if (bgImgOptions.getImgStyle() == QrCodeOptions.ImgStyle.ROUND) {
+            int cornerRadius = (int) (Math.min(bgW, bgH) * bgImgOptions.getRadius());
+            bgImg = ImageOperateUtil.makeRoundedCorner(bgImg, cornerRadius);
+        } else if (bgImgOptions.getImgStyle() == QrCodeOptions.ImgStyle.CIRCLE) {
+            bgImg = ImageOperateUtil.makeRoundImg(bgImg, false, null);
+        }
+
         Graphics2D bgImgGraphic = GraphicUtil.getG2d(bgImg);
         if (bgImgOptions.getBgImgStyle() == QrCodeOptions.BgImgStyle.FILL) {
             // 选择一块区域进行填充
             bgImgGraphic.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_ATOP, 1.0f));
             bgImgGraphic.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
-            bgImgGraphic.drawImage(qrImg.getScaledInstance(qrWidth, qrHeight, Image.SCALE_SMOOTH), bgImgOptions.getStartX(),
+            bgImgGraphic
+                    .drawImage(qrImg.getScaledInstance(qrWidth, qrHeight, Image.SCALE_SMOOTH), bgImgOptions.getStartX(),
                             bgImgOptions.getStartY(), null);
         } else {
             // 全覆盖方式
@@ -130,7 +139,8 @@ public class QrCodeRenderHelper {
             // 设置透明度， 避免看不到背景
             bgImgGraphic.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_ATOP, bgImgOptions.getOpacity()));
             bgImgGraphic.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
-            bgImgGraphic.drawImage(qrImg.getScaledInstance(qrWidth, qrHeight, Image.SCALE_SMOOTH), bgOffsetX, bgOffsetY, null);
+            bgImgGraphic.drawImage(qrImg.getScaledInstance(qrWidth, qrHeight, Image.SCALE_SMOOTH), bgOffsetX, bgOffsetY,
+                    null);
             bgImgGraphic.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_ATOP, 1.0f));
         }
         bgImgGraphic.dispose();
@@ -152,8 +162,8 @@ public class QrCodeRenderHelper {
         final int qrHeight = qrImg.getHeight();
 
         // 背景的图宽高不应该小于原图
-        int bgW = bgImgOptions.getBgW() < qrWidth ? qrWidth : bgImgOptions.getBgW();
-        int bgH = bgImgOptions.getBgH() < qrHeight ? qrHeight : bgImgOptions.getBgH();
+        int bgW = Math.max(bgImgOptions.getBgW(), qrWidth);
+        int bgH = Math.max(bgImgOptions.getBgH(), qrHeight);
 
         // 覆盖方式
         boolean fillMode = bgImgOptions.getBgImgStyle() == QrCodeOptions.BgImgStyle.FILL;
@@ -211,11 +221,12 @@ public class QrCodeRenderHelper {
         int infoSize = bitMatrix.getMultiple();
         BufferedImage qrImg = new BufferedImage(qrWidth, qrHeight, BufferedImage.TYPE_INT_ARGB);
 
+        QrCodeOptions.DrawOptions drawOptions = qrCodeConfig.getDrawOptions();
 
         // 绘制的背景色
-        Color bgColor = qrCodeConfig.getDrawOptions().getBgColor();
+        Color bgColor = drawOptions.getBgColor();
         // 绘制前置色
-        Color preColor = qrCodeConfig.getDrawOptions().getPreColor();
+        Color preColor = drawOptions.getPreColor();
 
         // 探测图形外圈的颜色
         Color detectOutColor = qrCodeConfig.getDetectOptions().getOutColor();
@@ -235,7 +246,7 @@ public class QrCodeRenderHelper {
         int topPadding = bitMatrix.getTopPadding();
 
         Graphics2D g2 = GraphicUtil.getG2d(qrImg);
-        if (!qrCodeConfig.getDrawOptions().isDiaphaneityFill()) {
+        if (!drawOptions.isDiaphaneityFill()) {
             // 当二维码中的透明区域，不填充时，如下设置，可以让图片中的透明度覆盖背景色
             g2.setComposite(AlphaComposite.Src);
         }
@@ -244,11 +255,9 @@ public class QrCodeRenderHelper {
         g2.setColor(bgColor);
         g2.fillRect(0, 0, qrWidth, qrHeight);
 
-        if (qrCodeConfig.getDrawOptions().getDrawStyle() == QrCodeOptions.DrawStyle.TXT) {
+        if (drawOptions.getDrawStyle() == QrCodeOptions.DrawStyle.TXT) {
             // 绘制文字时，需要设置字体
-            g2.setFont(QuickQrUtil
-                    .font(qrCodeConfig.getDrawOptions().getFontName(), qrCodeConfig.getDrawOptions().getFontStyle(),
-                            infoSize));
+            g2.setFont(QuickQrUtil.font(drawOptions.getFontName(), drawOptions.getFontStyle(), infoSize));
         }
 
         // 探测图形的大小
@@ -257,7 +266,7 @@ public class QrCodeRenderHelper {
         int matrixW = bitMatrix.getByteMatrix().getWidth();
         int matrixH = bitMatrix.getByteMatrix().getHeight();
 
-        QrCodeOptions.DrawStyle drawStyle = qrCodeConfig.getDrawOptions().getDrawStyle();
+        QrCodeOptions.DrawStyle drawStyle = drawOptions.getDrawStyle();
         DetectLocation detectLocation;
         for (int x = 0; x < matrixW; x++) {
             for (int y = 0; y < matrixH; y++) {
@@ -283,7 +292,35 @@ public class QrCodeRenderHelper {
             }
         }
         g2.dispose();
-        return qrImg;
+
+        // 将二维码缩放为预期的大小
+        qrImg = scaleQr2RealSize(qrCodeConfig, bitMatrix, qrImg);
+
+        // 二维码图片样式调整
+        if (drawOptions.getQrStyle() == QrCodeOptions.ImgStyle.CIRCLE) {
+            return ImageOperateUtil.makeRoundImg(qrImg, false, null);
+        } else if (drawOptions.getQrStyle() == QrCodeOptions.ImgStyle.ROUND) {
+            float radius = Math.min(qrCodeConfig.getW(), qrCodeConfig.getH()) * drawOptions.getCornerRadius();
+            return ImageOperateUtil.makeRoundedCorner(qrImg, (int) radius);
+        } else {
+            return qrImg;
+        }
+    }
+
+    private static BufferedImage scaleQr2RealSize(QrCodeOptions qrCodeConfig, BitMatrixEx bitMatrix,
+            BufferedImage qrCode) {
+        // 矩阵对应的宽高
+        int qrCodeWidth = bitMatrix.getWidth();
+        int qrCodeHeight = bitMatrix.getHeight();
+
+        // 若二维码的实际宽高和预期的宽高不一致, 则缩放
+        int realQrCodeWidth = qrCodeConfig.getW();
+        int realQrCodeHeight = qrCodeConfig.getH();
+        if (qrCodeWidth != realQrCodeWidth || qrCodeHeight != realQrCodeHeight) {
+            qrCode = GraphicUtil.createImg(realQrCodeWidth, realQrCodeHeight, 0, 0, qrCode);
+        }
+
+        return qrCode;
     }
 
     public enum DetectLocation {

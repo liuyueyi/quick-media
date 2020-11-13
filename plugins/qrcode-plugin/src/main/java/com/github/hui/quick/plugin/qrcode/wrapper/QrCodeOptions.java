@@ -413,6 +413,16 @@ public class QrCodeOptions {
         private BufferedImage bgImg;
 
         /**
+         * 背景图样式
+         */
+        private ImgStyle imgStyle;
+
+        /**
+         * 圆角弧度，默认为宽高中较小值的 1/8
+         */
+        private float radius;
+
+        /**
          * 动态背景图
          */
         private GifDecoder gifDecoder;
@@ -457,9 +467,11 @@ public class QrCodeOptions {
         public BgImgOptions() {
         }
 
-        public BgImgOptions(BufferedImage bgImg, GifDecoder gifDecoder, int bgW, int bgH, BgImgStyle bgImgStyle,
-                float opacity, int startX, int startY) {
+        public BgImgOptions(BufferedImage bgImg, ImgStyle imgStyle, float radius, GifDecoder gifDecoder, int bgW,
+                int bgH, BgImgStyle bgImgStyle, float opacity, int startX, int startY) {
             this.bgImg = bgImg;
+            this.imgStyle = imgStyle;
+            this.radius = radius;
             this.gifDecoder = gifDecoder;
             this.bgW = bgW;
             this.bgH = bgH;
@@ -547,6 +559,22 @@ public class QrCodeOptions {
             this.startY = startY;
         }
 
+        public ImgStyle getImgStyle() {
+            return imgStyle;
+        }
+
+        public void setImgStyle(ImgStyle imgStyle) {
+            this.imgStyle = imgStyle;
+        }
+
+        public float getRadius() {
+            return radius;
+        }
+
+        public void setRadius(float radius) {
+            this.radius = radius;
+        }
+
         @Override
         public boolean equals(Object o) {
             if (this == o) {
@@ -556,22 +584,22 @@ public class QrCodeOptions {
                 return false;
             }
             BgImgOptions that = (BgImgOptions) o;
-            return bgW == that.bgW && bgH == that.bgH && Float.compare(that.opacity, opacity) == 0 &&
-                    startX == that.startX && startY == that.startY && Objects.equals(bgImg, that.bgImg) &&
+            return Float.compare(that.radius, radius) == 0 && bgW == that.bgW && bgH == that.bgH &&
+                    Float.compare(that.opacity, opacity) == 0 && startX == that.startX && startY == that.startY &&
+                    Objects.equals(bgImg, that.bgImg) && imgStyle == that.imgStyle &&
                     Objects.equals(gifDecoder, that.gifDecoder) && bgImgStyle == that.bgImgStyle;
         }
 
         @Override
         public int hashCode() {
-
-            return Objects.hash(bgImg, gifDecoder, bgW, bgH, bgImgStyle, opacity, startX, startY);
+            return Objects.hash(bgImg, imgStyle, radius, gifDecoder, bgW, bgH, bgImgStyle, opacity, startX, startY);
         }
 
         @Override
         public String toString() {
-            return "BgImgOptions{" + "bgImg=" + bgImg + ", gifDecoder=" + gifDecoder + ", bgW=" + bgW + ", bgH=" + bgH +
-                    ", bgImgStyle=" + bgImgStyle + ", opacity=" + opacity + ", startX=" + startX + ", startY=" +
-                    startY + '}';
+            return "BgImgOptions{" + "bgImg=" + bgImg + ", imgStyle=" + imgStyle + ", radius=" + radius +
+                    ", gifDecoder=" + gifDecoder + ", bgW=" + bgW + ", bgH=" + bgH + ", bgImgStyle=" + bgImgStyle +
+                    ", opacity=" + opacity + ", startX=" + startX + ", startY=" + startY + '}';
         }
 
         public static BgImgOptionsBuilder builder() {
@@ -583,6 +611,16 @@ public class QrCodeOptions {
              * 背景图
              */
             private BufferedImage bgImg;
+
+            /**
+             * 背景图样式，圆角or矩形
+             */
+            private ImgStyle imgStyle;
+
+            /**
+             * 圆角背景时的角度 ，不填时，默认为 1/8 的圆角样式
+             */
+            private Float cornerRadius;
 
             /**
              * 动态背景图
@@ -631,6 +669,16 @@ public class QrCodeOptions {
                 return this;
             }
 
+            public BgImgOptionsBuilder imgStyle(ImgStyle imgStyle) {
+                this.imgStyle = imgStyle;
+                return this;
+            }
+
+            public BgImgOptionsBuilder cornerRadius(float radius) {
+                this.cornerRadius = radius;
+                return this;
+            }
+
             public BgImgOptionsBuilder gifDecoder(GifDecoder gifDecoder) {
                 this.gifDecoder = gifDecoder;
                 return this;
@@ -667,7 +715,16 @@ public class QrCodeOptions {
             }
 
             public BgImgOptions build() {
-                return new BgImgOptions(bgImg, gifDecoder, bgW, bgH, bgImgStyle, opacity, startX, startY);
+                if (imgStyle == null) {
+                    imgStyle = ImgStyle.NORMAL;
+                }
+
+                if (cornerRadius == null) {
+                    cornerRadius = 0.125f;
+                }
+
+                return new BgImgOptions(bgImg, imgStyle, cornerRadius, gifDecoder, bgW, bgH, bgImgStyle, opacity, startX,
+                        startY);
             }
         }
     }
@@ -920,7 +977,7 @@ public class QrCodeOptions {
 
         /**
          * 字体样式
-         *
+         * <p>
          * {@link Font#PLAIN} 0
          * {@link Font#BOLD}  1
          * {@link Font#ITALIC} 2
@@ -943,6 +1000,16 @@ public class QrCodeOptions {
          * 渲染图
          */
         private Map<DotSize, BufferedImage> imgMapper;
+
+        /**
+         * 生成二维码的图片样式，一般来讲不推荐使用圆形，默认为normal
+         */
+        private ImgStyle qrStyle;
+
+        /**
+         * 圆角的弧度，默认为 1 / 8
+         */
+        private Float cornerRadius;
 
         public BufferedImage getImage(int row, int col) {
             return getImage(DotSize.create(row, col));
@@ -1049,6 +1116,22 @@ public class QrCodeOptions {
             this.imgMapper = imgMapper;
         }
 
+        public ImgStyle getQrStyle() {
+            return qrStyle;
+        }
+
+        public void setQrStyle(ImgStyle qrStyle) {
+            this.qrStyle = qrStyle;
+        }
+
+        public Float getCornerRadius() {
+            return cornerRadius;
+        }
+
+        public void setCornerRadius(Float cornerRadius) {
+            this.cornerRadius = cornerRadius;
+        }
+
         @Override
         public boolean equals(Object o) {
             if (this == o) {
@@ -1063,14 +1146,14 @@ public class QrCodeOptions {
                     Objects.equals(bgColor, that.bgColor) && Objects.equals(bgImg, that.bgImg) &&
                     drawStyle == that.drawStyle && Objects.equals(text, that.text) &&
                     Objects.equals(fontName, that.fontName) && txtMode == that.txtMode &&
-                    Objects.equals(imgMapper, that.imgMapper);
+                    Objects.equals(imgMapper, that.imgMapper) && qrStyle == that.qrStyle &&
+                    Objects.equals(cornerRadius, that.cornerRadius);
         }
 
         @Override
         public int hashCode() {
-
             return Objects.hash(preColor, bgColor, bgImg, drawStyle, text, fontName, txtMode, fontStyle, enableScale,
-                    diaphaneityFill, imgMapper);
+                    diaphaneityFill, imgMapper, qrStyle, cornerRadius);
         }
 
         @Override
@@ -1078,7 +1161,8 @@ public class QrCodeOptions {
             return "DrawOptions{" + "preColor=" + preColor + ", bgColor=" + bgColor + ", bgImg=" + bgImg +
                     ", drawStyle=" + drawStyle + ", text='" + text + '\'' + ", fontName='" + fontName + '\'' +
                     ", txtMode=" + txtMode + ", fontStyle=" + fontStyle + ", enableScale=" + enableScale +
-                    ", diaphaneityFill=" + diaphaneityFill + ", imgMapper=" + imgMapper + '}';
+                    ", diaphaneityFill=" + diaphaneityFill + ", imgMapper=" + imgMapper + ", qrStyle=" + qrStyle +
+                    ", cornerRadius=" + cornerRadius + '}';
         }
 
         public static DrawOptionsBuilder builder() {
@@ -1118,7 +1202,7 @@ public class QrCodeOptions {
 
             /**
              * 字体样式
-             *
+             * <p>
              * {@link Font#PLAIN} 0
              * {@link Font#BOLD}  1
              * {@link Font#ITALIC} 2
@@ -1147,6 +1231,16 @@ public class QrCodeOptions {
              * 渲染图
              */
             private Map<DotSize, BufferedImage> imgMapper;
+
+            /**
+             * 生成二维码的图片样式，可以是圆角 或 矩形
+             */
+            private ImgStyle qrStyle;
+
+            /**
+             * 圆角弧度，默认宽高的 1/8
+             */
+            private Float cornerRadius;
 
             public DrawOptionsBuilder() {
                 imgMapper = new HashMap<>();
@@ -1207,6 +1301,16 @@ public class QrCodeOptions {
                 return this;
             }
 
+            public DrawOptionsBuilder qrStyle(ImgStyle qrStyle) {
+                this.qrStyle = qrStyle;
+                return this;
+            }
+
+            public DrawOptionsBuilder cornerRadius(Float cornerRadius) {
+                this.cornerRadius = cornerRadius;
+                return this;
+            }
+
             public DrawOptions build() {
                 DrawOptions drawOptions = new DrawOptions();
                 drawOptions.setBgColor(this.bgColor);
@@ -1220,18 +1324,29 @@ public class QrCodeOptions {
                 drawOptions.setTxtMode(txtMode == null ? TxtMode.ORDER : txtMode);
                 drawOptions.setFontName(fontName == null ? QuickQrUtil.DEFAULT_FONT_NAME : fontName);
                 drawOptions.setFontStyle(fontStyle == null ? QuickQrUtil.DEFAULT_FONT_STYLE : fontStyle);
+                drawOptions.setQrStyle(qrStyle == null ? ImgStyle.NORMAL: qrStyle);
+                drawOptions.setCornerRadius(cornerRadius == null ? 0.125F: cornerRadius);
                 return drawOptions;
             }
         }
     }
 
+    /**
+     * 图片样式
+     */
+    public enum ImgStyle {
+        ROUND, NORMAL, CIRCLE;
+
+        public static ImgStyle getStyle(String name) {
+            return ImgStyle.valueOf(name.toUpperCase());
+        }
+    }
 
     /**
      * logo的样式
      */
     public enum LogoStyle {
         ROUND, NORMAL, CIRCLE;
-
 
         public static LogoStyle getStyle(String name) {
             return LogoStyle.valueOf(name.toUpperCase());
@@ -1257,7 +1372,8 @@ public class QrCodeOptions {
         /**
          * 背景图穿透显示, 即二维码主题色为透明，由背景图的颜色进行填充
          */
-        PENETRATE,;
+        PENETRATE,
+        ;
 
 
         public static BgImgStyle getStyle(String name) {
@@ -1417,7 +1533,8 @@ public class QrCodeOptions {
         /***
          * 文字二维码，随机模式
          */
-        RANDOM, /**
+        RANDOM,
+        /**
          * 文字二维码，顺序模式
          */
         ORDER;

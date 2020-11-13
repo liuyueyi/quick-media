@@ -74,7 +74,7 @@
 <dependency>
     <groupId>com.github.liuyueyi.quick-media</groupId>
     <artifactId>qrcode-plugin</artifactId>
-    <version>2.5.1</version>
+    <version>2.5.2</version>
 </dependency>
 ```
 
@@ -223,9 +223,11 @@ markdown转html，转图片的封装类， 详细内容查看: [markdown-plugin]
     - 支持logo
     - 支持logo样式 （圆角logo， 边框）
     - 支持二维码颜色设置
+    - 支持二维码圆角
     - 支持探测图形颜色设置
     - 支持探测图形图片定制
     - 支持背景图
+    - 支持背景图圆角设置
     - 支持base64格式的二维码图片
     - 支持二维码定制绘制信息样式
      - 三角形

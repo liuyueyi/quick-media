@@ -2,17 +2,13 @@ package com.github.hui.quick.plugin.test;
 
 import com.github.hui.quick.plugin.base.ColorUtil;
 import com.github.hui.quick.plugin.base.GraphicUtil;
-import com.github.hui.quick.plugin.base.ImageOperateUtil;
 import com.github.hui.quick.plugin.qrcode.wrapper.QrCodeGenWrapper;
 import com.github.hui.quick.plugin.qrcode.wrapper.QrCodeOptions;
-import com.github.jaiimageio.impl.common.ImageUtil;
-import com.google.zxing.WriterException;
 import com.google.zxing.qrcode.decoder.ErrorCorrectionLevel;
 import org.junit.Test;
 
 import java.awt.*;
 import java.awt.image.BufferedImage;
-import java.io.IOException;
 
 /**
  * 二维码插件用户使用实例，教程说明文档参考：
@@ -30,6 +26,26 @@ public class QrCodeGenUserGuide {
             // 生成二维码，并输出为qr.png图片
             String msg = "http://weixin.qq.com/r/FS9waAPEg178rUcL93oH";
             boolean ans = QrCodeGenWrapper.of(msg).asFile("/tmp/dq.png");
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    /**
+     * 默认的二维码生成
+     */
+    @Test
+    public void defaultQr_corner() {
+        try {
+            // 生成二维码，并输出为qr.png图片
+            String msg = "http://weixin.qq.com/r/FS9waAPEg178rUcL93oH";
+            boolean ans = QrCodeGenWrapper.of(msg)
+                    .setW(500)
+                    .setPadding(3)
+                    .setQrStyle(QrCodeOptions.ImgStyle.ROUND)
+                    .setQrCornerRadiusRate(0.125F)
+                    .setPicType("png")
+                    .asFile("/tmp/dq_corner1.png");
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -198,6 +214,46 @@ public class QrCodeGenUserGuide {
                     .setW(500)
                     .setBgOpacity(0.5f)
                     .asFile("/tmp/bqr1.png");
+        }catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    @Test
+    public void bgQr1_corner() {
+        try {
+            String msg = "http://weixin.qq.com/r/FS9waAPEg178rUcL93oH";
+            String bg = "https://ss0.bdstatic.com/70cFuHSh_Q1YnxGkpoWK1HF6hhy/it/u=2859744156,2204003006&fm=26&gp=0.jpg";
+            boolean ans = QrCodeGenWrapper.of(msg)
+                    .setBgImg(bg)
+                    .setW(500)
+                    .setBgOpacity(0.6f)
+                    // 背景圆角比例
+                    .setBgCornerRadiusRate(0.125f)
+                    .setBgImgStyle(QrCodeOptions.ImgStyle.ROUND)
+                    .asFile("/tmp/bqr1_c1.png");
+        }catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    @Test
+    public void bgQr1_circle() {
+        try {
+            String msg = "http://weixin.qq.com/r/FS9waAPEg178rUcL93oH";
+            String bg = "http://pic.51yuansu.com/pic3/cover/01/07/09/59015a0e53d83_610.jpg";
+            boolean ans = QrCodeGenWrapper.of(msg)
+                    .setBgImg(bg)
+                    .setBgStyle(QrCodeOptions.BgImgStyle.FILL)
+                    .setBgW(500)
+                    .setBgH(500)
+                    .setBgStartX(130)
+                    .setBgStartY(120)
+                    .setW(260)
+                    .setPadding(0)
+                    .setDrawBgColor(0xfff7f7f7)
+                    .setBgImgStyle(QrCodeOptions.ImgStyle.CIRCLE)
+                    .asFile("/tmp/bqr2_c2.png");
         }catch (Exception e) {
             e.printStackTrace();
         }

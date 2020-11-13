@@ -158,21 +158,7 @@ public class QrCodeGenerateHelper {
      * @throws IOException
      */
     public static BufferedImage toBufferedImage(QrCodeOptions qrCodeConfig, BitMatrixEx bitMatrix) throws IOException {
-        int qrCodeWidth = bitMatrix.getWidth();
-        int qrCodeHeight = bitMatrix.getHeight();
         BufferedImage qrCode = QrCodeRenderHelper.drawQrInfo(qrCodeConfig, bitMatrix);
-
-        // 若二维码的实际宽高和预期的宽高不一致, 则缩放
-        int realQrCodeWidth = qrCodeConfig.getW();
-        int realQrCodeHeight = qrCodeConfig.getH();
-        if (qrCodeWidth != realQrCodeWidth || qrCodeHeight != realQrCodeHeight) {
-            BufferedImage tmp = new BufferedImage(realQrCodeWidth, realQrCodeHeight, BufferedImage.TYPE_INT_RGB);
-            tmp.getGraphics()
-                    .drawImage(qrCode.getScaledInstance(realQrCodeWidth, realQrCodeHeight, Image.SCALE_SMOOTH), 0, 0,
-                            null);
-            qrCode = tmp;
-        }
-
 
         /**
          * 说明
@@ -209,20 +195,7 @@ public class QrCodeGenerateHelper {
             throw new IllegalArgumentException("animated background image should not be null!");
         }
 
-        int qrCodeWidth = bitMatrix.getWidth();
-        int qrCodeHeight = bitMatrix.getHeight();
         BufferedImage qrCode = QrCodeRenderHelper.drawQrInfo(qrCodeConfig, bitMatrix);
-
-        // 若二维码的实际宽高和预期的宽高不一致, 则缩放
-        int realQrCodeWidth = qrCodeConfig.getW();
-        int realQrCodeHeight = qrCodeConfig.getH();
-        if (qrCodeWidth != realQrCodeWidth || qrCodeHeight != realQrCodeHeight) {
-            BufferedImage tmp = new BufferedImage(realQrCodeWidth, realQrCodeHeight, BufferedImage.TYPE_INT_RGB);
-            tmp.getGraphics()
-                    .drawImage(qrCode.getScaledInstance(realQrCodeWidth, realQrCodeHeight, Image.SCALE_SMOOTH), 0, 0,
-                            null);
-            qrCode = tmp;
-        }
 
         boolean logoAlreadyDraw = false;
         if (qrCodeConfig.getBgImgOptions().getBgImgStyle() == QrCodeOptions.BgImgStyle.FILL &&
