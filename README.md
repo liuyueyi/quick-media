@@ -24,9 +24,26 @@
 
 ### 使用说明
 
+目前最新版jar包已提交到maven仓库，因此想直接引入的小伙伴，不需要再采用下面的两种方案了（请注意jitpack的包通常来讲更新会更频繁些，而中央仓库的会更稳定些；相同的版本号对应的代码保持一致）
+
+中央仓库引入地址: [https://mvnrepository.com/artifact/com.github.liuyueyi.media](https://mvnrepository.com/artifact/com.github.liuyueyi.media)
+
+举例如二维码插件的依赖如下即可
+
+```xml
+<!-- https://mvnrepository.com/artifact/com.github.liuyueyi.media/qrcode-plugin -->
+<dependency>
+    <groupId>com.github.liuyueyi.media</groupId>
+    <artifactId>qrcode-plugin</artifactId>
+    <version>2.5.2</version>
+</dependency>
+```
+
+---
+
 在下载本项目之后，有些常见事项需要注意一二
 
-- 工程中使用lombok简化大量的代码，因此使用idea的童鞋请装一下lombok的插件
+- ~~工程中使用lombok简化大量的代码，因此使用idea的童鞋请装一下lombok的插件(最新版已移除lombok依赖)~~
 - 运行时，如果报某些依赖找不到，请在父pom文件中添加源
 
     ```xml
@@ -38,6 +55,10 @@
     </repositories>
     ```
 - 部分插件依赖第三方库，如 ffmpge, phantomjs, image-magic，请确保已经安装
+
+<del>
+
+请直接使用中央仓库下载依赖，就不会出现下载不到的问题
 
 **注意**
 
@@ -54,7 +75,9 @@
 </mirror>
 ```
 
-**注意**
+</del>
+
+**jitpack使用方式**
 
 由于某些原因，导致github访问太慢，无法下载依赖包时，这里也给出了第二种选择方案，借助`jitpack`仓库，详情使用文档，请查看：[quick-media jitpack-仓库导入](https://github.com/liuyueyi/quick-media/#/%E8%BF%AD%E4%BB%A3/%E6%9B%B4%E6%96%B0%E6%97%A5%E5%BF%97?id=b-jitpack-%e4%bb%93%e5%ba%93)
 
@@ -106,7 +129,14 @@
 
 插件工程，根据不同的场景，支持不同的服务功能，目前将所有的插件抽象出来，可以独立作为工具包提供给第三方依赖，外部使用方式
 
-添加源：
+<font color="red">
+
+注意：使用中央仓库依赖的方式，不需要额外添加源
+
+</font>
+
+<del>
+添加源：适用于通过github方式导入依赖
 
 ```xml
 <repositories>
@@ -116,10 +146,15 @@
     </repository>
 </repositories>
 ```
+</del>
 
 **audio-plugin**
 
 提供音频转码服务，使用依赖如下，详细查看: [audio-plugin说明](plugins/audio-plugin/readme.md)
+
+<del>
+
+适用于通过github方式导入依赖
 
 ```xml
 <dependency>
@@ -128,14 +163,45 @@
 </dependency>
 ```
 
+</del>
+
+中央仓库导入方式，注意groupId不同(为什么需要改变groupId? 因为上传到maven中央仓库，要求groupId与github的项目所属相同)
+
+```xml
+<!-- https://mvnrepository.com/artifact/com.github.liuyueyi.media/audio-plugin -->
+<!-- 请注意最新报，请直接到maven中央仓库查看，或者到迭代日志中获取 -->
+<dependency>
+    <groupId>com.github.liuyueyi.media</groupId>
+    <artifactId>audio-plugin</artifactId>
+    <version>2.5</version>
+</dependency>
+```
+
+
 **date-plugin**
 
 提供时间戳、日期转换为农历日期，详细查看：[date-plugin说明](plugins/date-plugin/readme.md)
+
+<del>
+
+适用于通过github方式导入依赖
 
 ```xml
 <dependency>
     <groupId>com.github.hui.media</groupId>
     <artifactId>date-plugin</artifactId>
+</dependency>
+```
+</del>
+
+中央仓库导入方式
+
+```xml
+<!-- https://mvnrepository.com/artifact/com.github.liuyueyi.media/date-plugin -->
+<dependency>
+    <groupId>com.github.liuyueyi.media</groupId>
+    <artifactId>date-plugin</artifactId>
+    <version>2.5</version>
 </dependency>
 ```
 
@@ -144,6 +210,10 @@
 
 提供图片合成，提供gif图片生成等图片操作的封装类，详细查看： [image-plugin说明](plugins/image-plugin/readme.md)
 
+<del>
+
+适用于通过github方式导入依赖
+
 ```xml
 <dependency>
     <groupId>com.github.hui.media</groupId>
@@ -151,9 +221,27 @@
 </dependency>
 ```
 
+</del>
+
+中央仓库导入方式
+
+```xml
+<!-- https://mvnrepository.com/artifact/com.github.liuyueyi.media/image-plugin -->
+<dependency>
+    <groupId>com.github.liuyueyi.media</groupId>
+    <artifactId>image-plugin</artifactId>
+    <version>2.5</version>
+</dependency>
+```
+
+
 **markdown-plugin** 
 
 markdown转html，转图片的封装类， 详细内容查看: [markdown-plugin](plugins/markdown-plugin/readme.md)
+
+<del>
+
+适用于通过github方式导入依赖
 
 ```xml
 <dependency>
@@ -161,16 +249,44 @@ markdown转html，转图片的封装类， 详细内容查看: [markdown-plugin]
     <artifactId>markdown-plugin</artifactId>
 </dependency>
 ```
+</del>
+
+中央仓库导入方式
+
+```xml
+<!-- https://mvnrepository.com/artifact/com.github.liuyueyi.media/markdown-plugin -->
+<dependency>
+    <groupId>com.github.liuyueyi.media</groupId>
+    <artifactId>markdown-plugin</artifactId>
+    <version>2.5</version>
+</dependency>
+```
 
 **phantom-plugin**
 
 提供根据phantomjs渲染html的封装
 
+<del>
+
+适用于通过github方式导入依赖
 
 ```xml
 <dependency>
     <groupId>com.github.hui.media</groupId>
     <artifactId>phantom-plugin</artifactId>
+</dependency>
+```
+
+</del>
+
+中央仓库导入方式
+
+```xml
+<!-- https://mvnrepository.com/artifact/com.github.liuyueyi.media/phantom-plugin -->
+<dependency>
+    <groupId>com.github.liuyueyi.media</groupId>
+    <artifactId>phantom-plugin</artifactId>
+    <version>2.5</version>
 </dependency>
 ```
 
@@ -180,16 +296,37 @@ markdown转html，转图片的封装类， 详细内容查看: [markdown-plugin]
 
 > [qrcode使用手册](https://liuyueyi.github.io/quick-media/#/%E6%8F%92%E4%BB%B6/%E4%BA%8C%E7%BB%B4%E7%A0%81/%E4%BA%8C%E7%BB%B4%E7%A0%81%E6%8F%92%E4%BB%B6%E4%BD%BF%E7%94%A8%E6%89%8B%E5%86%8C)
 
+<del>
+
+适用于通过github方式导入依赖
+
 ```xml
 <dependency>
     <groupId>com.github.hui.media</groupId>
     <artifactId>qrcode-plugin</artifactId>
 </dependency>
 ```
+</del>
+
+中央仓库导入方式
+
+```xml
+<!-- https://mvnrepository.com/artifact/com.github.liuyueyi.media/qrcode-plugin -->
+<dependency>
+    <groupId>com.github.liuyueyi.media</groupId>
+    <artifactId>qrcode-plugin</artifactId>
+    <version>2.5.2</version>
+</dependency>
+```
 
 **svg-plugin**
 
 提供svg文档的渲染，输出图片的封装，详细查看: [svg-plugin使用说明](plugins/svg-plugin/readme.md)
+
+
+<del>
+
+适用于通过github方式导入依赖
 
 ```xml
 <dependency>
@@ -198,15 +335,44 @@ markdown转html，转图片的封装类， 详细内容查看: [markdown-plugin]
 </dependency>
 ```
 
+</del>
+
+中央仓库导入方式
+
+```xml
+<!-- https://mvnrepository.com/artifact/com.github.liuyueyi.media/svg-core -->
+<dependency>
+    <groupId>com.github.liuyueyi.media</groupId>
+    <artifactId>svg-core</artifactId>
+    <version>2.5</version>
+</dependency>
+```
+
 
 **imagic-plugin**
 
 基于imagic-magic实现的图片编辑插件封装，详细查看: [imagic-plugin使用说明](plugins/imagic-plugin/readme.md)
 
+<del>
+
+适用于通过github方式导入依赖
+
 ```xml
 <dependency>
     <groupId>com.github.hui.media</groupId>
     <artifactId>imagic-core</artifactId>
+</dependency>
+```
+</del>
+
+中央仓库导入方式
+
+```xml
+<!-- https://mvnrepository.com/artifact/com.github.liuyueyi.media/imagic-plugin -->
+<dependency>
+    <groupId>com.github.liuyueyi.media</groupId>
+    <artifactId>imagic-plugin</artifactId>
+    <version>2.5</version>
 </dependency>
 ```
 
@@ -337,8 +503,8 @@ markdown转html，转图片的封装类， 详细内容查看: [markdown-plugin]
 
 使用react.js重构后的前端网站，实现前后端分离，前端网页借助gitee的pages直接部署，测试链接
 
-- Z+ | web : [http://liuyueyi.gitee.io/zweb](http://liuyueyi.gitee.io/zweb)
-- Z+ | web : [https://media.hhui.top/#/index](https://media.hhui.top/#/index)
+- gitee静态页面: [http://liuyueyi.gitee.io/zweb](http://liuyueyi.gitee.io/zweb)
+- <del> [https://zweb.hhui.top/#/index](https://zweb.hhui.top/#/index) 服务器hold不住，后端逻辑已下线😭 </del>
 
 
 web实际演示图: 

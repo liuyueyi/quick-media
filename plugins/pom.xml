@@ -6,7 +6,7 @@
 
     <parent>
         <artifactId>quick-media</artifactId>
-        <groupId>com.github.hui.media</groupId>
+        <groupId>com.github.liuyueyi.media</groupId>
         <version>1.1</version>
     </parent>
 

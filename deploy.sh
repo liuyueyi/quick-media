@@ -44,6 +44,9 @@ if [ $arg = 'snapshot' ] || [ $arg = 's' ];then
 elif [ $arg = 'release' ] || [ $arg = 'r' ];then
   ## 正式包发布
   deployFunc release
+elif [ $arg = 'center' ] || [ $arg = 'c' ];then
+  ## 打包发布到中央仓库
+  mvn clean deploy -DskipTests=true -P release
 else
   echo 'argument should be snapshot(s for short) or release(r for short). like: `sh deploy.sh snapshot` or `sh deploy.sh s`'
 fi
