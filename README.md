@@ -24,7 +24,7 @@
 
 ### 使用说明
 
-目前最新版jar包已提交到maven仓库，因此想直接引入的小伙伴，不需要再采用下面的两种方案了（请注意jitpack的包通常来讲会更频繁些，而中央仓库的会更稳定些；相同的版本号对应的代码保持一致）
+目前最新版jar包已提交到maven仓库，因此想直接引入的小伙伴，不需要再采用下面的两种方案了（请注意jitpack的包通常来讲更新会更频繁些，而中央仓库的会更稳定些；相同的版本号对应的代码保持一致）
 
 中央仓库引入地址: [https://mvnrepository.com/artifact/com.github.liuyueyi.media](https://mvnrepository.com/artifact/com.github.liuyueyi.media)
 
@@ -56,6 +56,10 @@
     ```
 - 部分插件依赖第三方库，如 ffmpge, phantomjs, image-magic，请确保已经安装
 
+<del>
+
+请直接使用中央仓库下载依赖，就不会出现下载不到的问题
+
 **注意**
 
 如果出现配置了上面的仓库地址，但是依然下载不到jar包（如二维码包，可以到`~/.m2/repository/com/github/hui/media/qrcode-plugin`目录下查看是否存在jar）
@@ -71,7 +75,9 @@
 </mirror>
 ```
 
-**注意**
+</del>
+
+**jitpack使用方式**
 
 由于某些原因，导致github访问太慢，无法下载依赖包时，这里也给出了第二种选择方案，借助`jitpack`仓库，详情使用文档，请查看：[quick-media jitpack-仓库导入](https://github.com/liuyueyi/quick-media/#/%E8%BF%AD%E4%BB%A3/%E6%9B%B4%E6%96%B0%E6%97%A5%E5%BF%97?id=b-jitpack-%e4%bb%93%e5%ba%93)
 
@@ -123,7 +129,9 @@
 
 插件工程，根据不同的场景，支持不同的服务功能，目前将所有的插件抽象出来，可以独立作为工具包提供给第三方依赖，外部使用方式
 
-**注意：使用中央仓库依赖的方式，不需要额外添加源**
+<font color="red">
+注意：使用中央仓库依赖的方式，不需要额外添加源
+</font>
 
 <del>
 添加源：适用于通过github方式导入依赖
@@ -155,10 +163,11 @@
 
 </del>
 
-中央仓库导入方式，注意groupId不同
+中央仓库导入方式，注意groupId不同(为什么需要改变groupId? 因为上传到maven中央仓库，要求groupId与github的项目所属相同)
 
 ```xml
 <!-- https://mvnrepository.com/artifact/com.github.liuyueyi.media/audio-plugin -->
+<!-- 请注意最新报，请直接到maven中央仓库查看，或者到迭代日志中获取 -->
 <dependency>
     <groupId>com.github.liuyueyi.media</groupId>
     <artifactId>audio-plugin</artifactId>
