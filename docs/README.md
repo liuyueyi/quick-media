@@ -97,6 +97,13 @@ QuickMedia项目根据不同的应用场景，以独立的二方包方式提供�
 
 ### 仓库&插件
 
+推荐直接从中央仓库获取最新的依赖包，无需额外的配置
+
+- 直达地址：[https://mvnrepository.com/artifact/com.github.liuyueyi.media](https://mvnrepository.com/artifact/com.github.liuyueyi.media)
+
+
+<del>
+
 QuickMeida的Plugin以二方包的方式提供服务，正式版的jar包，部署在以github构建的一个私人maven仓库中，优点是简单易控，缺点是没有中央仓库正规易用、而且国内网络可能也不咋地。(关于如何使用github搭建一个私人maven仓库，有兴趣的可以参考博文: [借助GitHub搭建属于自己的maven仓库教程](https://blog.hhui.top/hexblog/2018/02/12/%E5%80%9F%E5%8A%A9GitHub%E6%90%AD%E5%BB%BA%E5%B1%9E%E4%BA%8E%E8%87%AA%E5%B7%B1%E7%9A%84maven%E4%BB%93%E5%BA%93%E6%95%99%E7%A8%8B/) )
 
 > 私服仓库地址: [https://github.com/liuyueyi/maven-repository/](https://github.com/liuyueyi/maven-repository/)
@@ -112,13 +119,23 @@ maven的引入方式需要先添加一下`repository`
 </repositories>
 ```
 
+</del>
+
 接下来可以按需引入对应的二方包，在引入之前，如果需要确定最新的jar版本，请到更新日志这一章节进行确认，或者直接进入[私服仓库](https://github.com/liuyueyi/maven-repository/tree/master/repository/com/github/hui/media)进行查看
 
 **基于FFmpeg 音频处理二方包**
 
 ```xml
+<!-- 基于github私服的引入方式 -->
 <dependency>
     <groupId>com.github.hui.media</groupId>
+    <artifactId>audio-plugin</artifactId>
+    <version>x.x</version>
+</dependency>
+
+<!-- 推荐使用中央仓库直接引入方式 -->
+<dependency>
+    <groupId>com.github.liuyueyi.media</groupId>
     <artifactId>audio-plugin</artifactId>
     <version>x.x</version>
 </dependency>
@@ -127,8 +144,16 @@ maven的引入方式需要先添加一下`repository`
 **日期农历与公历互转二方包**
 
 ```xml
+<!-- 基于github私服的引入方式 -->
 <dependency>
     <groupId>com.github.hui.media</groupId>
+    <artifactId>date-plugin</artifactId>
+    <version>x.x</version>
+</dependency>
+
+<!-- 推荐使用中央仓库直接引入方式 -->
+<dependency>
+    <groupId>com.github.liuyueyi.media</groupId>
     <artifactId>date-plugin</artifactId>
     <version>x.x</version>
 </dependency>
@@ -137,8 +162,16 @@ maven的引入方式需要先添加一下`repository`
 **基于JDK AWT的图片处理二方包**
 
 ```xml
+<!-- 基于github私服的引入方式 -->
 <dependency>
     <groupId>com.github.hui.media</groupId>
+    <artifactId>image-plugin</artifactId>
+    <version>x.x</version>
+</dependency>
+
+<!-- 推荐使用中央仓库直接引入方式 -->
+<dependency>
+    <groupId>com.github.liuyueyi.media</groupId>
     <artifactId>image-plugin</artifactId>
     <version>x.x</version>
 </dependency>
@@ -147,8 +180,16 @@ maven的引入方式需要先添加一下`repository`
 **基于flexmark，xhtmlrenderer实现markdown/html渲染输出图片二方包**
 
 ```xml
+<!-- 基于github私服的引入方式 -->
 <dependency>
     <groupId>com.github.hui.media</groupId>
+    <artifactId>markdown-plugin</artifactId>
+    <version>x.x</version>
+</dependency>
+
+<!-- 推荐使用中央仓库直接引入方式 -->
+<dependency>
+    <groupId>com.github.liuyueyi.media</groupId>
     <artifactId>markdown-plugin</artifactId>
     <version>x.x</version>
 </dependency>
@@ -157,8 +198,16 @@ maven的引入方式需要先添加一下`repository`
 **phantomjs封装二方包**
 
 ```xml
+<!-- 基于github私服的引入方式 -->
 <dependency>
     <groupId>com.github.hui.media</groupId>
+    <artifactId>phantom-plugin</artifactId>
+    <version>x.x</version>
+</dependency>
+
+<!-- 推荐使用中央仓库直接引入方式 -->
+<dependency>
+    <groupId>com.github.liuyueyi.media</groupId>
     <artifactId>phantom-plugin</artifactId>
     <version>x.x</version>
 </dependency>
@@ -167,8 +216,16 @@ maven的引入方式需要先添加一下`repository`
 **基于zxing深度定制的二维码编解码二方包**
 
 ```xml
+<!-- 基于github私服的引入方式 -->
 <dependency>
     <groupId>com.github.hui.media</groupId>
+    <artifactId>qrcode-plugin</artifactId>
+    <version>x.x</version>
+</dependency>
+
+<!-- 推荐使用中央仓库直接引入方式 -->
+<dependency>
+    <groupId>com.github.liuyueyi.media</groupId>
     <artifactId>qrcode-plugin</artifactId>
     <version>x.x</version>
 </dependency>
@@ -177,8 +234,16 @@ maven的引入方式需要先添加一下`repository`
 **基于batik SVG渲染二方包**
 
 ```xml
+<!-- 基于github私服的引入方式 -->
 <dependency>
     <groupId>com.github.hui.media</groupId>
+    <artifactId>svg-core</artifactId>
+    <version>x.x</version>
+</dependency>
+
+<!-- 推荐使用中央仓库直接引入方式 -->
+<dependency>
+    <groupId>com.github.liuyueyi.media</groupId>
     <artifactId>svg-core</artifactId>
     <version>x.x</version>
 </dependency>
@@ -187,8 +252,16 @@ maven的引入方式需要先添加一下`repository`
 **ImageMagic封装二方包**
 
 ```xml
+<!-- 基于github私服的引入方式 -->
 <dependency>
     <groupId>com.github.hui.media</groupId>
+    <artifactId>imagic-core</artifactId>
+    <version>x.x</version>
+</dependency>
+
+<!-- 推荐使用中央仓库直接引入方式 -->
+<dependency>
+    <groupId>com.github.liuyueyi.media</groupId>
     <artifactId>imagic-core</artifactId>
     <version>x.x</version>
 </dependency>
