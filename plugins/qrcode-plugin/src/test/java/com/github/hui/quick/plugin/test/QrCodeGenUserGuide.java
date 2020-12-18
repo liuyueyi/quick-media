@@ -63,6 +63,8 @@ public class QrCodeGenUserGuide {
                     .setDetectInColor(Color.RED)
                     // 二维码着色点
                     .setDrawPreColor(Color.BLUE)
+                    // 探测图形特殊处理
+                    .setDetectSpecial()
                     // 二维码背景图
                     .setDrawBgColor(0xffffffff)
                     .asFile("/tmp/cqr.png");
