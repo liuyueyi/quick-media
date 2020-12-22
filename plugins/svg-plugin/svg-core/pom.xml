@@ -18,6 +18,12 @@
             <groupId>com.github.liuyueyi.media</groupId>
             <artifactId>batik-codec-fix</artifactId>
             <version>2.5</version>
+            <exclusions>
+                <exclusion>
+                    <groupId>commons-logging</groupId>
+                    <artifactId>commons-logging</artifactId>
+                </exclusion>
+            </exclusions>
         </dependency>
 
         <!--日志-->

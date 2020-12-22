@@ -19,18 +19,28 @@ public class FileWriteUtil {
 
     public static String TEMP_PATH = "/tmp/quickmedia/";
 
+    public static String WIN_TEMP_PATH = "C://tmp/quickmedia/";
+
+    private static String getBaseTmpPath() {
+        // 区分windows/mac/linux 的临时文件
+        return OSUtil.isWinOS() ? WIN_TEMP_PATH : TEMP_PATH;
+    }
+
     public static String getTmpPath() {
         // 优先从系统配置中获取获取临时目录参数，不存在时，用兜底的目录
         String tmpPathEnvProperties = System.getProperty("quick.media.tmp.path");
+        String pathPrefix;
         if (StringUtils.isNotBlank(tmpPathEnvProperties)) {
             if (tmpPathEnvProperties.endsWith("/")) {
-                TEMP_PATH = tmpPathEnvProperties;
+                pathPrefix = tmpPathEnvProperties;
             } else {
-                TEMP_PATH = tmpPathEnvProperties + "/";
+                pathPrefix = tmpPathEnvProperties + "/";
             }
+        } else {
+            pathPrefix = getBaseTmpPath();
         }
 
-        return TEMP_PATH + DateFormatUtils.format(new Date(), "yyyyMMdd");
+        return pathPrefix + DateFormatUtils.format(new Date(), "yyyyMMdd");
     }
 
     public static <T> FileInfo saveFile(T src, String inputType) throws Exception {
@@ -177,7 +187,7 @@ public class FileWriteUtil {
     /**
      * 用于生成临时文件名后缀的随机生成器
      */
-    private static Random FILENAME_GEN_RANDOM = new Random();
+    private static final Random FILENAME_GEN_RANDOM = new Random();
 
     /**
      * 临时文件名生成： 时间戳 + 0-1000随机数
@@ -198,6 +208,11 @@ public class FileWriteUtil {
     public static void mkDir(File path) throws FileNotFoundException {
         if (path.getParentFile() == null) {
             path = path.getAbsoluteFile();
+        }
+
+        if (path.getParentFile() == null) {
+            // windows 操作系统下，如果直接到最上层的分区，这里依然可能是null，所以直接返回
+            return;
         }
 
         if (path.getParentFile().exists()) {
