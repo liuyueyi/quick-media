@@ -154,7 +154,7 @@
 
 <del>
 
-适用于通过github方式导入依赖
+适用于通过github方式导入依赖（请替换成中央仓库导入方式）
 
 ```xml
 <dependency>
@@ -173,7 +173,6 @@
 <dependency>
     <groupId>com.github.liuyueyi.media</groupId>
     <artifactId>audio-plugin</artifactId>
-    <version>2.5</version>
 </dependency>
 ```
 
@@ -184,7 +183,7 @@
 
 <del>
 
-适用于通过github方式导入依赖
+适用于通过github方式导入依赖（请替换成中央仓库导入方式）
 
 ```xml
 <dependency>
@@ -201,7 +200,6 @@
 <dependency>
     <groupId>com.github.liuyueyi.media</groupId>
     <artifactId>date-plugin</artifactId>
-    <version>2.5</version>
 </dependency>
 ```
 
@@ -212,7 +210,7 @@
 
 <del>
 
-适用于通过github方式导入依赖
+适用于通过github方式导入依赖（请替换成中央仓库导入方式）
 
 ```xml
 <dependency>
@@ -230,7 +228,6 @@
 <dependency>
     <groupId>com.github.liuyueyi.media</groupId>
     <artifactId>image-plugin</artifactId>
-    <version>2.5</version>
 </dependency>
 ```
 
@@ -241,7 +238,7 @@ markdown转html，转图片的封装类， 详细内容查看: [markdown-plugin]
 
 <del>
 
-适用于通过github方式导入依赖
+适用于通过github方式导入依赖（请替换成中央仓库导入方式）
 
 ```xml
 <dependency>
@@ -258,7 +255,6 @@ markdown转html，转图片的封装类， 详细内容查看: [markdown-plugin]
 <dependency>
     <groupId>com.github.liuyueyi.media</groupId>
     <artifactId>markdown-plugin</artifactId>
-    <version>2.5</version>
 </dependency>
 ```
 
@@ -268,7 +264,7 @@ markdown转html，转图片的封装类， 详细内容查看: [markdown-plugin]
 
 <del>
 
-适用于通过github方式导入依赖
+适用于通过github方式导入依赖（请替换成中央仓库导入方式）
 
 ```xml
 <dependency>
@@ -286,7 +282,6 @@ markdown转html，转图片的封装类， 详细内容查看: [markdown-plugin]
 <dependency>
     <groupId>com.github.liuyueyi.media</groupId>
     <artifactId>phantom-plugin</artifactId>
-    <version>2.5</version>
 </dependency>
 ```
 
@@ -298,7 +293,7 @@ markdown转html，转图片的封装类， 详细内容查看: [markdown-plugin]
 
 <del>
 
-适用于通过github方式导入依赖
+适用于通过github方式导入依赖（请替换成中央仓库导入方式）
 
 ```xml
 <dependency>
@@ -315,7 +310,6 @@ markdown转html，转图片的封装类， 详细内容查看: [markdown-plugin]
 <dependency>
     <groupId>com.github.liuyueyi.media</groupId>
     <artifactId>qrcode-plugin</artifactId>
-    <version>2.5.2</version>
 </dependency>
 ```
 
@@ -326,7 +320,7 @@ markdown转html，转图片的封装类， 详细内容查看: [markdown-plugin]
 
 <del>
 
-适用于通过github方式导入依赖
+适用于通过github方式导入依赖 （请替换成中央仓库导入方式）
 
 ```xml
 <dependency>
@@ -344,7 +338,6 @@ markdown转html，转图片的封装类， 详细内容查看: [markdown-plugin]
 <dependency>
     <groupId>com.github.liuyueyi.media</groupId>
     <artifactId>svg-core</artifactId>
-    <version>2.5</version>
 </dependency>
 ```
 
@@ -355,7 +348,7 @@ markdown转html，转图片的封装类， 详细内容查看: [markdown-plugin]
 
 <del>
 
-适用于通过github方式导入依赖
+适用于通过github方式导入依赖（请替换成中央仓库导入方式）
 
 ```xml
 <dependency>
@@ -372,7 +365,6 @@ markdown转html，转图片的封装类， 详细内容查看: [markdown-plugin]
 <dependency>
     <groupId>com.github.liuyueyi.media</groupId>
     <artifactId>imagic-plugin</artifactId>
-    <version>2.5</version>
 </dependency>
 ```
 
@@ -481,15 +473,21 @@ markdown转html，转图片的封装类， 详细内容查看: [markdown-plugin]
 
 ### 扫描关注
 
-公众号&博客
+**公众号&博客**
 
 ![QrCode](https://gitee.com/liuyueyi/Source/raw/master/img/info/blogInfoV2.png)
 
 
-打赏码
+**打赏码**
 
 ![pay](https://gitee.com/liuyueyi/Source/raw/master/img/pay/pay.png)
 
+
+**赞助列表**
+
+> 感谢大佬赞助打赏
+
+- [datouliang](https://github.com/datouliang)
 
 ---
 
