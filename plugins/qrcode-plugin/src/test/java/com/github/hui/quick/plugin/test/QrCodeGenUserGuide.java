@@ -2,7 +2,6 @@ package com.github.hui.quick.plugin.test;
 
 import com.github.hui.quick.plugin.base.ColorUtil;
 import com.github.hui.quick.plugin.base.GraphicUtil;
-import com.github.hui.quick.plugin.base.ImageOperateUtil;
 import com.github.hui.quick.plugin.image.wrapper.create.ImgCreateOptions;
 import com.github.hui.quick.plugin.image.wrapper.merge.ImgMergeWrapper;
 import com.github.hui.quick.plugin.image.wrapper.merge.cell.ImgCell;
@@ -11,7 +10,6 @@ import com.github.hui.quick.plugin.qrcode.wrapper.QrCodeGenWrapper;
 import com.github.hui.quick.plugin.qrcode.wrapper.QrCodeOptions;
 import com.google.zxing.qrcode.decoder.ErrorCorrectionLevel;
 import org.junit.Test;
-import sun.jvm.hotspot.ui.GraphicsUtilities;
 
 import javax.imageio.ImageIO;
 import java.awt.*;
@@ -825,7 +823,7 @@ public class QrCodeGenUserGuide {
         g2d.drawString("欢迎关注《一灰灰Blog》", 140, 550);
 
 
-        String msg = "http://weixin.qq.com/r/FS9waAPEg178rUcL93oH";
+        String msg = "http://weixin.qq.com/r/FS9waAPEg178QrUcL93oH";
         try {
             boolean ans = QrCodeGenWrapper.of(msg)
                     .setW(500)
