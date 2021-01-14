@@ -53,6 +53,14 @@
             <artifactId>core</artifactId>
             <version>${zxing.version}</version>
         </dependency>
+
+        <dependency>
+            <groupId>com.github.liuyueyi.media</groupId>
+            <artifactId>image-plugin</artifactId>
+            <version>2.5.1</version>
+            <scope>test</scope>
+        </dependency>
+
     </dependencies>
 
 </project>

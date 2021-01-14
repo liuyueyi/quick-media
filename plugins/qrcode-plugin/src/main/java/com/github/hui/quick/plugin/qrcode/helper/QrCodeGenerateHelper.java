@@ -17,6 +17,7 @@ import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
@@ -184,12 +185,17 @@ public class QrCodeGenerateHelper {
             qrCode = QrCodeRenderHelper.drawLogo(qrCode, qrCodeConfig.getLogoOptions());
         }
 
+        // 前置图绘制
+        if (qrCodeConfig.getFtImgOptions() != null) {
+            qrCode = QrCodeRenderHelper.drawFrontImg(qrCode, qrCodeConfig.getFtImgOptions());
+        }
+
         return qrCode;
     }
 
 
     public static List<ImmutablePair<BufferedImage, Integer>> toGifImages(QrCodeOptions qrCodeConfig,
-            BitMatrixEx bitMatrix) {
+                                                                          BitMatrixEx bitMatrix) {
         if (qrCodeConfig.getBgImgOptions() == null ||
                 qrCodeConfig.getBgImgOptions().getGifDecoder().getFrameCount() <= 0) {
             throw new IllegalArgumentException("animated background image should not be null!");
@@ -198,29 +204,40 @@ public class QrCodeGenerateHelper {
         BufferedImage qrCode = QrCodeRenderHelper.drawQrInfo(qrCodeConfig, bitMatrix);
 
         boolean logoAlreadyDraw = false;
-        if (qrCodeConfig.getBgImgOptions().getBgImgStyle() == QrCodeOptions.BgImgStyle.FILL &&
-                qrCodeConfig.getLogoOptions() != null) {
+        if (qrCodeConfig.getLogoOptions() != null &&
+                qrCodeConfig.getBgImgOptions().getBgImgStyle() == QrCodeOptions.BgImgStyle.FILL) {
             // 此种模式，先绘制logo
             qrCode = QrCodeRenderHelper.drawLogo(qrCode, qrCodeConfig.getLogoOptions());
             logoAlreadyDraw = true;
         }
 
-
         // 绘制动态背景图
-        List<ImmutablePair<BufferedImage, Integer>> bgList =
-                QrCodeRenderHelper.drawGifBackground(qrCode, qrCodeConfig.getBgImgOptions());
+        boolean bgGif = qrCodeConfig.getBgImgOptions().getGifDecoder() != null;
+        List<ImmutablePair<BufferedImage, Integer>> bgList = bgGif ?
+                QrCodeRenderHelper.drawGifBackground(qrCode, qrCodeConfig.getBgImgOptions()) : Collections.emptyList();
 
-        // 插入logo
 
-        if (qrCodeConfig.getLogoOptions() != null && !logoAlreadyDraw) {
-            List<ImmutablePair<BufferedImage, Integer>> result = new ArrayList<>(bgList.size());
-            for (ImmutablePair<BufferedImage, Integer> pair : bgList) {
-                result.add(ImmutablePair.of(QrCodeRenderHelper.drawLogo(pair.getLeft(), qrCodeConfig.getLogoOptions()),
-                        pair.getRight()));
+        if (!logoAlreadyDraw && qrCodeConfig.getLogoOptions() != null) {
+            if (bgGif) {
+                // 插入logo
+                List<ImmutablePair<BufferedImage, Integer>> result = new ArrayList<>(bgList.size());
+                for (ImmutablePair<BufferedImage, Integer> pair : bgList) {
+                    result.add(ImmutablePair.of(QrCodeRenderHelper.drawLogo(pair.getLeft(), qrCodeConfig.getLogoOptions()),
+                            pair.getRight()));
+                }
+                bgList = result;
+            } else {
+                qrCode = QrCodeRenderHelper.drawLogo(qrCode, qrCodeConfig.getLogoOptions());
             }
-            return result;
-        } else {
+        }
+
+        if (bgGif) {
             return bgList;
         }
+
+        // todo 暂时不支持前置图和背景图同时设置为gif的场景，如果同时存在，只保存背景gif图
+
+        // 前置图为gif的场景
+        return QrCodeRenderHelper.drawFrontGifImg(qrCode, qrCodeConfig.getFtImgOptions());
     }
 }

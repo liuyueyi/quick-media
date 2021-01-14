@@ -15,13 +15,21 @@ public class GraphicUtil {
 
 
     public static BufferedImage createImg(int w, int h, int offsetX, int offsetY, BufferedImage img) {
+        return createImg(w, h, offsetX, offsetY, img, null);
+    }
+
+    public static BufferedImage createImg(int w, int h, int offsetX, int offsetY, BufferedImage img, Color fillColor) {
         BufferedImage bf = new BufferedImage(w, h, BufferedImage.TYPE_INT_ARGB);
+        Graphics2D g2d = getG2d(bf);
+        if (fillColor != null) {
+            g2d.setColor(fillColor);
+            g2d.fillRect(0, 0, w, h);
+        }
+
         if (img == null) {
             return bf;
         }
 
-
-        Graphics2D g2d = bf.createGraphics();
         g2d.setComposite(AlphaComposite.Src);
         g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
         g2d.drawImage(img, offsetX, offsetY, null);
@@ -29,11 +37,11 @@ public class GraphicUtil {
         return bf;
     }
 
-
     public static Graphics2D getG2d(BufferedImage bf) {
         Graphics2D g2d = Optional.ofNullable(bf).orElse(new BufferedImage(1, 1, BufferedImage.TYPE_INT_RGB)).createGraphics();
 
         g2d.setRenderingHint(RenderingHints.KEY_ALPHA_INTERPOLATION, RenderingHints.VALUE_ALPHA_INTERPOLATION_QUALITY);
+        // 抗锯齿
         g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
         g2d.setRenderingHint(RenderingHints.KEY_COLOR_RENDERING, RenderingHints.VALUE_COLOR_RENDER_QUALITY);
         g2d.setRenderingHint(RenderingHints.KEY_DITHERING, RenderingHints.VALUE_DITHER_ENABLE);

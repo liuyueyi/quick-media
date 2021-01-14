@@ -41,6 +41,10 @@ public class QrCodeOptions {
      */
     private DrawOptions drawOptions;
 
+    /**
+     * 前置图选项
+     */
+    private FrontImgOptions ftImgOptions;
 
     /**
      * 背景图样式选项
@@ -51,7 +55,6 @@ public class QrCodeOptions {
      * logo 样式选项
      */
     private LogoOptions logoOptions;
-
 
     /**
      * todo 后续可以考虑三个都可以自配置
@@ -76,7 +79,12 @@ public class QrCodeOptions {
      * @return
      */
     public boolean gifQrCode() {
-        return bgImgOptions != null && bgImgOptions.getGifDecoder() != null;
+        boolean ans = bgImgOptions != null && bgImgOptions.getGifDecoder() != null;
+        if (ans) {
+            return true;
+        }
+
+        return ftImgOptions != null && ftImgOptions.getGifDecoder() != null;
     }
 
 
@@ -120,6 +128,14 @@ public class QrCodeOptions {
         this.bgImgOptions = bgImgOptions;
     }
 
+    public FrontImgOptions getFtImgOptions() {
+        return ftImgOptions;
+    }
+
+    public void setFtImgOptions(FrontImgOptions ftImgOptions) {
+        this.ftImgOptions = ftImgOptions;
+    }
+
     public LogoOptions getLogoOptions() {
         return logoOptions;
     }
@@ -154,32 +170,24 @@ public class QrCodeOptions {
 
     @Override
     public boolean equals(Object o) {
-        if (this == o) {
-            return true;
-        }
-        if (o == null || getClass() != o.getClass()) {
-            return false;
-        }
-        QrCodeOptions options = (QrCodeOptions) o;
-        return Objects.equals(msg, options.msg) && Objects.equals(w, options.w) && Objects.equals(h, options.h) &&
-                Objects.equals(drawOptions, options.drawOptions) &&
-                Objects.equals(bgImgOptions, options.bgImgOptions) &&
-                Objects.equals(logoOptions, options.logoOptions) &&
-                Objects.equals(detectOptions, options.detectOptions) && Objects.equals(hints, options.hints) &&
-                Objects.equals(picType, options.picType);
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        QrCodeOptions that = (QrCodeOptions) o;
+        return Objects.equals(msg, that.msg) &&
+                Objects.equals(w, that.w) &&
+                Objects.equals(h, that.h) &&
+                Objects.equals(drawOptions, that.drawOptions) &&
+                Objects.equals(ftImgOptions, that.ftImgOptions) &&
+                Objects.equals(bgImgOptions, that.bgImgOptions) &&
+                Objects.equals(logoOptions, that.logoOptions) &&
+                Objects.equals(detectOptions, that.detectOptions) &&
+                Objects.equals(hints, that.hints) &&
+                Objects.equals(picType, that.picType);
     }
 
     @Override
     public int hashCode() {
-
-        return Objects.hash(msg, w, h, drawOptions, bgImgOptions, logoOptions, detectOptions, hints, picType);
-    }
-
-    @Override
-    public String toString() {
-        return "QrCodeOptions{" + "msg='" + msg + '\'' + ", w=" + w + ", h=" + h + ", drawOptions=" + drawOptions +
-                ", bgImgOptions=" + bgImgOptions + ", logoOptions=" + logoOptions + ", detectOptions=" + detectOptions +
-                ", hints=" + hints + ", picType='" + picType + '\'' + '}';
+        return Objects.hash(msg, w, h, drawOptions, ftImgOptions, bgImgOptions, logoOptions, detectOptions, hints, picType);
     }
 
     /**
@@ -227,7 +235,7 @@ public class QrCodeOptions {
         }
 
         public LogoOptions(BufferedImage logo, LogoStyle logoStyle, int rate, boolean border, Color borderColor,
-                Color outerBorderColor, Float opacity) {
+                           Color outerBorderColor, Float opacity) {
             this.logo = logo;
             this.logoStyle = logoStyle;
             this.rate = rate;
@@ -468,7 +476,7 @@ public class QrCodeOptions {
         }
 
         public BgImgOptions(BufferedImage bgImg, ImgStyle imgStyle, float radius, GifDecoder gifDecoder, int bgW,
-                int bgH, BgImgStyle bgImgStyle, float opacity, int startX, int startY) {
+                            int bgH, BgImgStyle bgImgStyle, float opacity, int startX, int startY) {
             this.bgImg = bgImg;
             this.imgStyle = imgStyle;
             this.radius = radius;
@@ -731,6 +739,257 @@ public class QrCodeOptions {
 
 
     /**
+     * 前置图的配置信息
+     */
+    public static class FrontImgOptions {
+        /**
+         * 前置图
+         */
+        private BufferedImage ftImg;
+
+        /**
+         * 背景图样式
+         */
+        private ImgStyle imgStyle;
+
+        /**
+         * 圆角弧度，默认为宽高中较小值的 1/8
+         */
+        private float radius;
+
+        /**
+         * 动态前置图
+         */
+        private GifDecoder gifDecoder;
+
+        /**
+         * 背景图宽
+         */
+        private int ftW;
+
+        /**
+         * 背景图高
+         */
+        private int ftH;
+
+        /**
+         * 用于设置二维码的绘制在前置图上的x坐标
+         */
+        private int startX;
+
+
+        /**
+         * 用于设置二维码的绘制在前置图上的y坐标
+         */
+        private int startY;
+
+        /**
+         * 二维码大小比最终输出的图片小时，用来指定二维码周边的填充色，不存在时，默认透明
+         */
+        private Color fillColor;
+
+        public BufferedImage getFtImg() {
+            return ftImg;
+        }
+
+        public ImgStyle getImgStyle() {
+            return imgStyle;
+        }
+
+        public float getRadius() {
+            return radius;
+        }
+
+        public GifDecoder getGifDecoder() {
+            return gifDecoder;
+        }
+
+        public int getFtW() {
+            if (ftW > 0) {
+                return ftW;
+            }
+
+            if (ftImg != null) {
+                return ftImg.getWidth();
+            } else {
+                return gifDecoder.getFrame(0).getWidth();
+            }
+        }
+
+        public int getFtH() {
+            if (ftH > 0) {
+                return ftH;
+            }
+
+            if (ftImg != null) {
+                return ftImg.getHeight();
+            } else {
+                return gifDecoder.getFrame(0).getHeight();
+            }
+        }
+
+        public int getStartX() {
+            return startX;
+        }
+
+        public int getStartY() {
+            return startY;
+        }
+
+        public Color getFillColor() {
+            return fillColor;
+        }
+
+        public FrontImgOptions() {
+        }
+
+        public FrontImgOptions(BufferedImage ftImg, ImgStyle imgStyle, float radius, GifDecoder gifDecoder, int ftW,
+                               int ftH, int startX, int startY, Color fillColor) {
+            this.ftImg = ftImg;
+            this.imgStyle = imgStyle;
+            this.radius = radius;
+            this.gifDecoder = gifDecoder;
+            this.ftW = ftW;
+            this.ftH = ftH;
+            this.startX = startX;
+            this.startY = startY;
+            this.fillColor = fillColor;
+        }
+
+        @Override
+        public boolean equals(Object o) {
+            if (this == o) return true;
+            if (o == null || getClass() != o.getClass()) return false;
+            FrontImgOptions that = (FrontImgOptions) o;
+            return Float.compare(that.radius, radius) == 0 &&
+                    ftW == that.ftW &&
+                    ftH == that.ftH &&
+                    startX == that.startX &&
+                    startY == that.startY &&
+                    Objects.equals(ftImg, that.ftImg) &&
+                    imgStyle == that.imgStyle &&
+                    Objects.equals(gifDecoder, that.gifDecoder) &&
+                    Objects.equals(fillColor, that.fillColor);
+        }
+
+        @Override
+        public int hashCode() {
+            return Objects.hash(ftImg, imgStyle, radius, gifDecoder, ftW, ftH, startX, startY, fillColor);
+        }
+
+        public static FtImgOptionsBuilder builder() {
+            return new FtImgOptionsBuilder();
+        }
+
+        public static class FtImgOptionsBuilder {
+            /**
+             * 前置图
+             */
+            private BufferedImage ftImg;
+
+            /**
+             * 背景图样式
+             */
+            private ImgStyle imgStyle;
+
+            /**
+             * 圆角弧度，默认为宽高中较小值的 1/8
+             */
+            private Float radius;
+
+            /**
+             * 动态前置图
+             */
+            private GifDecoder gifDecoder;
+
+            /**
+             * 背景图宽
+             */
+            private int ftW;
+
+            /**
+             * 背景图高
+             */
+            private int ftH;
+
+            /**
+             * 用于设置二维码的绘制在前置图上的x坐标
+             */
+            private int startX;
+
+
+            /**
+             * 用于设置二维码的绘制在前置图上的y坐标
+             */
+            private int startY;
+
+            /**
+             * 填充色
+             */
+            private Color fillColor;
+
+            public FtImgOptionsBuilder ftImg(BufferedImage img) {
+                this.ftImg = img;
+                return this;
+            }
+
+            public FtImgOptionsBuilder imgStyle(ImgStyle imgStyle) {
+                this.imgStyle = imgStyle;
+                return this;
+            }
+
+            public FtImgOptionsBuilder radius(Float radius) {
+                this.radius = radius;
+                return this;
+            }
+
+            public FtImgOptionsBuilder gifDecoder(GifDecoder gifDecoder) {
+                this.gifDecoder = gifDecoder;
+                return this;
+            }
+
+            public FtImgOptionsBuilder ftW(int ftW) {
+                this.ftW = ftW;
+                return this;
+            }
+
+            public FtImgOptionsBuilder ftH(int ftH) {
+                this.ftH = ftH;
+                return this;
+            }
+
+            public FtImgOptionsBuilder startX(int startX) {
+                this.startX = startX;
+                return this;
+            }
+
+            public FtImgOptionsBuilder startY(int startY) {
+                this.startY = startY;
+                return this;
+            }
+
+            public FtImgOptionsBuilder fillImg(Color fillColor) {
+                this.fillColor = fillColor;
+                return this;
+            }
+
+            public FrontImgOptions build() {
+                if (imgStyle == null) {
+                    imgStyle = ImgStyle.NORMAL;
+                }
+
+                if (radius == null) {
+                    radius = 0.125f;
+                }
+
+                return new FrontImgOptions(ftImg, imgStyle, radius, gifDecoder, ftW, ftH, startX,
+                        startY, fillColor);
+            }
+        }
+    }
+
+
+    /**
      * 探测图形的配置信息
      */
     public static class DetectOptions {
@@ -772,7 +1031,7 @@ public class QrCodeOptions {
         }
 
         public DetectOptions(Color outColor, Color inColor, BufferedImage detectImg, BufferedImage detectImgLT,
-                BufferedImage detectImgRT, BufferedImage detectImgLD, Boolean special) {
+                             BufferedImage detectImgRT, BufferedImage detectImgLD, Boolean special) {
             this.outColor = outColor;
             this.inColor = inColor;
             this.detectImg = detectImg;
@@ -1324,8 +1583,8 @@ public class QrCodeOptions {
                 drawOptions.setTxtMode(txtMode == null ? TxtMode.ORDER : txtMode);
                 drawOptions.setFontName(fontName == null ? QuickQrUtil.DEFAULT_FONT_NAME : fontName);
                 drawOptions.setFontStyle(fontStyle == null ? QuickQrUtil.DEFAULT_FONT_STYLE : fontStyle);
-                drawOptions.setQrStyle(qrStyle == null ? ImgStyle.NORMAL: qrStyle);
-                drawOptions.setCornerRadius(cornerRadius == null ? 0.125F: cornerRadius);
+                drawOptions.setQrStyle(qrStyle == null ? ImgStyle.NORMAL : qrStyle);
+                drawOptions.setCornerRadius(cornerRadius == null ? 0.125F : cornerRadius);
                 return drawOptions;
             }
         }

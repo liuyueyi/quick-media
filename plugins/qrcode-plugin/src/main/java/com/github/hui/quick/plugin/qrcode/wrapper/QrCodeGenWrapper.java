@@ -137,6 +137,7 @@ public class QrCodeGenWrapper {
          */
         private String picType = "png";
 
+        private QrCodeOptions.FrontImgOptions.FtImgOptionsBuilder ftImgOptions;
 
         private QrCodeOptions.BgImgOptions.BgImgOptionsBuilder bgImgOptions;
 
@@ -148,6 +149,9 @@ public class QrCodeGenWrapper {
 
 
         public Builder() {
+            // 前置图默认不做任何处理
+            ftImgOptions = QrCodeOptions.FrontImgOptions.builder().imgStyle(QrCodeOptions.ImgStyle.NORMAL);
+
             // 背景图默认采用覆盖方式
             bgImgOptions =
                     QrCodeOptions.BgImgOptions.builder().bgImgStyle(QrCodeOptions.BgImgStyle.OVERRIDE).opacity(0.85f);
@@ -345,6 +349,104 @@ public class QrCodeGenWrapper {
         // ------------------------------------------
 
 
+        /////////////// 前置图 相关配置 ///////////////
+
+        public Builder setFtImg(String ftImg) throws IOException {
+            try {
+                return setFtImg(FileReadUtil.getStreamByFileName(ftImg));
+            } catch (IOException e) {
+                log.error("load backgroundImg error!", e);
+                throw new IOException("load backgroundImg error!", e);
+            }
+        }
+
+
+        public Builder setFtImg(InputStream inputStream) throws IOException {
+            try {
+                ByteArrayInputStream target = IoUtil.toByteArrayInputStream(inputStream);
+                MediaType media = MediaType.typeOfMagicNum(FileReadUtil.getMagicNum(target));
+                if (media == MediaType.ImageGif) {
+                    GifDecoder gifDecoder = new GifDecoder();
+                    gifDecoder.read(target);
+                    ftImgOptions.gifDecoder(gifDecoder);
+                    return this;
+                } else {
+                    return setFtImg(ImageIO.read(target));
+                }
+            } catch (IOException e) {
+                log.error("load backgroundImg error!", e);
+                throw new IOException("load backgroundImg error!", e);
+            }
+        }
+
+
+        public Builder setFtImg(BufferedImage bufferedImage) {
+            ftImgOptions.ftImg(bufferedImage);
+            return this;
+        }
+
+        /**
+         * 前置图样式
+         *
+         * @param imgStyle
+         * @return
+         */
+        public Builder setFtImgStyle(QrCodeOptions.ImgStyle imgStyle) {
+            ftImgOptions.imgStyle(imgStyle);
+            return this;
+        }
+
+        /**
+         * 背景圆角弧度占比
+         *
+         * @param radius
+         * @return
+         */
+        public Builder setFtCornerRadiusRate(float radius) {
+            ftImgOptions.radius(radius);
+            return this;
+        }
+
+        public Builder setFtW(int w) {
+            ftImgOptions.ftW(w);
+            return this;
+        }
+
+        public Builder setFtH(int h) {
+            ftImgOptions.ftH(h);
+            return this;
+        }
+
+        public Builder setFtStartX(int startX) {
+            ftImgOptions.startX(startX);
+            return this;
+        }
+
+        public Builder setFtStartY(int startY) {
+            ftImgOptions.startY(startY);
+            return this;
+        }
+
+        public Builder setFtFillColor(Integer color) {
+            if (color == null) {
+                return this;
+            }
+
+            return setFtFillColor(ColorUtil.int2color(color));
+        }
+
+        public Builder setFtFillColor(Color color) {
+            ftImgOptions.fillImg(color);
+            return this;
+        }
+
+
+        /////////////// 前置图 配置结束 ///////////////
+
+
+        // ------------------------------------------
+
+
         /////////////// 背景 相关配置 ///////////////
 
         public Builder setBgImg(String bgImg) throws IOException {
@@ -437,7 +539,7 @@ public class QrCodeGenWrapper {
         }
 
 
-        /////////////// logo 配置结束 ///////////////
+        /////////////// 背景 配置结束 ///////////////
 
 
         // ------------------------------------------
@@ -823,6 +925,14 @@ public class QrCodeGenWrapper {
             qrCodeConfig.setH(getH());
             qrCodeConfig.setW(getW());
 
+
+            // 前置图信息
+            QrCodeOptions.FrontImgOptions ftOp = ftImgOptions.build();
+            if (ftOp.getFtImg() == null && ftOp.getGifDecoder() == null) {
+                qrCodeConfig.setFtImgOptions(null);
+            } else {
+                qrCodeConfig.setFtImgOptions(ftOp);
+            }
 
             // 设置背景信息
             QrCodeOptions.BgImgOptions bgOp = bgImgOptions.build();

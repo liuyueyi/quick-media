@@ -130,8 +130,9 @@ public class ImgCell implements IMergeCell {
             imgCell.img = img;
             imgCell.x = x;
             imgCell.y = y;
-            imgCell.w = w;
-            imgCell.h = h;
+            // 默认ImgCell的宽高等图片宽高
+            imgCell.w = w == 0 ? img.getWidth() : w;
+            imgCell.h = h == 0 ? img.getHeight() : h;
             return imgCell;
         }
     }

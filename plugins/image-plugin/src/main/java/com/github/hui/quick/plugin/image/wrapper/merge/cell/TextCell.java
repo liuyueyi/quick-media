@@ -1,11 +1,14 @@
 package com.github.hui.quick.plugin.image.wrapper.merge.cell;
 
 
+import com.github.hui.quick.plugin.base.Base64Util;
+import com.github.hui.quick.plugin.base.ColorUtil;
 import com.github.hui.quick.plugin.image.helper.CalculateHelper;
 import com.github.hui.quick.plugin.image.util.FontUtil;
 import com.github.hui.quick.plugin.image.util.PunctuationUtil;
 import com.github.hui.quick.plugin.image.wrapper.create.ImgCreateOptions;
 
+import javax.xml.soap.Text;
 import java.awt.*;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -161,8 +164,8 @@ public class TextCell implements IMergeCell {
 
                 tmpY = calculateY(info, fontMetrics);
                 for (int i = 0; i < chars.length; i++) {
-                    tmpX = PunctuationUtil.isPunctuation(chars[i]) ? tmpW : 0;
-                    g2d.drawString(chars[i] + "", tmpX + (PunctuationUtil.isPunctuation(chars[i]) ? tmpW : 0), tmpY);
+                    tmpX = startX + (PunctuationUtil.isPunctuation(chars[i]) ? tmpW : 0);
+                    g2d.drawString(chars[i] + "", tmpX, tmpY);
                     tmpY += tmpHeight;
                 }
 
@@ -211,7 +214,7 @@ public class TextCell implements IMergeCell {
             return endY - size;
         } else {
             int size = fontMetrics.stringWidth(text) + fontMetrics.getDescent() * (text.length() - 1);
-            return startY + ((endY - endX - size) >>> 1);
+            return startY + ((endY - startY - size) >> 1);
         }
     }
 
@@ -241,5 +244,105 @@ public class TextCell implements IMergeCell {
         return "TextCell{" + "texts=" + texts + ", color=" + color + ", font=" + font + ", lineSpace=" + lineSpace +
                 ", startX=" + startX + ", startY=" + startY + ", endX=" + endX + ", endY=" + endY + ", drawStyle=" +
                 drawStyle + ", alignStyle=" + alignStyle + '}';
+    }
+
+    public static TextCell.Builder builder() {
+        return new TextCell.Builder();
+    }
+
+    public static class Builder {
+        private List<String> texts;
+
+        private Color color = Color.black;
+
+        private Font font = FontUtil.DEFAULT_FONT;
+
+        private int lineSpace;
+
+        private int startX, startY;
+        private int endX, endY;
+
+        /**
+         * 绘制样式，水平，垂直
+         */
+        private ImgCreateOptions.DrawStyle drawStyle = ImgCreateOptions.DrawStyle.HORIZONTAL;
+
+        /**
+         * 对其方式
+         */
+        private ImgCreateOptions.AlignStyle alignStyle = ImgCreateOptions.AlignStyle.LEFT;
+
+        public Builder color(Color color) {
+            this.color = color;
+            return this;
+        }
+
+        public Builder color(int color) {
+            return color(ColorUtil.int2color(color));
+        }
+
+        public Builder font(Font font) {
+            this.font = font;
+            return this;
+        }
+
+        public Builder lineSpace(int lineSpace) {
+            this.lineSpace = lineSpace;
+            return this;
+        }
+
+        public Builder startX(int startX) {
+            this.startX = startX;
+            return this;
+        }
+
+        public Builder startY(int startY) {
+            this.startY = startY;
+            return this;
+        }
+
+        public Builder endX(int endX) {
+            this.endX = endX;
+            return this;
+        }
+
+        public Builder endY(int endY) {
+            this.endY = endY;
+            return this;
+        }
+
+        public Builder text(String text) {
+            if (texts == null) {
+                texts = new ArrayList<>();
+            }
+
+            texts.add(text);
+            return this;
+        }
+
+        public Builder drawStyle(ImgCreateOptions.DrawStyle drawStyle) {
+            this.drawStyle = drawStyle;
+            return this;
+        }
+
+        public Builder alignStyle(ImgCreateOptions.AlignStyle alignStyle) {
+            this.alignStyle = alignStyle;
+            return this;
+        }
+
+        public TextCell build() {
+            TextCell textCell = new TextCell();
+            textCell.color = color;
+            textCell.lineSpace = lineSpace;
+            textCell.font = font;
+            textCell.startX = startX;
+            textCell.startY = startY;
+            textCell.endX = endX;
+            textCell.endY = endY;
+            textCell.texts = texts;
+            textCell.drawStyle = drawStyle;
+            textCell.alignStyle = alignStyle;
+            return textCell;
+        }
     }
 }

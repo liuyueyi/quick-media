@@ -2,17 +2,26 @@ package com.github.hui.quick.plugin.test;
 
 import com.github.hui.quick.plugin.base.ColorUtil;
 import com.github.hui.quick.plugin.base.GraphicUtil;
+import com.github.hui.quick.plugin.base.ImageOperateUtil;
+import com.github.hui.quick.plugin.image.wrapper.create.ImgCreateOptions;
+import com.github.hui.quick.plugin.image.wrapper.merge.ImgMergeWrapper;
+import com.github.hui.quick.plugin.image.wrapper.merge.cell.ImgCell;
+import com.github.hui.quick.plugin.image.wrapper.merge.cell.TextCell;
 import com.github.hui.quick.plugin.qrcode.wrapper.QrCodeGenWrapper;
 import com.github.hui.quick.plugin.qrcode.wrapper.QrCodeOptions;
 import com.google.zxing.qrcode.decoder.ErrorCorrectionLevel;
 import org.junit.Test;
+import sun.jvm.hotspot.ui.GraphicsUtilities;
 
+import javax.imageio.ImageIO;
 import java.awt.*;
 import java.awt.image.BufferedImage;
+import java.io.File;
+import java.util.Arrays;
 
 /**
  * 二维码插件用户使用实例，教程说明文档参考：
- *  <a href="https://liuyueyi.github.io/quick-media/#/%E6%8F%92%E4%BB%B6/%E4%BA%8C%E7%BB%B4%E7%A0%81/%E4%BA%8C%E7%BB%B4%E7%A0%81%E6%8F%92%E4%BB%B6%E6%A6%82%E8%A7%88">二维码插件概览</a>
+ * <a href="https://liuyueyi.github.io/quick-media/#/%E6%8F%92%E4%BB%B6/%E4%BA%8C%E7%BB%B4%E7%A0%81/%E4%BA%8C%E7%BB%B4%E7%A0%81%E6%8F%92%E4%BB%B6%E6%A6%82%E8%A7%88">二维码插件概览</a>
  * Created by @author yihui in 21:05 19/11/11.
  */
 public class QrCodeGenUserGuide {
@@ -81,7 +90,7 @@ public class QrCodeGenUserGuide {
             boolean ans = QrCodeGenWrapper.of(msg)
                     .setLogo(logo)
                     .asFile("/tmp/lqr0.png");
-        }catch (Exception e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }
@@ -96,7 +105,7 @@ public class QrCodeGenUserGuide {
                     .setLogoBgColor(0xff808080)
                     .setLogoBorder(true)
                     .asFile("/tmp/lqr1.png");
-        }catch (Exception e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }
@@ -112,7 +121,7 @@ public class QrCodeGenUserGuide {
                     .setLogoBgColor(0xffc7c7c7)
                     .setLogoBorder(true)
                     .asFile("/tmp/lqr2.png");
-        }catch (Exception e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }
@@ -129,7 +138,7 @@ public class QrCodeGenUserGuide {
                     .setLogoBorderBgColor(0xffc7c7c7)
                     .setLogoBorder(true)
                     .asFile("/tmp/lqr3.png");
-        }catch (Exception e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }
@@ -152,7 +161,7 @@ public class QrCodeGenUserGuide {
                     .setLogoBorderBgColor(0xffc7c7c7)
                     .setLogoBorder(true)
                     .asFile("/tmp/lqr4.png");
-        }catch (Exception e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }
@@ -176,7 +185,7 @@ public class QrCodeGenUserGuide {
                     .asBufferedImage();
 //                    .asFile("/tmp/lqr5.png");
             System.out.println(img);
-        }catch (Exception e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }
@@ -198,7 +207,7 @@ public class QrCodeGenUserGuide {
                     .setLogoBorderBgColor(0xffc7c7c7)
                     .setLogoBorder(true)
                     .asFile("/tmp/lqr6.png");
-        }catch (Exception e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }
@@ -216,7 +225,7 @@ public class QrCodeGenUserGuide {
                     .setW(500)
                     .setBgOpacity(0.5f)
                     .asFile("/tmp/bqr1.png");
-        }catch (Exception e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }
@@ -234,7 +243,7 @@ public class QrCodeGenUserGuide {
                     .setBgCornerRadiusRate(0.125f)
                     .setBgImgStyle(QrCodeOptions.ImgStyle.ROUND)
                     .asFile("/tmp/bqr1_c1.png");
-        }catch (Exception e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }
@@ -256,14 +265,14 @@ public class QrCodeGenUserGuide {
                     .setDrawBgColor(0xfff7f7f7)
                     .setBgImgStyle(QrCodeOptions.ImgStyle.CIRCLE)
                     .asFile("/tmp/bqr2_c2.png");
-        }catch (Exception e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }
 
 
     /**
-     *  指定为填充模式，在背景图的坐标(startX, startY)处绘制二维码(左上角坐标为0,0)
+     * 指定为填充模式，在背景图的坐标(startX, startY)处绘制二维码(左上角坐标为0,0)
      */
     @Test
     public void bgQr2() {
@@ -281,7 +290,7 @@ public class QrCodeGenUserGuide {
                     .setPadding(0)
                     .setDrawBgColor(0xfff7f7f7)
                     .asFile("/tmp/bqr2.png");
-        }catch (Exception e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }
@@ -773,7 +782,96 @@ public class QrCodeGenUserGuide {
                     .setBgStyle(QrCodeOptions.BgImgStyle.PENETRATE)
                     .setW(500)
                     .asFile("/tmp/gifQr3.gif");
-        } catch (Exception e){
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+
+    /**
+     * 前置图测试
+     */
+    @Test
+    public void ft1() {
+        try {
+            String msg = "http://weixin.qq.com/r/FS9waAPEg178rUcL93oH";
+            String ft = "ft/ft_1.png";
+            boolean ans = QrCodeGenWrapper.of(msg)
+                    .setDetectImg("eye3.png")
+                    .setFtImg(ft)
+                    .setFtFillColor(Color.WHITE)
+                    .setW(1340)
+                    .setH(1340)
+                    .setFtStartX(100)
+                    .setFtStartY(130)
+                    .asFile("/tmp/ft1.png");
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    /**
+     * 在二维码周边添加文字的示例
+     */
+    @Test
+    public void ft2() {
+        //  创建一个文字的前置图
+        BufferedImage ftImg = GraphicUtil.createImg(500, 600, null);
+        Graphics2D g2d = GraphicUtil.getG2d(ftImg);
+        g2d.setColor(Color.WHITE);
+        g2d.fillRect(0, 500, 500, 500);
+        g2d.setColor(Color.BLACK);
+        g2d.setFont(new Font(null, Font.PLAIN, 22));
+        g2d.drawString("欢迎关注《一灰灰Blog》", 140, 550);
+
+
+        String msg = "http://weixin.qq.com/r/FS9waAPEg178rUcL93oH";
+        try {
+            boolean ans = QrCodeGenWrapper.of(msg)
+                    .setW(500)
+                    .setH(500)
+                    .setDetectImg("eye3.png")
+                    .setFtImg(ftImg)
+                    .setFtFillColor(Color.WHITE)
+                    .asFile("/tmp/ft2.png");
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    /**
+     * 在二维码周边添加文字的实例，借助 image-plugins 来实现，能更简单的满足UI大佬的设计需求
+     */
+    @Test
+    public void ft3() {
+        try {
+            // 二维码
+            int qrSize = 460;
+            String msg = "http://weixin.qq.com/r/FS9waAPEg178rUcL93oH";
+            BufferedImage qrImg = QrCodeGenWrapper.of(msg)
+                    .setW(qrSize)
+                    .setH(qrSize)
+                    .setDetectImg("eye3.png")
+                    .setFtFillColor(Color.WHITE)
+                    .asBufferedImage();
+            ImgCell qrCell = ImgCell.builder().img(qrImg).x(20).y(20).build();
+
+
+            // 修饰文字
+            TextCell textCell = TextCell.builder().font(new Font("宋体", Font.BOLD, 22))
+                    .color(Color.BLACK)
+                    .drawStyle(ImgCreateOptions.DrawStyle.VERTICAL_LEFT)
+                    .alignStyle(ImgCreateOptions.AlignStyle.CENTER)
+                    .startX(540)
+                    .startY(0)
+                    .endX(540)
+                    .endY(500)
+                    .text("欢迎关注<一灰灰Blog>")
+                    .build();
+
+            BufferedImage out = ImgMergeWrapper.merge(Arrays.asList(qrCell, textCell), 600, 500, Color.WHITE);
+            ImageIO.write(out, "jpg", new File("/tmp/ft3.jpg"));
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }
