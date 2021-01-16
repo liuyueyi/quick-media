@@ -5,12 +5,21 @@
     <parent>
         <artifactId>plugins</artifactId>
         <groupId>com.github.liuyueyi.media</groupId>
-        <version>2.5</version>
+        <version>2.5.1</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
     <artifactId>audio-plugin</artifactId>
     <version>2.5.1</version>
+
+    <description>simple way to operate audio by ffmpeg</description>
+    <developers>
+        <developer>
+            <name>YiHui</name>
+            <email>bangzewu@126.com</email>
+            <url>http://blog.hhui.top</url>
+        </developer>
+    </developers>
 
     <dependencies>
         <dependency>

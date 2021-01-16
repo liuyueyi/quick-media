@@ -50,7 +50,6 @@ public class QrCodeWrapperTest {
             System.out.println(ans);
         } catch (Exception e) {
             System.out.println("create qrcode error! e: " + e);
-            Assert.assertTrue(false);
         }
 
 
@@ -65,7 +64,6 @@ public class QrCodeWrapperTest {
             System.out.println(ans);
         } catch (Exception e) {
             System.out.println("create qrcode error! e: " + e);
-            Assert.assertTrue(false);
         }
 
 
@@ -85,7 +83,6 @@ public class QrCodeWrapperTest {
             System.out.println(ans);
         } catch (Exception e) {
             System.out.println("create qrcode error! e: " + e);
-            Assert.assertTrue(false);
         }
 
 
@@ -105,7 +102,6 @@ public class QrCodeWrapperTest {
             System.out.println(ans);
         } catch (Exception e) {
             System.out.println("create qrcode error! e: " + e);
-            Assert.assertTrue(false);
         }
 
 
@@ -129,7 +125,7 @@ public class QrCodeWrapperTest {
             System.out.println(ans);
         } catch (Exception e) {
             System.out.println("create qrcode error! e: " + e);
-            Assert.assertTrue(false);
+            
         }
 
 
@@ -158,7 +154,7 @@ public class QrCodeWrapperTest {
             System.out.println(ans);
         } catch (Exception e) {
             System.out.println("create qrcode error! e: " + e);
-            Assert.assertTrue(false);
+            
         }
     }
 
@@ -194,7 +190,6 @@ public class QrCodeWrapperTest {
             System.out.println("<img src=\"data:image/png;base64," + img64 + "\" />");
         } catch (Exception e) {
             System.out.println("cmvreate qrcode error! e: " + e);
-            Assert.assertTrue(false);
         }
     }
 
@@ -235,7 +230,7 @@ public class QrCodeWrapperTest {
                 System.out.println("<img src=\"data:image/png;base64," + img64 + "\" />");
             } catch (Exception e) {
                 System.out.println("create qrcode error! e: " + e);
-                Assert.assertTrue(false);
+                
             }
         }
     }
@@ -279,7 +274,7 @@ public class QrCodeWrapperTest {
             System.out.println("<img src=\"data:image/png;base64," + img64 + "\" />");
         } catch (Exception e) {
             System.out.println("create qrcode error! e: " + e);
-            Assert.assertTrue(false);
+            
         }
     }
 
