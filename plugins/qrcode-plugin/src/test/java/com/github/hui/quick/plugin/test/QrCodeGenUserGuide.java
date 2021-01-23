@@ -873,4 +873,30 @@ public class QrCodeGenUserGuide {
             e.printStackTrace();
         }
     }
+
+    @Test
+    public void preGif() {
+//        String pre = "http://1832.img.pp.sohu.com.cn/images/blog/2009/10/23/20/24/12530644e76g215.jpg";
+//        String pre = "http://1812.img.pp.sohu.com.cn/images/blog/2009/10/23/20/11/12530710098g214.jpg";
+        String pre = "https://iknow-pic.cdn.bcebos.com/f9dcd100baa1cd11dec1529bbd12c8fcc3ce2d11";
+        try {
+            // 二维码
+            int qrSize = 320;
+            String msg = "http://weixin.qq.com/r/FS9waAPEg178rUcL93oH";
+            QrCodeGenWrapper.of(msg)
+                    .setW(qrSize)
+                    .setH(qrSize)
+                    .setDrawPreColor(0xff73a7f5)
+//                    .setDrawStyle(QrCodeOptions.DrawStyle.CIRCLE)
+                    .setDrawEnableScale(true)
+                    .setFtImg(pre)
+                    .setFtStartX(0)
+                    .setFtStartY(-25)
+                    .setFtFillColor(Color.WHITE)
+                    .asFile("/tmp/ft_1.gif");
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
 }

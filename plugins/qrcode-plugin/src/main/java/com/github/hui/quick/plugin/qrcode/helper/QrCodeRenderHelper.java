@@ -108,8 +108,9 @@ public class QrCodeRenderHelper {
         int resH = Math.max(frontImgOptions.getFtH(), qrHeight);
 
         // 先将二维码绘制在底层背景图上
-        BufferedImage bottomImg = GraphicUtil.createImg(resW, resH, frontImgOptions.getStartX(),
-                frontImgOptions.getStartY(), qrImg, frontImgOptions.getFillColor());
+        int startX = frontImgOptions.getStartX(), startY = frontImgOptions.getStartY();
+        BufferedImage bottomImg = GraphicUtil.createImg(resW, resH, Math.max(startX, 0),
+                Math.max(startY, 0), qrImg, frontImgOptions.getFillColor());
 
 
         BufferedImage ftImg = frontImgOptions.getFtImg();
@@ -122,7 +123,7 @@ public class QrCodeRenderHelper {
         }
 
         Graphics2D g2d = GraphicUtil.getG2d(bottomImg);
-        g2d.drawImage(ftImg, 0, 0, null);
+        g2d.drawImage(ftImg, -Math.min(startX, 0), -Math.min(startY, 0), null);
         g2d.dispose();
         return bottomImg;
     }
@@ -139,8 +140,9 @@ public class QrCodeRenderHelper {
         int resH = Math.max(ftH, qrHeight);
 
         // 先将二维码绘制在底层背景图上
-        BufferedImage bottomImg = GraphicUtil.createImg(resW, resH, frontImgOptions.getStartX(),
-                frontImgOptions.getStartY(), frontImgOptions.getFtImg(), frontImgOptions.getFillColor());
+        int startX = frontImgOptions.getStartX(), startY = frontImgOptions.getStartY();
+        BufferedImage bottomImg = GraphicUtil.createImg(resW, resH, Math.max(startX, 0),
+                Math.max(startY, 0), qrImg, frontImgOptions.getFillColor());
 
 
         int gifImgLen = frontImgOptions.getGifDecoder().getFrameCount();
@@ -149,7 +151,8 @@ public class QrCodeRenderHelper {
         for (int index = 0; index < gifImgLen; index++) {
             BufferedImage bgImg = GraphicUtil.createImg(resW, resH, bottomImg);
             Graphics2D bgGraphic = GraphicUtil.getG2d(bgImg);
-            bgGraphic.drawImage(frontImgOptions.getGifDecoder().getFrame(index), 0, 0, null);
+            bgGraphic.drawImage(frontImgOptions.getGifDecoder().getFrame(index), -Math.min(startX, 0),
+                    -Math.min(startY, 0), null);
 
             bgGraphic.dispose();
             bgImg.flush();

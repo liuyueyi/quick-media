@@ -196,8 +196,9 @@ public class QrCodeGenerateHelper {
 
     public static List<ImmutablePair<BufferedImage, Integer>> toGifImages(QrCodeOptions qrCodeConfig,
                                                                           BitMatrixEx bitMatrix) {
-        if (qrCodeConfig.getBgImgOptions() == null ||
-                qrCodeConfig.getBgImgOptions().getGifDecoder().getFrameCount() <= 0) {
+        boolean preGif = qrCodeConfig.getFtImgOptions() != null && qrCodeConfig.getFtImgOptions().getGifDecoder().getFrameCount() > 0;
+        boolean bgGif = qrCodeConfig.getBgImgOptions() != null && qrCodeConfig.getBgImgOptions().getGifDecoder().getFrameCount() > 0;
+        if (!bgGif && !preGif) {
             throw new IllegalArgumentException("animated background image should not be null!");
         }
 
@@ -212,7 +213,6 @@ public class QrCodeGenerateHelper {
         }
 
         // 绘制动态背景图
-        boolean bgGif = qrCodeConfig.getBgImgOptions().getGifDecoder() != null;
         List<ImmutablePair<BufferedImage, Integer>> bgList = bgGif ?
                 QrCodeRenderHelper.drawGifBackground(qrCode, qrCodeConfig.getBgImgOptions()) : Collections.emptyList();
 
