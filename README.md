@@ -35,7 +35,7 @@
 <dependency>
     <groupId>com.github.liuyueyi.media</groupId>
     <artifactId>qrcode-plugin</artifactId>
-    <version>2.5.2</version>
+    <version>2.5.4</version>
 </dependency>
 ```
 
