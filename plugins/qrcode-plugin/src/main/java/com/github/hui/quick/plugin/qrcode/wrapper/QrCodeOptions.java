@@ -5,15 +5,16 @@ import com.github.hui.quick.plugin.qrcode.constants.QuickQrUtil;
 import com.github.hui.quick.plugin.qrcode.entity.DotSize;
 import com.github.hui.quick.plugin.qrcode.helper.QrCodeRenderHelper;
 import com.google.zxing.EncodeHintType;
-import org.apache.commons.lang.BooleanUtils;
-import org.apache.commons.lang3.StringUtils;
 
 import java.awt.*;
 import java.awt.geom.Ellipse2D;
 import java.awt.image.BufferedImage;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.List;
+import java.util.ArrayList;
 import java.util.Objects;
+import java.util.Random;
 
 /**
  * Created by yihui on 2017/7/17.
@@ -1024,7 +1025,11 @@ public class QrCodeOptions {
         private Boolean special;
 
         public Boolean getSpecial() {
-            return BooleanUtils.isTrue(special);
+            if (special == null) {
+                // 默认不特殊处理
+                special = false;
+            }
+            return special;
         }
 
         public DetectOptions() {
@@ -1199,6 +1204,7 @@ public class QrCodeOptions {
      * 绘制二维码的配置信息
      */
     public static class DrawOptions {
+        private Random random = new Random();
         /**
          * 着色颜色
          */
@@ -1258,7 +1264,7 @@ public class QrCodeOptions {
         /**
          * 渲染图
          */
-        private Map<DotSize, BufferedImage> imgMapper;
+        private Map<DotSize, List<BufferedImage>> imgMapper;
 
         /**
          * 生成二维码的图片样式，一般来讲不推荐使用圆形，默认为normal
@@ -1275,7 +1281,16 @@ public class QrCodeOptions {
         }
 
         public BufferedImage getImage(DotSize dotSize) {
-            return imgMapper.get(dotSize);
+            List<BufferedImage> list = imgMapper.get(dotSize);
+            if (list == null) {
+                return null;
+            }
+
+            if (list.size() == 1) {
+                return list.get(0);
+            }
+
+            return list.get(random.nextInt(list.size()));
         }
 
         /**
@@ -1367,11 +1382,11 @@ public class QrCodeOptions {
             this.diaphaneityFill = diaphaneityFill;
         }
 
-        public Map<DotSize, BufferedImage> getImgMapper() {
+        public Map<DotSize, List<BufferedImage>> getImgMapper() {
             return imgMapper;
         }
 
-        public void setImgMapper(Map<DotSize, BufferedImage> imgMapper) {
+        public void setImgMapper(Map<DotSize, List<BufferedImage>> imgMapper) {
             this.imgMapper = imgMapper;
         }
 
@@ -1489,7 +1504,7 @@ public class QrCodeOptions {
             /**
              * 渲染图
              */
-            private Map<DotSize, BufferedImage> imgMapper;
+            private Map<DotSize, List<BufferedImage>> imgMapper;
 
             /**
              * 生成二维码的图片样式，可以是圆角 或 矩形
@@ -1556,7 +1571,7 @@ public class QrCodeOptions {
             }
 
             public DrawOptionsBuilder drawImg(int row, int column, BufferedImage image) {
-                imgMapper.put(new DotSize(row, column), image);
+                imgMapper.computeIfAbsent(new DotSize(row, column), (k) -> new ArrayList<>()).add(image);
                 return this;
             }
 
@@ -1646,7 +1661,6 @@ public class QrCodeOptions {
      */
     public enum DrawStyle {
         RECT { // 矩形
-
             @Override
             public void draw(Graphics2D g2d, int x, int y, int w, int h, BufferedImage img, String txt) {
                 g2d.fillRect(x, y, w, h);
@@ -1655,6 +1669,17 @@ public class QrCodeOptions {
             @Override
             public boolean expand(DotSize dotSize) {
                 return dotSize.getRow() == dotSize.getCol();
+            }
+        }, MINI_RECT {
+            @Override
+            public void draw(Graphics2D g2d, int x, int y, int w, int h, BufferedImage img, String txt) {
+                int offsetX = w >> 2, offsetY = h >> 2;
+                g2d.fillRect(x + offsetX, y + offsetY, offsetX << 1, offsetY << 1);
+            }
+
+            @Override
+            public boolean expand(DotSize dotSize) {
+                return false;
             }
         }, CIRCLE { // 圆点
 
@@ -1765,7 +1790,7 @@ public class QrCodeOptions {
         }
 
         public static DrawStyle getDrawStyle(String name) {
-            if (StringUtils.isBlank(name)) { // 默认返回矩形
+            if (name == null || name.isEmpty()) { // 默认返回矩形
                 return RECT;
             }
 

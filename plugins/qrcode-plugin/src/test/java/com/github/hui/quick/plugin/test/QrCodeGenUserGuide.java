@@ -444,6 +444,20 @@ public class QrCodeGenUserGuide {
     }
 
     @Test
+    public void miniRectQr() {
+        try {
+            String msg = "http://weixin.qq.com/r/FS9waAPEg178rUcL93oH";
+            boolean ans = QrCodeGenWrapper.of(msg)
+                    .setW(400)
+                    .setDetectSpecial()
+                    .setDrawStyle(QrCodeOptions.DrawStyle.MINI_RECT)
+                    .asFile("/tmp/dqr0_1.png");
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    @Test
     public void circleQr() {
         try {
             String msg = "http://weixin.qq.com/r/FS9waAPEg178rUcL93oH";
@@ -682,7 +696,10 @@ public class QrCodeGenUserGuide {
                     .setDrawBgColor(ColorUtil.OPACITY)
                     .setDetectImg("love/01.png")
                     .setDrawStyle(QrCodeOptions.DrawStyle.IMAGE)
-                    .addImg(1, 1, "love/003_01.png")
+                    .addImg(1, 1, "love/001.png")
+                    .addImg(2, 2, "love/003_01.png")
+                    .addImg(2, 2, "love/003_02.png")
+                    .addImg(2, 2, "love/003_03.png")
                     .addImg(4, 1, "love/004.png")
                     .addImg(1, 4, "love/004_02.png")
                     .asFile("/tmp/imgQr2.png");
