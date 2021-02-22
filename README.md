@@ -3,6 +3,7 @@
 [![Join the chat at https://gitter.im/quick-media/Lobby](https://badges.gitter.im/quick-media/Lobby.svg)](https://gitter.im/quick-media/Lobby?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
 [![Builder](https://travis-ci.org/liuyueyi/quick-media.svg?branch=master)](https://travis-ci.org/liuyueyi/quick-media)
 [![JitPack](https://jitpack.io/v/liuyueyi/quick-media.svg)](https://jitpack.io/#liuyueyi/quick-media)
+[![Maven Central with version prefix filter](https://img.shields.io/maven-central/v/com.github.liuyueyi.media/plugins.svg)](https://search.maven.org/search?q=g:com.github.liuyueyi.media)
 [![codecov](https://codecov.io/gh/liuyueyi/quick-media/branch/master/graph/badge.svg)](https://codecov.io/gh/liuyueyi/quick-media)
 [![Average time to resolve an issue](http://isitmaintained.com/badge/resolution/liuyueyi/quick-media.svg)](http://isitmaintained.com/project/liuyueyi/quick-media "Average time to resolve an issue")
 [![Percentage of issues still open](http://isitmaintained.com/badge/open/liuyueyi/quick-media.svg)](http://isitmaintained.com/project/liuyueyi/quick-media "Percentage of issues still open")
@@ -44,38 +45,7 @@
 在下载本项目之后，有些常见事项需要注意一二
 
 - ~~工程中使用lombok简化大量的代码，因此使用idea的童鞋请装一下lombok的插件(最新版已移除lombok依赖)~~
-- 运行时，如果报某些依赖找不到，请在父pom文件中添加源
-
-    ```xml
-    <repositories>
-        <repository>
-            <id>yihui-maven-repo</id>
-            <url>https://raw.githubusercontent.com/liuyueyi/maven-repository/master/repository</url>
-        </repository>
-    </repositories>
-    ```
 - 部分插件依赖第三方库，如 ffmpge, phantomjs, image-magic，请确保已经安装
-
-<del>
-
-请直接使用中央仓库下载依赖，就不会出现下载不到的问题
-
-**注意**
-
-如果出现配置了上面的仓库地址，但是依然下载不到jar包（如二维码包，可以到`~/.m2/repository/com/github/hui/media/qrcode-plugin`目录下查看是否存在jar）
-
-可能是由于maven的镜像配置原因，可以在<mirrors>标签下，添加如下依赖解决
-
-```xml
-<mirror>
-    <id>yihui-maven-repo</id>
-    <mirrorOf>yihui-maven-repo</mirrorOf>
-    <name>yihui-maven-repo</name>
-    <url>https://raw.githubusercontent.com/liuyueyi/maven-repository/master/repository</url>
-</mirror>
-```
-
-</del>
 
 **jitpack使用方式**
 
@@ -127,43 +97,11 @@
 
 #### plugins 
 
-插件工程，根据不同的场景，支持不同的服务功能，目前将所有的插件抽象出来，可以独立作为工具包提供给第三方依赖，外部使用方式
-
-<font color="red">
-
-注意：使用中央仓库依赖的方式，不需要额外添加源
-
-</font>
-
-<del>
-添加源：适用于通过github方式导入依赖
-
-```xml
-<repositories>
-    <repository>
-        <id>yihui-maven-repo</id>
-        <url>https://raw.githubusercontent.com/liuyueyi/maven-repository/master/repository</url>
-    </repository>
-</repositories>
-```
-</del>
+插件工程，根据不同的场景，支持不同的服务功能，目前将所有的插件抽象出来，可以独立作为工具包提供给第三方依赖，直接引入使用
 
 **audio-plugin**
 
 提供音频转码服务，使用依赖如下，详细查看: [audio-plugin说明](plugins/audio-plugin/readme.md)
-
-<del>
-
-适用于通过github方式导入依赖（请替换成中央仓库导入方式）
-
-```xml
-<dependency>
-    <groupId>com.github.hui.media</groupId>
-    <artifactId>audio-plugin</artifactId>
-</dependency>
-```
-
-</del>
 
 中央仓库导入方式，注意groupId不同(为什么需要改变groupId? 因为上传到maven中央仓库，要求groupId与github的项目所属相同)
 
@@ -181,20 +119,6 @@
 
 提供时间戳、日期转换为农历日期，详细查看：[date-plugin说明](plugins/date-plugin/readme.md)
 
-<del>
-
-适用于通过github方式导入依赖（请替换成中央仓库导入方式）
-
-```xml
-<dependency>
-    <groupId>com.github.hui.media</groupId>
-    <artifactId>date-plugin</artifactId>
-</dependency>
-```
-</del>
-
-中央仓库导入方式
-
 ```xml
 <!-- https://mvnrepository.com/artifact/com.github.liuyueyi.media/date-plugin -->
 <dependency>
@@ -208,20 +132,6 @@
 
 提供图片合成，提供gif图片生成等图片操作的封装类，详细查看： [image-plugin说明](plugins/image-plugin/readme.md)
 
-<del>
-
-适用于通过github方式导入依赖（请替换成中央仓库导入方式）
-
-```xml
-<dependency>
-    <groupId>com.github.hui.media</groupId>
-    <artifactId>image-plugin</artifactId>
-</dependency>
-```
-
-</del>
-
-中央仓库导入方式
 
 ```xml
 <!-- https://mvnrepository.com/artifact/com.github.liuyueyi.media/image-plugin -->
@@ -236,19 +146,6 @@
 
 markdown转html，转图片的封装类， 详细内容查看: [markdown-plugin](plugins/markdown-plugin/readme.md)
 
-<del>
-
-适用于通过github方式导入依赖（请替换成中央仓库导入方式）
-
-```xml
-<dependency>
-    <groupId>com.github.hui.media</groupId>
-    <artifactId>markdown-plugin</artifactId>
-</dependency>
-```
-</del>
-
-中央仓库导入方式
 
 ```xml
 <!-- https://mvnrepository.com/artifact/com.github.liuyueyi.media/markdown-plugin -->
@@ -262,20 +159,6 @@ markdown转html，转图片的封装类， 详细内容查看: [markdown-plugin]
 
 提供根据phantomjs渲染html的封装
 
-<del>
-
-适用于通过github方式导入依赖（请替换成中央仓库导入方式）
-
-```xml
-<dependency>
-    <groupId>com.github.hui.media</groupId>
-    <artifactId>phantom-plugin</artifactId>
-</dependency>
-```
-
-</del>
-
-中央仓库导入方式
 
 ```xml
 <!-- https://mvnrepository.com/artifact/com.github.liuyueyi.media/phantom-plugin -->
@@ -291,19 +174,6 @@ markdown转html，转图片的封装类， 详细内容查看: [markdown-plugin]
 
 > [qrcode使用手册](https://liuyueyi.github.io/quick-media/#/%E6%8F%92%E4%BB%B6/%E4%BA%8C%E7%BB%B4%E7%A0%81/%E4%BA%8C%E7%BB%B4%E7%A0%81%E6%8F%92%E4%BB%B6%E4%BD%BF%E7%94%A8%E6%89%8B%E5%86%8C)
 
-<del>
-
-适用于通过github方式导入依赖（请替换成中央仓库导入方式）
-
-```xml
-<dependency>
-    <groupId>com.github.hui.media</groupId>
-    <artifactId>qrcode-plugin</artifactId>
-</dependency>
-```
-</del>
-
-中央仓库导入方式
 
 ```xml
 <!-- https://mvnrepository.com/artifact/com.github.liuyueyi.media/qrcode-plugin -->
@@ -318,21 +188,6 @@ markdown转html，转图片的封装类， 详细内容查看: [markdown-plugin]
 提供svg文档的渲染，输出图片的封装，详细查看: [svg-plugin使用说明](plugins/svg-plugin/readme.md)
 
 
-<del>
-
-适用于通过github方式导入依赖 （请替换成中央仓库导入方式）
-
-```xml
-<dependency>
-    <groupId>com.github.hui.media</groupId>
-    <artifactId>svg-core</artifactId>
-</dependency>
-```
-
-</del>
-
-中央仓库导入方式
-
 ```xml
 <!-- https://mvnrepository.com/artifact/com.github.liuyueyi.media/svg-core -->
 <dependency>
@@ -346,19 +201,6 @@ markdown转html，转图片的封装类， 详细内容查看: [markdown-plugin]
 
 基于imagic-magic实现的图片编辑插件封装，详细查看: [imagic-plugin使用说明](plugins/imagic-plugin/readme.md)
 
-<del>
-
-适用于通过github方式导入依赖（请替换成中央仓库导入方式）
-
-```xml
-<dependency>
-    <groupId>com.github.hui.media</groupId>
-    <artifactId>imagic-core</artifactId>
-</dependency>
-```
-</del>
-
-中央仓库导入方式
 
 ```xml
 <!-- https://mvnrepository.com/artifact/com.github.liuyueyi.media/imagic-plugin -->
@@ -401,7 +243,7 @@ markdown转html，转图片的封装类， 详细内容查看: [markdown-plugin]
 
 [查看更多二维码详情](https://liuyueyi.github.io/quick-media/#/插件/二维码/二维码插件使用手册)
 
-<font color="red">最新版本2.5，详情查看 [迭代日志](https://liuyueyi.github.io/quick-media/#/%E8%BF%AD%E4%BB%A3/%E6%9B%B4%E6%96%B0%E6%97%A5%E5%BF%97?id=_27-qrcode-plugin)</font>
+<font color="red">最新版本2.5.4，详情查看 [迭代日志](https://liuyueyi.github.io/quick-media/#/%E8%BF%AD%E4%BB%A3/%E6%9B%B4%E6%96%B0%E6%97%A5%E5%BF%97?id=_27-qrcode-plugin)</font>
 
 给出一个实际生成的case如下:
 
@@ -473,6 +315,13 @@ markdown转html，转图片的封装类， 详细内容查看: [markdown-plugin]
 
 ### 扫描关注
 
+**打赏列表**
+
+> 1一分也是❤️，感谢大佬的打赏 (打赏的小伙伴不妨留个备注名)
+
+- [datouliang](https://github.com/datouliang)
+- [*桑]()
+
 **公众号&博客**
 
 ![QrCode](https://gitee.com/liuyueyi/Source/raw/master/img/info/blogInfoV2.png)
@@ -483,11 +332,6 @@ markdown转html，转图片的封装类， 详细内容查看: [markdown-plugin]
 ![pay](https://gitee.com/liuyueyi/Source/raw/master/img/pay/pay.png)
 
 
-**赞助列表**
-
-> 感谢大佬赞助打赏
-
-- [datouliang](https://github.com/datouliang)
 
 ---
 
