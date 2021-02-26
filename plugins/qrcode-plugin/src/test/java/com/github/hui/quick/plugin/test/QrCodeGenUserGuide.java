@@ -2,6 +2,7 @@ package com.github.hui.quick.plugin.test;
 
 import com.github.hui.quick.plugin.base.ColorUtil;
 import com.github.hui.quick.plugin.base.GraphicUtil;
+import com.github.hui.quick.plugin.base.OSUtil;
 import com.github.hui.quick.plugin.image.wrapper.create.ImgCreateOptions;
 import com.github.hui.quick.plugin.image.wrapper.merge.ImgMergeWrapper;
 import com.github.hui.quick.plugin.image.wrapper.merge.cell.ImgCell;
@@ -9,6 +10,7 @@ import com.github.hui.quick.plugin.image.wrapper.merge.cell.TextCell;
 import com.github.hui.quick.plugin.qrcode.wrapper.QrCodeGenWrapper;
 import com.github.hui.quick.plugin.qrcode.wrapper.QrCodeOptions;
 import com.google.zxing.qrcode.decoder.ErrorCorrectionLevel;
+import org.junit.Before;
 import org.junit.Test;
 
 import javax.imageio.ImageIO;
@@ -24,6 +26,15 @@ import java.util.Arrays;
  */
 public class QrCodeGenUserGuide {
 
+    private String prefix = "/tmp";
+
+    @Before
+    public void init() {
+        if (OSUtil.isWinOS()) {
+            prefix = "c://quick-media";
+        }
+    }
+
     /**
      * 默认的二维码生成
      */
@@ -32,7 +43,7 @@ public class QrCodeGenUserGuide {
         try {
             // 生成二维码，并输出为qr.png图片
             String msg = "http://weixin.qq.com/r/FS9waAPEg178rUcL93oH";
-            boolean ans = QrCodeGenWrapper.of(msg).asFile("/tmp/dq.png");
+            boolean ans = QrCodeGenWrapper.of(msg).asFile(prefix + "/dq.png");
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -52,7 +63,7 @@ public class QrCodeGenUserGuide {
                     .setQrStyle(QrCodeOptions.ImgStyle.ROUND)
                     .setQrCornerRadiusRate(0.125F)
                     .setPicType("png")
-                    .asFile("/tmp/dq_corner1.png");
+                    .asFile(prefix + "/dq_corner1.png");
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -74,7 +85,7 @@ public class QrCodeGenUserGuide {
                     .setDetectSpecial()
                     // 二维码背景图
                     .setDrawBgColor(0xffffffff)
-                    .asFile("/tmp/cqr.png");
+                    .asFile(prefix + "/cqr.png");
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -87,7 +98,7 @@ public class QrCodeGenUserGuide {
             String logo = "https://static.oschina.net/uploads/user/283/566591_100.jpeg";
             boolean ans = QrCodeGenWrapper.of(msg)
                     .setLogo(logo)
-                    .asFile("/tmp/lqr0.png");
+                    .asFile(prefix + "/lqr0.png");
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -102,7 +113,7 @@ public class QrCodeGenUserGuide {
                     .setLogo(logo)
                     .setLogoBgColor(0xff808080)
                     .setLogoBorder(true)
-                    .asFile("/tmp/lqr1.png");
+                    .asFile(prefix + "/lqr1.png");
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -118,7 +129,7 @@ public class QrCodeGenUserGuide {
                     .setLogoStyle(QrCodeOptions.LogoStyle.ROUND)
                     .setLogoBgColor(0xffc7c7c7)
                     .setLogoBorder(true)
-                    .asFile("/tmp/lqr2.png");
+                    .asFile(prefix + "/lqr2.png");
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -135,7 +146,7 @@ public class QrCodeGenUserGuide {
                     .setLogoBgColor(0xfffefefe)
                     .setLogoBorderBgColor(0xffc7c7c7)
                     .setLogoBorder(true)
-                    .asFile("/tmp/lqr3.png");
+                    .asFile(prefix + "/lqr3.png");
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -158,7 +169,7 @@ public class QrCodeGenUserGuide {
                     .setLogoBgColor(0xfffefefe)
                     .setLogoBorderBgColor(0xffc7c7c7)
                     .setLogoBorder(true)
-                    .asFile("/tmp/lqr4.png");
+                    .asFile(prefix + "/lqr4.png");
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -181,7 +192,7 @@ public class QrCodeGenUserGuide {
                     .setLogoBorderBgColor(0xffc7c7c7)
                     .setLogoBorder(true)
                     .asBufferedImage();
-//                    .asFile("/tmp/lqr5.png");
+//                    .asFile(prefix + "/lqr5.png");
             System.out.println(img);
         } catch (Exception e) {
             e.printStackTrace();
@@ -204,7 +215,7 @@ public class QrCodeGenUserGuide {
                     .setLogoBgColor(0xfffefefe)
                     .setLogoBorderBgColor(0xffc7c7c7)
                     .setLogoBorder(true)
-                    .asFile("/tmp/lqr6.png");
+                    .asFile(prefix + "/lqr6.png");
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -222,7 +233,7 @@ public class QrCodeGenUserGuide {
                     .setBgImg(bg)
                     .setW(500)
                     .setBgOpacity(0.5f)
-                    .asFile("/tmp/bqr1.png");
+                    .asFile(prefix + "/bqr1.png");
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -240,7 +251,7 @@ public class QrCodeGenUserGuide {
                     // 背景圆角比例
                     .setBgCornerRadiusRate(0.125f)
                     .setBgImgStyle(QrCodeOptions.ImgStyle.ROUND)
-                    .asFile("/tmp/bqr1_c1.png");
+                    .asFile(prefix + "/bqr1_c1.png");
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -262,7 +273,7 @@ public class QrCodeGenUserGuide {
                     .setPadding(0)
                     .setDrawBgColor(0xfff7f7f7)
                     .setBgImgStyle(QrCodeOptions.ImgStyle.CIRCLE)
-                    .asFile("/tmp/bqr2_c2.png");
+                    .asFile(prefix + "/bqr2_c2.png");
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -287,7 +298,7 @@ public class QrCodeGenUserGuide {
                     .setW(260)
                     .setPadding(0)
                     .setDrawBgColor(0xfff7f7f7)
-                    .asFile("/tmp/bqr2.png");
+                    .asFile(prefix + "/bqr2.png");
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -300,14 +311,15 @@ public class QrCodeGenUserGuide {
     public void bgQr3() {
         try {
             String msg = "http://weixin.qq.com/r/FS9waAPEg178rUcL93oH";
-            String bg = "http://img1.juimg.com/180517/355855-1P51H3520817.jpg";
+//            String bg = "http://img1.juimg.com/180517/355855-1P51H3520817.jpg";
+            String bg = "d://bg.jpg";
             boolean ans = QrCodeGenWrapper.of(msg)
                     .setBgImg(bg)
                     .setBgStyle(QrCodeOptions.BgImgStyle.PENETRATE)
                     .setBgW(500)
                     .setBgH(500)
                     .setW(500)
-                    .asFile("/tmp/bqr3.png");
+                    .asFile("d://bqr3.png");
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -323,7 +335,7 @@ public class QrCodeGenUserGuide {
             g2d.setColor(Color.LIGHT_GRAY);
             g2d.fillRect(0, 0, 500, 500);
 
-            Font font = new Font("宋体", Font.BOLD, 500);
+            Font font = new Font("宋体", Font.BOLD, 250);
             g2d.setFont(font);
             g2d.setColor(Color.RED);
             g2d.drawString("码", 0, 500 - g2d.getFontMetrics().getDescent() / 2);
@@ -335,7 +347,7 @@ public class QrCodeGenUserGuide {
                     .setBgW(500)
                     .setBgH(500)
                     .setW(500)
-                    .asFile("/tmp/bqrTxt.png");
+                    .asFile(prefix + "/bqrTxt.png");
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -361,7 +373,7 @@ public class QrCodeGenUserGuide {
                     .setDrawImg(cell)
                     .setDrawBgImg(bgCell)
                     .setDetectSpecial()
-                    .asFile("/tmp/bqr4.png");
+                    .asFile(prefix + "/bqr4.png");
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -378,7 +390,7 @@ public class QrCodeGenUserGuide {
             QrCodeGenWrapper.of(msg)
                     .setW(500)
                     .setDetectImg("detect.png")
-                    .asFile("/tmp/tqr1.png");
+                    .asFile(prefix + "/tqr1.png");
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -397,7 +409,7 @@ public class QrCodeGenUserGuide {
                     .setLDDetectImg("jihe/PDP.png")
                     .setRTDetectImg("love/01.png")
                     .setDiaphaneityFill(true)
-                    .asFile("/tmp/tqr2.png");
+                    .asFile(prefix + "/tqr2.png");
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -410,7 +422,7 @@ public class QrCodeGenUserGuide {
             QrCodeGenWrapper.of(msg)
                     .setDrawStyle(QrCodeOptions.DrawStyle.CIRCLE)
                     .setDrawEnableScale(true)
-                    .asFile("/tmp/tqr3.png");
+                    .asFile(prefix + "/tqr3.png");
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -424,7 +436,7 @@ public class QrCodeGenUserGuide {
                     .setDetectSpecial()
                     .setDrawStyle(QrCodeOptions.DrawStyle.CIRCLE)
                     .setDrawEnableScale(true)
-                    .asFile("/tmp/tqr4.png");
+                    .asFile(prefix + "/tqr4.png");
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -437,7 +449,7 @@ public class QrCodeGenUserGuide {
             boolean ans = QrCodeGenWrapper.of(msg)
                     .setW(400)
                     .setDrawStyle(QrCodeOptions.DrawStyle.RECT)
-                    .asFile("/tmp/dqr0.png");
+                    .asFile(prefix + "/dqr0.png");
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -448,10 +460,10 @@ public class QrCodeGenUserGuide {
         try {
             String msg = "http://weixin.qq.com/r/FS9waAPEg178rUcL93oH";
             boolean ans = QrCodeGenWrapper.of(msg)
-                    .setW(400)
-                    .setDetectSpecial()
+                    .setW(200)
+//                    .setDetectSpecial()
                     .setDrawStyle(QrCodeOptions.DrawStyle.MINI_RECT)
-                    .asFile("/tmp/dqr0_1.png");
+                    .asFile(prefix + "/dqr0_1.png");
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -464,7 +476,7 @@ public class QrCodeGenUserGuide {
             boolean ans = QrCodeGenWrapper.of(msg)
                     .setW(400)
                     .setDrawStyle(QrCodeOptions.DrawStyle.CIRCLE)
-                    .asFile("/tmp/dqr1.png");
+                    .asFile(prefix + "/dqr1.png");
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -477,7 +489,7 @@ public class QrCodeGenUserGuide {
             boolean ans = QrCodeGenWrapper.of(msg)
                     .setW(400)
                     .setDrawStyle(QrCodeOptions.DrawStyle.TRIANGLE)
-                    .asFile("/tmp/dqr2.png");
+                    .asFile(prefix + "/dqr2.png");
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -490,7 +502,7 @@ public class QrCodeGenUserGuide {
             boolean ans = QrCodeGenWrapper.of(msg)
                     .setW(400)
                     .setDrawStyle(QrCodeOptions.DrawStyle.DIAMOND)
-                    .asFile("/tmp/dqr3.png");
+                    .asFile(prefix + "/dqr3.png");
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -503,7 +515,7 @@ public class QrCodeGenUserGuide {
             boolean ans = QrCodeGenWrapper.of(msg)
                     .setW(400)
                     .setDrawStyle(QrCodeOptions.DrawStyle.SEXANGLE)
-                    .asFile("/tmp/dqr4.png");
+                    .asFile(prefix + "/dqr4.png");
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -516,7 +528,7 @@ public class QrCodeGenUserGuide {
             boolean ans = QrCodeGenWrapper.of(msg)
                     .setW(400)
                     .setDrawStyle(QrCodeOptions.DrawStyle.OCTAGON)
-                    .asFile("/tmp/dqr5.png");
+                    .asFile(prefix + "/dqr5.png");
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -531,7 +543,7 @@ public class QrCodeGenUserGuide {
                     // 支持合并成一个大的圆点
                     .setDrawEnableScale(true)
                     .setDrawStyle(QrCodeOptions.DrawStyle.CIRCLE)
-                    .asFile("/tmp/dqr6.png");
+                    .asFile(prefix + "/dqr6.png");
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -545,7 +557,7 @@ public class QrCodeGenUserGuide {
                     .setW(400)
                     .setDrawEnableScale(true)
                     .setDrawStyle(QrCodeOptions.DrawStyle.DIAMOND)
-                    .asFile("/tmp/dqr7.png");
+                    .asFile(prefix + "/dqr7.png");
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -559,7 +571,7 @@ public class QrCodeGenUserGuide {
                     .setW(400)
                     .setDrawEnableScale(true)
                     .setDrawStyle(QrCodeOptions.DrawStyle.SEXANGLE)
-                    .asFile("/tmp/dqr8.png");
+                    .asFile(prefix + "/dqr8.png");
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -573,7 +585,7 @@ public class QrCodeGenUserGuide {
                     .setW(400)
                     .setDrawEnableScale(true)
                     .setDrawStyle(QrCodeOptions.DrawStyle.OCTAGON)
-                    .asFile("/tmp/dqr9.png");
+                    .asFile(prefix + "/dqr9.png");
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -588,7 +600,7 @@ public class QrCodeGenUserGuide {
                     .setDrawStyle(QrCodeOptions.DrawStyle.TXT)
                     .setDrawEnableScale(true)
                     .setPicType("png")
-                    .asFile("/tmp/fontQr0.png");
+                    .asFile(prefix + "/fontQr0.png");
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -605,7 +617,7 @@ public class QrCodeGenUserGuide {
                     .setErrorCorrection(ErrorCorrectionLevel.H)
                     .setDrawStyle(QrCodeOptions.DrawStyle.TXT)
                     .setPicType("png")
-                    .asFile("/tmp/fontQr1.png");
+                    .asFile(prefix + "/fontQr1.png");
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -627,7 +639,7 @@ public class QrCodeGenUserGuide {
                     .setErrorCorrection(ErrorCorrectionLevel.H)
                     .setDrawStyle(QrCodeOptions.DrawStyle.TXT)
                     .setPicType("png")
-                    .asFile("/tmp/fontQr2.png");
+                    .asFile(prefix + "/fontQr2.png");
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -652,7 +664,7 @@ public class QrCodeGenUserGuide {
                     // 当相邻的NxN都是黑色小方块时，放大（慎用，因为部分汉子如 `一` 无法友好的填充2x2的方块）
                     .setDrawEnableScale(true)
                     .setPicType("png")
-                    .asFile("/tmp/fontQr3.png");
+                    .asFile(prefix + "/fontQr3.png");
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -678,7 +690,7 @@ public class QrCodeGenUserGuide {
                     .addImg(2, 2, "jihe/g.png")
                     .addImg(3, 4, "jihe/h.png")
                     .setPicType("png")
-                    .asFile("/tmp/imgQr1.png");
+                    .asFile(prefix + "/imgQr1.png");
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -702,7 +714,7 @@ public class QrCodeGenUserGuide {
                     .addImg(2, 2, "love/003_03.png")
                     .addImg(4, 1, "love/004.png")
                     .addImg(1, 4, "love/004_02.png")
-                    .asFile("/tmp/imgQr2.png");
+                    .asFile(prefix + "/imgQr2.png");
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -721,7 +733,7 @@ public class QrCodeGenUserGuide {
                     .setDrawBgImg("overbg/b.png")
                     .setDrawStyle(QrCodeOptions.DrawStyle.IMAGE)
                     .setDrawImg("overbg/a.png")
-                    .asFile("/tmp/imgQr3.png");
+                    .asFile(prefix + "/imgQr3.png");
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -741,7 +753,7 @@ public class QrCodeGenUserGuide {
                     .setDrawStyle(QrCodeOptions.DrawStyle.IMAGE)
                     .setDrawImg("overbg/a.png")
                     .setDetectSpecial()
-                    .asFile("/tmp/imgQr4.png");
+                    .asFile(prefix + "/imgQr4.png");
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -761,7 +773,7 @@ public class QrCodeGenUserGuide {
                     .setBgImg(bg)
                     .setBgOpacity(0.6f)
                     .setPicType("gif")
-                    .asFile("/tmp/gifQr1.gif");
+                    .asFile(prefix + "/gifQr1.gif");
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -779,7 +791,7 @@ public class QrCodeGenUserGuide {
                     .setBgStartX(20)
                     .setBgStartY(137)
                     .setPicType("gif")
-                    .asFile("/tmp/gifQr2.gif");
+                    .asFile(prefix + "/gifQr2.gif");
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -796,7 +808,7 @@ public class QrCodeGenUserGuide {
                     .setBgH(500)
                     .setBgStyle(QrCodeOptions.BgImgStyle.PENETRATE)
                     .setW(500)
-                    .asFile("/tmp/gifQr3.gif");
+                    .asFile(prefix + "/gifQr3.gif");
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -819,7 +831,7 @@ public class QrCodeGenUserGuide {
                     .setH(1340)
                     .setFtStartX(100)
                     .setFtStartY(130)
-                    .asFile("/tmp/ft1.png");
+                    .asFile(prefix + "/ft1.png");
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -848,7 +860,7 @@ public class QrCodeGenUserGuide {
                     .setDetectImg("eye3.png")
                     .setFtImg(ftImg)
                     .setFtFillColor(Color.WHITE)
-                    .asFile("/tmp/ft2.png");
+                    .asFile(prefix + "/ft2.png");
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -885,7 +897,7 @@ public class QrCodeGenUserGuide {
                     .build();
 
             BufferedImage out = ImgMergeWrapper.merge(Arrays.asList(qrCell, textCell), 600, 500, Color.WHITE);
-            ImageIO.write(out, "jpg", new File("/tmp/ft3.jpg"));
+            ImageIO.write(out, "jpg", new File(prefix + "/ft3.jpg"));
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -910,7 +922,7 @@ public class QrCodeGenUserGuide {
                     .setFtStartX(0)
                     .setFtStartY(-25)
                     .setFtFillColor(Color.WHITE)
-                    .asFile("/tmp/ft_1.gif");
+                    .asFile(prefix + "/ft_1.gif");
 
         } catch (Exception e) {
             e.printStackTrace();

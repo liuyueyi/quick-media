@@ -8,6 +8,8 @@ import com.google.zxing.qrcode.QRCodeReader;
 
 import java.awt.image.BufferedImage;
 import java.io.IOException;
+import java.util.LinkedHashMap;
+import java.util.Map;
 
 /**
  * 解析二维码的工具类
@@ -41,8 +43,17 @@ public class QrCodeDeWrapper {
 
         LuminanceSource source = new BufferedImageLuminanceSource(image);
         BinaryBitmap bitmap = new BinaryBitmap(new HybridBinarizer(source));
-        QRCodeReader qrCodeReader = new QRCodeReader();
-        Result result = qrCodeReader.decode(bitmap);
+//        QRCodeReader qrCodeReader = new QRCodeReader();
+//        Result result = qrCodeReader.decode(bitmap);
+
+        Map<DecodeHintType,Object> hints = new LinkedHashMap<DecodeHintType,Object>();
+        // 解码设置编码方式为：utf-8，
+        hints.put(DecodeHintType.CHARACTER_SET, "utf-8");
+        //优化精度
+        hints.put(DecodeHintType.TRY_HARDER, Boolean.TRUE);
+        //复杂模式，开启PURE_BARCODE模式
+        hints.put(DecodeHintType.PURE_BARCODE, Boolean.TRUE);
+        Result result = new MultiFormatReader().decode(bitmap, hints);
         return result.getText();
     }
 

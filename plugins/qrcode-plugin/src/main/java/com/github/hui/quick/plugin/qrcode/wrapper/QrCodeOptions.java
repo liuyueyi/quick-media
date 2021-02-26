@@ -1673,8 +1673,9 @@ public class QrCodeOptions {
         }, MINI_RECT {
             @Override
             public void draw(Graphics2D g2d, int x, int y, int w, int h, BufferedImage img, String txt) {
-                int offsetX = w >> 2, offsetY = h >> 2;
-                g2d.fillRect(x + offsetX, y + offsetY, offsetX << 1, offsetY << 1);
+                int offsetX = w / 5, offsetY = h / 5;
+                int width = w - offsetX * 2, height = h - offsetY * 2;
+                g2d.fillRect(x + offsetX, y + offsetY, width, height);
             }
 
             @Override
