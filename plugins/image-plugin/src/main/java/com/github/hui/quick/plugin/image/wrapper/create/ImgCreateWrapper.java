@@ -316,13 +316,11 @@ public class ImgCreateWrapper {
                 result = GraphicUtil.createImg(options.getImgW(),
                         Math.max(height + options.getTopPadding() + options.getBottomPadding(), BASE_ADD_H),
                         null);
-                g2d = GraphicUtil.getG2d(result);
             } else if (result.getHeight() < contentH + height + options.getBottomPadding()) {
                 // 超过原来图片高度的上限, 则需要扩充图片长度
                 result = GraphicUtil.createImg(options.getImgW(),
                         result.getHeight() + Math.max(height + options.getBottomPadding(), BASE_ADD_H),
                         result);
-                g2d = GraphicUtil.getG2d(result);
             }
 
 
@@ -336,7 +334,6 @@ public class ImgCreateWrapper {
 
         protected void doDrawContent(String[] strs, int fontHeight) {
             Graphics2D g2d = GraphicUtil.getG2d(result);
-            ;
             int index = 0;
             for (String str : strs) {
                 ImgDrawHelper.drawContent(g2d, str,

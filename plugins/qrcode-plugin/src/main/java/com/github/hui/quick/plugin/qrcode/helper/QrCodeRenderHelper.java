@@ -387,7 +387,7 @@ public class QrCodeRenderHelper {
         int realQrCodeWidth = qrCodeConfig.getW();
         int realQrCodeHeight = qrCodeConfig.getH();
         if (qrCodeWidth != realQrCodeWidth || qrCodeHeight != realQrCodeHeight) {
-            qrCode = GraphicUtil.createImg(realQrCodeWidth, realQrCodeHeight, 0, 0, qrCode);
+            qrCode = GraphicUtil.scaleImg(realQrCodeWidth, realQrCodeHeight, qrCode);
         }
 
         return qrCode;

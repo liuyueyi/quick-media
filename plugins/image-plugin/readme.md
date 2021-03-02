@@ -37,7 +37,7 @@ jar包引入，请注意使用最新的版本
 <dependency>
     <groupId>com.github.hui.media</groupId>
     <artifactId>image-plugin</artifactId>
-    <version>1.0</version>
+    <version>2.5.2</version>
 </dependency>
 ```
 
