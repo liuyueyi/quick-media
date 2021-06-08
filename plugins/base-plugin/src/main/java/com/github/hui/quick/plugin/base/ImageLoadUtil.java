@@ -25,8 +25,9 @@ public class ImageLoadUtil {
             return null;
         }
 
-        InputStream stream = FileReadUtil.getStreamByFileName(path);
-        return ImageIO.read(stream);
+        try (InputStream stream = FileReadUtil.getStreamByFileName(path)) {
+            return ImageIO.read(stream);
+        }
     }
 
     /**
