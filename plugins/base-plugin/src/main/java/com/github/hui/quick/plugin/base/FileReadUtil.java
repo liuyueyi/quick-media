@@ -5,6 +5,7 @@ import com.google.common.base.Joiner;
 import java.io.*;
 import java.net.URL;
 import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -39,7 +40,7 @@ public class FileReadUtil {
      * @param fileName 文件名
      */
     public static Reader createCharRead(String fileName) throws IOException {
-        return new InputStreamReader(getStreamByFileName(fileName), Charset.forName("UTF-8"));
+        return new InputStreamReader(getStreamByFileName(fileName), StandardCharsets.UTF_8);
     }
 
 
@@ -49,7 +50,7 @@ public class FileReadUtil {
      * @param fileName 文件名
      */
     public static BufferedReader createLineRead(String fileName) throws IOException {
-        return new BufferedReader(new InputStreamReader(getStreamByFileName(fileName), Charset.forName("UTF-8")));
+        return new BufferedReader(new InputStreamReader(getStreamByFileName(fileName), StandardCharsets.UTF_8));
     }
 
 
