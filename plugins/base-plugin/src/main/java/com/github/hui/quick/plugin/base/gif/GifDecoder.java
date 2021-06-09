@@ -246,7 +246,7 @@ public class GifDecoder {
     /**
      * Reads GIF image from stream
      *
-     * @param BufferedInputStream containing GIF file.
+     * @param is containing GIF file.
      * @return read status code (0 = no errors)
      */
     public int read(BufferedInputStream is) {
@@ -273,28 +273,33 @@ public class GifDecoder {
     /**
      * Reads GIF image from stream
      *
-     * @param InputStream containing GIF file.
+     * @param is containing GIF file.
      * @return read status code (0 = no errors)
      */
     public int read(InputStream is) {
         init();
-        if (is != null) {
-            if (!(is instanceof BufferedInputStream))
-                is = new BufferedInputStream(is);
-            in = (BufferedInputStream) is;
-            readHeader();
-            if (!err()) {
-                readContents();
-                if (frameCount < 0) {
-                    status = STATUS_FORMAT_ERROR;
-                }
-            }
-        } else {
-            status = STATUS_OPEN_ERROR;
-        }
         try {
-            is.close();
-        } catch (IOException e) {
+            if (is != null) {
+                if (!(is instanceof BufferedInputStream)) {
+                    is = new BufferedInputStream(is);
+                }
+                in = (BufferedInputStream) is;
+                readHeader();
+                if (!err()) {
+                    readContents();
+                    if (frameCount < 0) {
+                        status = STATUS_FORMAT_ERROR;
+                    }
+                }
+            } else {
+                status = STATUS_OPEN_ERROR;
+            }
+        } finally {
+            if (is != null)
+                try {
+                    is.close();
+                } catch (IOException e) {
+                }
         }
         return status;
     }

@@ -362,8 +362,7 @@ public class QrCodeGenWrapper {
 
 
         public Builder setFtImg(InputStream inputStream) throws IOException {
-            try {
-                ByteArrayInputStream target = IoUtil.toByteArrayInputStream(inputStream);
+            try (ByteArrayInputStream target = IoUtil.toByteArrayInputStream(inputStream)) {
                 MediaType media = MediaType.typeOfMagicNum(FileReadUtil.getMagicNum(target));
                 if (media == MediaType.ImageGif) {
                     GifDecoder gifDecoder = new GifDecoder();
@@ -460,8 +459,7 @@ public class QrCodeGenWrapper {
 
 
         public Builder setBgImg(InputStream inputStream) throws IOException {
-            try {
-                ByteArrayInputStream target = IoUtil.toByteArrayInputStream(inputStream);
+            try (ByteArrayInputStream target = IoUtil.toByteArrayInputStream(inputStream)) {
                 MediaType media = MediaType.typeOfMagicNum(FileReadUtil.getMagicNum(target));
                 if (media == MediaType.ImageGif) {
                     GifDecoder gifDecoder = new GifDecoder();

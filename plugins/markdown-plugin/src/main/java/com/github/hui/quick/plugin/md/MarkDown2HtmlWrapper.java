@@ -15,6 +15,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
 import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -74,11 +75,17 @@ public class MarkDown2HtmlWrapper {
      * @param stream
      * @return
      */
-    public static MarkdownEntity ofStream(InputStream stream) {
-        BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(stream, Charset.forName("UTF-8")));
-        List<String> lines = bufferedReader.lines().collect(Collectors.toList());
-        String content = Joiner.on("\n").join(lines);
-        return ofContent(content);
+    public static MarkdownEntity ofStream(InputStream stream) throws IOException {
+        try {
+            BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(stream, StandardCharsets.UTF_8));
+            List<String> lines = bufferedReader.lines().collect(Collectors.toList());
+            String content = Joiner.on("\n").join(lines);
+            return ofContent(content);
+        } finally {
+            if (stream != null) {
+                stream.close();
+            }
+        }
     }
 
 

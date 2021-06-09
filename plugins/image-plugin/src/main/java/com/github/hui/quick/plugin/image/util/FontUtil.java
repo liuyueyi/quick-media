@@ -59,9 +59,10 @@ public class FontUtil {
      * @throws FontFormatException
      */
     public static Font getFont(String fontPath, int style, int size) throws IOException, FontFormatException {
-        InputStream inputStream = FileReadUtil.getStreamByFileName(fontPath);
-        Font font = Font.createFont(Font.TRUETYPE_FONT, inputStream);
-        return font.deriveFont(style, size);
+        try (InputStream inputStream = FileReadUtil.getStreamByFileName(fontPath)) {
+            Font font = Font.createFont(Font.TRUETYPE_FONT, inputStream);
+            return font.deriveFont(style, size);
+        }
     }
 
 
