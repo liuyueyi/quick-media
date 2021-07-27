@@ -9,6 +9,13 @@ import java.util.Optional;
  */
 public class GraphicUtil {
 
+    public static BufferedImage pngToJpg(BufferedImage img, Color bg) {
+        BufferedImage newBufferedImage = new BufferedImage(img.getWidth(),
+                img.getHeight(), BufferedImage.TYPE_INT_RGB);
+        newBufferedImage.createGraphics().drawImage(img, 0, 0, bg, null);
+        return newBufferedImage;
+    }
+
     public static BufferedImage scaleImg(int w, int h, BufferedImage img) {
         BufferedImage bf = new BufferedImage(w, h, img.getType());
         Graphics2D g2d = getG2d(bf);

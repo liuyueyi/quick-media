@@ -3,6 +3,7 @@ package com.github.hui.quick.plugin.qrcode.wrapper;
 import com.github.hui.quick.plugin.base.gif.GifDecoder;
 import com.github.hui.quick.plugin.qrcode.constants.QuickQrUtil;
 import com.github.hui.quick.plugin.qrcode.entity.DotSize;
+import com.github.hui.quick.plugin.qrcode.entity.RenderImgDecorate;
 import com.github.hui.quick.plugin.qrcode.helper.QrCodeRenderHelper;
 import com.google.zxing.EncodeHintType;
 
@@ -1264,7 +1265,7 @@ public class QrCodeOptions {
         /**
          * 渲染图
          */
-        private Map<DotSize, List<BufferedImage>> imgMapper;
+        private Map<DotSize, RenderImgDecorate> imgMapper;
 
         /**
          * 生成二维码的图片样式，一般来讲不推荐使用圆形，默认为normal
@@ -1281,16 +1282,17 @@ public class QrCodeOptions {
         }
 
         public BufferedImage getImage(DotSize dotSize) {
-            List<BufferedImage> list = imgMapper.get(dotSize);
-            if (list == null) {
+            RenderImgDecorate renderImg = imgMapper.get(dotSize);
+            if (renderImg == null) {
                 return null;
             }
-
-            if (list.size() == 1) {
-                return list.get(0);
+            try {
+                return renderImg.getImg();
+            } finally {
+                if (renderImg.empty()) {
+                    imgMapper.remove(dotSize);
+                }
             }
-
-            return list.get(random.nextInt(list.size()));
         }
 
         /**
@@ -1382,11 +1384,11 @@ public class QrCodeOptions {
             this.diaphaneityFill = diaphaneityFill;
         }
 
-        public Map<DotSize, List<BufferedImage>> getImgMapper() {
+        public Map<DotSize, RenderImgDecorate> getImgMapper() {
             return imgMapper;
         }
 
-        public void setImgMapper(Map<DotSize, List<BufferedImage>> imgMapper) {
+        public void setImgMapper(Map<DotSize, RenderImgDecorate> imgMapper) {
             this.imgMapper = imgMapper;
         }
 
@@ -1504,7 +1506,7 @@ public class QrCodeOptions {
             /**
              * 渲染图
              */
-            private Map<DotSize, List<BufferedImage>> imgMapper;
+            private Map<DotSize, RenderImgDecorate> imgMapper;
 
             /**
              * 生成二维码的图片样式，可以是圆角 或 矩形
@@ -1571,7 +1573,17 @@ public class QrCodeOptions {
             }
 
             public DrawOptionsBuilder drawImg(int row, int column, BufferedImage image) {
-                imgMapper.computeIfAbsent(new DotSize(row, column), (k) -> new ArrayList<>()).add(image);
+                return drawImg(row, column, image, RenderImgDecorate.NO_LIMIT_COUNT);
+            }
+
+            public DrawOptionsBuilder drawImg(int row, int column, BufferedImage image, int count) {
+                DotSize dotSize = new DotSize(row, column);
+                RenderImgDecorate decorate = imgMapper.get(dotSize);
+                if (decorate == null) {
+                    imgMapper.put(dotSize, new RenderImgDecorate(image, count));
+                } else {
+                    decorate.addImg(image, count);
+                }
                 return this;
             }
 

@@ -5,6 +5,7 @@ import com.github.hui.quick.plugin.base.constants.MediaType;
 import com.github.hui.quick.plugin.base.gif.GifDecoder;
 import com.github.hui.quick.plugin.base.gif.GifHelper;
 import com.github.hui.quick.plugin.qrcode.constants.QuickQrUtil;
+import com.github.hui.quick.plugin.qrcode.entity.RenderImgDecorate;
 import com.github.hui.quick.plugin.qrcode.helper.QrCodeGenerateHelper;
 import com.google.zxing.EncodeHintType;
 import com.google.zxing.WriterException;
@@ -565,6 +566,7 @@ public class QrCodeGenWrapper {
 
 
         public Builder setDetectImg(BufferedImage detectImg) {
+            detectImg = GraphicUtil.pngToJpg(detectImg, Color.WHITE);
             detectOptions.detectImg(detectImg);
             detectOptions.special(true);
             return this;
@@ -610,6 +612,7 @@ public class QrCodeGenWrapper {
          * @throws IOException
          */
         public Builder setLTDetectImg(BufferedImage detectImg) {
+            detectImg = GraphicUtil.pngToJpg(detectImg, Color.WHITE);
             detectOptions.detectImgLT(detectImg);
             detectOptions.special(true);
             return this;
@@ -655,6 +658,7 @@ public class QrCodeGenWrapper {
          * @throws IOException
          */
         public Builder setRTDetectImg(BufferedImage detectImg) {
+            detectImg = GraphicUtil.pngToJpg(detectImg, Color.WHITE);
             detectOptions.detectImgRT(detectImg);
             detectOptions.special(true);
             return this;
@@ -700,6 +704,7 @@ public class QrCodeGenWrapper {
          * @throws IOException
          */
         public Builder setLDDetectImg(BufferedImage detectImg) {
+            detectImg = GraphicUtil.pngToJpg(detectImg, Color.WHITE);
             detectOptions.detectImgLD(detectImg);
             detectOptions.special(true);
             return this;
@@ -841,17 +846,28 @@ public class QrCodeGenWrapper {
 
 
         public Builder addImg(int row, int col, BufferedImage img) {
+            return addImg(row, col, img, RenderImgDecorate.NO_LIMIT_COUNT);
+        }
+
+
+        public Builder addImg(int row, int col, BufferedImage img, int count) {
             if (img == null) {
                 return this;
             }
             drawOptions.enableScale(true);
-            drawOptions.drawImg(row, col, img);
+            // 将img转成白底的图片
+            img = GraphicUtil.pngToJpg(img, Color.WHITE);
+            drawOptions.drawImg(row, col, img, count);
             return this;
         }
 
         public Builder addImg(int row, int col, String img) throws IOException {
+            return addImg(row, col, img, RenderImgDecorate.NO_LIMIT_COUNT);
+        }
+
+        public Builder addImg(int row, int col, String img, int count) throws IOException {
             try {
-                return addImg(row, col, ImageLoadUtil.getImageByPath(img));
+                return addImg(row, col, ImageLoadUtil.getImageByPath(img), count);
             } catch (IOException e) {
                 log.error("load draw size4img error! e: {}", e);
                 throw new IOException("load draw row:" + row + ", col:" + col + " img error!", e);
@@ -859,8 +875,12 @@ public class QrCodeGenWrapper {
         }
 
         public Builder addImg(int row, int col, InputStream img) throws IOException {
+            return addImg(row, col, img, RenderImgDecorate.NO_LIMIT_COUNT);
+        }
+
+        public Builder addImg(int row, int col, InputStream img, int count) throws IOException {
             try {
-                return addImg(row, col, ImageIO.read(img));
+                return addImg(row, col, ImageIO.read(img), count);
             } catch (IOException e) {
                 log.error("load draw size4img error! e: {}", e);
                 throw new IOException("load draw row:" + row + ", col:" + col + " img error!", e);
