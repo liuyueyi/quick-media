@@ -566,7 +566,6 @@ public class QrCodeGenWrapper {
 
 
         public Builder setDetectImg(BufferedImage detectImg) {
-            detectImg = GraphicUtil.pngToJpg(detectImg, Color.WHITE);
             detectOptions.detectImg(detectImg);
             detectOptions.special(true);
             return this;
@@ -612,7 +611,6 @@ public class QrCodeGenWrapper {
          * @throws IOException
          */
         public Builder setLTDetectImg(BufferedImage detectImg) {
-            detectImg = GraphicUtil.pngToJpg(detectImg, Color.WHITE);
             detectOptions.detectImgLT(detectImg);
             detectOptions.special(true);
             return this;
@@ -629,7 +627,7 @@ public class QrCodeGenWrapper {
             try {
                 return setRTDetectImg(ImageLoadUtil.getImageByPath(detectImg));
             } catch (IOException e) {
-                log.error("load detectImage error! e:{}", e);
+                log.error("load detectImage error! img:{}", detectImg, e);
                 throw new IOException("load detectImage error!", e);
             }
         }
@@ -658,7 +656,6 @@ public class QrCodeGenWrapper {
          * @throws IOException
          */
         public Builder setRTDetectImg(BufferedImage detectImg) {
-            detectImg = GraphicUtil.pngToJpg(detectImg, Color.WHITE);
             detectOptions.detectImgRT(detectImg);
             detectOptions.special(true);
             return this;
@@ -704,7 +701,6 @@ public class QrCodeGenWrapper {
          * @throws IOException
          */
         public Builder setLDDetectImg(BufferedImage detectImg) {
-            detectImg = GraphicUtil.pngToJpg(detectImg, Color.WHITE);
             detectOptions.detectImgLD(detectImg);
             detectOptions.special(true);
             return this;
@@ -856,7 +852,6 @@ public class QrCodeGenWrapper {
             }
             drawOptions.enableScale(true);
             // 将img转成白底的图片
-            img = GraphicUtil.pngToJpg(img, Color.WHITE);
             drawOptions.drawImg(row, col, img, count);
             return this;
         }

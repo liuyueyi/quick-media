@@ -928,4 +928,50 @@ public class QrCodeGenUserGuide {
             e.printStackTrace();
         }
     }
+
+    @Test
+    public void testGenSepical() {
+        try {
+            // 二维码
+            int qrSize = 500;
+            String msg = "http://www.shuzitengfei.com.cn/weixin/yikezhong/";
+            QrCodeGenWrapper.of(msg)
+                    .setErrorCorrection(ErrorCorrectionLevel.M)
+                    .setW(qrSize)
+                    .setH(qrSize)
+                    .setDiaphaneityFill(true) // 透明处用背景色填充
+                    .setDetectSpecial()
+                    .setDrawStyle(QrCodeOptions.DrawStyle.IMAGE)
+//                    .setDrawEnableScale(true)
+                    .setLogo("/Users/user/Documents/qrcode/logo.jpg")
+                    .setLogoRate(12)
+                    .setLTDetectImg("/Users/user/Documents/qrcode/d1.jpg")
+                    .setLDDetectImg("/Users/user/Documents/qrcode/d2.jpg")
+                    .setRTDetectImg("/Users/user/Documents/qrcode/d3.jpg")
+                    .addImg(1, 1, "/Users/user/Documents/qrcode/1_1.png")
+                    .addImg(2, 2, "/Users/user/Documents/qrcode/1_1.png")
+                    .addImg(1, 1, "/Users/user/Documents/qrcode/1_1_2.png")
+//                    .addImg(1, 1, "/Users/user/Documents/qrcode/1_1_3.png")
+                    .addImg(2, 1, "/Users/user/Documents/qrcode/1_2.png")
+                    .addImg(3, 1, "/Users/user/Documents/qrcode/1_3.png")
+                    .addImg(1, 2, "/Users/user/Documents/qrcode/2_1_1.png")
+                    .addImg(1, 3, "/Users/user/Documents/qrcode/2_1_1.png")
+//                    .addImg(1, 4, "/Users/user/Documents/qrcode/2_1_1.png")
+                    .addImg(1, 2, "/Users/user/Documents/qrcode/2_1_2.png")
+                    .addImg(1, 3, "/Users/user/Documents/qrcode/2_1_2.png")
+//                    .addImg(1, 4, "/Users/user/Documents/qrcode/2_1_2.png")
+                    .addImg(2, 2, "/Users/user/Documents/qrcode/2_2.png", 1)
+                    .addImg(3, 2, "/Users/user/Documents/qrcode/2_3.png", 1)
+                    .addImg(3, 2, "/Users/user/Documents/qrcode/2_3_2.png")
+                    .addImg(2, 2, "/Users/user/Documents/qrcode/3_3.png", 1)
+//                    .addImg(3, 3, "/Users/user/Documents/qrcode/3_3.png", 1)
+                    .addImg(3, 3, "/Users/user/Documents/qrcode/3_3_2.png", 1)
+//                    .addImg(2, 8, "/Users/user/Documents/qrcode/4_1.png")
+//                    .addImg(2, 3, "/Users/user/Documents/qrcode/6_3.png", 2)
+                    .asFile(prefix + "/out.jpg");
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
 }
