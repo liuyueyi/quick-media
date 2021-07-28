@@ -5,7 +5,7 @@ import com.github.hui.quick.plugin.base.constants.MediaType;
 import com.github.hui.quick.plugin.base.gif.GifDecoder;
 import com.github.hui.quick.plugin.base.gif.GifHelper;
 import com.github.hui.quick.plugin.qrcode.constants.QuickQrUtil;
-import com.github.hui.quick.plugin.qrcode.entity.RenderImgDecorate;
+import com.github.hui.quick.plugin.qrcode.entity.RenderImgResources;
 import com.github.hui.quick.plugin.qrcode.helper.QrCodeGenerateHelper;
 import com.google.zxing.EncodeHintType;
 import com.google.zxing.WriterException;
@@ -549,7 +549,7 @@ public class QrCodeGenWrapper {
             try {
                 return setDetectImg(ImageLoadUtil.getImageByPath(detectImg));
             } catch (IOException e) {
-                log.error("load detectImage error! e:{}", e);
+                log.error("load detectImage error! img:{}", detectImg, e);
                 throw new IOException("load detectImage error!", e);
             }
         }
@@ -559,7 +559,7 @@ public class QrCodeGenWrapper {
             try {
                 return setDetectImg(ImageIO.read(detectImg));
             } catch (IOException e) {
-                log.error("load detectImage error! e:{}", e);
+                log.error("load detectImage error!", e);
                 throw new IOException("load detectImage error!", e);
             }
         }
@@ -582,7 +582,7 @@ public class QrCodeGenWrapper {
             try {
                 return setLTDetectImg(ImageLoadUtil.getImageByPath(detectImg));
             } catch (IOException e) {
-                log.error("load detectImage error! e:{}", e);
+                log.error("load detectImage error! img:{}",detectImg, e);
                 throw new IOException("load detectImage error!", e);
             }
         }
@@ -643,7 +643,7 @@ public class QrCodeGenWrapper {
             try {
                 return setRTDetectImg(ImageIO.read(detectImg));
             } catch (IOException e) {
-                log.error("load detectImage error! e:{}", e);
+                log.error("load detectImage error! img:{}", detectImg, e);
                 throw new IOException("load detectImage error!", e);
             }
         }
@@ -672,7 +672,7 @@ public class QrCodeGenWrapper {
             try {
                 return setLDDetectImg(ImageLoadUtil.getImageByPath(detectImg));
             } catch (IOException e) {
-                log.error("load detectImage error! e:{}", e);
+                log.error("load detectImage error! img:{}", detectImg, e);
                 throw new IOException("load detectImage error!", e);
             }
         }
@@ -688,7 +688,7 @@ public class QrCodeGenWrapper {
             try {
                 return setLDDetectImg(ImageIO.read(detectImg));
             } catch (IOException e) {
-                log.error("load detectImage error! e:{}", e);
+                log.error("load detectImage error! img:{}", detectImg, e);
                 throw new IOException("load detectImage error!", e);
             }
         }
@@ -792,7 +792,7 @@ public class QrCodeGenWrapper {
             try {
                 return setDrawBgImg(ImageLoadUtil.getImageByPath(img));
             } catch (IOException e) {
-                log.error("load drawBgImg error! e:{}", e);
+                log.error("load drawBgImg error! img:{}", img, e);
                 throw new IOException("load drawBgImg error!", e);
             }
         }
@@ -801,7 +801,7 @@ public class QrCodeGenWrapper {
             try {
                 return setDrawBgImg(ImageIO.read(img));
             } catch (IOException e) {
-                log.error("load drawBgImg error! e:{}", e);
+                log.error("load drawBgImg error!", e);
                 throw new IOException("load drawBgImg error!", e);
             }
         }
@@ -821,7 +821,7 @@ public class QrCodeGenWrapper {
             try {
                 return setDrawImg(ImageLoadUtil.getImageByPath(img));
             } catch (IOException e) {
-                log.error("load draw img error! e: {}", e);
+                log.error("load draw img error! img: {}", img, e);
                 throw new IOException("load draw img error!", e);
             }
         }
@@ -830,7 +830,7 @@ public class QrCodeGenWrapper {
             try {
                 return setDrawImg(ImageIO.read(input));
             } catch (IOException e) {
-                log.error("load draw img error! e: {}", e);
+                log.error("load draw img error!", e);
                 throw new IOException("load draw img error!", e);
             }
         }
@@ -842,7 +842,7 @@ public class QrCodeGenWrapper {
 
 
         public Builder addImg(int row, int col, BufferedImage img) {
-            return addImg(row, col, img, RenderImgDecorate.NO_LIMIT_COUNT);
+            return addImg(row, col, img, RenderImgResources.NO_LIMIT_COUNT);
         }
 
 
@@ -857,27 +857,27 @@ public class QrCodeGenWrapper {
         }
 
         public Builder addImg(int row, int col, String img) throws IOException {
-            return addImg(row, col, img, RenderImgDecorate.NO_LIMIT_COUNT);
+            return addImg(row, col, img, RenderImgResources.NO_LIMIT_COUNT);
         }
 
         public Builder addImg(int row, int col, String img, int count) throws IOException {
             try {
                 return addImg(row, col, ImageLoadUtil.getImageByPath(img), count);
             } catch (IOException e) {
-                log.error("load draw size4img error! e: {}", e);
+                log.error("load draw size4img error! img: {}", img, e);
                 throw new IOException("load draw row:" + row + ", col:" + col + " img error!", e);
             }
         }
 
         public Builder addImg(int row, int col, InputStream img) throws IOException {
-            return addImg(row, col, img, RenderImgDecorate.NO_LIMIT_COUNT);
+            return addImg(row, col, img, RenderImgResources.NO_LIMIT_COUNT);
         }
 
         public Builder addImg(int row, int col, InputStream img, int count) throws IOException {
             try {
                 return addImg(row, col, ImageIO.read(img), count);
             } catch (IOException e) {
-                log.error("load draw size4img error! e: {}", e);
+                log.error("load draw size4img error!", e);
                 throw new IOException("load draw row:" + row + ", col:" + col + " img error!", e);
             }
         }

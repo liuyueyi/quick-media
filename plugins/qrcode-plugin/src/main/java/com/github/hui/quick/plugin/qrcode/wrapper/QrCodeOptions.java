@@ -3,7 +3,7 @@ package com.github.hui.quick.plugin.qrcode.wrapper;
 import com.github.hui.quick.plugin.base.gif.GifDecoder;
 import com.github.hui.quick.plugin.qrcode.constants.QuickQrUtil;
 import com.github.hui.quick.plugin.qrcode.entity.DotSize;
-import com.github.hui.quick.plugin.qrcode.entity.RenderImgDecorate;
+import com.github.hui.quick.plugin.qrcode.entity.RenderImgResources;
 import com.github.hui.quick.plugin.qrcode.helper.QrCodeRenderHelper;
 import com.google.zxing.EncodeHintType;
 
@@ -12,8 +12,6 @@ import java.awt.geom.Ellipse2D;
 import java.awt.image.BufferedImage;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.List;
-import java.util.ArrayList;
 import java.util.Objects;
 import java.util.Random;
 
@@ -1265,7 +1263,7 @@ public class QrCodeOptions {
         /**
          * 渲染图
          */
-        private Map<DotSize, RenderImgDecorate> imgMapper;
+        private RenderImgResources imgResources;
 
         /**
          * 生成二维码的图片样式，一般来讲不推荐使用圆形，默认为normal
@@ -1282,17 +1280,7 @@ public class QrCodeOptions {
         }
 
         public BufferedImage getImage(DotSize dotSize) {
-            RenderImgDecorate renderImg = imgMapper.get(dotSize);
-            if (renderImg == null) {
-                return null;
-            }
-            try {
-                return renderImg.getImg();
-            } finally {
-                if (renderImg.empty()) {
-                    imgMapper.remove(dotSize);
-                }
-            }
+            return imgResources.getImage(dotSize);
         }
 
         /**
@@ -1384,12 +1372,12 @@ public class QrCodeOptions {
             this.diaphaneityFill = diaphaneityFill;
         }
 
-        public Map<DotSize, RenderImgDecorate> getImgMapper() {
-            return imgMapper;
+        public RenderImgResources getImgResources() {
+            return imgResources;
         }
 
-        public void setImgMapper(Map<DotSize, RenderImgDecorate> imgMapper) {
-            this.imgMapper = imgMapper;
+        public void setImgResources(RenderImgResources imgResources) {
+            this.imgResources = imgResources;
         }
 
         public ImgStyle getQrStyle() {
@@ -1422,14 +1410,14 @@ public class QrCodeOptions {
                     Objects.equals(bgColor, that.bgColor) && Objects.equals(bgImg, that.bgImg) &&
                     drawStyle == that.drawStyle && Objects.equals(text, that.text) &&
                     Objects.equals(fontName, that.fontName) && txtMode == that.txtMode &&
-                    Objects.equals(imgMapper, that.imgMapper) && qrStyle == that.qrStyle &&
+                    Objects.equals(imgResources, that.imgResources) && qrStyle == that.qrStyle &&
                     Objects.equals(cornerRadius, that.cornerRadius);
         }
 
         @Override
         public int hashCode() {
             return Objects.hash(preColor, bgColor, bgImg, drawStyle, text, fontName, txtMode, fontStyle, enableScale,
-                    diaphaneityFill, imgMapper, qrStyle, cornerRadius);
+                    diaphaneityFill, imgResources, qrStyle, cornerRadius);
         }
 
         @Override
@@ -1437,7 +1425,7 @@ public class QrCodeOptions {
             return "DrawOptions{" + "preColor=" + preColor + ", bgColor=" + bgColor + ", bgImg=" + bgImg +
                     ", drawStyle=" + drawStyle + ", text='" + text + '\'' + ", fontName='" + fontName + '\'' +
                     ", txtMode=" + txtMode + ", fontStyle=" + fontStyle + ", enableScale=" + enableScale +
-                    ", diaphaneityFill=" + diaphaneityFill + ", imgMapper=" + imgMapper + ", qrStyle=" + qrStyle +
+                    ", diaphaneityFill=" + diaphaneityFill + ", imgMapper=" + imgResources + ", qrStyle=" + qrStyle +
                     ", cornerRadius=" + cornerRadius + '}';
         }
 
@@ -1506,7 +1494,7 @@ public class QrCodeOptions {
             /**
              * 渲染图
              */
-            private Map<DotSize, RenderImgDecorate> imgMapper;
+            private RenderImgResources imgResources;
 
             /**
              * 生成二维码的图片样式，可以是圆角 或 矩形
@@ -1517,10 +1505,6 @@ public class QrCodeOptions {
              * 圆角弧度，默认宽高的 1/8
              */
             private Float cornerRadius;
-
-            public DrawOptionsBuilder() {
-                imgMapper = new HashMap<>();
-            }
 
             public DrawOptionsBuilder preColor(Color preColor) {
                 this.preColor = preColor;
@@ -1573,17 +1557,14 @@ public class QrCodeOptions {
             }
 
             public DrawOptionsBuilder drawImg(int row, int column, BufferedImage image) {
-                return drawImg(row, column, image, RenderImgDecorate.NO_LIMIT_COUNT);
+                return drawImg(row, column, image, RenderImgResources.NO_LIMIT_COUNT);
             }
 
             public DrawOptionsBuilder drawImg(int row, int column, BufferedImage image, int count) {
-                DotSize dotSize = new DotSize(row, column);
-                RenderImgDecorate decorate = imgMapper.get(dotSize);
-                if (decorate == null) {
-                    imgMapper.put(dotSize, new RenderImgDecorate(image, count));
-                } else {
-                    decorate.addImg(image, count);
+                if (imgResources == null) {
+                    imgResources = new RenderImgResources();
                 }
+                imgResources.addImage(row, column, count, image);
                 return this;
             }
 
@@ -1604,7 +1585,7 @@ public class QrCodeOptions {
                 drawOptions.setPreColor(this.preColor);
                 drawOptions.setDrawStyle(this.drawStyle);
                 drawOptions.setEnableScale(this.enableScale);
-                drawOptions.setImgMapper(this.imgMapper);
+                drawOptions.setImgResources(this.imgResources);
                 drawOptions.setDiaphaneityFill(this.diaphaneityFill);
                 drawOptions.setText(text == null ? QuickQrUtil.DEFAULT_QR_TXT : text);
                 drawOptions.setTxtMode(txtMode == null ? TxtMode.ORDER : txtMode);
