@@ -18,7 +18,7 @@ public class RenderImgResourcesV2 {
     /**
      * 兜底的1x1的渲染图
      */
-    private RenderImgDecorate defaultImgDecorate;
+    private RenderImgResources.ImgDecorate defaultImgDecorate;
 
     public List<RenderSource> getSourceList() {
         return sourceList;
@@ -114,7 +114,7 @@ public class RenderImgResourcesV2 {
         }
 
         public void autoUpdateCount() {
-            if (count == RenderImgDecorate.NO_LIMIT_COUNT) {
+            if (count == RenderImgResources.NO_LIMIT_COUNT) {
                 return;
             }
             count -= 1;
