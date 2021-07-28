@@ -4,7 +4,7 @@ import com.github.hui.quick.plugin.base.gif.GifDecoder;
 import com.github.hui.quick.plugin.qrcode.constants.QuickQrUtil;
 import com.github.hui.quick.plugin.qrcode.entity.DotSize;
 import com.github.hui.quick.plugin.qrcode.entity.RenderImgDecorate;
-import com.github.hui.quick.plugin.qrcode.entity.RenderImgResources;
+import com.github.hui.quick.plugin.qrcode.entity.RenderImgResourcesV2;
 import com.github.hui.quick.plugin.qrcode.helper.QrCodeRenderHelper;
 import com.google.zxing.EncodeHintType;
 
@@ -13,10 +13,7 @@ import java.awt.geom.Ellipse2D;
 import java.awt.image.BufferedImage;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.List;
-import java.util.ArrayList;
 import java.util.Objects;
-import java.util.Random;
 
 /**
  * Created by yihui on 2017/7/17.
@@ -1279,7 +1276,7 @@ public class QrCodeOptions {
         /**
          * v2 版本图片渲染资源
          */
-        private RenderImgResources imgResourcesForV2;
+        private RenderImgResourcesV2 imgResourcesForV2;
 
         public BufferedImage getImage(int row, int col) {
             return getImage(DotSize.create(row, col));
@@ -1396,11 +1393,11 @@ public class QrCodeOptions {
             this.imgMapper = imgMapper;
         }
 
-        public void setImgResourcesForV2(RenderImgResources imgResourcesForV2) {
+        public void setImgResourcesForV2(RenderImgResourcesV2 imgResourcesForV2) {
             this.imgResourcesForV2 = imgResourcesForV2;
         }
 
-        public RenderImgResources getImgResourcesForV2() {
+        public RenderImgResourcesV2 getImgResourcesForV2() {
             return imgResourcesForV2;
         }
 

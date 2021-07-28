@@ -11,7 +11,7 @@ import java.util.Map;
  * @author yihui
  * @date 2021/7/28
  */
-public class RenderImgResources {
+public class RenderImgResourcesV2 {
 
     private List<RenderSource> sourceList;
 

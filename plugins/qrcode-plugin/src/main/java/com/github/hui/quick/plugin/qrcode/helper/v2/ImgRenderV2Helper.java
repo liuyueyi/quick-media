@@ -1,6 +1,6 @@
 package com.github.hui.quick.plugin.qrcode.helper.v2;
 
-import com.github.hui.quick.plugin.qrcode.entity.RenderImgResources;
+import com.github.hui.quick.plugin.qrcode.entity.RenderImgResourcesV2;
 import com.github.hui.quick.plugin.qrcode.wrapper.QrCodeOptions;
 import com.google.zxing.qrcode.encoder.ByteMatrix;
 
@@ -14,8 +14,8 @@ import java.awt.image.BufferedImage;
  * @date 2021/7/28
  */
 public class ImgRenderV2Helper {
-    public static void drawImg(Graphics2D g2d, ByteMatrix matrix, RenderImgResources imgResources, int leftPadding, int topPadding, int infoSize) {
-        for (RenderImgResources.RenderSource renderSource : imgResources.getSourceList()) {
+    public static void drawImg(Graphics2D g2d, ByteMatrix matrix, RenderImgResourcesV2 imgResources, int leftPadding, int topPadding, int infoSize) {
+        for (RenderImgResourcesV2.RenderSource renderSource : imgResources.getSourceList()) {
             renderSpecialResource(g2d, matrix, renderSource, leftPadding, topPadding, infoSize);
         }
 
@@ -31,7 +31,7 @@ public class ImgRenderV2Helper {
         }
     }
 
-    private static void renderSpecialResource(Graphics2D g2d, ByteMatrix matrix, RenderImgResources.RenderSource renderSource,
+    private static void renderSpecialResource(Graphics2D g2d, ByteMatrix matrix, RenderImgResourcesV2.RenderSource renderSource,
                                               int leftPadding, int topPadding, int infoSize) {
         if (renderSource.countOver()) return;
         for (int x = 0; x < matrix.getWidth(); x++) {
@@ -47,7 +47,7 @@ public class ImgRenderV2Helper {
         }
     }
 
-    private static boolean match(ByteMatrix matrix, RenderImgResources.RenderSource renderSource, int startX, int startY) {
+    private static boolean match(ByteMatrix matrix, RenderImgResourcesV2.RenderSource renderSource, int startX, int startY) {
         // 要求矩阵的1点图，能完全覆盖 renderSource
         for (int x = 0; x < renderSource.getCol(); x++) {
             for (int y = 0; y < renderSource.getRow(); y++) {
@@ -60,7 +60,7 @@ public class ImgRenderV2Helper {
         return true;
     }
 
-    private static void renderImg(Graphics2D g2d, ByteMatrix matrix, RenderImgResources.RenderSource renderSource, int x, int y,
+    private static void renderImg(Graphics2D g2d, ByteMatrix matrix, RenderImgResourcesV2.RenderSource renderSource, int x, int y,
                                   int leftPadding, int topPadding, int infoSize) {
         renderSource.autoUpdateCount();
         BufferedImage img = renderSource.getImg();
