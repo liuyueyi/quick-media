@@ -48,7 +48,7 @@ public class RenderImgDecorate {
         imgList.add(new RenderImg(img, cnt));
     }
 
-    public BufferedImage getImg() {
+    public BufferedImage getImg(DotSize dotSize) {
         if (imgList.size() == 0) {
             return null;
         }
@@ -62,8 +62,13 @@ public class RenderImgDecorate {
             return img.img;
         } else {
             // 次数用完
+            if (imgList.size() == 1 && dotSize.getRow() == 1 && dotSize.getCol() == 1) {
+                // 兜底的不允许删除
+                return imgList.get(0).img;
+            }
+
             imgList.remove(index);
-            return getImg();
+            return getImg(dotSize);
         }
     }
 

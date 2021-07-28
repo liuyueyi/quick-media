@@ -4,6 +4,7 @@ import com.github.hui.quick.plugin.base.GraphicUtil;
 import com.github.hui.quick.plugin.base.ImageOperateUtil;
 import com.github.hui.quick.plugin.qrcode.constants.QuickQrUtil;
 import com.github.hui.quick.plugin.qrcode.entity.DotSize;
+import com.github.hui.quick.plugin.qrcode.helper.v2.ImgRenderV2Helper;
 import com.github.hui.quick.plugin.qrcode.wrapper.BitMatrixEx;
 import com.github.hui.quick.plugin.qrcode.wrapper.QrCodeOptions;
 import com.google.zxing.qrcode.encoder.ByteMatrix;
@@ -337,27 +338,48 @@ public class QrCodeRenderHelper {
         int matrixH = bitMatrix.getByteMatrix().getHeight();
 
         QrCodeOptions.DrawStyle drawStyle = drawOptions.getDrawStyle();
-        DetectLocation detectLocation;
-        for (int x = 0; x < matrixW; x++) {
-            for (int y = 0; y < matrixH; y++) {
-                detectLocation = inDetectCornerArea(x, y, matrixW, matrixH, detectCornerSize);
-                if (bitMatrix.getByteMatrix().get(x, y) == 0) {
-                    // 探测图形内部的元素与二维码的01点图绘制逻辑分开
-                    // 绘制二维码中不在探测图形内部的0点图
-                    if (!detectLocation.detectedArea() || !qrCodeConfig.getDetectOptions().getSpecial()) {
-                        drawQrDotBgImg(qrCodeConfig, g2, leftPadding, topPadding, infoSize, x, y);
-                    }
-                    continue;
-                }
+        if (drawStyle == QrCodeOptions.DrawStyle.IMAGE_V2) {
+            // 若探测图形特殊绘制，则提前处理掉
+            if (qrCodeConfig.getDetectOptions().getSpecial()) {
+                for (int x = 0; x < matrixW; x++) {
+                    for (int y = 0; y < matrixH; y++) {
+                        DetectLocation detectLocation = inDetectCornerArea(x, y, matrixW, matrixH, detectCornerSize);
+                        if (!detectLocation.detectedArea() || bitMatrix.getByteMatrix().get(x, y) == 0) {
+                            continue;
+                        }
 
-                if (detectLocation.detectedArea() && qrCodeConfig.getDetectOptions().getSpecial()) {
-                    // 绘制三个位置探测图形
-                    drawDetectImg(qrCodeConfig, g2, bitMatrix, matrixW, matrixH, leftPadding, topPadding, infoSize,
-                            detectCornerSize, x, y, detectOutColor, detectInnerColor, detectLocation);
-                } else {
-                    g2.setColor(preColor);
-                    // 绘制二维码的1点图
-                    drawQrDotImg(qrCodeConfig, drawStyle, g2, bitMatrix, leftPadding, topPadding, infoSize, x, y);
+                        if (detectLocation.detectedArea() && qrCodeConfig.getDetectOptions().getSpecial()) {
+                            // 绘制三个位置探测图形
+                            drawDetectImg(qrCodeConfig, g2, bitMatrix, matrixW, matrixH, leftPadding, topPadding, infoSize,
+                                    detectCornerSize, x, y, detectOutColor, detectInnerColor, detectLocation);
+                        }
+                    }
+                }
+            }
+            ImgRenderV2Helper.drawImg(g2, bitMatrix.getByteMatrix(), drawOptions.getImgResourcesForV2(), leftPadding, topPadding, infoSize);
+        } else {
+            DetectLocation detectLocation;
+            for (int x = 0; x < matrixW; x++) {
+                for (int y = 0; y < matrixH; y++) {
+                    detectLocation = inDetectCornerArea(x, y, matrixW, matrixH, detectCornerSize);
+                    if (bitMatrix.getByteMatrix().get(x, y) == 0) {
+                        // 探测图形内部的元素与二维码的01点图绘制逻辑分开
+                        // 绘制二维码中不在探测图形内部的0点图
+                        if (!detectLocation.detectedArea() || !qrCodeConfig.getDetectOptions().getSpecial()) {
+                            drawQrDotBgImg(qrCodeConfig, g2, leftPadding, topPadding, infoSize, x, y);
+                        }
+                        continue;
+                    }
+
+                    if (detectLocation.detectedArea() && qrCodeConfig.getDetectOptions().getSpecial()) {
+                        // 绘制三个位置探测图形
+                        drawDetectImg(qrCodeConfig, g2, bitMatrix, matrixW, matrixH, leftPadding, topPadding, infoSize,
+                                detectCornerSize, x, y, detectOutColor, detectInnerColor, detectLocation);
+                    } else {
+                        g2.setColor(preColor);
+                        // 绘制二维码的1点图
+                        drawQrDotImg(qrCodeConfig, drawStyle, g2, bitMatrix, leftPadding, topPadding, infoSize, x, y);
+                    }
                 }
             }
         }

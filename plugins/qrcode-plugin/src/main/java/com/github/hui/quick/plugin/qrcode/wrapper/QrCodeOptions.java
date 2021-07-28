@@ -4,6 +4,7 @@ import com.github.hui.quick.plugin.base.gif.GifDecoder;
 import com.github.hui.quick.plugin.qrcode.constants.QuickQrUtil;
 import com.github.hui.quick.plugin.qrcode.entity.DotSize;
 import com.github.hui.quick.plugin.qrcode.entity.RenderImgDecorate;
+import com.github.hui.quick.plugin.qrcode.entity.RenderImgResources;
 import com.github.hui.quick.plugin.qrcode.helper.QrCodeRenderHelper;
 import com.google.zxing.EncodeHintType;
 
@@ -1205,7 +1206,6 @@ public class QrCodeOptions {
      * 绘制二维码的配置信息
      */
     public static class DrawOptions {
-        private Random random = new Random();
         /**
          * 着色颜色
          */
@@ -1276,6 +1276,10 @@ public class QrCodeOptions {
          * 圆角的弧度，默认为 1 / 8
          */
         private Float cornerRadius;
+        /**
+         * v2 版本图片渲染资源
+         */
+        private RenderImgResources imgResourcesForV2;
 
         public BufferedImage getImage(int row, int col) {
             return getImage(DotSize.create(row, col));
@@ -1287,7 +1291,7 @@ public class QrCodeOptions {
                 return null;
             }
             try {
-                return renderImg.getImg();
+                return renderImg.getImg(dotSize);
             } finally {
                 if (renderImg.empty()) {
                     imgMapper.remove(dotSize);
@@ -1390,6 +1394,14 @@ public class QrCodeOptions {
 
         public void setImgMapper(Map<DotSize, RenderImgDecorate> imgMapper) {
             this.imgMapper = imgMapper;
+        }
+
+        public void setImgResourcesForV2(RenderImgResources imgResourcesForV2) {
+            this.imgResourcesForV2 = imgResourcesForV2;
+        }
+
+        public RenderImgResources getImgResourcesForV2() {
+            return imgResourcesForV2;
         }
 
         public ImgStyle getQrStyle() {
@@ -1791,7 +1803,20 @@ public class QrCodeOptions {
             public boolean expand(DotSize dotSize) {
                 return dotSize.getRow() == dotSize.getCol();
             }
-        };
+        },
+
+        IMAGE_V2 {
+            @Override
+            public void draw(Graphics2D g2d, int x, int y, int w, int h, BufferedImage img, String txt) {
+                g2d.drawImage(img.getScaledInstance(w, h, Image.SCALE_SMOOTH), x, y, null);
+            }
+
+            @Override
+            public boolean expand(DotSize dotSize) {
+                return true;
+            }
+        }
+        ;
 
         private static Map<String, DrawStyle> map;
 
