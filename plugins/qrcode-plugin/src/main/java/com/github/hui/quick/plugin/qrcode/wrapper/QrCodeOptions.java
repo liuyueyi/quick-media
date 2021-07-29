@@ -1508,6 +1508,11 @@ public class QrCodeOptions {
             private RenderImgResources imgResources;
 
             /**
+             * v2版渲染图
+             */
+            private RenderImgResourcesV2 imgResourcesV2;
+
+            /**
              * 生成二维码的图片样式，可以是圆角 或 矩形
              */
             private ImgStyle qrStyle;
@@ -1579,6 +1584,10 @@ public class QrCodeOptions {
                 return this;
             }
 
+            public void setImgResourcesV2(RenderImgResourcesV2 imgResourcesV2) {
+                this.imgResourcesV2 = imgResourcesV2;
+            }
+
             public DrawOptionsBuilder qrStyle(ImgStyle qrStyle) {
                 this.qrStyle = qrStyle;
                 return this;
@@ -1597,6 +1606,7 @@ public class QrCodeOptions {
                 drawOptions.setDrawStyle(this.drawStyle);
                 drawOptions.setEnableScale(this.enableScale);
                 drawOptions.setImgResources(this.imgResources);
+                drawOptions.setImgResourcesForV2(this.imgResourcesV2);
                 drawOptions.setDiaphaneityFill(this.diaphaneityFill);
                 drawOptions.setText(text == null ? QuickQrUtil.DEFAULT_QR_TXT : text);
                 drawOptions.setTxtMode(txtMode == null ? TxtMode.ORDER : txtMode);

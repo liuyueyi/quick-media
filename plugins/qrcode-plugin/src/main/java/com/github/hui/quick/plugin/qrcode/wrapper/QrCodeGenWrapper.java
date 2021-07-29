@@ -6,6 +6,7 @@ import com.github.hui.quick.plugin.base.gif.GifDecoder;
 import com.github.hui.quick.plugin.base.gif.GifHelper;
 import com.github.hui.quick.plugin.qrcode.constants.QuickQrUtil;
 import com.github.hui.quick.plugin.qrcode.entity.RenderImgResources;
+import com.github.hui.quick.plugin.qrcode.entity.RenderImgResourcesV2;
 import com.github.hui.quick.plugin.qrcode.helper.QrCodeGenerateHelper;
 import com.google.zxing.EncodeHintType;
 import com.google.zxing.WriterException;
@@ -851,7 +852,6 @@ public class QrCodeGenWrapper {
                 return this;
             }
             drawOptions.enableScale(true);
-            // 将img转成白底的图片
             drawOptions.drawImg(row, col, img, count);
             return this;
         }
@@ -880,6 +880,11 @@ public class QrCodeGenWrapper {
                 log.error("load draw size4img error!", e);
                 throw new IOException("load draw row:" + row + ", col:" + col + " img error!", e);
             }
+        }
+
+        public Builder setImgResourcesForV2(RenderImgResourcesV2 imgResourcesForV2) {
+            drawOptions.setImgResourcesV2(imgResourcesForV2);
+            return this;
         }
 
         /**

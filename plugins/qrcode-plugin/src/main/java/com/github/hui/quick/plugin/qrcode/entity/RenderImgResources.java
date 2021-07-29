@@ -25,7 +25,7 @@ public class RenderImgResources {
             return null;
         }
         try {
-            return renderImg.getImg(dotSize);
+            return renderImg.getImg();
         } finally {
             if (renderImg.empty()) {
                 imgMapper.remove(dotSize);
@@ -50,22 +50,6 @@ public class RenderImgResources {
             return imgList.isEmpty();
         }
 
-        public static class RenderImg {
-            /**
-             * 绘制图
-             */
-            BufferedImage img;
-            /**
-             * -1表示不限次数， >1 表示最多出现的次数
-             */
-            int count;
-
-            public RenderImg(BufferedImage img, int count) {
-                this.img = img;
-                this.count = count;
-            }
-        }
-
         public ImgDecorate(BufferedImage img) {
             this(img, NO_LIMIT_COUNT);
         }
@@ -79,7 +63,7 @@ public class RenderImgResources {
             imgList.add(new RenderImg(img, cnt));
         }
 
-        public BufferedImage getImg(DotSize dotSize) {
+        public BufferedImage getImg() {
             if (imgList.size() == 0) {
                 return null;
             }
@@ -90,12 +74,30 @@ public class RenderImgResources {
                 return img.img;
             } else if (img.count > 0) {
                 img.count -= 1;
+                if (img.count == 0) {
+                    imgList.remove(index);
+                }
                 return img.img;
-            } else {
-                // 次数用完
-                imgList.remove(index);
-                return getImg(dotSize);
             }
+
+            // 次数用完
+            return getImg();
+        }
+    }
+
+    public static class RenderImg {
+        /**
+         * 绘制图
+         */
+        BufferedImage img;
+        /**
+         * -1表示不限次数， >1 表示最多出现的次数
+         */
+        int count;
+
+        public RenderImg(BufferedImage img, int count) {
+            this.img = img;
+            this.count = count;
         }
     }
 }

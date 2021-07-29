@@ -352,6 +352,7 @@ public class QrCodeRenderHelper {
                             // 绘制三个位置探测图形
                             drawDetectImg(qrCodeConfig, g2, bitMatrix, matrixW, matrixH, leftPadding, topPadding, infoSize,
                                     detectCornerSize, x, y, detectOutColor, detectInnerColor, detectLocation);
+                            bitMatrix.getByteMatrix().set(x, y, 0);
                         }
                     }
                 }

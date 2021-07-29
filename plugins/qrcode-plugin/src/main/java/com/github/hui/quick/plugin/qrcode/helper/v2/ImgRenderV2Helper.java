@@ -16,7 +16,7 @@ import java.awt.image.BufferedImage;
 public class ImgRenderV2Helper {
     public static void drawImg(Graphics2D g2d, ByteMatrix matrix, RenderImgResourcesV2 imgResources, int leftPadding, int topPadding, int infoSize) {
         for (RenderImgResourcesV2.RenderSource renderSource : imgResources.getSourceList()) {
-            renderSpecialResource(g2d, matrix, renderSource, leftPadding, topPadding, infoSize);
+            renderSpecialResource(g2d, matrix, renderSource, leftPadding, topPadding, infoSize, renderSource.fullMatch());
         }
 
         // 最后走一个兜底的1x1的渲染
@@ -32,28 +32,35 @@ public class ImgRenderV2Helper {
     }
 
     private static void renderSpecialResource(Graphics2D g2d, ByteMatrix matrix, RenderImgResourcesV2.RenderSource renderSource,
-                                              int leftPadding, int topPadding, int infoSize) {
+                                              int leftPadding, int topPadding, int infoSize, boolean fullMatch) {
         if (renderSource.countOver()) return;
-        for (int x = 0; x < matrix.getWidth(); x++) {
-            for (int y = 0; y < matrix.getHeight(); y++) {
-                if (renderSource.countOver()) {
-                    return;
-                }
-
-                if (!match(matrix, renderSource, x, y)) {
+        for (int x = 0; x < matrix.getWidth() - renderSource.getCol() + 1; x++) {
+            for (int y = 0; y < matrix.getHeight() - renderSource.getRow() + 1; y++) {
+                if (match(matrix, renderSource, x, y, fullMatch)) {
                     renderImg(g2d, matrix, renderSource, x, y, leftPadding, topPadding, infoSize);
+                    if (renderSource.countOver()) {
+                        return;
+                    }
                 }
             }
         }
     }
 
-    private static boolean match(ByteMatrix matrix, RenderImgResourcesV2.RenderSource renderSource, int startX, int startY) {
+    private static boolean match(ByteMatrix matrix, RenderImgResourcesV2.RenderSource renderSource, int startX, int startY, boolean fullMatch) {
         // 要求矩阵的1点图，能完全覆盖 renderSource
         for (int x = 0; x < renderSource.getCol(); x++) {
             for (int y = 0; y < renderSource.getRow(); y++) {
                 if (!renderSource.miss(x, y) && matrix.get(startX + x, startY + y) == 0) {
                     // 资源图存在，但是矩阵点不存在，则表示未满足条件，直接退出
                     return false;
+                }
+
+                if (fullMatch) {
+                    // 全匹配时，则要求资源图是空格的地方，二维码矩阵也是空白的
+                    // 非全匹配时，只要求资源图有的地方，二维码矩阵也有
+                    if (renderSource.miss(x, y) && matrix.get(startX + x, startY + y) == 1) {
+                        return false;
+                    }
                 }
             }
         }
@@ -62,7 +69,6 @@ public class ImgRenderV2Helper {
 
     private static void renderImg(Graphics2D g2d, ByteMatrix matrix, RenderImgResourcesV2.RenderSource renderSource, int x, int y,
                                   int leftPadding, int topPadding, int infoSize) {
-        renderSource.autoUpdateCount();
         BufferedImage img = renderSource.getImg();
         // 开始绘制，并将已经绘制过得地方置空
         QrCodeOptions.DrawStyle.IMAGE_V2.draw(g2d, leftPadding + x * infoSize,
