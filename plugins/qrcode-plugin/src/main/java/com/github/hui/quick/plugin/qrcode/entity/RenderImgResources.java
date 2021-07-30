@@ -83,6 +83,10 @@ public class RenderImgResources {
             // 次数用完
             return getImg();
         }
+
+        public List<RenderImg> getImgList() {
+            return imgList;
+        }
     }
 
     public static class RenderImg {

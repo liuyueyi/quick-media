@@ -15,6 +15,20 @@ import java.awt.image.BufferedImage;
  */
 public class ImgRenderV2Helper {
     public static void drawImg(Graphics2D g2d, ByteMatrix matrix, RenderImgResourcesV2 imgResources, int leftPadding, int topPadding, int infoSize) {
+        // fixme 探测图形特殊绘制时的处理
+        if (imgResources.getDefaultBgImg() != null) {
+            for (int x = 0; x < matrix.getWidth(); x++) {
+                for (int y = 0; y < matrix.getHeight(); y++) {
+                    if (matrix.get(x, y) == 0) {
+                        QrCodeOptions.DrawStyle.IMAGE_V2.draw(g2d, leftPadding + x * infoSize,
+                                topPadding + y * infoSize, infoSize, infoSize,
+                                imgResources.getDefaultBgImg(), null);
+                        matrix.set(x, y, 0);
+                    }
+                }
+            }
+        }
+
         for (RenderImgResourcesV2.RenderSource renderSource : imgResources.getSourceList()) {
             renderSpecialResource(g2d, matrix, renderSource, leftPadding, topPadding, infoSize, renderSource.fullMatch());
         }
@@ -25,7 +39,7 @@ public class ImgRenderV2Helper {
                 if (matrix.get(x, y) == 1) {
                     QrCodeOptions.DrawStyle.IMAGE_V2.draw(g2d, leftPadding + x * infoSize,
                             topPadding + y * infoSize, infoSize, infoSize,
-                            imgResources.getDefaultImg(), null);
+                            imgResources.getDefaultDrawImg(), null);
                 }
             }
         }

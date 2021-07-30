@@ -31,7 +31,7 @@ public class Issue88 {
     @Test
     public void testLogoErrPosition() throws IOException, WriterException {
         String logo = "logo.jpg";
-        String msg = "ccccccccccccccccccccccccccccccccccccccccccccc{\"type\":\"1\",\"data\":\"Bv1EReUAm3T4yG2sMvM0tJzyd5TQccWdd9e5j4cjiCHIEi6S1DHyFvpabpQghmkkmhynmc/6bQoRpw6zhPK1vNZDMPJAaSo7SirP68rkp0sUAHzilB0Vqpf6AqxA0JCXvusgbo3dSDMg9oLoHxQzBVltIB/I70SAHv28aXpQBa/Sc8VB38BA6sjv+2ygBHJIgTuWZEdruAm7hQZFGbPUQuW6HdEdSVWfSPpY55i/AQS/GfWVcBMXtMVYBhzF9JpLN78ZgXywF5Z9CUC57okArJIafSqYC9mtGcsHiV0YvlckxAr1cXthFr3ijfQA6eqmXw5\"}";
+        String msg = "{\"type\":\"1\",\"data\":\"Bv1EReUAm3T4yG2sMvM0tJzyd5TQccWdd9e5j4cjiCHIEi6S1DHyFvpabpQghmkkmhynmc/6bQoRpw6zhPK1vNZDMPJAaSo7SirP68rkp0sUAHzilB0Vqpf6AqxA0JCXvusgbo3dSDMg9oLoHxQzBVltIB/I70SAHv28aXpQBa/Sc8VB38BA6sjv+2ygBHJIgTuWZEdruAm7hQZFGbPUQuW6HdEdSVWfSPpY55i/AQS/GfWVcBMXtMVYBhzF9JpLN78ZgXywF5Z9CUC57okArJIafSqYC9mtGcsHiV0YvlckxAr1cXthFr3ijfQA6eqmXw5\"}";
         QrCodeGenWrapper.of(msg)
                 .setW(300)
                 .setLogo(logo)

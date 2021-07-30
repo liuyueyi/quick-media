@@ -2,6 +2,7 @@ package com.github.hui.quick.plugin.qrcode.entity;
 
 import com.github.hui.quick.plugin.base.ImageLoadUtil;
 import com.github.hui.quick.plugin.qrcode.wrapper.QrCodeGenWrapper;
+import org.apache.commons.lang3.BooleanUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -23,40 +24,53 @@ import java.util.*;
 public class RenderImgResourcesV2 {
     private static Logger log = LoggerFactory.getLogger(QrCodeGenWrapper.Builder.class);
 
+    /**
+     * 所有渲染的资源列表
+     */
     private List<RenderSource> sourceList;
 
-    public RenderImgResourcesV2() {
+    /**
+     * 兜底的1x1 渲染图
+     */
+    private RenderImgResources.ImgDecorate defaultRenderDrawImg;
+
+    /**
+     * 兜底的1x1 背景图
+     */
+    private RenderImgResources.ImgDecorate defaultRenderBgImg;
+
+
+    public static RenderImgResourcesV2 create() {
+        return new RenderImgResourcesV2();
+    }
+
+    private RenderImgResourcesV2() {
         sourceList = new ArrayList<>();
     }
 
-    /**
-     * 兜底的1x1的渲染图
-     */
-    private RenderImgResources.ImgDecorate defaultImgDecorate;
 
     public List<RenderSource> getSourceList() {
         return sourceList;
     }
 
-    public BufferedImage getDefaultImg() {
-        return defaultImgDecorate.getImg();
+    public BufferedImage getDefaultDrawImg() {
+        return defaultRenderDrawImg.getImg();
     }
 
-    public RenderImgResourcesV2 addSource(RenderSource renderSource) {
-        sourceList.add(renderSource);
-        Collections.sort(sourceList);
-        if (defaultImgDecorate == null && renderSource.row == 1 && renderSource.col == 1) {
-            defaultImgDecorate = renderSource.imgDecorate;
-        }
-        return this;
+    public BufferedImage getDefaultBgImg() {
+        return defaultRenderBgImg == null ? null : defaultRenderBgImg.getImg();
     }
 
-    public static RenderSource createRenderSource() {
-        return new RenderSource();
+    public RenderSource addSource(int row, int col) {
+        RenderSource renderSource = new RenderSource(this);
+        renderSource.setRow(row);
+        renderSource.setCol(col);
+        return renderSource;
     }
 
     public static class RenderSource implements Comparable<RenderSource> {
         private static final int DEFAULT_ORDER = -999;
+        private RenderImgResourcesV2 resources;
         private RenderImgResources.ImgDecorate imgDecorate;
         /**
          * 表示 row * col 的图片资源中，哪些地方是有素材填充的（坐标从左上角开始）
@@ -93,7 +107,8 @@ public class RenderImgResourcesV2 {
          */
         private boolean fullMatch;
 
-        public RenderSource() {
+        public RenderSource(RenderImgResourcesV2 resources) {
+            this.resources = resources;
             missMap = new HashMap<>();
             order = DEFAULT_ORDER;
         }
@@ -231,6 +246,54 @@ public class RenderImgResourcesV2 {
                 setMiss(Integer.parseInt(cells[0].trim()), Integer.parseInt(cells[1].trim()));
             }
             return this;
+        }
+
+        public RenderImgResourcesV2 build() {
+            resources.sourceList.add(this);
+            Collections.sort(resources.sourceList);
+            initDefaultRenderImg();
+            return resources;
+        }
+
+        /**
+         * 从现有的资源中，初始化兜底的 1x1 渲染图
+         */
+        private void initDefaultRenderImg() {
+            if (row > 1 || col > 1) {
+                return;
+            }
+
+            if (resources.defaultRenderBgImg != null && resources.defaultRenderDrawImg != null) {
+                return;
+            }
+
+            RenderImgResources.ImgDecorate decorate = null;
+            for (RenderImgResources.RenderImg renderImg : imgDecorate.getImgList()) {
+                // 找一个不限制渲染次数的
+                if (renderImg.count == RenderImgResources.NO_LIMIT_COUNT) {
+                    if (decorate == null) {
+                        decorate = new RenderImgResources.ImgDecorate(renderImg.img);
+                    } else {
+                        decorate.addImg(renderImg.img, RenderImgResources.NO_LIMIT_COUNT);
+                    }
+                }
+            }
+            if (decorate == null) {
+                // 所有的都是次数限制，则全部加进去
+                for (RenderImgResources.RenderImg renderImg : imgDecorate.getImgList()) {
+                    if (decorate == null) {
+                        decorate = new RenderImgResources.ImgDecorate(renderImg.img);
+                    } else {
+                        decorate.addImg(renderImg.img, RenderImgResources.NO_LIMIT_COUNT);
+                    }
+                }
+            }
+
+            if (missMap.isEmpty() && resources.defaultRenderDrawImg == null) {
+                resources.defaultRenderDrawImg = decorate;
+            } else if (BooleanUtils.isTrue(missMap.get(new Point(1, 1))) && resources.defaultRenderBgImg == null) {
+                resources.defaultRenderBgImg = decorate;
+            }
         }
     }
 }
