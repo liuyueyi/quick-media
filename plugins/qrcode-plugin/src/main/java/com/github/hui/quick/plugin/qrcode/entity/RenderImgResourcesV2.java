@@ -171,8 +171,12 @@ public class RenderImgResourcesV2 {
             return imgDecorate.empty();
         }
 
-        public boolean fullMatch() {
+        public boolean isFullMatch() {
             return fullMatch;
+        }
+
+        public RenderSource addImg(String img) throws IOException {
+            return addImg(img, RenderImgResources.NO_LIMIT_COUNT);
         }
 
         public RenderSource addImg(String img, int count) throws IOException {
@@ -184,6 +188,10 @@ public class RenderImgResourcesV2 {
             }
         }
 
+        public RenderSource addImg(InputStream img) throws IOException {
+            return addImg(img, RenderImgResources.NO_LIMIT_COUNT);
+        }
+
         public RenderSource addImg(InputStream img, int count) throws IOException {
             try {
                 return addImg(ImageIO.read(img), count);
@@ -191,6 +199,10 @@ public class RenderImgResourcesV2 {
                 log.error("load img error!", e);
                 throw new IOException("load logo error!", e);
             }
+        }
+
+        public RenderSource addImg(BufferedImage img) throws IOException {
+            return addImg(img, RenderImgResources.NO_LIMIT_COUNT);
         }
 
         public RenderSource addImg(BufferedImage img, int count) {
@@ -249,7 +261,9 @@ public class RenderImgResourcesV2 {
         }
 
         public RenderImgResourcesV2 build() {
-            resources.sourceList.add(this);
+            if (row > 1 || col > 1 || !BooleanUtils.isTrue(missMap.get(new Point(0, 0)))) {
+                resources.sourceList.add(this);
+            }
             Collections.sort(resources.sourceList);
             initDefaultRenderImg();
             return resources;
@@ -291,7 +305,7 @@ public class RenderImgResourcesV2 {
 
             if (missMap.isEmpty() && resources.defaultRenderDrawImg == null) {
                 resources.defaultRenderDrawImg = decorate;
-            } else if (BooleanUtils.isTrue(missMap.get(new Point(1, 1))) && resources.defaultRenderBgImg == null) {
+            } else if (BooleanUtils.isTrue(missMap.get(new Point(0, 0))) && resources.defaultRenderBgImg == null) {
                 resources.defaultRenderBgImg = decorate;
             }
         }

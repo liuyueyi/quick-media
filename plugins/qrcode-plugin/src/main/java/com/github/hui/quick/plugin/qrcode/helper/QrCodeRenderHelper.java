@@ -4,11 +4,11 @@ import com.github.hui.quick.plugin.base.GraphicUtil;
 import com.github.hui.quick.plugin.base.ImageOperateUtil;
 import com.github.hui.quick.plugin.qrcode.constants.QuickQrUtil;
 import com.github.hui.quick.plugin.qrcode.entity.DotSize;
+import com.github.hui.quick.plugin.qrcode.entity.RenderImgResourcesV2;
 import com.github.hui.quick.plugin.qrcode.helper.v2.ImgRenderV2Helper;
 import com.github.hui.quick.plugin.qrcode.wrapper.BitMatrixEx;
 import com.github.hui.quick.plugin.qrcode.wrapper.QrCodeOptions;
 import com.google.zxing.qrcode.encoder.ByteMatrix;
-import com.sun.imageio.plugins.common.ImageUtil;
 import org.apache.commons.lang3.tuple.ImmutablePair;
 
 import java.awt.*;
@@ -340,20 +340,34 @@ public class QrCodeRenderHelper {
         QrCodeOptions.DrawStyle drawStyle = drawOptions.getDrawStyle();
         if (drawStyle == QrCodeOptions.DrawStyle.IMAGE_V2) {
             // 若探测图形特殊绘制，则提前处理掉
-            if (qrCodeConfig.getDetectOptions().getSpecial()) {
-                for (int x = 0; x < matrixW; x++) {
-                    for (int y = 0; y < matrixH; y++) {
-                        DetectLocation detectLocation = inDetectCornerArea(x, y, matrixW, matrixH, detectCornerSize);
-                        if (!detectLocation.detectedArea() || bitMatrix.getByteMatrix().get(x, y) == 0) {
-                            continue;
+            RenderImgResourcesV2 imgResourcesV2 = drawOptions.getImgResourcesForV2();
+            for (int x = 0; x < matrixW; x++) {
+                for (int y = 0; y < matrixH; y++) {
+                    DetectLocation detectLocation = inDetectCornerArea(x, y, matrixW, matrixH, detectCornerSize);
+                    if (detectLocation.detectedArea()) {
+                        // 若探测图形特殊绘制，则单独处理
+                        if (qrCodeConfig.getDetectOptions().getSpecial()) {
+                            if (bitMatrix.getByteMatrix().get(x, y) == 1) {
+                                // 绘制三个位置探测图形
+                                drawDetectImg(qrCodeConfig, g2, bitMatrix, matrixW, matrixH, leftPadding, topPadding, infoSize,
+                                        detectCornerSize, x, y, detectOutColor, detectInnerColor, detectLocation);
+                                bitMatrix.getByteMatrix().set(x, y, 0);
+                            }
+                        } else {
+                            if (bitMatrix.getByteMatrix().get(x, y) == 0 && imgResourcesV2.getDefaultBgImg() != null) {
+                                QrCodeOptions.DrawStyle.IMAGE_V2.draw(g2, leftPadding + x * infoSize,
+                                        topPadding + y * infoSize, infoSize, infoSize,
+                                        imgResourcesV2.getDefaultBgImg(), null);
+                            }
                         }
+                        continue;
+                    }
 
-                        if (detectLocation.detectedArea() && qrCodeConfig.getDetectOptions().getSpecial()) {
-                            // 绘制三个位置探测图形
-                            drawDetectImg(qrCodeConfig, g2, bitMatrix, matrixW, matrixH, leftPadding, topPadding, infoSize,
-                                    detectCornerSize, x, y, detectOutColor, detectInnerColor, detectLocation);
-                            bitMatrix.getByteMatrix().set(x, y, 0);
-                        }
+                    // 非探测区域内的0点图渲染
+                    if (bitMatrix.getByteMatrix().get(x, y) == 0 && imgResourcesV2.getDefaultBgImg() != null) {
+                        QrCodeOptions.DrawStyle.IMAGE_V2.draw(g2, leftPadding + x * infoSize,
+                                topPadding + y * infoSize, infoSize, infoSize,
+                                imgResourcesV2.getDefaultBgImg(), null);
                     }
                 }
             }
