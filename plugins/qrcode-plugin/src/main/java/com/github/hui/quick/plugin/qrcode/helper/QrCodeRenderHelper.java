@@ -9,6 +9,7 @@ import com.github.hui.quick.plugin.qrcode.helper.v2.ImgRenderV2Helper;
 import com.github.hui.quick.plugin.qrcode.wrapper.BitMatrixEx;
 import com.github.hui.quick.plugin.qrcode.wrapper.QrCodeOptions;
 import com.google.zxing.qrcode.encoder.ByteMatrix;
+import com.sun.imageio.plugins.common.ImageUtil;
 import org.apache.commons.lang3.tuple.ImmutablePair;
 
 import java.awt.*;
@@ -124,7 +125,9 @@ public class QrCodeRenderHelper {
         }
 
         Graphics2D g2d = GraphicUtil.getG2d(bottomImg);
-        g2d.drawImage(ftImg, -Math.min(startX, 0), -Math.min(startY, 0), null);
+        boolean needScale = frontImgOptions.getFtW() < ftImg.getWidth() || frontImgOptions.getFtH() < ftImg.getHeight();
+        g2d.drawImage(!needScale ? ftImg: ftImg.getScaledInstance(frontImgOptions.getFtW(), frontImgOptions.getFtH(), BufferedImage.SCALE_SMOOTH),
+                -Math.min(startX, 0), -Math.min(startY, 0), null);
         g2d.dispose();
         return bottomImg;
     }
@@ -149,11 +152,14 @@ public class QrCodeRenderHelper {
         int gifImgLen = frontImgOptions.getGifDecoder().getFrameCount();
         List<ImmutablePair<BufferedImage, Integer>> result = new ArrayList<>(gifImgLen);
         // 背景图缩放
+        BufferedImage ftImg = frontImgOptions.getGifDecoder().getFrame(0);
+        boolean needScale = frontImgOptions.getFtW() < ftImg.getWidth() || frontImgOptions.getFtH() < ftImg.getHeight();
         for (int index = 0; index < gifImgLen; index++) {
             BufferedImage bgImg = GraphicUtil.createImg(resW, resH, bottomImg);
             Graphics2D bgGraphic = GraphicUtil.getG2d(bgImg);
-            bgGraphic.drawImage(frontImgOptions.getGifDecoder().getFrame(index), -Math.min(startX, 0),
-                    -Math.min(startY, 0), null);
+            ftImg = frontImgOptions.getGifDecoder().getFrame(index);
+            bgGraphic.drawImage(!needScale ? ftImg : ftImg.getScaledInstance(frontImgOptions.getFtW(), frontImgOptions.getFtH(), BufferedImage.SCALE_SMOOTH),
+                    -Math.min(startX, 0), -Math.min(startY, 0), null);
 
             bgGraphic.dispose();
             bgImg.flush();

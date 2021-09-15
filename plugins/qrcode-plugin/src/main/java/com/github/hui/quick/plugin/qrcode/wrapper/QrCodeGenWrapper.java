@@ -418,11 +418,22 @@ public class QrCodeGenWrapper {
             return this;
         }
 
+        /**
+         * startX 表示二维码在前置图上的x坐标， 左上角为（0,0)
+         *
+         * @param startX
+         * @return
+         */
         public Builder setFtStartX(int startX) {
             ftImgOptions.startX(startX);
             return this;
         }
 
+        /**
+         * startY 表示二维码在前置图上的y坐标，左上角为(0, 0)
+         * @param startY
+         * @return
+         */
         public Builder setFtStartY(int startY) {
             ftImgOptions.startY(startY);
             return this;

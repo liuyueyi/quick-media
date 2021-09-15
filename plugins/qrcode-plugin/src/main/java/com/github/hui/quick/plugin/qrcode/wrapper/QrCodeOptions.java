@@ -206,7 +206,7 @@ public class QrCodeOptions {
         private LogoStyle logoStyle;
 
         /**
-         * logo 占二维码的比例
+         * logo 占二维码的比例， rate 要求 > 4
          */
         private int rate;
 
@@ -344,7 +344,7 @@ public class QrCodeOptions {
             private LogoStyle logoStyle;
 
             /**
-             * logo 占二维码的比例
+             * logo 占二维码的比例， 默认为12
              */
             private int rate;
 
@@ -1283,6 +1283,10 @@ public class QrCodeOptions {
         }
 
         public BufferedImage getImage(DotSize dotSize) {
+            if(imgResources == null) {
+                return null;
+            }
+
             return imgResources.getImage(dotSize);
         }
 
