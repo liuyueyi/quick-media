@@ -18,13 +18,13 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
         <java.version>1.8</java.version>
-        <qrcode-plugin.version>2.5.0</qrcode-plugin.version>
-        <image-plugin.version>2.5</image-plugin.version>
-        <svg-plugin.version>2.5</svg-plugin.version>
-        <markdonw-plugin.version>2.5</markdonw-plugin.version>
-        <audio-plugin.version>2.5</audio-plugin.version>
-        <date-plugin.version>2.5</date-plugin.version>
-        <phantom-plugin.version>2.5</phantom-plugin.version>
+        <qrcode-plugin.version>2.6.1</qrcode-plugin.version>
+        <image-plugin.version>2.6.1</image-plugin.version>
+        <svg-plugin.version>2.6.1</svg-plugin.version>
+        <markdonw-plugin.version>2.6.1</markdonw-plugin.version>
+        <audio-plugin.version>2.6.1</audio-plugin.version>
+        <date-plugin.version>2.6.1</date-plugin.version>
+        <phantom-plugin.version>2.6.1</phantom-plugin.version>
     </properties>
 
     <repositories>
@@ -44,12 +44,12 @@
     <dependencies>
 
         <dependency>
-            <groupId>com.github.hui.media</groupId>
+            <groupId>com.github.liuyueyi.media</groupId>
             <artifactId>svg-core</artifactId>
             <version>${svg-plugin.version}</version>
         </dependency>
         <dependency>
-            <groupId>com.github.hui.media</groupId>
+            <groupId>com.github.liuyueyi.media</groupId>
             <artifactId>image-plugin</artifactId>
             <version>${image-plugin.version}</version>
             <exclusions>
@@ -61,25 +61,25 @@
         </dependency>
 
         <dependency>
-            <groupId>com.github.hui.media</groupId>
+            <groupId>com.github.liuyueyi.media</groupId>
             <artifactId>qrcode-plugin</artifactId>
             <version>${qrcode-plugin.version}</version>
         </dependency>
 
         <dependency>
-            <groupId>com.github.hui.media</groupId>
+            <groupId>com.github.liuyueyi.media</groupId>
             <artifactId>markdown-plugin</artifactId>
             <version>${markdonw-plugin.version}</version>
         </dependency>
 
         <dependency>
-            <groupId>com.github.hui.media</groupId>
+            <groupId>com.github.liuyueyi.media</groupId>
             <artifactId>date-plugin</artifactId>
             <version>${date-plugin.version}</version>
         </dependency>
 
         <dependency>
-            <groupId>com.github.hui.media</groupId>
+            <groupId>com.github.liuyueyi.media</groupId>
             <artifactId>phantom-plugin</artifactId>
             <version>${phantom-plugin.version}</version>
             <exclusions>
@@ -91,7 +91,7 @@
         </dependency>
 
         <dependency>
-            <groupId>com.github.hui.media</groupId>
+            <groupId>com.github.liuyueyi.media</groupId>
             <artifactId>audio-plugin</artifactId>
             <version>${audio-plugin.version}</version>
         </dependency>
