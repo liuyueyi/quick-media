@@ -1,7 +1,5 @@
 package com.github.hui.quick.plugin.image.helper;
 
-import com.github.hui.quick.plugin.base.GraphicUtil;
-
 import java.awt.*;
 import java.awt.image.BufferedImage;
 
@@ -12,32 +10,16 @@ import java.awt.image.BufferedImage;
  * @data 2021/11/7
  */
 public class ImgPixelHelper {
+    static String ascii = "$@B%8&WM#*oahkbdpqwmZO0QLCJUYXzcvunxrjft/\\|()1{}[]?-_+~<>i!lI;:,\\\"^`'.";
 
     /**
-     * 转成像素图片
-     *
-     * @param bufferedImage 原图片
-     * @param blockSize     块大小
+     * 基于颜色的灰度值，获取对应的字符
+     * @param g
      * @return
      */
-    public static BufferedImage getBlockBitmap(BufferedImage bufferedImage, int blockSize) {
-        if (bufferedImage == null)
-            throw new IllegalArgumentException("Bitmap cannot be null.");
-        int picWidth = bufferedImage.getWidth();
-        int picHeight = bufferedImage.getHeight();
-
-        BufferedImage back = new BufferedImage(picWidth / blockSize * blockSize, picHeight / blockSize * blockSize, bufferedImage.getType());
-        Graphics2D g2d = GraphicUtil.getG2d(back);
-        g2d.setColor(Color.WHITE);
-        for (int y = 0; y < picHeight; y += blockSize) {
-            for (int x = 0; x < picWidth; x += blockSize) {
-                int[] colors = getPixels(bufferedImage, x, y, blockSize, blockSize);
-                g2d.setColor(getAverage(colors));
-                g2d.fillRect(x, y, blockSize, blockSize);
-            }
-        }
-
-        return back;
+    public static char toChar(Color g) {
+        double gray = 0.299 * g.getRed() + 0.578 * g.getGreen() + 0.114 * g.getBlue();
+        return ascii.charAt((int) (gray / 255 * ascii.length()));
     }
 
     /**
@@ -50,7 +32,7 @@ public class ImgPixelHelper {
      * @param h
      * @return
      */
-    private static int[] getPixels(BufferedImage image, int x, int y, int w, int h) {
+    public static int[] getPixels(BufferedImage image, int x, int y, int w, int h) {
         int[] colors = new int[w * h];
         int idx = 0;
         for (int i = y; (i < h + y) && (i < image.getHeight()); i++) {
@@ -60,29 +42,5 @@ public class ImgPixelHelper {
             }
         }
         return colors;
-    }
-
-    /**
-     * 求取多个颜色的平均值
-     *
-     * @param colors
-     * @return
-     */
-    private static Color getAverage(int[] colors) {
-        //int alpha=0;
-        int red = 0;
-        int green = 0;
-        int blue = 0;
-        for (int color : colors) {
-            red += ((color & 0xff0000) >> 16);
-            green += ((color & 0xff00) >> 8);
-            blue += (color & 0x0000ff);
-        }
-        float len = colors.length;
-        //alpha=Math.round(alpha/len);
-        red = Math.round(red / len);
-        green = Math.round(green / len);
-        blue = Math.round(blue / len);
-        return new Color(0xff, red, green, blue);
     }
 }
