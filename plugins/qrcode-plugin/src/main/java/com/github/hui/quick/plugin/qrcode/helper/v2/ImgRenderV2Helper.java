@@ -75,7 +75,7 @@ public class ImgRenderV2Helper {
                 topPadding + y * infoSize,
                 renderSource.getCol() * infoSize,
                 renderSource.getRow() * infoSize,
-                img, null);
+                img, String.valueOf(renderSource.getCol() > 1 || renderSource.getRow() > 1));
 
         // 将命中的标记为已渲染
         for (int col = 0; col < renderSource.getCol(); col++) {

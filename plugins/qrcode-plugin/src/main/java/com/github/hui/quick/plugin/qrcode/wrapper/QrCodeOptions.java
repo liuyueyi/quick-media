@@ -1802,7 +1802,46 @@ public class QrCodeOptions {
         IMAGE_V2 {
             @Override
             public void draw(Graphics2D g2d, int x, int y, int w, int h, BufferedImage img, String txt) {
-                g2d.drawImage(img.getScaledInstance(w, h, Image.SCALE_SMOOTH), x, y, null);
+                String source  = "明月几时有把酒问青天不知天上宫阙今夕是何年我欲乘风归去又恐琼楼玉宇高处不胜寒起舞弄清影何似在人间" +
+                        "转朱阁低绮户照无眠不应有恨何事长向别时圆人有悲欢离合月有阴晴圆缺此事古难全但愿人长久千里共婵娟";
+                if ("false".equals(txt)) {
+                    if ( Math.random() < 0.8f) {
+                        if (Math.random() < 0.6f) {
+                            int offsetX = w / 5, offsetY = h / 5;
+                            int width = w - offsetX * 2, height = h - offsetY * 2;
+                            Color last = g2d.getColor();
+                            g2d.setColor(Color.GRAY);
+                            g2d.fillRect(x + offsetX, y + offsetY, width, height);
+                            g2d.setColor(last);
+                            return;
+                        }
+
+                        int index = QuickQrUtil.getIndex();
+                        if (index >= source.length()) {
+                            int offsetX = w / 5, offsetY = h / 5;
+                            int width = w - offsetX * 2, height = h - offsetY * 2;
+                            Color last = g2d.getColor();
+                            g2d.setColor(Color.GRAY);
+                            g2d.fillRect(x + offsetX, y + offsetY, width, height);
+                            g2d.setColor(last);
+                        } else {
+                            Color last = g2d.getColor();
+                            g2d.setColor(Color.GRAY);
+                            Font oldFont = g2d.getFont();
+                            if (oldFont.getSize() != w) {
+                                Font newFont = QuickQrUtil.font(oldFont.getName(), oldFont.getStyle(), w);
+                                g2d.setFont(newFont);
+                            }
+                            g2d.drawString(source.substring(index, index+1), x, y + w);
+                            g2d.setFont(oldFont);
+                            g2d.setColor(last);
+                        }
+                    } else {
+                        g2d.drawImage(img.getScaledInstance(w, h, Image.SCALE_SMOOTH), x, y, null);
+                    }
+                } else {
+                    g2d.drawImage(img.getScaledInstance(w, h, Image.SCALE_SMOOTH), x, y, null);
+                }
             }
 
             @Override

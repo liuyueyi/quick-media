@@ -137,8 +137,8 @@ public class QrCodeRenderHelper {
         final int qrWidth = qrImg.getWidth();
         final int qrHeight = qrImg.getHeight();
 
-        final int ftW = frontImgOptions.getFtW();
-        final int ftH = frontImgOptions.getFtH();
+        int ftW = frontImgOptions.getFtW();
+        int ftH = frontImgOptions.getFtH();
 
         int resW = Math.max(ftW, qrWidth);
         int resH = Math.max(ftH, qrHeight);
@@ -264,9 +264,15 @@ public class QrCodeRenderHelper {
                 // 选择一块区域进行填充
                 bgGraphic.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_ATOP, 1.0f));
                 bgGraphic.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
-                bgGraphic
-                        .drawImage(qrImg.getScaledInstance(qrWidth, qrHeight, Image.SCALE_SMOOTH), bgOffsetX, bgOffsetY,
-                                null);
+//                bgGraphic
+//                        .drawImage(qrImg.getScaledInstance(qrWidth, qrHeight, Image.SCALE_SMOOTH), bgOffsetX, bgOffsetY,
+//                                null);
+                // 实验功能，用于gif生成时缩放
+                int add = 2 * Math.abs(index - len / 2);
+                int newQrW = qrWidth + add;
+                int newQrH = qrHeight + add;
+
+                bgGraphic.drawImage(qrImg.getScaledInstance(newQrW, newQrH, Image.SCALE_SMOOTH), bgOffsetX - add / 2, bgOffsetY - add /2, null);
             } else {
                 // 全覆盖模式, 设置透明度， 避免看不到背景
                 bgGraphic.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_ATOP, bgImgOptions.getOpacity()));
