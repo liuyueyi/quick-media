@@ -1,7 +1,6 @@
 package com.github.hui.quick.plugin.image.wrapper.pixel.model;
 
 import com.github.hui.quick.plugin.image.helper.ImgPixelHelper;
-import com.github.hui.quick.plugin.image.util.FontUtil;
 
 import java.awt.*;
 
@@ -29,7 +28,7 @@ public enum PixelStyleEnum implements IPixelType {
     /**
      * 颜色均值 -- 适用于像素块处理
      */
-    COLOR_AVG {
+    PIXEL_COLOR_AVG {
         @Override
         public Color calculateColor(int red, int green, int blue, int size) {
             red = Math.round(red / (float) size);
@@ -41,10 +40,10 @@ public enum PixelStyleEnum implements IPixelType {
     /**
      * 图片转字符
      */
-    CHAR_GRAY_ALG {
+    CHAR_COLOR {
         @Override
         public Color calculateColor(int red, int green, int blue, int size) {
-            return COLOR_AVG.calculateColor(red, green, blue, size);
+            return PIXEL_COLOR_AVG.calculateColor(red, green, blue, size);
         }
 
         @Override
@@ -59,6 +58,21 @@ public enum PixelStyleEnum implements IPixelType {
 
             g2d.drawString(String.valueOf(ch), x, y);
         }
+    },
+    /**
+     * 图片转字符
+     */
+    CHAR_GRAY {
+        @Override
+        public Color calculateColor(int red, int green, int blue, int size) {
+            return GRAY_ALG.calculateColor(red, green, blue, size);
+        }
+
+        @Override
+        public void draw(Graphics2D g2d, Color color, int x, int y, int width, int height) {
+            CHAR_COLOR.draw(g2d, color, x, y, width, height);
+        }
     }
+
     ;
 }

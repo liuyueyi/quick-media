@@ -1,12 +1,10 @@
 package com.github.hui.quick.plugin.test;
 
-import com.github.hui.quick.plugin.base.FileReadUtil;
 import com.github.hui.quick.plugin.base.ImageLoadUtil;
 import com.github.hui.quick.plugin.image.wrapper.pixel.ImgPixelWrapper;
 import com.github.hui.quick.plugin.image.wrapper.pixel.model.PixelStyleEnum;
 import org.junit.Test;
 
-import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 
@@ -21,8 +19,7 @@ public class ImgPixelHelperTest {
     @Test
     public void testImgGrayAlg() throws IOException {
         String img = "https://c-ssl.duitang.com/uploads/item/201809/16/20180916175034_Gr2hk.thumb.1000_0.jpeg";
-        BufferedImage source = ImageLoadUtil.getImageByPath(img);
-        BufferedImage out = ImgPixelWrapper.toPixelImg(source, 1, PixelStyleEnum.GRAY_ALG);
+        BufferedImage out = ImgPixelWrapper.build().setSourceImg(img).setBlockSize(1).setPixelType(PixelStyleEnum.GRAY_ALG).build().toImg();
         System.out.println(out);
     }
 
@@ -30,16 +27,14 @@ public class ImgPixelHelperTest {
     @Test
     public void testImgGrayAvg() throws IOException {
         String img = "https://c-ssl.duitang.com/uploads/item/201809/16/20180916175034_Gr2hk.thumb.1000_0.jpeg";
-        BufferedImage source = ImageLoadUtil.getImageByPath(img);
-        BufferedImage out = ImgPixelWrapper.toPixelImg(source, 1, PixelStyleEnum.GRAY_AVG);
+        BufferedImage out = ImgPixelWrapper.build().setSourceImg(img).setBlockSize(1).setPixelType(PixelStyleEnum.GRAY_AVG).build().toImg();
         System.out.println(out);
     }
 
     @Test
     public void testImgPixel() throws IOException {
         String img = "https://c-ssl.duitang.com/uploads/item/201809/16/20180916175034_Gr2hk.thumb.1000_0.jpeg";
-        BufferedImage source = ImageLoadUtil.getImageByPath(img);
-        BufferedImage out = ImgPixelWrapper.toPixelImg(source, 10, PixelStyleEnum.COLOR_AVG);
+        BufferedImage out = ImgPixelWrapper.build().setSourceImg(img).setBlockSize(1).setPixelType(PixelStyleEnum.PIXEL_COLOR_AVG).build().toImg();
         System.out.println(out);
     }
 
@@ -49,9 +44,10 @@ public class ImgPixelHelperTest {
      */
     @Test
     public void testCharImg() throws IOException {
-        String img = "https://c-ssl.duitang.com/uploads/item/201809/16/20180916175034_Gr2hk.thumb.1000_0.jpeg";
+//        String img = "https://c-ssl.duitang.com/uploads/item/201809/16/20180916175034_Gr2hk.thumb.1000_0.jpeg";
+        String img = "http://hbimg.b0.upaiyun.com/2b79e7e15883d8f8bbae0b1d1efd6cf2c0c1ed1b10753-cusHEA_fw236";
         BufferedImage source = ImageLoadUtil.getImageByPath(img);
-        BufferedImage out = ImgPixelWrapper.toPixelImg(source, 6, PixelStyleEnum.CHAR_GRAY_ALG);
+        BufferedImage out = ImgPixelWrapper.build().setSourceImg(img).setBlockSize(2).setPixelType(PixelStyleEnum.CHAR_COLOR).build().toImg();
         System.out.println(out);
     }
 }
