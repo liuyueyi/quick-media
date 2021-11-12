@@ -10,14 +10,12 @@ import java.awt.image.BufferedImage;
  * @data 2021/11/7
  */
 public class ImgPixelHelper {
-    static String ascii = "$@B%8&WM#*oahkbdpqwmZO0QLCJUYXzcvunxrjft/\\|()1{}[]?-_+~<>i!lI;:,\\\"^`'.";
-
     /**
      * 基于颜色的灰度值，获取对应的字符
      * @param g
      * @return
      */
-    public static char toChar(Color g) {
+    public static char toChar(String ascii, Color g) {
         double gray = 0.299 * g.getRed() + 0.578 * g.getGreen() + 0.114 * g.getBlue();
         return ascii.charAt((int) (gray / 255 * ascii.length()));
     }

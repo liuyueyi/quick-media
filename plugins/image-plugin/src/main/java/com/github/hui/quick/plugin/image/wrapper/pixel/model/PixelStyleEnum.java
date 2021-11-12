@@ -1,10 +1,18 @@
 package com.github.hui.quick.plugin.image.wrapper.pixel.model;
 
 import com.github.hui.quick.plugin.image.helper.ImgPixelHelper;
+import com.github.hui.quick.plugin.image.wrapper.pixel.ImgPixelOptions;
 
 import java.awt.*;
 
-public enum PixelStyleEnum implements IPixelType {
+/**
+ * 系统提供的渲染枚举类
+ *
+ * @author yihui
+ * @date 21/11/8
+ */
+
+public enum PixelStyleEnum implements IPixelStyle {
     /**
      * 灰度公式
      */
@@ -47,15 +55,11 @@ public enum PixelStyleEnum implements IPixelType {
         }
 
         @Override
-        public void draw(Graphics2D g2d, Color color, int x, int y, int width, int height) {
-            char ch = ImgPixelHelper.toChar(color);
-            g2d.setColor(color);
-            Font old = g2d.getFont();
-            if (old.getSize() != width) {
-                Font newFont = new Font("宋体", Font.PLAIN, width);
-                g2d.setFont(newFont);
+        public void draw(Graphics2D g2d, ImgPixelOptions options, int x, int y) {
+            char ch = ImgPixelHelper.toChar(options.getChars(), g2d.getColor());
+            if (g2d.getFont() == null || g2d.getFont().getSize() != options.getBlockSize()) {
+                g2d.setFont(options.getFont());
             }
-
             g2d.drawString(String.valueOf(ch), x, y);
         }
     },
@@ -69,10 +73,8 @@ public enum PixelStyleEnum implements IPixelType {
         }
 
         @Override
-        public void draw(Graphics2D g2d, Color color, int x, int y, int width, int height) {
-            CHAR_COLOR.draw(g2d, color, x, y, width, height);
+        public void draw(Graphics2D g2d, ImgPixelOptions options, int x, int y) {
+            CHAR_COLOR.draw(g2d, options, x, y);
         }
-    }
-
-    ;
+    };
 }

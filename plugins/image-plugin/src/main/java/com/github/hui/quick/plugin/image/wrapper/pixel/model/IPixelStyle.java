@@ -1,12 +1,16 @@
 package com.github.hui.quick.plugin.image.wrapper.pixel.model;
 
+import com.github.hui.quick.plugin.image.helper.ImgPixelHelper;
+import com.github.hui.quick.plugin.image.wrapper.pixel.ImgPixelOptions;
+
 import java.awt.*;
+import java.awt.image.BufferedImage;
 
 /**
  * @author yihui
  * @date 21/11/8
  */
-public interface IPixelType {
+public interface IPixelStyle {
     /**
      * 求取多个颜色的平均值
      *
@@ -41,13 +45,27 @@ public interface IPixelType {
      * 图片绘制
      *
      * @param g2d
+     * @param options
      * @param x
      * @param y
-     * @param width
-     * @param height
      */
-    default void draw(Graphics2D g2d, Color color, int x, int y, int width, int height) {
-        g2d.setColor(color);
-        g2d.fillRect(x, y, width, height);
+    default void draw(Graphics2D g2d, ImgPixelOptions options, int x, int y) {
+        g2d.fillRect(x, y, options.getBlockSize(), options.getBlockSize());
+    }
+
+    /**
+     * 渲染
+     *
+     * @param g2d
+     * @param source
+     * @param options
+     * @param x
+     * @param y
+     */
+    default void render(Graphics2D g2d, BufferedImage source, ImgPixelOptions options, int x, int y) {
+        int[] colors = ImgPixelHelper.getPixels(source, x, y, options.getBlockSize(), options.getBlockSize());
+        Color avgColor = getAverage(colors);
+        g2d.setColor(avgColor);
+        draw(g2d, options, x, y);
     }
 }

@@ -9,7 +9,7 @@ import org.junit.Test;
 import java.io.IOException;
 
 /**
- * @author wuzebang
+ * @author yihui
  * @date 2021/3/2
  */
 public class Issue88 {
