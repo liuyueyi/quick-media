@@ -123,7 +123,7 @@ public class ImgPixelWrapper {
     }
 
     public static class Builder {
-        private static final String DEFAULT_CHAR_SET = "$@B%8&WM#*oahkbdpqwmZO0QLCJUYXzcvunxrjft/\\|()1{}[]?-_+~<>i!lI;:,\\\"^`'.";
+        private static final String DEFAULT_CHAR_SET = "$@B%8&WM#*oahkbdpqwmZO0QLCJUYXzcvunxrjft/\\|()1{}[]?-_+~<>i!lI;:,\\\"^`'. ";
         private static final double DEFAULT_RATE = 1D;
         private static final int DEFAULT_BLOCK_SIZE = 1;
         private static final String DEFAULT_FONT_NAME = "宋体";
@@ -173,7 +173,7 @@ public class ImgPixelWrapper {
                     gifDecoder.read(target);
                     pixelOptions.setGifSource(gifDecoder);
                 } else {
-                    pixelOptions.setSource(ImageIO.read(inputStream));
+                    pixelOptions.setSource(ImageIO.read(target));
                 }
             } catch (IOException e) {
                 log.error("load backgroundImg error!", e);

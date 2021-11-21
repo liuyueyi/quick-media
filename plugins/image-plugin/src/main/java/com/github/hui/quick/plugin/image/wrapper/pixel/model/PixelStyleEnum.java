@@ -64,7 +64,7 @@ public enum PixelStyleEnum implements IPixelStyle {
         }
     },
     /**
-     * 图片转字符
+     * 图片转灰度字符
      */
     CHAR_GRAY {
         @Override
@@ -76,5 +76,26 @@ public enum PixelStyleEnum implements IPixelStyle {
         public void draw(Graphics2D g2d, ImgPixelOptions options, int x, int y) {
             CHAR_COLOR.draw(g2d, options, x, y);
         }
-    };
+    },
+
+    /**
+     * 图片转纯黑白字符
+     */
+    CHAR_BLACK {
+        @Override
+        public Color calculateColor(int red, int green, int blue, int size) {
+            return GRAY_ALG.calculateColor(red, green, blue, size);
+        }
+
+        @Override
+        public void draw(Graphics2D g2d, ImgPixelOptions options, int x, int y) {
+            char ch = ImgPixelHelper.toChar(options.getChars(), g2d.getColor());
+            if (g2d.getFont() == null || g2d.getFont().getSize() != options.getBlockSize()) {
+                g2d.setFont(options.getFont());
+            }
+            g2d.setColor(Color.BLACK);
+            g2d.drawString(String.valueOf(ch), x, y);
+        }
+    },
+    ;
 }
