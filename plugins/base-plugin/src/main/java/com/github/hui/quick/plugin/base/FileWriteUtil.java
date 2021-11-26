@@ -1,6 +1,7 @@
 package com.github.hui.quick.plugin.base;
 
 import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang3.reflect.FieldUtils;
 import org.apache.commons.lang3.time.DateFormatUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -43,6 +44,15 @@ public class FileWriteUtil {
         return pathPrefix + DateFormatUtils.format(new Date(), "yyyyMMdd");
     }
 
+    /**
+     * 生成文件信息
+     *
+     * @param src
+     * @param inputType 文件类型
+     * @param <T>
+     * @return 文件信息
+     * @throws Exception
+     */
     public static <T> FileInfo saveFile(T src, String inputType) throws Exception {
         if (src instanceof String) {
             // 给的文件路径，区分三中，本地绝对路径，相对路径，网络地址
@@ -120,6 +130,13 @@ public class FileWriteUtil {
     }
 
 
+    /**
+     * 将字节流保存到文件中
+     *
+     * @param inputStream
+     * @param fileType
+     * @return
+     */
     public static FileInfo saveFileByStream(InputStream inputStream, String fileType) throws Exception {
         // 临时文件生成规则  当前时间戳 + 随机数 + 后缀
         return saveFileByStream(inputStream, getTmpPath(), genTempFileName(), fileType);
@@ -291,6 +308,17 @@ public class FileWriteUtil {
             fileInfo.setFilename(fileName.substring(0, index));
             fileInfo.setFileType(index + 1 == fileName.length() ? "" : fileName.substring(index + 1));
         }
+    }
+
+    /**
+     * 保存文本
+     * @param fileInfo
+     * @param content
+     * @throws FileNotFoundException
+     */
+    public static void saveContent(FileInfo fileInfo, String content) throws FileNotFoundException {
+        StringBufferInputStream stringBufferInputStream = new StringBufferInputStream(content);
+        saveFileByStream(stringBufferInputStream, fileInfo);
     }
 
     public static class FileInfo {

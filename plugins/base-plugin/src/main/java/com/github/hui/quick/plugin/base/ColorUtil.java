@@ -49,4 +49,13 @@ public class ColorUtil {
         int b = (0x000000ff & color);
         return "#" + NumUtil.toHex(r) + NumUtil.toHex(g) + NumUtil.toHex(b) + NumUtil.toHex(a);
     }
+
+    /**
+     * 转html对应的颜色配置
+     * @param color
+     * @return
+     */
+    public static String color2htmlColor(Color color) {
+        return "#" + NumUtil.toHex(color.getRed()) + NumUtil.toHex(color.getGreen()) + NumUtil.toHex(color.getBlue()) + NumUtil.toHex(color.getAlpha());
+    }
 }

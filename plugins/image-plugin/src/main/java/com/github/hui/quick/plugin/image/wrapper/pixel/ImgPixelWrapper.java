@@ -1,12 +1,10 @@
 package com.github.hui.quick.plugin.image.wrapper.pixel;
 
-import com.github.hui.quick.plugin.base.FileReadUtil;
-import com.github.hui.quick.plugin.base.FileWriteUtil;
-import com.github.hui.quick.plugin.base.GraphicUtil;
-import com.github.hui.quick.plugin.base.IoUtil;
+import com.github.hui.quick.plugin.base.*;
 import com.github.hui.quick.plugin.base.constants.MediaType;
 import com.github.hui.quick.plugin.base.gif.GifDecoder;
 import com.github.hui.quick.plugin.base.gif.GifHelper;
+import com.github.hui.quick.plugin.image.helper.ImgPixelHelper;
 import com.github.hui.quick.plugin.image.wrapper.pixel.context.PixelContextHolder;
 import com.github.hui.quick.plugin.image.wrapper.pixel.model.IPixelStyle;
 import com.github.hui.quick.plugin.image.wrapper.pixel.model.PixelStyleEnum;
@@ -131,6 +129,44 @@ public class ImgPixelWrapper {
         }
 
         return PixelContextHolder.toPixelChars(imgPixelChar);
+    }
+
+    /**
+     * 输出svg图
+     *
+     * @return
+     */
+    public List<String> asSvg() {
+        List<List<String>> chars = asChars();
+        List<String> result = new ArrayList<>(chars.size());
+
+        for (List<String> txt : chars) {
+            result.add(ImgPixelHelper.ascii2svg(txt, ColorUtil.color2htmlColor(pixelOptions.getBgColor()),
+                    ColorUtil.color2htmlColor(pixelOptions.getFontColor())));
+        }
+        return result;
+    }
+
+    /**
+     * 输出svg文件
+     *
+     * @param file
+     * @throws Exception
+     */
+    public void asSvgFile(String file) throws Exception {
+        FileWriteUtil.FileInfo fileInfo = FileWriteUtil.saveFile(file, "svg");
+
+        List<String> context = asSvg();
+        if (context.size() == 1) {
+            FileWriteUtil.saveContent(fileInfo, context.get(0));
+            return;
+        }
+
+        String lastName = fileInfo.getFilename();
+        for (int i = 0; i < context.size(); i++) {
+            fileInfo.setFilename(lastName + i);
+            FileWriteUtil.saveFile(fileInfo, context.get(i));
+        }
     }
 
     private ImmutablePair<BufferedImage, PixelContextHolder.ImgPixelChar> parseImg(BufferedImage source) {
@@ -273,11 +309,33 @@ public class ImgPixelWrapper {
             return this;
         }
 
+        public Builder setBgColor(int color) {
+            pixelOptions.setBgColor(ColorUtil.int2color(color));
+            return this;
+        }
+
+        public Builder setBgColor(Color color) {
+            pixelOptions.setBgColor(color);
+            return this;
+        }
+
+        public Builder setFontColor(int color) {
+            pixelOptions.setFontColor(ColorUtil.int2color(color));
+            return this;
+        }
+
+        public Builder setFontColor(Color color) {
+            pixelOptions.setFontColor(color);
+            return this;
+        }
+
         public ImgPixelWrapper build() {
             pixelOptions.setBlockSize(conditionGetOrElse((s) -> s > 0, pixelOptions.getBlockSize(), DEFAULT_BLOCK_SIZE));
             pixelOptions.setPixelType(conditionGetOrElse(Objects::nonNull, pixelOptions.getPixelType(), PixelStyleEnum.CHAR_COLOR));
             pixelOptions.setChars(conditionGetOrElse(Objects::nonNull, pixelOptions.getChars(), DEFAULT_CHAR_SET));
             pixelOptions.setRate(conditionGetOrElse(Objects::nonNull, pixelOptions.getRate(), DEFAULT_RATE));
+            pixelOptions.setBgColor(conditionGetOrElse(Objects::nonNull, pixelOptions.getBgColor(), Color.WHITE));
+            pixelOptions.setFontColor(conditionGetOrElse(Objects::nonNull, pixelOptions.getFontColor(), Color.BLACK));
             fontStyle = conditionGetOrElse((s) -> s >= 0 && s <= 3, fontStyle, Font.PLAIN);
             fontName = conditionGetOrElse(Objects::nonNull, fontName, DEFAULT_FONT_NAME);
             pixelOptions.setFont(new Font(fontName, fontStyle, pixelOptions.getBlockSize()));

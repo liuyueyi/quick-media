@@ -1,7 +1,11 @@
 package com.github.hui.quick.plugin.image.helper;
 
+import com.github.hui.quick.plugin.image.util.StrUtil;
+
 import java.awt.*;
 import java.awt.image.BufferedImage;
+import java.util.Comparator;
+import java.util.List;
 
 /**
  * 图片像素画处理
@@ -10,8 +14,43 @@ import java.awt.image.BufferedImage;
  * @data 2021/11/7
  */
 public class ImgPixelHelper {
+    public static String SVG_START = "<?xml version=\"1.0\" encoding=\"UTF-8\" ?>\n" +
+            "<svg xmlns=\"http://www.w3.org/2000/svg\"\n" +
+            "        viewBox=\"0 0 {width} {height}\"\n" +
+            "        style=\"width: 100%; height: 100%; overflow: auto; fill: {BG_COLOR}\">\n" +
+            "    <script type=\"text/javascript\"><![CDATA[\n" +
+            "window.addEventListener('load',function() {\n" +
+            "    var bounding_rect = document.getElementById(\"bounding-rect\");\n" +
+            "    var text = document.getElementById(\"ascii\");\n" +
+            "    var bb_text = text.getBBox();\n" +
+            "    // Change the font size so that the height and width match up\n" +
+            "    var font_size = Math.round(1e3 * bb_text.height / bb_text.width) / 1e3;\n" +
+            "    text.setAttribute(\"font-size\", font_size + \"px\");\n" +
+            "    // Adjust size of bounding rectangle\n" +
+            "    bb_text = text.getBBox();\n" +
+            "    bounding_rect.setAttribute(\"width\", bb_text.width);\n" +
+            "    bounding_rect.setAttribute(\"height\", bb_text.height);\n" +
+            "}, false);\n" +
+            "    ]]></script>\n" +
+            "    <style type=\"text/css\">\n" +
+            "    text.ascii-art {\n" +
+            "        user-select: none;\n" +
+            "        whiteSpace: \"pre\";\n" +
+            "        fill: {FONT_COLOR};\n" +
+            "        -webkit-user-select:none;\n" +
+            "        -khtml-user-select:none;\n" +
+            "        -moz-user-select:none;\n" +
+            "        -ms-user-select:none;\n" +
+            "    }\n" +
+            "    </style>\n" +
+            "    <rect x=\"0\" y=\"0\" height=\"100%\" width=\"100%\" id=\"bounding-rect\"/>\n" +
+            "    <text x=\"0\" y=\"0\" id=\"ascii\" font-family=\"monospace, courier\" text-anchor=\"start\"\n" +
+            "        font-size=\"1px\" class=\"ascii-art\">";
+    public static String END = "\n  </text></svg>";
+
     /**
      * 基于颜色的灰度值，获取对应的字符
+     *
      * @param g
      * @return
      */
@@ -40,5 +79,32 @@ public class ImgPixelHelper {
             }
         }
         return colors;
+    }
+
+    /**
+     * 字符转svg矢量图
+     *
+     * @param lines
+     * @param bgColor
+     * @param fontColor
+     * @return
+     */
+    public static String ascii2svg(List<String> lines, String bgColor, String fontColor) {
+        StringBuilder builder = new StringBuilder();
+        int height = lines.size();
+        int width = lines.stream().max(Comparator.comparingInt(String::length)).get().length();
+        builder.append(StrUtil.replace(SVG_START, "{width}", String.valueOf(width), "{height}", String.valueOf(height), "{BG_COLOR}", bgColor, "{FONT_COLOR}", fontColor));
+
+        float dy = 100.0f / height;
+        String start = String.format("<tspan x=\"0\" dy=\"%.3f%%\" textLength=\"100%%\" xml:space=\"preserve\">", dy);
+        String end = "</tspan>";
+        for (String line : lines) {
+            builder.append(start)
+                    .append(StrUtil.replace(line,"&", "&amp;", "\"", "&quot;", "<", "&lt;", ">", "&gt;"))
+                    .append(end).append("\n");
+        }
+
+        builder.append(END);
+        return builder.toString();
     }
 }

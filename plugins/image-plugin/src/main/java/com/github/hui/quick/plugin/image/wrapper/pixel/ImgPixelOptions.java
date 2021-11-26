@@ -52,6 +52,16 @@ public class ImgPixelOptions {
      */
     private String picType;
 
+    /**
+     * 字符图/svg图的背景色
+     */
+    private Color bgColor;
+
+    /**
+     * 字符图/svg图的字体色
+     */
+    private Color fontColor;
+
     public BufferedImage getSource() {
         return source;
     }
@@ -114,5 +124,21 @@ public class ImgPixelOptions {
 
     public void setPicType(String picType) {
         this.picType = picType;
+    }
+
+    public Color getBgColor() {
+        return bgColor;
+    }
+
+    public void setBgColor(Color bgColor) {
+        this.bgColor = bgColor;
+    }
+
+    public Color getFontColor() {
+        return fontColor;
+    }
+
+    public void setFontColor(Color fontColor) {
+        this.fontColor = fontColor;
     }
 }

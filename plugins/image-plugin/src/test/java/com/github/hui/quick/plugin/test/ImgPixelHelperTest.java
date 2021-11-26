@@ -1,14 +1,11 @@
 package com.github.hui.quick.plugin.test;
 
-import com.github.hui.quick.plugin.base.ColorUtil;
-import com.github.hui.quick.plugin.base.FileReadUtil;
 import com.github.hui.quick.plugin.base.OSUtil;
 import com.github.hui.quick.plugin.image.wrapper.pixel.ImgPixelWrapper;
 import com.github.hui.quick.plugin.image.wrapper.pixel.model.PixelStyleEnum;
 import org.junit.Before;
 import org.junit.Test;
 
-import javax.imageio.ImageIO;
 import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
@@ -102,8 +99,8 @@ public class ImgPixelHelperTest {
 
     @Test
     public void testCharLines() {
-//        String file = "http://pic.dphydh.com/pic/newspic/2017-12-13/505831-1.png";
-        String file = "https://c-ssl.duitang.com/uploads/item/202003/29/20200329043918_2FUvk.thumb.400_0.gif";
+        String file = "http://pic.dphydh.com/pic/newspic/2017-12-13/505831-1.png";
+//        String file = "https://c-ssl.duitang.com/uploads/item/202003/29/20200329043918_2FUvk.thumb.400_0.gif";
         java.util.List<java.util.List<String>> list = ImgPixelWrapper.build()
                 .setSourceImg(file)
                 .setBlockSize(3)
@@ -111,12 +108,25 @@ public class ImgPixelHelperTest {
                 .setPixelType(PixelStyleEnum.CHAR_BLACK)
                 .build()
                 .asChars();
-        for (List<String> s: list) {
-            for (String t: s) {
+        for (List<String> s : list) {
+            for (String t : s) {
                 System.out.println(t);
             }
 
             System.out.println("------- 分割 -------");
         }
+    }
+
+    @Test
+    public void testSvg() throws Exception {
+        String file = "http://pic.dphydh.com/pic/newspic/2017-12-13/505831-1.png";
+//        String file = "https://c-ssl.duitang.com/uploads/item/202003/29/20200329043918_2FUvk.thumb.400_0.gif";
+        ImgPixelWrapper.build()
+                .setSourceImg(file)
+                .setBlockSize(3)
+                .setRate(0.6)
+                .setPixelType(PixelStyleEnum.CHAR_BLACK)
+                .build()
+                .asSvgFile(prefix + "/out.svg");
     }
 }

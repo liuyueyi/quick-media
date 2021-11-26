@@ -1,6 +1,6 @@
 package com.github.hui.quick.plugin.image.helper;
 
-import com.github.hui.quick.plugin.image.util.StrListUtil;
+import com.github.hui.quick.plugin.image.util.StrUtil;
 import com.github.hui.quick.plugin.image.wrapper.create.ImgCreateOptions;
 
 import java.awt.*;
@@ -128,7 +128,7 @@ public class CalculateHelper {
             ans.add(str.substring(currentLineStartIndex));
         }
 
-        return StrListUtil.toArray(ans);
+        return StrUtil.toArray(ans);
     }
 
 
