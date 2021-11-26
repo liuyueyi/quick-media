@@ -7,6 +7,7 @@ import com.github.hui.quick.plugin.base.IoUtil;
 import com.github.hui.quick.plugin.base.constants.MediaType;
 import com.github.hui.quick.plugin.base.gif.GifDecoder;
 import com.github.hui.quick.plugin.base.gif.GifHelper;
+import com.github.hui.quick.plugin.image.wrapper.pixel.context.PixelContextHolder;
 import com.github.hui.quick.plugin.image.wrapper.pixel.model.IPixelStyle;
 import com.github.hui.quick.plugin.image.wrapper.pixel.model.PixelStyleEnum;
 import org.apache.commons.lang3.tuple.ImmutablePair;
@@ -14,7 +15,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import javax.imageio.ImageIO;
-import javax.swing.plaf.basic.BasicGraphicsUtils;
 import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.*;
@@ -55,7 +55,7 @@ public class ImgPixelWrapper {
             throw new IllegalArgumentException("bufferedImage cannot be null.");
         }
 
-        return parseImg(pixelOptions.getSource());
+        return parseImg(pixelOptions.getSource()).left;
     }
 
     /**
@@ -72,13 +72,21 @@ public class ImgPixelWrapper {
         int gifCnt = decoder.getFrameCount();
         List<ImmutablePair<BufferedImage, Integer>> renderImgList = new ArrayList<>(gifCnt);
         for (int index = 0; index < gifCnt; index++) {
-            renderImgList.add(ImmutablePair.of(parseImg(decoder.getFrame(index)), decoder.getDelay(index)));
+            ImmutablePair<BufferedImage, PixelContextHolder.ImgPixelChar> pair = parseImg(decoder.getFrame(index));
+            renderImgList.add(ImmutablePair.of(pair.left, decoder.getDelay(index)));
         }
         ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
         GifHelper.saveGif(renderImgList, outputStream);
         return outputStream;
     }
 
+    /**
+     * 保存到文件
+     *
+     * @param fileName
+     * @return
+     * @throws Exception
+     */
     public boolean asFile(String fileName) throws Exception {
         File file = new File(fileName);
         FileWriteUtil.mkDir(file.getParentFile());
@@ -101,25 +109,54 @@ public class ImgPixelWrapper {
         return true;
     }
 
-    private BufferedImage parseImg(BufferedImage source) {
-        if (pixelOptions.getRate() != 1) {
-            source = GraphicUtil.scaleImg((int)(source.getWidth() * pixelOptions.getRate()), (int)(source.getHeight() * pixelOptions.getRate()), source);
+    /**
+     * 图片转字符时，输出字符数组
+     *
+     * @return
+     */
+    public List<List<String>> asChars() {
+        // 静态图的转换
+        if (pixelOptions.getSource() != null) {
+            return PixelContextHolder.toPixelChars(parseImg(pixelOptions.getSource()).getRight());
         }
-        int picWidth = source.getWidth();
-        int picHeight = source.getHeight();
-        int blockSize = pixelOptions.getBlockSize();
-        IPixelStyle pixelType = pixelOptions.getPixelType();
-        BufferedImage pixelImg = new BufferedImage(picWidth / blockSize * blockSize, picHeight / blockSize * blockSize, source.getType());
-        Graphics2D g2d = GraphicUtil.getG2d(pixelImg);
-        g2d.setColor(null);
-        g2d.fillRect(0, 0, picWidth, picHeight);
-        for (int y = 0; y < picHeight; y += blockSize) {
-            for (int x = 0; x < picWidth; x += blockSize) {
-                pixelType.render(g2d, source, pixelOptions, x, y);
+
+        // gif图的转换
+        GifDecoder decoder = pixelOptions.getGifSource();
+        int gifCnt = decoder.getFrameCount();
+        PixelContextHolder.ImgPixelChar imgPixelChar = null;
+        for (int index = 0; index < gifCnt; index++) {
+            ImmutablePair<BufferedImage, PixelContextHolder.ImgPixelChar> pair = parseImg(decoder.getFrame(index));
+            pair.right.setPre(imgPixelChar);
+            imgPixelChar = pair.right;
+        }
+
+        return PixelContextHolder.toPixelChars(imgPixelChar);
+    }
+
+    private ImmutablePair<BufferedImage, PixelContextHolder.ImgPixelChar> parseImg(BufferedImage source) {
+        try {
+            PixelContextHolder.newPic();
+            if (pixelOptions.getRate() != 1) {
+                source = GraphicUtil.scaleImg((int) (source.getWidth() * pixelOptions.getRate()), (int) (source.getHeight() * pixelOptions.getRate()), source);
             }
+            int picWidth = source.getWidth();
+            int picHeight = source.getHeight();
+            int blockSize = pixelOptions.getBlockSize();
+            IPixelStyle pixelType = pixelOptions.getPixelType();
+            BufferedImage pixelImg = new BufferedImage(picWidth / blockSize * blockSize, picHeight / blockSize * blockSize, source.getType());
+            Graphics2D g2d = GraphicUtil.getG2d(pixelImg);
+            g2d.setColor(null);
+            g2d.fillRect(0, 0, picWidth, picHeight);
+            for (int y = 0; y < picHeight; y += blockSize) {
+                for (int x = 0; x < picWidth; x += blockSize) {
+                    pixelType.render(g2d, source, pixelOptions, x, y);
+                }
+            }
+            g2d.dispose();
+            return ImmutablePair.of(pixelImg, PixelContextHolder.getPixelChar());
+        } finally {
+            PixelContextHolder.clear();
         }
-        g2d.dispose();
-        return pixelImg;
     }
 
     public static class Builder {

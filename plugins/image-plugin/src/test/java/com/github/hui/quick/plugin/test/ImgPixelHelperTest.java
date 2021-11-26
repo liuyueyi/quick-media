@@ -12,6 +12,7 @@ import javax.imageio.ImageIO;
 import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
+import java.util.List;
 
 /**
  * 图片像素化测试类
@@ -86,16 +87,36 @@ public class ImgPixelHelperTest {
     @Test
     public void testGif() throws Exception {
 //        String img = "https://img.zcool.cn/community/01565859a4ea21a801211d251e1cbc.gif";
-//        String img = "https://c-ssl.duitang.com/uploads/item/202003/29/20200329043918_2FUvk.thumb.400_0.gif";
-        String img = "http://n.sinaimg.cn/sinacn/w390h219/20171231/0ac1-fyqefvw5238474.gif";
+        String img = "https://c-ssl.duitang.com/uploads/item/202003/29/20200329043918_2FUvk.thumb.400_0.gif";
+//        String img = "http://n.sinaimg.cn/sinacn/w390h219/20171231/0ac1-fyqefvw5238474.gif";
         ImgPixelWrapper.build().setSourceImg(img)
                 .setBlockSize(7)
-                .setPixelType(PixelStyleEnum.CHAR_COLOR)
+                .setPixelType(PixelStyleEnum.CHAR_BLACK)
                 .setRate(2d)
                 .setFontStyle(Font.BOLD)
-                .setChars("😍")
                 .build()
                 .asFile(prefix + "/out3.gif");
         System.out.println("--------");
+    }
+
+
+    @Test
+    public void testCharLines() {
+//        String file = "http://pic.dphydh.com/pic/newspic/2017-12-13/505831-1.png";
+        String file = "https://c-ssl.duitang.com/uploads/item/202003/29/20200329043918_2FUvk.thumb.400_0.gif";
+        java.util.List<java.util.List<String>> list = ImgPixelWrapper.build()
+                .setSourceImg(file)
+                .setBlockSize(3)
+                .setRate(0.6)
+                .setPixelType(PixelStyleEnum.CHAR_BLACK)
+                .build()
+                .asChars();
+        for (List<String> s: list) {
+            for (String t: s) {
+                System.out.println(t);
+            }
+
+            System.out.println("------- 分割 -------");
+        }
     }
 }

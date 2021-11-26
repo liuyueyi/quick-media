@@ -2,8 +2,10 @@ package com.github.hui.quick.plugin.image.wrapper.pixel.model;
 
 import com.github.hui.quick.plugin.image.helper.ImgPixelHelper;
 import com.github.hui.quick.plugin.image.wrapper.pixel.ImgPixelOptions;
+import com.github.hui.quick.plugin.image.wrapper.pixel.context.PixelContextHolder;
 
 import java.awt.*;
+import java.lang.String;
 
 /**
  * 系统提供的渲染枚举类
@@ -60,6 +62,7 @@ public enum PixelStyleEnum implements IPixelStyle {
             if (g2d.getFont() == null || g2d.getFont().getSize() != options.getBlockSize()) {
                 g2d.setFont(options.getFont());
             }
+            PixelContextHolder.addChar(y, ch);
             g2d.drawString(String.valueOf(ch), x, y);
         }
     },
@@ -82,6 +85,7 @@ public enum PixelStyleEnum implements IPixelStyle {
      * 图片转纯黑白字符
      */
     CHAR_BLACK {
+
         @Override
         public Color calculateColor(int red, int green, int blue, int size) {
             return GRAY_ALG.calculateColor(red, green, blue, size);
@@ -93,6 +97,7 @@ public enum PixelStyleEnum implements IPixelStyle {
             if (g2d.getFont() == null || g2d.getFont().getSize() != options.getBlockSize()) {
                 g2d.setFont(options.getFont());
             }
+            PixelContextHolder.addChar(y, ch);
             g2d.setColor(Color.BLACK);
             g2d.drawString(String.valueOf(ch), x, y);
         }
