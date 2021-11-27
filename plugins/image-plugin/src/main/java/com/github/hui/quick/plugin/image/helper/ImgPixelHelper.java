@@ -51,12 +51,16 @@ public class ImgPixelHelper {
     /**
      * 基于颜色的灰度值，获取对应的字符
      *
+     * <a href='https://blog.csdn.net/cuixiping/article/details/40291389'/>
      * @param g
      * @return
      */
     public static char toChar(String ascii, Color g) {
-        double gray = 0.299 * g.getRed() + 0.578 * g.getGreen() + 0.114 * g.getBlue();
-        return ascii.charAt((int) (gray / 255 * ascii.length()));
+        // 原始灰度值公式如下
+        // double gray = 0.299 * g.getRed() + 0.587 * g.getGreen() + 0.114 * g.getBlue();
+        // 使用下面这种用于提高计算效率
+        int gray = (19595 * g.getRed() + 38469 * g.getGreen() + 7472 * g.getBlue()) >> 16;
+        return ascii.charAt(gray * (ascii.length() - 1) / 255 );
     }
 
     /**
