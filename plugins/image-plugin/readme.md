@@ -11,6 +11,10 @@
     - [图片合成支持](doc/images/imgMerge.md)
 - [x] 水印
 - [x] svg渲染
+- [x] 灰度化
+- [x] 图片转字符图
+- [x] 图转字符数组
+- [x] 位图转矢量图
 - [ ] 裁剪
 - [ ] 压缩
 - [ ] 旋转
@@ -20,24 +24,13 @@
 
 ### 1. 依赖
 
-外部如需使用，请引入下面的源
-
-```xml
-<repositories>
-    <repository>
-        <id>yihui-maven-repo</id>
-        <url>https://raw.githubusercontent.com/liuyueyi/maven-repository/master/repository</url>
-    </repository>
-</repositories>
-```
-
-jar包引入，请注意使用最新的版本
+jar包引入，请注意使用最新的版本，直接到中央仓库依赖
 
 ```xml
 <dependency>
-    <groupId>com.github.hui.media</groupId>
+    <groupId>com.github.liuyueyi.media</groupId>
     <artifactId>image-plugin</artifactId>
-    <version>2.5.2</version>
+    <version>2.6.3</version>
 </dependency>
 ```
 
@@ -320,5 +313,25 @@ public void testWaterMark() {
         } catch (Exception e) {
             e.printStackTrace();
         }
+}
+```
+
+#### e. ImgPixelWrapper
+
+实现图片灰度化、像素化、字符图、位图转矢量图等基本功能
+
+```java
+// 位图转矢量图输出
+@Test
+public void testSvg() throws Exception {
+    String file = "http://pic.dphydh.com/pic/newspic/2017-12-13/505831-1.png";
+//        String file = "https://c-ssl.duitang.com/uploads/item/202003/29/20200329043918_2FUvk.thumb.400_0.gif";
+    ImgPixelWrapper.build()
+            .setSourceImg(file)
+            .setBlockSize(3)
+            .setRate(0.6)
+            .setPixelType(PixelStyleEnum.CHAR_BLACK)
+            .build()
+            .asSvgFile(prefix + "/out.svg");
 }
 ```

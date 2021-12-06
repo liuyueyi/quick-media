@@ -46,7 +46,7 @@ public class ImgPixelHelper {
             "    <rect x=\"0\" y=\"0\" height=\"100%\" width=\"100%\" id=\"bounding-rect\"/>\n" +
             "    <text x=\"0\" y=\"0\" id=\"ascii\" font-family=\"monospace, courier\" text-anchor=\"start\"\n" +
             "        font-size=\"1px\" class=\"ascii-art\">";
-    public static String END = "\n  </text></svg>";
+    public static String SVG_END = "\n  </text></svg>";
 
     /**
      * 基于颜色的灰度值，获取对应的字符
@@ -108,7 +108,7 @@ public class ImgPixelHelper {
                     .append(end).append("\n");
         }
 
-        builder.append(END);
+        builder.append(SVG_END);
         return builder.toString();
     }
 }

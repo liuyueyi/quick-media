@@ -36,7 +36,7 @@
 <dependency>
     <groupId>com.github.liuyueyi.media</groupId>
     <artifactId>qrcode-plugin</artifactId>
-    <version>2.6.1</version>
+    <version>2.6.3</version>
 </dependency>
 ```
 
@@ -67,7 +67,7 @@
 <dependency>
     <groupId>com.github.liuyueyi.quick-media</groupId>
     <artifactId>qrcode-plugin</artifactId>
-    <version>2.6.1</version>
+    <version>2.6.3</version>
 </dependency>
 ```
 
@@ -268,12 +268,17 @@ markdown转html，转图片的封装类， 详细内容查看: [markdown-plugin]
 - [x] 压缩
 - [x] 旋转
 - [x] 缩放
+- [x] 灰度化，像素化
+- [x] 转字符图
+- [x] 位图转矢量图
 - [ ] 格式转换
 
 
 [查看更多图片服务详情](https://liuyueyi.github.io/quick-media/#/插件/image/使用手册)
     
+    
 ### 4. 视频相关
+
 - [ ] 视频压缩
 - [ ] 转码
 - [ ] 截取
