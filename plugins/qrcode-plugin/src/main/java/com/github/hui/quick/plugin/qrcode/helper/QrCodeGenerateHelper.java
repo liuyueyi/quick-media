@@ -54,9 +54,30 @@ public class QrCodeGenerateHelper {
         }
 
         QRCode code = Encoder.encode(qrCodeConfig.getMsg(), errorCorrectionLevel, qrCodeConfig.getHints());
-        return renderResult(code, qrCodeConfig.getW(), qrCodeConfig.getH(), quietZone);
+        BitMatrixEx bitMatrixEx = renderResult(code, qrCodeConfig.getW(), qrCodeConfig.getH(), quietZone);
+        clearLogo(bitMatrixEx, qrCodeConfig.getLogoOptions());
+        return bitMatrixEx;
     }
 
+    private static void clearLogo(BitMatrixEx bitMatrixEx, QrCodeOptions.LogoOptions logoOptions) {
+        if (logoOptions == null) {
+            return;
+        }
+
+        // 将logo所占的点阵区间，全部设置为0，避免出现logo覆盖时，渲染处被部分覆盖的问题
+        int rate = logoOptions.getRate() / 2;
+        int width = bitMatrixEx.getByteMatrix().getWidth();
+        int height = bitMatrixEx.getByteMatrix().getHeight();
+        int logoWidth = (int) Math.ceil(width / (float)rate);
+        int logoHeight = (int) Math.ceil(height / (float)rate);
+        int logoX = (width - logoWidth) / 2;
+        int logoY = (height - logoHeight) / 2;
+        for (int x = logoX; x <= logoX + logoWidth; x++) {
+            for (int y = logoY; y <= logoY + logoHeight; y++) {
+                bitMatrixEx.getByteMatrix().set(x, y, 0);
+            }
+        }
+    }
 
     /**
      * 对 zxing 的 QRCodeWriter 进行扩展, 解决白边过多的问题
@@ -204,7 +225,7 @@ public class QrCodeGenerateHelper {
         BufferedImage qrCode = QrCodeRenderHelper.drawQrInfo(qrCodeConfig, bitMatrix);
 
         boolean logoAlreadyDraw = false;
-        if (qrCodeConfig.getLogoOptions() != null &&
+        if (qrCodeConfig.getLogoOptions() != null && qrCodeConfig.getBgImgOptions() != null &&
                 qrCodeConfig.getBgImgOptions().getBgImgStyle() == QrCodeOptions.BgImgStyle.FILL) {
             // 此种模式，先绘制logo
             qrCode = QrCodeRenderHelper.drawLogo(qrCode, qrCodeConfig.getLogoOptions());

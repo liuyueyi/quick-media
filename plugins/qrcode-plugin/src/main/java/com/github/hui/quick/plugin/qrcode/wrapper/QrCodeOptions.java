@@ -3,6 +3,8 @@ package com.github.hui.quick.plugin.qrcode.wrapper;
 import com.github.hui.quick.plugin.base.gif.GifDecoder;
 import com.github.hui.quick.plugin.qrcode.constants.QuickQrUtil;
 import com.github.hui.quick.plugin.qrcode.entity.DotSize;
+import com.github.hui.quick.plugin.qrcode.entity.RenderImgResourcesV2;
+import com.github.hui.quick.plugin.qrcode.entity.RenderImgResources;
 import com.github.hui.quick.plugin.qrcode.helper.QrCodeRenderHelper;
 import com.google.zxing.EncodeHintType;
 
@@ -11,10 +13,7 @@ import java.awt.geom.Ellipse2D;
 import java.awt.image.BufferedImage;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.List;
-import java.util.ArrayList;
 import java.util.Objects;
-import java.util.Random;
 
 /**
  * Created by yihui on 2017/7/17.
@@ -207,7 +206,7 @@ public class QrCodeOptions {
         private LogoStyle logoStyle;
 
         /**
-         * logo 占二维码的比例
+         * logo 占二维码的比例， rate 要求 > 4
          */
         private int rate;
 
@@ -345,7 +344,7 @@ public class QrCodeOptions {
             private LogoStyle logoStyle;
 
             /**
-             * logo 占二维码的比例
+             * logo 占二维码的比例， 默认为12
              */
             private int rate;
 
@@ -1204,7 +1203,6 @@ public class QrCodeOptions {
      * 绘制二维码的配置信息
      */
     public static class DrawOptions {
-        private Random random = new Random();
         /**
          * 着色颜色
          */
@@ -1264,7 +1262,7 @@ public class QrCodeOptions {
         /**
          * 渲染图
          */
-        private Map<DotSize, List<BufferedImage>> imgMapper;
+        private RenderImgResources imgResources;
 
         /**
          * 生成二维码的图片样式，一般来讲不推荐使用圆形，默认为normal
@@ -1275,22 +1273,21 @@ public class QrCodeOptions {
          * 圆角的弧度，默认为 1 / 8
          */
         private Float cornerRadius;
+        /**
+         * v2 版本图片渲染资源
+         */
+        private RenderImgResourcesV2 imgResourcesForV2;
 
         public BufferedImage getImage(int row, int col) {
             return getImage(DotSize.create(row, col));
         }
 
         public BufferedImage getImage(DotSize dotSize) {
-            List<BufferedImage> list = imgMapper.get(dotSize);
-            if (list == null) {
+            if(imgResources == null) {
                 return null;
             }
 
-            if (list.size() == 1) {
-                return list.get(0);
-            }
-
-            return list.get(random.nextInt(list.size()));
+            return imgResources.getImage(dotSize);
         }
 
         /**
@@ -1382,12 +1379,20 @@ public class QrCodeOptions {
             this.diaphaneityFill = diaphaneityFill;
         }
 
-        public Map<DotSize, List<BufferedImage>> getImgMapper() {
-            return imgMapper;
+        public RenderImgResources getImgResources() {
+            return imgResources;
         }
 
-        public void setImgMapper(Map<DotSize, List<BufferedImage>> imgMapper) {
-            this.imgMapper = imgMapper;
+        public void setImgResources(RenderImgResources imgResources) {
+            this.imgResources = imgResources;
+        }
+
+        public void setImgResourcesForV2(RenderImgResourcesV2 imgResourcesForV2) {
+            this.imgResourcesForV2 = imgResourcesForV2;
+        }
+
+        public RenderImgResourcesV2 getImgResourcesForV2() {
+            return imgResourcesForV2;
         }
 
         public ImgStyle getQrStyle() {
@@ -1420,14 +1425,14 @@ public class QrCodeOptions {
                     Objects.equals(bgColor, that.bgColor) && Objects.equals(bgImg, that.bgImg) &&
                     drawStyle == that.drawStyle && Objects.equals(text, that.text) &&
                     Objects.equals(fontName, that.fontName) && txtMode == that.txtMode &&
-                    Objects.equals(imgMapper, that.imgMapper) && qrStyle == that.qrStyle &&
+                    Objects.equals(imgResources, that.imgResources) && qrStyle == that.qrStyle &&
                     Objects.equals(cornerRadius, that.cornerRadius);
         }
 
         @Override
         public int hashCode() {
             return Objects.hash(preColor, bgColor, bgImg, drawStyle, text, fontName, txtMode, fontStyle, enableScale,
-                    diaphaneityFill, imgMapper, qrStyle, cornerRadius);
+                    diaphaneityFill, imgResources, qrStyle, cornerRadius);
         }
 
         @Override
@@ -1435,7 +1440,7 @@ public class QrCodeOptions {
             return "DrawOptions{" + "preColor=" + preColor + ", bgColor=" + bgColor + ", bgImg=" + bgImg +
                     ", drawStyle=" + drawStyle + ", text='" + text + '\'' + ", fontName='" + fontName + '\'' +
                     ", txtMode=" + txtMode + ", fontStyle=" + fontStyle + ", enableScale=" + enableScale +
-                    ", diaphaneityFill=" + diaphaneityFill + ", imgMapper=" + imgMapper + ", qrStyle=" + qrStyle +
+                    ", diaphaneityFill=" + diaphaneityFill + ", imgMapper=" + imgResources + ", qrStyle=" + qrStyle +
                     ", cornerRadius=" + cornerRadius + '}';
         }
 
@@ -1504,7 +1509,12 @@ public class QrCodeOptions {
             /**
              * 渲染图
              */
-            private Map<DotSize, List<BufferedImage>> imgMapper;
+            private RenderImgResources imgResources;
+
+            /**
+             * v2版渲染图
+             */
+            private RenderImgResourcesV2 imgResourcesV2;
 
             /**
              * 生成二维码的图片样式，可以是圆角 或 矩形
@@ -1515,10 +1525,6 @@ public class QrCodeOptions {
              * 圆角弧度，默认宽高的 1/8
              */
             private Float cornerRadius;
-
-            public DrawOptionsBuilder() {
-                imgMapper = new HashMap<>();
-            }
 
             public DrawOptionsBuilder preColor(Color preColor) {
                 this.preColor = preColor;
@@ -1571,8 +1577,19 @@ public class QrCodeOptions {
             }
 
             public DrawOptionsBuilder drawImg(int row, int column, BufferedImage image) {
-                imgMapper.computeIfAbsent(new DotSize(row, column), (k) -> new ArrayList<>()).add(image);
+                return drawImg(row, column, image, RenderImgResources.NO_LIMIT_COUNT);
+            }
+
+            public DrawOptionsBuilder drawImg(int row, int column, BufferedImage image, int count) {
+                if (imgResources == null) {
+                    imgResources = new RenderImgResources();
+                }
+                imgResources.addImage(row, column, count, image);
                 return this;
+            }
+
+            public void setImgResourcesV2(RenderImgResourcesV2 imgResourcesV2) {
+                this.imgResourcesV2 = imgResourcesV2;
             }
 
             public DrawOptionsBuilder qrStyle(ImgStyle qrStyle) {
@@ -1592,7 +1609,8 @@ public class QrCodeOptions {
                 drawOptions.setPreColor(this.preColor);
                 drawOptions.setDrawStyle(this.drawStyle);
                 drawOptions.setEnableScale(this.enableScale);
-                drawOptions.setImgMapper(this.imgMapper);
+                drawOptions.setImgResources(this.imgResources);
+                drawOptions.setImgResourcesForV2(this.imgResourcesV2);
                 drawOptions.setDiaphaneityFill(this.diaphaneityFill);
                 drawOptions.setText(text == null ? QuickQrUtil.DEFAULT_QR_TXT : text);
                 drawOptions.setTxtMode(txtMode == null ? TxtMode.ORDER : txtMode);
@@ -1779,7 +1797,59 @@ public class QrCodeOptions {
             public boolean expand(DotSize dotSize) {
                 return dotSize.getRow() == dotSize.getCol();
             }
-        };
+        },
+
+        IMAGE_V2 {
+            @Override
+            public void draw(Graphics2D g2d, int x, int y, int w, int h, BufferedImage img, String txt) {
+                String source  = "明月几时有把酒问青天不知天上宫阙今夕是何年我欲乘风归去又恐琼楼玉宇高处不胜寒起舞弄清影何似在人间" +
+                        "转朱阁低绮户照无眠不应有恨何事长向别时圆人有悲欢离合月有阴晴圆缺此事古难全但愿人长久千里共婵娟";
+                if ("false".equals(txt)) {
+                    if ( Math.random() < 0.8f) {
+                        if (Math.random() < 0.6f) {
+                            int offsetX = w / 5, offsetY = h / 5;
+                            int width = w - offsetX * 2, height = h - offsetY * 2;
+                            Color last = g2d.getColor();
+                            g2d.setColor(Color.GRAY);
+                            g2d.fillRect(x + offsetX, y + offsetY, width, height);
+                            g2d.setColor(last);
+                            return;
+                        }
+
+                        int index = QuickQrUtil.getIndex();
+                        if (index >= source.length()) {
+                            int offsetX = w / 5, offsetY = h / 5;
+                            int width = w - offsetX * 2, height = h - offsetY * 2;
+                            Color last = g2d.getColor();
+                            g2d.setColor(Color.GRAY);
+                            g2d.fillRect(x + offsetX, y + offsetY, width, height);
+                            g2d.setColor(last);
+                        } else {
+                            Color last = g2d.getColor();
+                            g2d.setColor(Color.GRAY);
+                            Font oldFont = g2d.getFont();
+                            if (oldFont.getSize() != w) {
+                                Font newFont = QuickQrUtil.font(oldFont.getName(), oldFont.getStyle(), w);
+                                g2d.setFont(newFont);
+                            }
+                            g2d.drawString(source.substring(index, index+1), x, y + w);
+                            g2d.setFont(oldFont);
+                            g2d.setColor(last);
+                        }
+                    } else {
+                        g2d.drawImage(img.getScaledInstance(w, h, Image.SCALE_SMOOTH), x, y, null);
+                    }
+                } else {
+                    g2d.drawImage(img.getScaledInstance(w, h, Image.SCALE_SMOOTH), x, y, null);
+                }
+            }
+
+            @Override
+            public boolean expand(DotSize dotSize) {
+                return true;
+            }
+        }
+        ;
 
         private static Map<String, DrawStyle> map;
 

@@ -4,6 +4,8 @@ import com.github.hui.quick.plugin.base.GraphicUtil;
 import com.github.hui.quick.plugin.base.ImageOperateUtil;
 import com.github.hui.quick.plugin.qrcode.constants.QuickQrUtil;
 import com.github.hui.quick.plugin.qrcode.entity.DotSize;
+import com.github.hui.quick.plugin.qrcode.entity.RenderImgResourcesV2;
+import com.github.hui.quick.plugin.qrcode.helper.v2.ImgRenderV2Helper;
 import com.github.hui.quick.plugin.qrcode.wrapper.BitMatrixEx;
 import com.github.hui.quick.plugin.qrcode.wrapper.QrCodeOptions;
 import com.google.zxing.qrcode.encoder.ByteMatrix;
@@ -123,7 +125,9 @@ public class QrCodeRenderHelper {
         }
 
         Graphics2D g2d = GraphicUtil.getG2d(bottomImg);
-        g2d.drawImage(ftImg, -Math.min(startX, 0), -Math.min(startY, 0), null);
+        boolean needScale = frontImgOptions.getFtW() < ftImg.getWidth() || frontImgOptions.getFtH() < ftImg.getHeight();
+        g2d.drawImage(!needScale ? ftImg: ftImg.getScaledInstance(frontImgOptions.getFtW(), frontImgOptions.getFtH(), BufferedImage.SCALE_SMOOTH),
+                -Math.min(startX, 0), -Math.min(startY, 0), null);
         g2d.dispose();
         return bottomImg;
     }
@@ -133,8 +137,8 @@ public class QrCodeRenderHelper {
         final int qrWidth = qrImg.getWidth();
         final int qrHeight = qrImg.getHeight();
 
-        final int ftW = frontImgOptions.getFtW();
-        final int ftH = frontImgOptions.getFtH();
+        int ftW = frontImgOptions.getFtW();
+        int ftH = frontImgOptions.getFtH();
 
         int resW = Math.max(ftW, qrWidth);
         int resH = Math.max(ftH, qrHeight);
@@ -148,11 +152,14 @@ public class QrCodeRenderHelper {
         int gifImgLen = frontImgOptions.getGifDecoder().getFrameCount();
         List<ImmutablePair<BufferedImage, Integer>> result = new ArrayList<>(gifImgLen);
         // 背景图缩放
+        BufferedImage ftImg = frontImgOptions.getGifDecoder().getFrame(0);
+        boolean needScale = frontImgOptions.getFtW() < ftImg.getWidth() || frontImgOptions.getFtH() < ftImg.getHeight();
         for (int index = 0; index < gifImgLen; index++) {
             BufferedImage bgImg = GraphicUtil.createImg(resW, resH, bottomImg);
             Graphics2D bgGraphic = GraphicUtil.getG2d(bgImg);
-            bgGraphic.drawImage(frontImgOptions.getGifDecoder().getFrame(index), -Math.min(startX, 0),
-                    -Math.min(startY, 0), null);
+            ftImg = frontImgOptions.getGifDecoder().getFrame(index);
+            bgGraphic.drawImage(!needScale ? ftImg : ftImg.getScaledInstance(frontImgOptions.getFtW(), frontImgOptions.getFtH(), BufferedImage.SCALE_SMOOTH),
+                    -Math.min(startX, 0), -Math.min(startY, 0), null);
 
             bgGraphic.dispose();
             bgImg.flush();
@@ -257,9 +264,15 @@ public class QrCodeRenderHelper {
                 // 选择一块区域进行填充
                 bgGraphic.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_ATOP, 1.0f));
                 bgGraphic.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
-                bgGraphic
-                        .drawImage(qrImg.getScaledInstance(qrWidth, qrHeight, Image.SCALE_SMOOTH), bgOffsetX, bgOffsetY,
-                                null);
+//                bgGraphic
+//                        .drawImage(qrImg.getScaledInstance(qrWidth, qrHeight, Image.SCALE_SMOOTH), bgOffsetX, bgOffsetY,
+//                                null);
+                // 实验功能，用于gif生成时缩放
+                int add = 2 * Math.abs(index - len / 2);
+                int newQrW = qrWidth + add;
+                int newQrH = qrHeight + add;
+
+                bgGraphic.drawImage(qrImg.getScaledInstance(newQrW, newQrH, Image.SCALE_SMOOTH), bgOffsetX - add / 2, bgOffsetY - add /2, null);
             } else {
                 // 全覆盖模式, 设置透明度， 避免看不到背景
                 bgGraphic.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_ATOP, bgImgOptions.getOpacity()));
@@ -337,27 +350,63 @@ public class QrCodeRenderHelper {
         int matrixH = bitMatrix.getByteMatrix().getHeight();
 
         QrCodeOptions.DrawStyle drawStyle = drawOptions.getDrawStyle();
-        DetectLocation detectLocation;
-        for (int x = 0; x < matrixW; x++) {
-            for (int y = 0; y < matrixH; y++) {
-                detectLocation = inDetectCornerArea(x, y, matrixW, matrixH, detectCornerSize);
-                if (bitMatrix.getByteMatrix().get(x, y) == 0) {
-                    // 探测图形内部的元素与二维码的01点图绘制逻辑分开
-                    // 绘制二维码中不在探测图形内部的0点图
-                    if (!detectLocation.detectedArea() || !qrCodeConfig.getDetectOptions().getSpecial()) {
-                        drawQrDotBgImg(qrCodeConfig, g2, leftPadding, topPadding, infoSize, x, y);
+        if (drawStyle == QrCodeOptions.DrawStyle.IMAGE_V2) {
+            // 若探测图形特殊绘制，则提前处理掉
+            RenderImgResourcesV2 imgResourcesV2 = drawOptions.getImgResourcesForV2();
+            for (int x = 0; x < matrixW; x++) {
+                for (int y = 0; y < matrixH; y++) {
+                    DetectLocation detectLocation = inDetectCornerArea(x, y, matrixW, matrixH, detectCornerSize);
+                    if (detectLocation.detectedArea()) {
+                        // 若探测图形特殊绘制，则单独处理
+                        if (qrCodeConfig.getDetectOptions().getSpecial()) {
+                            if (bitMatrix.getByteMatrix().get(x, y) == 1) {
+                                // 绘制三个位置探测图形
+                                drawDetectImg(qrCodeConfig, g2, bitMatrix, matrixW, matrixH, leftPadding, topPadding, infoSize,
+                                        detectCornerSize, x, y, detectOutColor, detectInnerColor, detectLocation);
+                                bitMatrix.getByteMatrix().set(x, y, 0);
+                            }
+                        } else {
+                            if (bitMatrix.getByteMatrix().get(x, y) == 0 && imgResourcesV2.getDefaultBgImg() != null) {
+                                QrCodeOptions.DrawStyle.IMAGE_V2.draw(g2, leftPadding + x * infoSize,
+                                        topPadding + y * infoSize, infoSize, infoSize,
+                                        imgResourcesV2.getDefaultBgImg(), null);
+                            }
+                        }
+                        continue;
                     }
-                    continue;
-                }
 
-                if (detectLocation.detectedArea() && qrCodeConfig.getDetectOptions().getSpecial()) {
-                    // 绘制三个位置探测图形
-                    drawDetectImg(qrCodeConfig, g2, bitMatrix, matrixW, matrixH, leftPadding, topPadding, infoSize,
-                            detectCornerSize, x, y, detectOutColor, detectInnerColor, detectLocation);
-                } else {
-                    g2.setColor(preColor);
-                    // 绘制二维码的1点图
-                    drawQrDotImg(qrCodeConfig, drawStyle, g2, bitMatrix, leftPadding, topPadding, infoSize, x, y);
+                    // 非探测区域内的0点图渲染
+                    if (bitMatrix.getByteMatrix().get(x, y) == 0 && imgResourcesV2.getDefaultBgImg() != null) {
+                        QrCodeOptions.DrawStyle.IMAGE_V2.draw(g2, leftPadding + x * infoSize,
+                                topPadding + y * infoSize, infoSize, infoSize,
+                                imgResourcesV2.getDefaultBgImg(), null);
+                    }
+                }
+            }
+            ImgRenderV2Helper.drawImg(g2, bitMatrix.getByteMatrix(), drawOptions.getImgResourcesForV2(), leftPadding, topPadding, infoSize);
+        } else {
+            DetectLocation detectLocation;
+            for (int x = 0; x < matrixW; x++) {
+                for (int y = 0; y < matrixH; y++) {
+                    detectLocation = inDetectCornerArea(x, y, matrixW, matrixH, detectCornerSize);
+                    if (bitMatrix.getByteMatrix().get(x, y) == 0) {
+                        // 探测图形内部的元素与二维码的01点图绘制逻辑分开
+                        // 绘制二维码中不在探测图形内部的0点图
+                        if (!detectLocation.detectedArea() || !qrCodeConfig.getDetectOptions().getSpecial()) {
+                            drawQrDotBgImg(qrCodeConfig, g2, leftPadding, topPadding, infoSize, x, y);
+                        }
+                        continue;
+                    }
+
+                    if (detectLocation.detectedArea() && qrCodeConfig.getDetectOptions().getSpecial()) {
+                        // 绘制三个位置探测图形
+                        drawDetectImg(qrCodeConfig, g2, bitMatrix, matrixW, matrixH, leftPadding, topPadding, infoSize,
+                                detectCornerSize, x, y, detectOutColor, detectInnerColor, detectLocation);
+                    } else {
+                        g2.setColor(preColor);
+                        // 绘制二维码的1点图
+                        drawQrDotImg(qrCodeConfig, drawStyle, g2, bitMatrix, leftPadding, topPadding, infoSize, x, y);
+                    }
                 }
             }
         }

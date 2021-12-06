@@ -45,7 +45,7 @@ public class QuickQrUtil {
 
     public static ThreadLocal<AtomicInteger> TXT_INDEX_LOCAL = new ThreadLocal<>();
 
-    private static int getIndex() {
+    public static int getIndex() {
         // 实际上是否加锁，对业务影响并不大
         AtomicInteger integer = TXT_INDEX_LOCAL.get();
         if (integer == null) {

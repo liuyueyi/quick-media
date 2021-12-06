@@ -7,8 +7,10 @@ import com.github.hui.quick.plugin.image.wrapper.create.ImgCreateOptions;
 import com.github.hui.quick.plugin.image.wrapper.merge.ImgMergeWrapper;
 import com.github.hui.quick.plugin.image.wrapper.merge.cell.ImgCell;
 import com.github.hui.quick.plugin.image.wrapper.merge.cell.TextCell;
+import com.github.hui.quick.plugin.qrcode.entity.RenderImgResourcesV2;
 import com.github.hui.quick.plugin.qrcode.wrapper.QrCodeGenWrapper;
 import com.github.hui.quick.plugin.qrcode.wrapper.QrCodeOptions;
+import com.google.zxing.WriterException;
 import com.google.zxing.qrcode.decoder.ErrorCorrectionLevel;
 import org.junit.Before;
 import org.junit.Test;
@@ -17,6 +19,7 @@ import javax.imageio.ImageIO;
 import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.File;
+import java.io.IOException;
 import java.util.Arrays;
 
 /**
@@ -737,6 +740,23 @@ public class QrCodeGenUserGuide {
         } catch (Exception e) {
             e.printStackTrace();
         }
+    }
+
+    @Test
+    public void imgQr3_v2() throws IOException, WriterException {
+        String msg = "http://weixin.qq.com/r/FS9waAPEg178rUcL93oH";
+        int size = 500;
+        boolean ans = QrCodeGenWrapper.of(msg)
+                .setW(size)
+                .setH(size)
+                .setErrorCorrection(ErrorCorrectionLevel.M)
+                .setDrawBgColor(ColorUtil.OPACITY)
+                .setImgResourcesForV2(RenderImgResourcesV2.create()
+                        .addSource(1, 1).addImg("overbg/b.png", -1).setMiss(0, 0).build()
+                        .addSource(1, 1).addImg("overbg/a.png", -1).build()
+                )
+                .setDrawStyle(QrCodeOptions.DrawStyle.IMAGE_V2)
+                .asFile(prefix + "/imgQr3_v2.png");
     }
 
     @Test
