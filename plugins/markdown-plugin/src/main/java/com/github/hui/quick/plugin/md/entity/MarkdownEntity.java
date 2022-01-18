@@ -29,7 +29,21 @@ public class MarkdownEntity {
 
     @Override
     public String toString() {
-        return css + "\n<div " + parseDiv() + ">\n" + html + "\n</div>";
+
+        /**
+         * 添加更完整的html结构
+         */
+        return "<html lang=\"en\">\n" +
+                "<head>\n" +
+                "    <meta charset=\"UTF-8\" />\n"
+                + css +
+                "</head>\n" +
+                "<body>" +
+                "\n<div " + parseDiv() + ">\n" +
+                    html +
+                "\n</div>" +
+                "</body>\n" +
+                "</html>";
     }
 
 

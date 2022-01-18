@@ -22,7 +22,9 @@ public class Md2ImgTest {
                 .setW(800)
                 .setAutoW(false)
                 .setAutoH(true)
-                .setOutType("jpg")
+                .setOutType("jpg") /*
+                若为windows平台要加上这句，否则有可能会出现乱码问题
+                .setFontFamily("微软雅黑");*/
                 .build()
                 .asImage();
         ImageIO.write(bf, "jpg", new File("md_out.jpg"));
@@ -49,6 +51,6 @@ public class Md2ImgTest {
                 .build()
                 .asImage();
         ImageIO.write(bf, "jpg", new File("md_out_2.jpg"));
-        System.out.println("---over---");
+
     }
 }
