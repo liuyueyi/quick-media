@@ -46,6 +46,11 @@ public class Md2ImgTest {
                 .setAutoW(false)
                 .setAutoH(true)
                 .setOutType("jpg")
+                /*
+                在其他平台最好设置一个通用字体, 否则可能会出现由于字体字库不全而导致的乱码问题
+                如在win下设置为'微软雅黑'
+                .setFontFamily("微软雅黑")
+                */
                 .build()
                 .asImage();
         ImageIO.write(bf, "jpg", new File("md_out_2.jpg"));
