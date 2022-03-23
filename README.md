@@ -1,5 +1,9 @@
 # quick-media
 
+<a href="https://blog.hhui.top" target="_blank">
+    <img src="https://img.shields.io/badge/-微信关注“一灰灰blog”公众号-orange.svg" alt="#" align="right">
+</a>
+
 [![Join the chat at https://gitter.im/quick-media/Lobby](https://badges.gitter.im/quick-media/Lobby.svg)](https://gitter.im/quick-media/Lobby?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
 [![Builder](https://travis-ci.org/liuyueyi/quick-media.svg?branch=master)](https://travis-ci.org/liuyueyi/quick-media)
 [![JitPack](https://jitpack.io/v/liuyueyi/quick-media.svg)](https://jitpack.io/#liuyueyi/quick-media)
@@ -11,6 +15,11 @@
 > 多媒体处理web服务
 >
 > mult-media process Web Service by FFMPEG & ImageMagic & SpringMVC
+
+组建了一个微信技术交流群，有兴趣的小伙伴欢迎关注公众号`一灰灰blog`，回复加群一起愉快玩耍
+
+![QrCode](https://spring.hhui.top/spring-blog/imgs/info/info.png) 
+
  
 本项目为一个提供图片 + 音频 + 视频 + 二维码 + 网页 + markdown处理的Web项目，我们的目标是封装一套多媒体文件处理的公共类库，简化各种复杂的调用；利用 spring-boot 来提供http接口实现多媒体的操作实例功能
 
