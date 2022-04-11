@@ -946,7 +946,7 @@ public class QrCodeGenWrapper {
         }
 
 
-        private QrCodeOptions build() {
+        public QrCodeOptions build() {
             this.validate();
 
             QrCodeOptions qrCodeConfig = new QrCodeOptions();
