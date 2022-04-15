@@ -134,6 +134,43 @@ public class SvgGenTest {
         }
     }
 
+    /**
+     * 五边形
+     */
+    public static class PentagonSvgTag extends SvgTag {
+        @Override
+        public String toString() {
+            float rate = NumUtil.divWithScaleFloor(w, 30, 2);
+            StringBuilder points = new StringBuilder();
+            points.append(x + NumUtil.multiplyWithScaleFloor(15, rate, 2)).append(",").append(y).append(" ")
+                    .append(x + NumUtil.multiplyWithScaleFloor(30, rate, 2)).append(",").append(y + NumUtil.multiplyWithScaleFloor(15, rate, 2)).append(" ")
+                    .append(x + NumUtil.multiplyWithScaleFloor(20, rate, 2)).append(",").append(y + NumUtil.multiplyWithScaleFloor(30, rate, 2)).append(" ")
+                    .append(x + NumUtil.multiplyWithScaleFloor(10, rate, 2)).append(",").append(y + NumUtil.multiplyWithScaleFloor(30, rate, 2)).append(" ")
+                    .append(x).append(",").append(y + NumUtil.multiplyWithScaleFloor(15, rate, 2)).append(" ");
+
+            return "<polygon points=\"" + points.toString() + "\"  style=\"fill:" + color + ";fill-rule:nonzero;\" />";
+        }
+    }
+
+    /**
+     * 六边形器
+     */
+    public static class HexagonSvgTag extends SvgTag {
+        @Override
+        public String toString() {
+            float rate = NumUtil.divWithScaleFloor(w, 30, 2);
+            StringBuilder points = new StringBuilder();
+            points.append(x + NumUtil.multiplyWithScaleFloor(10, rate, 2)).append(",").append(y).append(" ")
+                    .append(x + NumUtil.multiplyWithScaleFloor(20, rate, 2)).append(",").append(y).append(" ")
+                    .append(x + NumUtil.multiplyWithScaleFloor(30, rate, 2)).append(",").append(y + NumUtil.multiplyWithScaleFloor(15, rate, 2)).append(" ")
+                    .append(x + NumUtil.multiplyWithScaleFloor(20, rate, 2)).append(",").append(y + NumUtil.multiplyWithScaleFloor(30, rate, 2)).append(" ")
+                    .append(x + NumUtil.multiplyWithScaleFloor(10, rate, 2)).append(",").append(y + NumUtil.multiplyWithScaleFloor(30, rate, 2)).append(" ")
+                    .append(x).append(",").append(y + NumUtil.multiplyWithScaleFloor(15, rate, 2)).append(" ");
+
+            return "<polygon points=\"" + points.toString() + "\"  style=\"fill:" + color + ";fill-rule:nonzero;\" />";
+        }
+    }
+
     @Test
     public void testRenderToSvg() {
         try {
@@ -161,7 +198,7 @@ public class SvgGenTest {
             for (int x = 0; x < bitMatrix.getByteMatrix().getWidth(); x++) {
                 for (int y = 0; y < bitMatrix.getByteMatrix().getHeight(); y++) {
                     if (bitMatrix.getByteMatrix().get(x, y) == 1) {
-                        SvgTag tag = new RotateRectSvgTag();
+                        SvgTag tag = new HexagonSvgTag();
                         tag.x = x * cellSize;
                         tag.y = y * cellSize;
                         tag.w = cellSize;
