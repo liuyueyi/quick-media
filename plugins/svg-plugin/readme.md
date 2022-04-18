@@ -4,24 +4,13 @@
 
 ### 1. 依赖
 
-外部如需使用，请引入下面的源
-
-```xml
-<repositories>
-    <repository>
-        <id>yihui-maven-repo</id>
-        <url>https://raw.githubusercontent.com/liuyueyi/maven-repository/master/repository</url>
-    </repository>
-</repositories>
-```
-
 jar包引入，请注意使用最新的版本
 
 ```xml
 <dependency>
-    <groupId>com.github.hui.media</groupId>
+    <groupId>com.github.liuyueyi.media</groupId>
     <artifactId>svg-plugin</artifactId>
-    <version>1.0</version>
+    <version>2.6.3</version>
 </dependency>
 ```
 
