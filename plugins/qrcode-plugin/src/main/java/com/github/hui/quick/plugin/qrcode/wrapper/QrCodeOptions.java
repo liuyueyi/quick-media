@@ -231,11 +231,17 @@ public class QrCodeOptions {
          */
         private Float opacity;
 
+        /**
+         * true 表示将logo区域的二维码移除掉
+         * false logo区域的二维码不做任何处理
+         */
+        private boolean clearLogoArea;
+
         public LogoOptions() {
         }
 
         public LogoOptions(BufferedImage logo, LogoStyle logoStyle, int rate, boolean border, Color borderColor,
-                           Color outerBorderColor, Float opacity) {
+                           Color outerBorderColor, Float opacity, boolean clearLogoArea) {
             this.logo = logo;
             this.logoStyle = logoStyle;
             this.rate = rate;
@@ -243,6 +249,7 @@ public class QrCodeOptions {
             this.borderColor = borderColor;
             this.outerBorderColor = outerBorderColor;
             this.opacity = opacity;
+            this.clearLogoArea = clearLogoArea;
         }
 
         public BufferedImage getLogo() {
@@ -323,9 +330,16 @@ public class QrCodeOptions {
 
         @Override
         public String toString() {
-            return "LogoOptions{" + "logo=" + logo + ", logoStyle=" + logoStyle + ", rate=" + rate + ", border=" +
-                    border + ", borderColor=" + borderColor + ", outerBorderColor=" + outerBorderColor + ", opacity=" +
-                    opacity + '}';
+            return "LogoOptions{" +
+                    "logo=" + logo +
+                    ", logoStyle=" + logoStyle +
+                    ", rate=" + rate +
+                    ", border=" + border +
+                    ", borderColor=" + borderColor +
+                    ", outerBorderColor=" + outerBorderColor +
+                    ", opacity=" + opacity +
+                    ", clearLogoArea=" + clearLogoArea +
+                    '}';
         }
 
         public static LogoOptionsBuilder builder() {
@@ -369,6 +383,11 @@ public class QrCodeOptions {
              */
             private Float opacity;
 
+            /**
+             * true 会将logo区域的二维码清除掉
+             */
+            private boolean clearLogoArea = true;
+
             public LogoOptionsBuilder logo(BufferedImage logo) {
                 this.logo = logo;
                 return this;
@@ -404,8 +423,13 @@ public class QrCodeOptions {
                 return this;
             }
 
+            public LogoOptionsBuilder clearLogoArea(boolean clearLogoArea) {
+                this.clearLogoArea = clearLogoArea;
+                return this;
+            }
+
             public LogoOptions build() {
-                return new LogoOptions(logo, logoStyle, rate, border, borderColor, outerBorderColor, opacity);
+                return new LogoOptions(logo, logoStyle, rate, border, borderColor, outerBorderColor, opacity, clearLogoArea);
             }
         }
     }

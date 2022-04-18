@@ -21,8 +21,8 @@ import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.*;
 import java.util.HashMap;
-import java.util.Map;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Created by yihui on 2017/7/17.
@@ -345,6 +345,17 @@ public class QrCodeGenWrapper {
             return this;
         }
 
+        /**
+         * 是否清楚logo区域对应的二维码信息
+         *
+         * @param clearLogoArea true 表示清楚logo对应的二维码
+         * @return
+         */
+        public Builder setClearLogoArea(boolean clearLogoArea) {
+            logoOptions.clearLogoArea(clearLogoArea);
+            return this;
+        }
+
         ///////////////// logo配置结束 ///////////////
 
 
@@ -431,6 +442,7 @@ public class QrCodeGenWrapper {
 
         /**
          * startY 表示二维码在前置图上的y坐标，左上角为(0, 0)
+         *
          * @param startY
          * @return
          */
@@ -594,7 +606,7 @@ public class QrCodeGenWrapper {
             try {
                 return setLTDetectImg(ImageLoadUtil.getImageByPath(detectImg));
             } catch (IOException e) {
-                log.error("load detectImage error! img:{}",detectImg, e);
+                log.error("load detectImage error! img:{}", detectImg, e);
                 throw new IOException("load detectImage error!", e);
             }
         }

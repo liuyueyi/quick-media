@@ -25,17 +25,15 @@ public class QrCodeDeWrapper {
      * @param qrcodeImg 二维码图片的地址
      * @return 返回二维码的内容
      * @throws IOException       读取二维码失败
-     * @throws FormatException   二维码解析失败
-     * @throws ChecksumException
      * @throws NotFoundException
      */
-    public static String decode(String qrcodeImg) throws IOException, FormatException, ChecksumException, NotFoundException {
+    public static String decode(String qrcodeImg) throws IOException, NotFoundException {
         BufferedImage image = ImageLoadUtil.getImageByPath(qrcodeImg);
         return decode(image);
     }
 
 
-    public static String decode(BufferedImage image) throws FormatException, ChecksumException, NotFoundException {
+    public static String decode(BufferedImage image) throws NotFoundException {
         if (image == null) {
             throw new IllegalStateException("can not load qrCode!");
         }
@@ -43,8 +41,6 @@ public class QrCodeDeWrapper {
 
         LuminanceSource source = new BufferedImageLuminanceSource(image);
         BinaryBitmap bitmap = new BinaryBitmap(new HybridBinarizer(source));
-//        QRCodeReader qrCodeReader = new QRCodeReader();
-//        Result result = qrCodeReader.decode(bitmap);
 
         Map<DecodeHintType,Object> hints = new LinkedHashMap<DecodeHintType,Object>();
         // 解码设置编码方式为：utf-8，
