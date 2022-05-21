@@ -1,6 +1,7 @@
 package com.github.hui.quick.plugin.image.wrapper.pixel.context;
 
 import java.util.*;
+import java.util.concurrent.atomic.AtomicInteger;
 
 /**
  * @author yihui
@@ -13,9 +14,11 @@ public class PixelContextHolder {
     public static void newPic() {
         ImgPixelChar imgPixelChar = charCache.get();
         if (imgPixelChar == null) {
-            charCache.set(new ImgPixelChar());
+            // 首张图
+            charCache.set(new ImgPixelChar(new AtomicInteger()));
         } else {
-            ImgPixelChar newImg = new ImgPixelChar();
+            // 下一张图
+            ImgPixelChar newImg = new ImgPixelChar(imgPixelChar.seqCount);
             newImg.pre = imgPixelChar;
             charCache.set(newImg);
         }
@@ -24,7 +27,7 @@ public class PixelContextHolder {
     public static void addChar(int y, char ch) {
         ImgPixelChar imgPixelChar = charCache.get();
         if (imgPixelChar == null) {
-            imgPixelChar = new ImgPixelChar();
+            imgPixelChar = new ImgPixelChar(new AtomicInteger());
             charCache.set(imgPixelChar);
         }
         imgPixelChar.addChar(y, ch);
@@ -56,20 +59,31 @@ public class PixelContextHolder {
 
 
     public static class ImgPixelChar {
+        private final AtomicInteger seqCount;
         /**
          * key: y
          * value: y轴对应的字符
          */
-        private Map<Integer, StringBuilder> charCache;
+        private final Map<Integer, StringBuilder> charCache;
 
         private ImgPixelChar pre;
 
-        public ImgPixelChar() {
+        public ImgPixelChar(AtomicInteger seqCount) {
             charCache = new TreeMap<>();
+            this.seqCount = seqCount;
         }
 
         public void addChar(int y, char ch) {
             charCache.computeIfAbsent(y, (s) -> new StringBuilder()).append(ch);
+        }
+
+        public int getAndUpdateSeqIndex(int maxIndex) {
+            int index = seqCount.getAndAdd(1);
+            if (index >= maxIndex) {
+                index = 0;
+                seqCount.set(1);
+            }
+            return index;
         }
 
         public List<String> toPixelChars() {

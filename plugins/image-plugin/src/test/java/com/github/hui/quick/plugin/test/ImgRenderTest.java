@@ -181,8 +181,8 @@ public class ImgRenderTest {
                 .setPixelType(PixelStyleEnum.CHAR_BLACK)
                 .build()
                 .asChars();
-        for (List<String> s: list) {
-            for (String t: s) {
+        for (List<String> s : list) {
+            for (String t : s) {
                 System.out.println(t);
             }
 

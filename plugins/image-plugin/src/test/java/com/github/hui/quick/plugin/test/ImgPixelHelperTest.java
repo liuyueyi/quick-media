@@ -1,5 +1,8 @@
 package com.github.hui.quick.plugin.test;
 
+import com.github.hui.quick.plugin.base.ColorUtil;
+import com.github.hui.quick.plugin.base.GraphicUtil;
+import com.github.hui.quick.plugin.base.ImageLoadUtil;
 import com.github.hui.quick.plugin.base.OSUtil;
 import com.github.hui.quick.plugin.image.wrapper.pixel.ImgPixelWrapper;
 import com.github.hui.quick.plugin.image.wrapper.pixel.model.PixelStyleEnum;
@@ -23,7 +26,7 @@ public class ImgPixelHelperTest {
     @Before
     public void init() {
         if (OSUtil.isWinOS()) {
-            prefix = "c://quick-media";
+            prefix = "d://quick-media";
         }
     }
 
@@ -51,6 +54,37 @@ public class ImgPixelHelperTest {
         String img = "https://c-ssl.duitang.com/uploads/item/201809/16/20180916175034_Gr2hk.thumb.1000_0.jpeg";
         BufferedImage out = ImgPixelWrapper.build().setSourceImg(img).setBlockSize(1).setPixelType(PixelStyleEnum.PIXEL_COLOR_AVG).build().asBufferedImg();
         System.out.println(out);
+    }
+
+    /**
+     * 使用文字来组装图片
+     *
+     * @throws Exception
+     */
+    @Test
+    public void testCharPicture() throws Exception {
+        String pic = "jj3.png";
+//        String img = "D://MobileFile/" + pic;
+        String img = "http://hbimg.b0.upaiyun.com/2b79e7e15883d8f8bbae0b1d1efd6cf2c0c1ed1b10753-cusHEA_fw236";
+        ImgPixelWrapper.build()
+                .setSourceImg(img)
+                .setChars("小黄人")
+                // 字体文件下载地址: https://www.diyiziti.com/Builder/446
+                .setFontName(prefix + "/潇洒手写体.ttf")
+                .setBlockSize(24)
+                .setFontSize(22)
+                .setBgPredicate(color -> {
+                    if (color == 0) {
+                        return true;
+                    }
+
+                    Color rc = ColorUtil.int2color(color);
+                    // 将白色当作背景色
+                    return rc.getRed() >= 245 && rc.getGreen() >= 245 && rc.getBlue() >= 245;
+                })
+                .setPixelType(PixelStyleEnum.CHAR_SEQ_SCALE_UP)
+                .build().asFile(prefix + "/char_pic_" + pic);
+        System.out.println("---- over ---");
     }
 
     /**
@@ -128,5 +162,38 @@ public class ImgPixelHelperTest {
                 .setPixelType(PixelStyleEnum.CHAR_BLACK)
                 .build()
                 .asSvgFile(prefix + "/out.svg");
+    }
+
+
+    /**
+     * 尝试自动识别背景图，目前看来是失败的
+     *
+     * @throws Exception
+     */
+    @Test
+    public void testPickBackground() throws Exception {
+//        String url = "http://5b0988e595225.cdn.sohucs.com/images/20200410/76499041d3b144b58d6ed83f307df8a3.jpeg";
+        String url = "http://img2.woyaogexing.com/2017/05/24/432c24863a7ab65a!600x600.jpg";
+        BufferedImage img = ImageLoadUtil.getImageByPath(url);
+
+
+        BufferedImage newImg = new BufferedImage(img.getWidth(), img.getHeight(), BufferedImage.TYPE_INT_ARGB);
+        Graphics2D g2d = GraphicUtil.getG2d(newImg);
+        g2d.setColor(ColorUtil.OPACITY);
+        g2d.fillRect(0, 0, img.getWidth(), img.getHeight());
+        for (int y = 0; y < img.getHeight(); y++) {
+            for (int x = 0; x < img.getWidth(); x++) {
+                int rgb = img.getRGB(x, y);
+                Color color = ColorUtil.int2color(rgb);
+                if (color.getRed() > 220 && color.getGreen() > 220 && color.getBlue() > 220) {
+                    g2d.setColor(ColorUtil.OPACITY);
+                } else {
+                    g2d.setColor(color);
+                }
+                g2d.fillRect(x, y, 1, 1);
+            }
+        }
+        g2d.dispose();
+        System.out.println("---over----");
     }
 }

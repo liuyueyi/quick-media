@@ -1,11 +1,13 @@
 package com.github.hui.quick.plugin.image.wrapper.pixel.model;
 
+import com.github.hui.quick.plugin.base.ColorUtil;
 import com.github.hui.quick.plugin.image.helper.ImgPixelHelper;
 import com.github.hui.quick.plugin.image.wrapper.pixel.ImgPixelOptions;
 import com.github.hui.quick.plugin.image.wrapper.pixel.context.PixelContextHolder;
 
 import java.awt.*;
-import java.lang.String;
+import java.awt.image.BufferedImage;
+import java.util.Objects;
 
 /**
  * 系统提供的渲染枚举类
@@ -85,7 +87,6 @@ public enum PixelStyleEnum implements IPixelStyle {
      * 图片转纯黑白字符
      */
     CHAR_BLACK {
-
         @Override
         public Color calculateColor(int red, int green, int blue, int size) {
             return GRAY_ALG.calculateColor(red, green, blue, size);
@@ -102,5 +103,44 @@ public enum PixelStyleEnum implements IPixelStyle {
             g2d.drawString(String.valueOf(ch), x, y);
         }
     },
-    ;
+
+    /**
+     * 根据字符顺序绘画
+     */
+    CHAR_SEQ_SCALE_UP {
+        @Override
+        public Color calculateColor(int red, int green, int blue, int size) {
+            return null;
+        }
+
+        @Override
+        public boolean scaleUp() {
+            return true;
+        }
+
+        @Override
+        public void draw(Graphics2D g2d, ImgPixelOptions options, int x, int y) {
+            int index = PixelContextHolder.getPixelChar().getAndUpdateSeqIndex(options.getChars().length());
+            char ch = options.getChars().charAt(index);
+            int offsetSize = (options.getBlockSize() - options.getFontSize()) / 2;
+            g2d.drawString(String.valueOf(ch), x * options.getBlockSize() + offsetSize, y * options.getBlockSize() + offsetSize);
+        }
+
+        @Override
+        public void render(Graphics2D g2d, BufferedImage source, ImgPixelOptions options, int x, int y) {
+            int color = source.getRGB(x, y);
+            if (options.getBgPredicate().test(color)) {
+                // 背景，直接跳过
+                return;
+            }
+
+            if (g2d.getFont() == null
+                    || !Objects.equals(g2d.getFont().getName(), options.getFont().getName())
+                    || g2d.getFont().getSize() != options.getFontSize()) {
+                g2d.setFont(options.getFont());
+            }
+            g2d.setColor(ColorUtil.int2color(color));
+            draw(g2d, options, x, y);
+        }
+    };
 }

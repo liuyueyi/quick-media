@@ -12,6 +12,16 @@ import java.awt.image.BufferedImage;
  */
 public interface IPixelStyle {
     /**
+     * true 表示生成的图片进行放大 blockSize 倍，每个像素点的信息都保留
+     * false 表示将 blockSize 区间内的像素点，作为一个像素点信息输出到新的图片上
+     *
+     * @return
+     */
+    default boolean scaleUp() {
+        return false;
+    }
+
+    /**
      * 求取多个颜色的平均值
      *
      * @param colors
@@ -23,7 +33,7 @@ public interface IPixelStyle {
         int blue = 0;
         for (int color : colors) {
             red += ((color & 0xff0000) >> 16);
-            green += ((color & 0xff00) >> 8);
+            green += ((color & 0x00ff00) >> 8);
             blue += (color & 0x0000ff);
         }
         int len = colors.length;

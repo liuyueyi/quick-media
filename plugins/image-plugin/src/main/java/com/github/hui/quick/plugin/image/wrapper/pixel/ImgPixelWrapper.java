@@ -5,6 +5,7 @@ import com.github.hui.quick.plugin.base.constants.MediaType;
 import com.github.hui.quick.plugin.base.gif.GifDecoder;
 import com.github.hui.quick.plugin.base.gif.GifHelper;
 import com.github.hui.quick.plugin.image.helper.ImgPixelHelper;
+import com.github.hui.quick.plugin.image.util.FontUtil;
 import com.github.hui.quick.plugin.image.wrapper.pixel.context.PixelContextHolder;
 import com.github.hui.quick.plugin.image.wrapper.pixel.model.IPixelStyle;
 import com.github.hui.quick.plugin.image.wrapper.pixel.model.PixelStyleEnum;
@@ -19,6 +20,7 @@ import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
+import java.util.function.Predicate;
 
 import static com.github.hui.quick.plugin.image.util.PredicateUtil.conditionGetOrElse;
 
@@ -27,9 +29,9 @@ import static com.github.hui.quick.plugin.image.util.PredicateUtil.conditionGetO
  * @date 21/11/8
  */
 public class ImgPixelWrapper {
-    private static Logger log = LoggerFactory.getLogger(ImgPixelWrapper.class);
+    private static final Logger LOG = LoggerFactory.getLogger(ImgPixelWrapper.class);
 
-    private ImgPixelOptions pixelOptions;
+    private final ImgPixelOptions pixelOptions;
 
     static {
         ImageIO.scanForPlugins();
@@ -68,6 +70,7 @@ public class ImgPixelWrapper {
         }
 
         int gifCnt = decoder.getFrameCount();
+        // Pair.left 渲染的字符图， Pair.right gif图展示间隔时间
         List<ImmutablePair<BufferedImage, Integer>> renderImgList = new ArrayList<>(gifCnt);
         for (int index = 0; index < gifCnt; index++) {
             ImmutablePair<BufferedImage, PixelContextHolder.ImgPixelChar> pair = parseImg(decoder.getFrame(index));
@@ -170,6 +173,10 @@ public class ImgPixelWrapper {
     }
 
     private ImmutablePair<BufferedImage, PixelContextHolder.ImgPixelChar> parseImg(BufferedImage source) {
+        if (pixelOptions.getPixelType().scaleUp()) {
+            return parseAndScaleImg(source);
+        }
+
         try {
             PixelContextHolder.newPic();
             if (pixelOptions.getRate() != 1) {
@@ -195,13 +202,35 @@ public class ImgPixelWrapper {
         }
     }
 
+    private ImmutablePair<BufferedImage, PixelContextHolder.ImgPixelChar> parseAndScaleImg(BufferedImage source) {
+        try {
+            PixelContextHolder.newPic();
+            int blockSize = pixelOptions.getBlockSize();
+            int outWidth = source.getWidth() * blockSize;
+            int outHeight = source.getHeight() * blockSize;
+            IPixelStyle pixelType = pixelOptions.getPixelType();
+            BufferedImage pixelImg = new BufferedImage(outWidth, outHeight, source.getType());
+            Graphics2D g2d = GraphicUtil.getG2d(pixelImg);
+            g2d.setColor(null);
+            g2d.fillRect(0, 0, outWidth, outHeight);
+            for (int y = 0; y < source.getHeight(); y += 1) {
+                for (int x = 0; x < source.getWidth(); x += 1) {
+                    pixelType.render(g2d, source, pixelOptions, x, y);
+                }
+            }
+            g2d.dispose();
+            return ImmutablePair.of(pixelImg, PixelContextHolder.getPixelChar());
+
+        } finally {
+            PixelContextHolder.clear();
+        }
+    }
+
     public static class Builder {
         private static final String DEFAULT_CHAR_SET = "$@B%8&WM#*oahkbdpqwmZO0QLCJUYXzcvunxrjft/\\|()1{}[]?-_+~<>i!lI;:,\\\"^`'. ";
         private static final double DEFAULT_RATE = 1D;
         private static final int DEFAULT_BLOCK_SIZE = 1;
-        private static final String DEFAULT_FONT_NAME = "宋体";
-
-        private ImgPixelOptions pixelOptions;
+        private final ImgPixelOptions pixelOptions;
 
         private String fontName;
         private int fontStyle;
@@ -249,7 +278,7 @@ public class ImgPixelWrapper {
                     pixelOptions.setSource(ImageIO.read(target));
                 }
             } catch (IOException e) {
-                log.error("load backgroundImg error!", e);
+                LOG.error("load backgroundImg error!", e);
                 throw new RuntimeException("load sourceImg error!", e);
             }
             return this;
@@ -329,16 +358,28 @@ public class ImgPixelWrapper {
             return this;
         }
 
+        public Builder setFontSize(int fontSize) {
+            pixelOptions.setFontSize(fontSize);
+            return this;
+        }
+
+        public Builder setBgPredicate(Predicate<Integer> predicate) {
+            pixelOptions.setBgPredicate(predicate);
+            return this;
+        }
+
         public ImgPixelWrapper build() {
             pixelOptions.setBlockSize(conditionGetOrElse((s) -> s > 0, pixelOptions.getBlockSize(), DEFAULT_BLOCK_SIZE));
             pixelOptions.setPixelType(conditionGetOrElse(Objects::nonNull, pixelOptions.getPixelType(), PixelStyleEnum.CHAR_COLOR));
             pixelOptions.setChars(conditionGetOrElse(Objects::nonNull, pixelOptions.getChars(), DEFAULT_CHAR_SET));
             pixelOptions.setRate(conditionGetOrElse(Objects::nonNull, pixelOptions.getRate(), DEFAULT_RATE));
             pixelOptions.setBgColor(conditionGetOrElse(Objects::nonNull, pixelOptions.getBgColor(), Color.WHITE));
+            // 默认将全透明作为背景色
+            pixelOptions.setBgPredicate(conditionGetOrElse(Objects::isNull, pixelOptions.getBgPredicate(), integer -> integer == 0));
             pixelOptions.setFontColor(conditionGetOrElse(Objects::nonNull, pixelOptions.getFontColor(), Color.BLACK));
+            pixelOptions.setFontSize(conditionGetOrElse(s -> pixelOptions.getFontSize() > 0, Math.min(pixelOptions.getFontSize(), pixelOptions.getBlockSize()), pixelOptions.getBlockSize()));
             fontStyle = conditionGetOrElse((s) -> s >= 0 && s <= 3, fontStyle, Font.PLAIN);
-            fontName = conditionGetOrElse(Objects::nonNull, fontName, DEFAULT_FONT_NAME);
-            pixelOptions.setFont(new Font(fontName, fontStyle, pixelOptions.getBlockSize()));
+            pixelOptions.setFont(FontUtil.getFontOrDefault(fontName, fontStyle, pixelOptions.getFontSize()));
             pixelOptions.setPicType(conditionGetOrElse(Objects::nonNull, pixelOptions.getPicType(), MediaType.ImageJpg.getExt()));
             return new ImgPixelWrapper(pixelOptions);
         }
