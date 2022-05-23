@@ -375,7 +375,7 @@ public class ImgPixelWrapper {
             pixelOptions.setRate(conditionGetOrElse(Objects::nonNull, pixelOptions.getRate(), DEFAULT_RATE));
             pixelOptions.setBgColor(conditionGetOrElse(Objects::nonNull, pixelOptions.getBgColor(), Color.WHITE));
             // 默认将全透明作为背景色
-            pixelOptions.setBgPredicate(conditionGetOrElse(Objects::isNull, pixelOptions.getBgPredicate(), integer -> integer == 0));
+            pixelOptions.setBgPredicate(conditionGetOrElse(Objects::nonNull, pixelOptions.getBgPredicate(), integer -> integer == 0));
             pixelOptions.setFontColor(conditionGetOrElse(Objects::nonNull, pixelOptions.getFontColor(), Color.BLACK));
             pixelOptions.setFontSize(conditionGetOrElse(s -> pixelOptions.getFontSize() > 0, Math.min(pixelOptions.getFontSize(), pixelOptions.getBlockSize()), pixelOptions.getBlockSize()));
             fontStyle = conditionGetOrElse((s) -> s >= 0 && s <= 3, fontStyle, Font.PLAIN);
