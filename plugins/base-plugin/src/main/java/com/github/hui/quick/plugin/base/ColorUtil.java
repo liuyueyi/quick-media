@@ -26,6 +26,7 @@ public class ColorUtil {
      * @return
      */
     public static Color int2color(int color) {
+        // new Color(color, true);
         int a = (0xff000000 & color) >>> 24;
         int r = (0x00ff0000 & color) >> 16;
         int g = (0x0000ff00 & color) >> 8;

@@ -32,7 +32,20 @@
             <artifactId>base-plugin</artifactId>
             <version>2.6.3</version>
         </dependency>
+
+        <dependency>
+            <groupId>com.github.liuyueyi</groupId>
+            <artifactId>java-jhlabs</artifactId>
+            <version>1.0</version>
+        </dependency>
     </dependencies>
+
+    <repositories>
+        <repository>
+            <id>jitpack.io</id>
+            <url>https://jitpack.io</url>
+        </repository>
+    </repositories>
 
 
 </project>
