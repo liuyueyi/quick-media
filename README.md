@@ -335,6 +335,7 @@ markdown转html，转图片的封装类， 详细内容查看: [markdown-plugin]
 
 - [datouliang](https://github.com/datouliang)
 - [*桑]()
+- [坏笑]()
 
 **公众号&博客**
 
