@@ -339,13 +339,13 @@ markdown转html，转图片的封装类， 详细内容查看: [markdown-plugin]
 
 **公众号&博客**
 
-![QrCode](https://gitee.com/liuyueyi/Source/raw/master/img/info/blogInfoV2.png)
+![QrCode](https://blog.hhui.top/hexblog/imgs/info/blogHhui.png)
+
 
 
 **打赏码**
 
-![pay](https://gitee.com/liuyueyi/Source/raw/master/img/pay/pay.png)
-
+![pay](https://blog.hhui.top/hexblog/imgs/info/payHhui.png)
 
 
 ---
