@@ -8,7 +8,7 @@ import java.awt.*;
 import java.awt.image.BufferedImage;
 
 /**
- * v2版图片渲染辅助类，根据优先级从从最高的网下进行绘制
+ * v2版图片渲染辅助类，根据优先级从从最高的往下进行绘制
  *
  * @author yihui
  * @date 2021/7/28
@@ -75,7 +75,7 @@ public class ImgRenderV2Helper {
                 topPadding + y * infoSize,
                 renderSource.getCol() * infoSize,
                 renderSource.getRow() * infoSize,
-                img, String.valueOf(renderSource.getCol() > 1 || renderSource.getRow() > 1));
+                img, null);
 
         // 将命中的标记为已渲染
         for (int col = 0; col < renderSource.getCol(); col++) {
