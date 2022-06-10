@@ -61,7 +61,7 @@ public class BorderDetectUtil {
         }
     }
 
-    public List<List<Integer>> filterBorder(Border<Byte> border) {
+    public static List<List<Integer>> filterBorder(Border<Byte> border) {
         List<List<Integer>> borders = new ArrayList<>();
         for (int x = 0; x < border.getW(); x++) {
             for (int y = 0; y < border.getH(); y++) {
@@ -72,6 +72,7 @@ public class BorderDetectUtil {
 
             }
         }
+        return null;
     }
 
     private static List<List<Integer>> filterFromPoint(Point point, Border<Byte> border) {
@@ -93,6 +94,7 @@ public class BorderDetectUtil {
                 list.add(key);
             }
         }
+        return null;
     }
 
     /**
