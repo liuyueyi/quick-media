@@ -1,10 +1,10 @@
-package com.github.hui.quick.plugin.qrcode.v3.resources;
+package com.github.hui.quick.plugin.qrcode.v3.resources.impl;
 
 import com.github.hui.quick.plugin.qrcode.v3.canvas.GraphicQrCanvas;
 import com.github.hui.quick.plugin.qrcode.v3.canvas.QrCanvas;
 import com.github.hui.quick.plugin.qrcode.v3.canvas.StrQrCanvas;
 import com.github.hui.quick.plugin.qrcode.v3.canvas.SvgQrCanvas;
-import com.github.hui.quick.plugin.qrcode.v3.options.SourceOptions;
+import com.github.hui.quick.plugin.qrcode.v3.options.source.SourceOptions;
 import com.github.hui.quick.plugin.qrcode.v3.templates.svg.SvgTag;
 import com.github.hui.quick.plugin.qrcode.v3.templates.svg.TextSvgTag;
 
@@ -15,7 +15,7 @@ import java.util.List;
  * @author
  * @date 2022/6/10
  */
-public class TextRenderSource extends BasicRenderResource<String> {
+public class TextRenderSource extends BasicRenderSource<String> {
     private String text;
     private int index;
     /**
@@ -69,7 +69,7 @@ public class TextRenderSource extends BasicRenderResource<String> {
 
     @Override
     public void qrSvgRender(List<SvgTag> svgList, int x, int y, int w, int h) {
-        TextSvgTag svgTag = new TextSvgTag();
+        TextSvgTag svgTag = new TextSvgTag().setText(getSource());
         svgTag.setX(x).setY(y).setW(w).setH(h).setColor(sourceOptions.getColor());
         svgList.add(svgTag);
     }

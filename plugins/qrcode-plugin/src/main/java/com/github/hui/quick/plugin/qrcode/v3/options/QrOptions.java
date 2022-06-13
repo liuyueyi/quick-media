@@ -7,6 +7,7 @@ import com.github.hui.quick.plugin.qrcode.v3.options.front.FrontOptions;
 import com.github.hui.quick.plugin.qrcode.v3.options.logo.LogoOptions;
 import com.github.hui.quick.plugin.qrcode.v3.options.qr.QrDetectOptions;
 import com.github.hui.quick.plugin.qrcode.v3.options.qr.QrInfoOptions;
+import com.github.hui.quick.plugin.qrcode.v3.resources.ResourceContainer;
 import com.google.zxing.EncodeHintType;
 
 import java.util.Map;
@@ -33,7 +34,6 @@ public class QrOptions {
      */
     private String outType;
 
-
     /**
      * 画板
      */
@@ -48,6 +48,11 @@ public class QrOptions {
     private FrontOptions front;
 
     private BgOptions bg;
+
+    /**
+     * 存储所有的资源
+     */
+    private ResourceContainer sources;
 
     public static QrOptions of(String content) {
         QrOptions qrOptions = new QrOptions();
@@ -162,6 +167,18 @@ public class QrOptions {
             qrCanvas = new GraphicQrCanvas(getW(), getH());
         }
         return qrCanvas;
+    }
+
+    public ResourceContainer getSources() {
+        if (sources == null) {
+            sources = new ResourceContainer();
+        }
+        return sources;
+    }
+
+    public QrOptions setSources(ResourceContainer sources) {
+        this.sources = sources;
+        return this;
     }
 
     public QrOptions setQrCanvas(QrCanvas qrCanvas) {

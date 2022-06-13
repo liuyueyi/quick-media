@@ -1,6 +1,7 @@
 package com.github.hui.quick.plugin.qrcode.v3.resources;
 
 import com.github.hui.quick.plugin.qrcode.v3.canvas.QrCanvas;
+import com.github.hui.quick.plugin.qrcode.v3.options.source.SourceOptions;
 
 /**
  * @author
@@ -25,4 +26,5 @@ public interface RenderSource<T> {
      */
     T getSource();
 
+    SourceOptions getSourceOptions();
 };

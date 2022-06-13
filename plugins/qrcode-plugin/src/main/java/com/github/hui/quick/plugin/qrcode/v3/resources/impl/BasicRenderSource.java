@@ -1,10 +1,11 @@
-package com.github.hui.quick.plugin.qrcode.v3.resources;
+package com.github.hui.quick.plugin.qrcode.v3.resources.impl;
 
 import com.github.hui.quick.plugin.qrcode.v3.canvas.GraphicQrCanvas;
 import com.github.hui.quick.plugin.qrcode.v3.canvas.QrCanvas;
 import com.github.hui.quick.plugin.qrcode.v3.canvas.StrQrCanvas;
 import com.github.hui.quick.plugin.qrcode.v3.canvas.SvgQrCanvas;
-import com.github.hui.quick.plugin.qrcode.v3.options.SourceOptions;
+import com.github.hui.quick.plugin.qrcode.v3.options.source.SourceOptions;
+import com.github.hui.quick.plugin.qrcode.v3.resources.RenderSource;
 import com.github.hui.quick.plugin.qrcode.v3.templates.svg.SvgTag;
 import com.github.hui.quick.plugin.qrcode.v3.templates.svg.TextSvgTag;
 
@@ -15,10 +16,10 @@ import java.util.List;
  * @author
  * @date 2022/6/10
  */
-public class BasicRenderResource<T> implements RenderSource<T> {
+public class BasicRenderSource<T> implements RenderSource<T> {
     protected SourceOptions sourceOptions;
 
-    public BasicRenderResource(SourceOptions sourceOptions) {
+    public BasicRenderSource(SourceOptions sourceOptions) {
         this.sourceOptions = sourceOptions;
     }
 
@@ -50,16 +51,22 @@ public class BasicRenderResource<T> implements RenderSource<T> {
     }
 
     public void qrSvgRender(List<SvgTag> svgList, int x, int y, int w, int h) {
-        TextSvgTag svgTag = new TextSvgTag();
+        TextSvgTag svgTag = new TextSvgTag().setText("⬛");
         svgTag.setX(x).setY(y).setW(w).setH(h).setColor(sourceOptions.getColor());
         svgList.add(svgTag);
     }
 
     public <K> void qrExternalRender(QrCanvas canvas, int x, int y, int w, int h) {
+        throw new UnsupportedOperationException("render source not support for " + canvas.getClass());
     }
 
     @Override
     public T getSource() {
         return null;
+    }
+
+    @Override
+    public SourceOptions getSourceOptions() {
+        return sourceOptions;
     }
 }
