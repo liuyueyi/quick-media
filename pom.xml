@@ -9,6 +9,7 @@
     <modules>
         <module>plugins</module>
         <module>console</module>
+        <module>plugins/photo-plugin</module>
     </modules>
     <packaging>pom</packaging>
 
