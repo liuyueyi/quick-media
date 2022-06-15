@@ -1,6 +1,7 @@
 package com.github.hui.quick.plugin.test;
 
 import com.github.hui.quick.plugin.base.FileReadUtil;
+import com.github.hui.quick.plugin.base.GraphicUtil;
 import com.github.hui.quick.plugin.base.ImageLoadUtil;
 import com.github.hui.quick.plugin.base.gif.GifDecoder;
 import com.github.hui.quick.plugin.base.gif.GifHelper;
@@ -9,12 +10,12 @@ import com.github.hui.quick.plugin.image.wrapper.pixel.model.PixelStyleEnum;
 import org.apache.commons.lang3.tuple.ImmutablePair;
 import org.junit.Test;
 
+import javax.imageio.ImageIO;
 import java.awt.*;
 import java.awt.image.BufferedImage;
-import java.io.ByteArrayOutputStream;
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
+import java.io.*;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -188,5 +189,70 @@ public class ImgRenderTest {
 
             System.out.println("------- 分割 -------");
         }
+    }
+
+
+    public void renderCharPhoto(String imgPath, String name, String saveFile) throws Exception {
+        BufferedImage img = ImageIO.read(new File(imgPath));
+        int w = img.getWidth(), h = img.getHeight();
+
+        BufferedImage output = new BufferedImage(w * 24, h * 24, img.getType());
+        Graphics2D g2d = output.createGraphics();
+
+        try (InputStream inputStream = Files.newInputStream(Paths.get("D://MobileFile/潇洒手写体.ttf"))) {
+            Font font = Font.createFont(Font.TRUETYPE_FONT, inputStream);
+            g2d.setFont(font.deriveFont(Font.PLAIN, 20));
+        }
+        int index = 0;
+        for (int x = 0; x < w; x++) {
+            for (int y = 0; y < h; y++) {
+                char ch = name.charAt((index++) % name.length());
+                g2d.setColor(new Color(img.getRGB(x, y), true));
+                g2d.drawString(String.valueOf(ch), x * 24 + 2, y * 24 + 2);
+            }
+        }
+
+        g2d.dispose();
+        ImageIO.write(output, "png", new File(saveFile));
+    }
+
+    public void rend(String imgPath, String saveFile) throws Exception {
+        BufferedImage img = ImageIO.read(new File(imgPath));
+        int w = img.getWidth(), h = img.getHeight();
+
+        BufferedImage output = new BufferedImage(w * 4, h * 4, img.getType());
+        Graphics2D g2d = GraphicUtil.getG2d(output);
+        for (int x = 0; x < w; x++) {
+            for (int y = 0; y < h; y++) {
+                g2d.setColor(new Color(img.getRGB(x, y), true));
+                g2d.fillRect(x * 4 + 1, y * 4 + 1, 2, 2);
+            }
+        }
+
+        g2d.dispose();
+        ImageIO.write(output, "png", new File(saveFile));
+    }
+
+    @Test
+    public void testRenderCharPhoto() throws Exception {
+//        renderCharPhoto("d://MobileFile/lyf.png", "刘亦菲", "D://MobileFile/o_lyf.png");
+        rend("d://MobileFile/wx.png", "d://MobileFile/o_wx.png");
+    }
+
+
+    @Test
+    public void testTt() throws IOException {
+        String file = "d://MobileFile/wx.png";
+        BufferedImage img = ImageLoadUtil.getImageByPath(file);
+        Graphics2D g2d = GraphicUtil.getG2d(img);
+        g2d.setColor(new Color(0, 0, 0, 0));
+        g2d.fillRect(0, 0, 10, 10);
+
+        g2d.setColor(new Color(0, 0, 0, 100));
+        g2d.fillRect(0, 20, 10, 10);
+
+        g2d.setColor(new Color(0, 0, 0, 255));
+        g2d.fillRect(0, 40, 10, 10);
+        g2d.dispose();
     }
 }

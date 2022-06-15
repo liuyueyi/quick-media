@@ -153,12 +153,14 @@ public class ImgPixelHelperTest {
 
     @Test
     public void testSvg() throws Exception {
-        String file = "http://pic.dphydh.com/pic/newspic/2017-12-13/505831-1.png";
+        String file = "D://quick-media/ddm.jpg";
+//        String file = "http://pic.dphydh.com/pic/newspic/2017-12-13/505831-1.png";
 //        String file = "https://c-ssl.duitang.com/uploads/item/202003/29/20200329043918_2FUvk.thumb.400_0.gif";
         ImgPixelWrapper.build()
                 .setSourceImg(file)
                 .setBlockSize(3)
                 .setRate(0.6)
+                .setChars("$@B%8&WM#*oahkbdpqwmZO0QLCJUYXzcvunxrjft/\\|()1{}[]?-_+~<>i!lI;:,\\\"^`'  ")
                 .setPixelType(PixelStyleEnum.CHAR_BLACK)
                 .build()
                 .asSvgFile(prefix + "/out.svg");
