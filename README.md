@@ -91,6 +91,7 @@
 - batik
 - flexmark
 - phantomjs
+- jhlabs
 
 ### 2. 结构分析
 
@@ -219,6 +220,18 @@ markdown转html，转图片的封装类， 详细内容查看: [markdown-plugin]
 </dependency>
 ```
 
+**photo-plugin**
+
+相片、图片处理插件，适用于图像的各种处理，如灰度，素描，滤镜等
+
+```xml
+<!-- https://mvnrepository.com/artifact/com.github.liuyueyi.media/imagic-plugin -->
+<dependency>
+    <groupId>com.github.liuyueyi.media</groupId>
+    <artifactId>photo-plugin</artifactId>
+</dependency>
+```
+
 
 ## II. 已支持服务
 
@@ -281,7 +294,8 @@ markdown转html，转图片的封装类， 详细内容查看: [markdown-plugin]
 - [x] 转字符图
 - [x] 位图转矢量图
 - [ ] 格式转换
-
+- [ ] 相片处理
+  - [x] 相片转素描
 
 [查看更多图片服务详情](https://liuyueyi.github.io/quick-media/#/插件/image/使用手册)
     
