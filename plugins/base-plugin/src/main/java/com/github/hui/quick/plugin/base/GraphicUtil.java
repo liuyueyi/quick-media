@@ -23,6 +23,10 @@ public class GraphicUtil {
         return bf;
     }
 
+    public static BufferedImage createImg(int w, int h, int type) {
+        return createImg(w, h, 0, 0, type, null, null);
+    }
+
     public static BufferedImage createImg(int w, int h, BufferedImage img) {
         return createImg(w, h, 0, 0, img);
     }
@@ -33,20 +37,26 @@ public class GraphicUtil {
     }
 
     public static BufferedImage createImg(int w, int h, int offsetX, int offsetY, BufferedImage img, Color fillColor) {
-        BufferedImage bf = new BufferedImage(w, h, BufferedImage.TYPE_INT_ARGB);
+        return createImg(w, h, offsetX, offsetY, BufferedImage.TYPE_INT_ARGB, img, fillColor);
+    }
+
+    public static BufferedImage createImg(int w, int h, int offsetX, int offsetY, int imgType, BufferedImage img, Color fillColor) {
+        BufferedImage bf = new BufferedImage(w, h, imgType);
+        if (fillColor == null && img == null) {
+            return bf;
+        }
+
         Graphics2D g2d = getG2d(bf);
         if (fillColor != null) {
             g2d.setColor(fillColor);
             g2d.fillRect(0, 0, w, h);
         }
 
-        if (img == null) {
-            return bf;
+        if (img != null) {
+            g2d.setComposite(AlphaComposite.Src);
+            g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+            g2d.drawImage(img, offsetX, offsetY, null);
         }
-
-        g2d.setComposite(AlphaComposite.Src);
-        g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
-        g2d.drawImage(img, offsetX, offsetY, null);
         g2d.dispose();
         return bf;
     }

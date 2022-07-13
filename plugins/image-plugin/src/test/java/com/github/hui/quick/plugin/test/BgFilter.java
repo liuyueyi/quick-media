@@ -62,7 +62,7 @@ public class BgFilter {
      *
      * @author gue
      */
-    private class SimilarColorFilter extends RGBImageFilter {
+    public static class SimilarColorFilter extends RGBImageFilter {
         Double delta_hue;
         Double delta_saturation;
         Double delta_brightness;

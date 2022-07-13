@@ -30,7 +30,7 @@
 
 线上体验地址
 
-- Z+ | web : [http://media.hhui.top](http://media.hhui.top)
+- Z+ | web : [http://tool.hhui.top](http://tool.hhui.top)
 
 ### 使用说明
 
@@ -45,6 +45,7 @@
 <dependency>
     <groupId>com.github.liuyueyi.media</groupId>
     <artifactId>qrcode-plugin</artifactId>
+    <!-- 以中央仓库最新版本为准 -->
     <version>2.6.3</version>
 </dependency>
 ```
@@ -100,10 +101,10 @@
 #### web
 
 - 根据spring-boot可以迅速搭建一个web服务，提供http接口用于功能测试
-- 内部集成了一个简单的web网站，打开: [http://media.hhui.top:8089/media/webs](http://media.hhui.top:8080/media/webs) 查看
-- 使用ReactJS，前后端分离，写了一个更友好的网站，打开: [https://zweb.hhui.top/#/index](https://zweb.hhui.top/#/index) 查看
+- ~~内部集成了一个简单的web网站，打开: [http://media.hhui.top:8089/media/webs](http://media.hhui.top:8089/media/webs) 查看~~
+- ~~使用ReactJS，前后端分离，写了一个更友好的网站，打开: [https://zweb.hhui.top/#/index](https://zweb.hhui.top/#/index) 查看~~
 - 内部实现了小程序【图文小工具】的后端逻辑
-
+- 本项目所有功能，将移植到 [一灰灰的神奇小工具](https://tool.hhui.top)
 
 #### plugins 
 
@@ -298,9 +299,12 @@ markdown转html，转图片的封装类， 详细内容查看: [markdown-plugin]
   - [x] 相片转素描
 
 [查看更多图片服务详情](https://liuyueyi.github.io/quick-media/#/插件/image/使用手册)
+
+### 4. 图像
+
+- [x] 图像转素描风格
     
-    
-### 4. 视频相关
+### 5. 视频相关
 
 - [ ] 视频压缩
 - [ ] 转码

@@ -10,6 +10,7 @@
 - [x] 合成
     - [图片合成支持](doc/images/imgMerge.md)
 - [x] 水印
+- [x] 移除水印
 - [x] svg渲染
 - [x] 灰度化
 - [x] 图片转字符图
@@ -333,5 +334,66 @@ public void testSvg() throws Exception {
             .setPixelType(PixelStyleEnum.CHAR_BLACK)
             .build()
             .asSvgFile(prefix + "/out.svg");
+}
+```
+
+#### f. WaterMarkRemoveWrapper
+
+三种移除水印的姿势
+
+- WaterMarkRemoveTypeEnum.FILL：使用给定的颜色，填充水印区域
+- WaterMarkRemoveTypeEnum.PIXEL: 将水印区域通过马赛克的方式进行模糊化
+- WaterMarkRemoveTypeEnum.BG：基于水印区周边背景色，来填充水印区域
+
+本功能服务于：[https://tool.hhui.top/tools/image/rmwater/](https://tool.hhui.top/tools/image/rmwater/)，欢迎尝鲜
+
+```java
+@Test
+public void testRemove() throws IOException {
+    String url = "https://mmbiz.qpic.cn/mmbiz_png/dYV9cAW65kYJ2uVS43GPVqNQcAtJqVCWhBmISJXF9KpNib7zicjIX7VFYnNccafC7LomzqIZKQe4A54RNicic9HTvw/640?wx_fmt=png&wxfrom=5&wx_lazy=1&wx_co=1";
+
+    BufferedImage img = WaterMarkRemoveWrapper.of(url)
+            .setType(WaterMarkRemoveTypeEnum.FILL.getType())
+            .setWaterMarkH(47)
+            .setWaterMarkW(189)
+            .setWaterMarkX(782)
+            .setWaterMarkY(352)
+            .setFillColor("0xff557ec6")
+            .build()
+            .asImage();
+    System.out.println("---");
+}
+
+@Test
+public void testRemove2() throws IOException {
+    String url = "https://mmbiz.qpic.cn/mmbiz_png/dYV9cAW65kYJ2uVS43GPVqNQcAtJqVCWhBmISJXF9KpNib7zicjIX7VFYnNccafC7LomzqIZKQe4A54RNicic9HTvw/640?wx_fmt=png&wxfrom=5&wx_lazy=1&wx_co=1";
+
+    BufferedImage img = WaterMarkRemoveWrapper.of(url)
+            .setType(WaterMarkRemoveTypeEnum.PIXEL.getType())
+            .setWaterMarkH(47)
+            .setWaterMarkW(189)
+            .setWaterMarkX(782)
+            .setWaterMarkY(352)
+            .setPixelSize(8)
+            .build()
+            .asImage();
+    System.out.println("---");
+}
+
+@Test
+public void testRemove3() throws IOException {
+    String url = "https://mmbiz.qpic.cn/mmbiz_png/dYV9cAW65kYJ2uVS43GPVqNQcAtJqVCWhBmISJXF9KpNib7zicjIX7VFYnNccafC7LomzqIZKQe4A54RNicic9HTvw/640?wx_fmt=png&wxfrom=5&wx_lazy=1&wx_co=1";
+
+    BufferedImage img = WaterMarkRemoveWrapper.of(url)
+            .setType(WaterMarkRemoveTypeEnum.BG.getType())
+            .setWaterMarkH(47)
+            .setWaterMarkW(189)
+            .setWaterMarkX(782)
+            .setWaterMarkY(352)
+            .setUpDownRate(0.2F)
+            .setDownRange(0.2f)
+            .build()
+            .asImage();
+    System.out.println("---");
 }
 ```
