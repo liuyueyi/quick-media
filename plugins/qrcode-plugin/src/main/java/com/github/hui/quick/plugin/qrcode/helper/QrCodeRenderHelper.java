@@ -453,7 +453,8 @@ public class QrCodeRenderHelper {
         /**
          * 右上角
          */
-        RT, NONE {
+        RT,
+        NONE {
             @Override
             public boolean detectedArea() {
                 return false;

@@ -1,10 +1,10 @@
-package com.github.hui.quick.plugin.qrcode.wrapper;
+package com.github.hui.quick.plugin.qrcode.helper.v3.req;
 
 import com.github.hui.quick.plugin.base.gif.GifDecoder;
 import com.github.hui.quick.plugin.qrcode.constants.QuickQrUtil;
 import com.github.hui.quick.plugin.qrcode.entity.DotSize;
-import com.github.hui.quick.plugin.qrcode.entity.RenderImgResourcesV2;
 import com.github.hui.quick.plugin.qrcode.entity.RenderImgResources;
+import com.github.hui.quick.plugin.qrcode.entity.RenderImgResourcesV2;
 import com.github.hui.quick.plugin.qrcode.helper.QrCodeRenderHelper;
 import com.github.hui.quick.plugin.qrcode.helper.v3.entity.RenderResourcesV3;
 import com.google.zxing.EncodeHintType;
@@ -19,7 +19,7 @@ import java.util.Objects;
 /**
  * Created by yihui on 2017/7/17.
  */
-public class QrCodeOptions {
+public class QrCodeV3Options<T> {
     /**
      * 塞入二维码的信息
      */
@@ -40,7 +40,7 @@ public class QrCodeOptions {
     /**
      * 二维码信息(即传统二维码中的黑色方块) 绘制选项
      */
-    private DrawOptions drawOptions;
+    private DrawOptions<T> drawOptions;
 
     /**
      * 前置图选项
@@ -173,7 +173,7 @@ public class QrCodeOptions {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        QrCodeOptions that = (QrCodeOptions) o;
+        QrCodeV3Options that = (QrCodeV3Options) o;
         return Objects.equals(msg, that.msg) &&
                 Objects.equals(w, that.w) &&
                 Objects.equals(h, that.h) &&
@@ -1227,7 +1227,7 @@ public class QrCodeOptions {
     /**
      * 绘制二维码的配置信息
      */
-    public static class DrawOptions {
+    public static class DrawOptions<T> {
         /**
          * 着色颜色
          */
@@ -1303,7 +1303,7 @@ public class QrCodeOptions {
          */
         private RenderImgResourcesV2 imgResourcesForV2;
 
-        private RenderResourcesV3 renderResourcesV3;
+        private RenderResourcesV3<T> renderResourcesV3;
 
         public BufferedImage getImage(int row, int col) {
             return getImage(DotSize.create(row, col));
@@ -1422,7 +1422,7 @@ public class QrCodeOptions {
             return imgResourcesForV2;
         }
 
-        public RenderResourcesV3 getRenderResourcesV3() {
+        public RenderResourcesV3<T> getRenderResourcesV3() {
             return renderResourcesV3;
         }
 
