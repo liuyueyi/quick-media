@@ -1,6 +1,6 @@
 package com.github.hui.quick.plugin.photo.options;
 
-import com.github.hui.quick.plugin.base.ImageLoadUtil;
+import com.github.hui.quick.plugin.base.awt.ImageLoadUtil;
 import com.github.hui.quick.plugin.photo.operator.PhotoOperator;
 
 import java.awt.image.BufferedImage;

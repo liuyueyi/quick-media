@@ -1,7 +1,7 @@
 package com.github.hui.quick.plugin.image.wrapper.merge.template;
 
 
-import com.github.hui.quick.plugin.base.ColorUtil;
+import com.github.hui.quick.plugin.base.awt.ColorUtil;
 import com.github.hui.quick.plugin.image.util.FontUtil;
 
 import java.awt.*;

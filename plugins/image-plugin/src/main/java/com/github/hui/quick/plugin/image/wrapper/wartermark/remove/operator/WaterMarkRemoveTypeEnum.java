@@ -1,6 +1,6 @@
 package com.github.hui.quick.plugin.image.wrapper.wartermark.remove.operator;
 
-import com.github.hui.quick.plugin.base.GraphicUtil;
+import com.github.hui.quick.plugin.base.awt.GraphicUtil;
 import com.github.hui.quick.plugin.image.wrapper.pixel.util.PixelUtil;
 import com.github.hui.quick.plugin.image.wrapper.wartermark.remove.WaterMarkRemoveOptions;
 

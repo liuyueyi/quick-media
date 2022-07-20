@@ -1,7 +1,8 @@
-package com.github.hui.quick.plugin.base;
+package com.github.hui.quick.plugin.base.file;
 
+import com.github.hui.quick.plugin.base.http.HttpUtil;
+import com.github.hui.quick.plugin.base.OSUtil;
 import org.apache.commons.lang3.StringUtils;
-import org.apache.commons.lang3.reflect.FieldUtils;
 import org.apache.commons.lang3.time.DateFormatUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

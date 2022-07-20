@@ -1,7 +1,7 @@
 package com.github.hui.quick.plugin.base.gif;
 
-import com.github.hui.quick.plugin.base.FileReadUtil;
-import com.github.hui.quick.plugin.base.FileWriteUtil;
+import com.github.hui.quick.plugin.base.file.FileReadUtil;
+import com.github.hui.quick.plugin.base.file.FileWriteUtil;
 import org.apache.commons.lang3.tuple.ImmutablePair;
 
 import java.awt.image.BufferedImage;

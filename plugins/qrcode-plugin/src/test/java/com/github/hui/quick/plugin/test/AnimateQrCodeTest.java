@@ -1,6 +1,6 @@
 package com.github.hui.quick.plugin.test;
 
-import com.github.hui.quick.plugin.base.ColorUtil;
+import com.github.hui.quick.plugin.base.awt.ColorUtil;
 import com.github.hui.quick.plugin.qrcode.wrapper.QrCodeGenWrapper;
 import com.github.hui.quick.plugin.qrcode.wrapper.QrCodeOptions;
 import com.google.zxing.WriterException;

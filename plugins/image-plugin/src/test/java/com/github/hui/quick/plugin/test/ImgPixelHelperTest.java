@@ -1,8 +1,8 @@
 package com.github.hui.quick.plugin.test;
 
-import com.github.hui.quick.plugin.base.ColorUtil;
-import com.github.hui.quick.plugin.base.GraphicUtil;
-import com.github.hui.quick.plugin.base.ImageLoadUtil;
+import com.github.hui.quick.plugin.base.awt.ColorUtil;
+import com.github.hui.quick.plugin.base.awt.GraphicUtil;
+import com.github.hui.quick.plugin.base.awt.ImageLoadUtil;
 import com.github.hui.quick.plugin.base.OSUtil;
 import com.github.hui.quick.plugin.image.wrapper.pixel.ImgPixelWrapper;
 import com.github.hui.quick.plugin.image.wrapper.pixel.model.PixelStyleEnum;

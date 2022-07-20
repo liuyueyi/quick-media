@@ -1,20 +1,19 @@
 package com.github.hui.quick.plugin.md;
 
-import com.github.hui.quick.plugin.base.FileReadUtil;
+import com.github.hui.quick.plugin.base.file.FileReadUtil;
 import com.github.hui.quick.plugin.md.entity.MarkdownEntity;
 import com.google.common.base.Joiner;
-import com.vladsch.flexmark.ast.Node;
 import com.vladsch.flexmark.ext.tables.TablesExtension;
 import com.vladsch.flexmark.html.HtmlRenderer;
 import com.vladsch.flexmark.parser.Parser;
 import com.vladsch.flexmark.parser.ParserEmulationProfile;
-import com.vladsch.flexmark.util.options.MutableDataSet;
+import com.vladsch.flexmark.util.ast.Node;
+import com.vladsch.flexmark.util.data.MutableDataSet;
 
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
 import java.util.Arrays;
 import java.util.List;

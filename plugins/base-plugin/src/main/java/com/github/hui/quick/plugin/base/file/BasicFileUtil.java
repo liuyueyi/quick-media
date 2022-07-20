@@ -1,5 +1,6 @@
-package com.github.hui.quick.plugin.base;
+package com.github.hui.quick.plugin.base.file;
 
+import com.github.hui.quick.plugin.base.OSUtil;
 import com.github.hui.quick.plugin.base.constants.MediaType;
 import org.apache.commons.lang3.StringUtils;
 

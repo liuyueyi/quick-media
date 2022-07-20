@@ -1,6 +1,6 @@
 package com.github.hui.quick.plugin.md.helper;
 
-import com.github.hui.quick.plugin.base.GraphicUtil;
+import com.github.hui.quick.plugin.base.awt.GraphicUtil;
 import com.github.hui.quick.plugin.md.entity.HtmlRenderOptions;
 import org.xhtmlrenderer.simple.Graphics2DRenderer;
 

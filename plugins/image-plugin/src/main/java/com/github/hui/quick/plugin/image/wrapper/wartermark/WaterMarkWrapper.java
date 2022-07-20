@@ -1,7 +1,7 @@
 package com.github.hui.quick.plugin.image.wrapper.wartermark;
 
-import com.github.hui.quick.plugin.base.GraphicUtil;
-import com.github.hui.quick.plugin.base.ImageLoadUtil;
+import com.github.hui.quick.plugin.base.awt.GraphicUtil;
+import com.github.hui.quick.plugin.base.awt.ImageLoadUtil;
 import com.github.hui.quick.plugin.image.helper.ImgDrawHelper;
 import com.github.hui.quick.plugin.image.util.FontUtil;
 import com.google.common.base.Splitter;

@@ -1,14 +1,12 @@
 package com.github.hui.quick.plugin.image.wrapper.merge.cell;
 
 
-import com.github.hui.quick.plugin.base.Base64Util;
-import com.github.hui.quick.plugin.base.ColorUtil;
+import com.github.hui.quick.plugin.base.awt.ColorUtil;
 import com.github.hui.quick.plugin.image.helper.CalculateHelper;
 import com.github.hui.quick.plugin.image.util.FontUtil;
 import com.github.hui.quick.plugin.image.util.PunctuationUtil;
 import com.github.hui.quick.plugin.image.wrapper.create.ImgCreateOptions;
 
-import javax.xml.soap.Text;
 import java.awt.*;
 import java.util.ArrayList;
 import java.util.Arrays;

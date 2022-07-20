@@ -1,7 +1,7 @@
 package com.github.hui.quick.plugin.image.util;
 
-import com.github.hui.quick.plugin.base.FileReadUtil;
-import com.github.hui.quick.plugin.base.GraphicUtil;
+import com.github.hui.quick.plugin.base.file.FileReadUtil;
+import com.github.hui.quick.plugin.base.awt.GraphicUtil;
 import org.apache.commons.lang3.StringUtils;
 
 import java.awt.*;

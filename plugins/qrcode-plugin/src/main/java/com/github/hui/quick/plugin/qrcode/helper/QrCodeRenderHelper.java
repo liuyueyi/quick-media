@@ -1,7 +1,7 @@
 package com.github.hui.quick.plugin.qrcode.helper;
 
-import com.github.hui.quick.plugin.base.GraphicUtil;
-import com.github.hui.quick.plugin.base.ImageOperateUtil;
+import com.github.hui.quick.plugin.base.awt.GraphicUtil;
+import com.github.hui.quick.plugin.base.awt.ImageOperateUtil;
 import com.github.hui.quick.plugin.qrcode.constants.QuickQrUtil;
 import com.github.hui.quick.plugin.qrcode.entity.DotSize;
 import com.github.hui.quick.plugin.qrcode.entity.RenderImgResourcesV2;
@@ -9,7 +9,6 @@ import com.github.hui.quick.plugin.qrcode.helper.v2.ImgRenderV2Helper;
 import com.github.hui.quick.plugin.qrcode.wrapper.BitMatrixEx;
 import com.github.hui.quick.plugin.qrcode.wrapper.QrCodeOptions;
 import com.google.zxing.qrcode.encoder.ByteMatrix;
-import com.sun.imageio.plugins.common.ImageUtil;
 import org.apache.commons.lang3.tuple.ImmutablePair;
 
 import java.awt.*;
@@ -126,7 +125,7 @@ public class QrCodeRenderHelper {
 
         Graphics2D g2d = GraphicUtil.getG2d(bottomImg);
         boolean needScale = frontImgOptions.getFtW() < ftImg.getWidth() || frontImgOptions.getFtH() < ftImg.getHeight();
-        g2d.drawImage(!needScale ? ftImg: ftImg.getScaledInstance(frontImgOptions.getFtW(), frontImgOptions.getFtH(), BufferedImage.SCALE_SMOOTH),
+        g2d.drawImage(!needScale ? ftImg : ftImg.getScaledInstance(frontImgOptions.getFtW(), frontImgOptions.getFtH(), BufferedImage.SCALE_SMOOTH),
                 -Math.min(startX, 0), -Math.min(startY, 0), null);
         g2d.dispose();
         return bottomImg;
@@ -272,7 +271,7 @@ public class QrCodeRenderHelper {
                 int newQrW = qrWidth + add;
                 int newQrH = qrHeight + add;
 
-                bgGraphic.drawImage(qrImg.getScaledInstance(newQrW, newQrH, Image.SCALE_SMOOTH), bgOffsetX - add / 2, bgOffsetY - add /2, null);
+                bgGraphic.drawImage(qrImg.getScaledInstance(newQrW, newQrH, Image.SCALE_SMOOTH), bgOffsetX - add / 2, bgOffsetY - add / 2, null);
             } else {
                 // 全覆盖模式, 设置透明度， 避免看不到背景
                 bgGraphic.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_ATOP, bgImgOptions.getOpacity()));

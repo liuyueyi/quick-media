@@ -1,10 +1,9 @@
-package com.github.hui.quick.plugin.base;
+package com.github.hui.quick.plugin.base.file;
 
+import com.github.hui.quick.plugin.base.http.HttpUtil;
 import com.google.common.base.Joiner;
 
 import java.io.*;
-import java.net.URL;
-import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -18,9 +17,10 @@ import java.util.stream.Collectors;
 public class FileReadUtil {
 
     public static String readAll(String fileName) throws IOException {
-        BufferedReader reader = createLineRead(fileName);
-        List<String> lines = reader.lines().collect(Collectors.toList());
-        return Joiner.on("\n").join(lines);
+        try(BufferedReader reader = createLineRead(fileName)) {
+            List<String> lines = reader.lines().collect(Collectors.toList());
+            return Joiner.on("\n").join(lines);
+        }
     }
 
 

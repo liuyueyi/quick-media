@@ -1,4 +1,4 @@
-package com.github.hui.quick.plugin.base;
+package com.github.hui.quick.plugin.base.awt;
 
 import java.awt.*;
 import java.awt.geom.RoundRectangle2D;
@@ -50,20 +50,16 @@ public class ImageOperateUtil {
     public static BufferedImage makeRoundImg(BufferedImage image,
                                              Rectangle rectangle,
                                              int cornerRadius) {
-        int x = (int) rectangle.getX(), y = (int) rectangle.getY();
+        int x = (int) rectangle.getX();
+        int y = (int) rectangle.getY();
         int w = (int) rectangle.getWidth();
         int h = (int) rectangle.getHeight();
 
-        BufferedImage output = new BufferedImage(w, h,
-                BufferedImage.TYPE_INT_ARGB);
-
-        Graphics2D g2 = output.createGraphics();
+        BufferedImage output = new BufferedImage(w, h, BufferedImage.TYPE_INT_ARGB);
+        Graphics2D g2 = GraphicUtil.getG2d(output);
         g2.setComposite(AlphaComposite.Src);
-        g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING,
-                RenderingHints.VALUE_ANTIALIAS_ON);
         g2.setColor(Color.WHITE);
-        g2.fill(new RoundRectangle2D.Float(0, 0, w, h, cornerRadius,
-                cornerRadius));
+        g2.fill(new RoundRectangle2D.Float(0, 0, w, h, cornerRadius, cornerRadius));
 
 
         g2.setComposite(AlphaComposite.SrcAtop);
@@ -91,9 +87,8 @@ public class ImageOperateUtil {
         int h = image.getHeight() + size;
         BufferedImage output = new BufferedImage(w, h, BufferedImage.TYPE_INT_ARGB);
 
-        Graphics2D g2 = output.createGraphics();
+        Graphics2D g2 = GraphicUtil.getG2d(output);
         g2.setComposite(AlphaComposite.Src);
-        g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
         g2.setColor(color == null ? Color.WHITE : color);
         g2.fill(new RoundRectangle2D.Float(0, 0, w, h, cornerRadius, cornerRadius));
 
@@ -112,21 +107,15 @@ public class ImageOperateUtil {
      * @param cornerRadius 圆角的弧度（根据实测效果，一般建议为图片宽度的1/4）, 0表示直角
      * @return 返回圆角图
      */
-    public static BufferedImage makeRoundedCorner(BufferedImage image,
-                                                  int cornerRadius) {
+    public static BufferedImage makeRoundedCorner(BufferedImage image, int cornerRadius) {
         int w = image.getWidth();
         int h = image.getHeight();
-        BufferedImage output = new BufferedImage(w, h,
-                BufferedImage.TYPE_INT_ARGB);
+        BufferedImage output = new BufferedImage(w, h, BufferedImage.TYPE_INT_ARGB);
 
-        Graphics2D g2 = output.createGraphics();
+        Graphics2D g2 = GraphicUtil.getG2d(output);
         g2.setComposite(AlphaComposite.Src);
-        g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING,
-                RenderingHints.VALUE_ANTIALIAS_ON);
         g2.setColor(Color.WHITE);
-        g2.fill(new RoundRectangle2D.Float(0, 0, w, h, cornerRadius,
-                cornerRadius));
-
+        g2.fill(new RoundRectangle2D.Float(0, 0, w, h, cornerRadius, cornerRadius));
 
         g2.setComposite(AlphaComposite.SrcAtop);
         g2.drawImage(image, 0, 0, null);

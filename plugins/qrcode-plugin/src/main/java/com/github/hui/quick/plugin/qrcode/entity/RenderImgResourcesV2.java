@@ -1,6 +1,6 @@
 package com.github.hui.quick.plugin.qrcode.entity;
 
-import com.github.hui.quick.plugin.base.ImageLoadUtil;
+import com.github.hui.quick.plugin.base.awt.ImageLoadUtil;
 import com.github.hui.quick.plugin.qrcode.wrapper.QrCodeGenWrapper;
 import org.apache.commons.lang3.BooleanUtils;
 import org.apache.commons.lang3.StringUtils;

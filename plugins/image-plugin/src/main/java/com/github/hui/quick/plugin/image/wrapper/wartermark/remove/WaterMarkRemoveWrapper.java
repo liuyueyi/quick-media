@@ -1,7 +1,7 @@
 package com.github.hui.quick.plugin.image.wrapper.wartermark.remove;
 
-import com.github.hui.quick.plugin.base.FileWriteUtil;
-import com.github.hui.quick.plugin.base.ImageLoadUtil;
+import com.github.hui.quick.plugin.base.file.FileWriteUtil;
+import com.github.hui.quick.plugin.base.awt.ImageLoadUtil;
 import com.github.hui.quick.plugin.image.wrapper.wartermark.remove.operator.WaterMarkRemoveOperator;
 import com.github.hui.quick.plugin.image.wrapper.wartermark.remove.operator.WaterMarkRemoveTypeEnum;
 

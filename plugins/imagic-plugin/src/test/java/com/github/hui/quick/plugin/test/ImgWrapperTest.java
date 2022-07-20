@@ -1,6 +1,6 @@
 package com.github.hui.quick.plugin.test;
 
-import com.github.hui.quick.plugin.base.FileReadUtil;
+import com.github.hui.quick.plugin.base.file.FileReadUtil;
 import com.github.hui.quick.plugin.imagic.ImgWrapper;
 import org.junit.Test;
 
