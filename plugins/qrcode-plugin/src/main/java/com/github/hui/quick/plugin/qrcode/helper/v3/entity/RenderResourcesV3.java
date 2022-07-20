@@ -14,27 +14,27 @@ import java.util.*;
  * @author YiHui
  * @date 2022/7/20
  */
-public class RenderResourcesV3<T> {
+public class RenderResourcesV3 {
     public static final int NO_LIMIT_COUNT = -1;
 
     /**
      * 所有渲染的资源列表
      */
-    private List<RenderSource<T>> sourceList;
+    private List<RenderSource> sourceList;
 
     /**
      * 兜底的1x1 渲染图
      */
-    private ResourceDecorate<T> defaultRenderDrawImg;
+    private ResourceDecorate defaultRenderDrawImg;
 
     /**
      * 兜底的1x1 背景图
      */
-    private ResourceDecorate<T> defaultRenderBgImg;
+    private ResourceDecorate defaultRenderBgImg;
 
 
     public static RenderResourcesV3 create() {
-        return new RenderResourcesV3<>();
+        return new RenderResourcesV3();
     }
 
     private RenderResourcesV3() {
@@ -42,29 +42,29 @@ public class RenderResourcesV3<T> {
     }
 
 
-    public List<RenderSource<T>> getSourceList() {
+    public List<RenderSource> getSourceList() {
         return sourceList;
     }
 
-    public T getDefaultDrawImg() {
+    public QrResource getDefaultDrawImg() {
         return defaultRenderDrawImg.getResource();
     }
 
-    public T getDefaultBgImg() {
+    public QrResource getDefaultBgImg() {
         return defaultRenderBgImg == null ? null : defaultRenderBgImg.getResource();
     }
 
-    public RenderSource<T> addSource(int row, int col) {
-        RenderSource<T> renderSource = new RenderSource<>(this);
+    public RenderSource addSource(int row, int col) {
+        RenderSource renderSource = new RenderSource(this);
         renderSource.setRow(row);
         renderSource.setCol(col);
         return renderSource;
     }
 
-    public static class RenderSource<T> implements Comparable<RenderSource<T>> {
+    public static class RenderSource implements Comparable<RenderSource> {
         private static final int DEFAULT_ORDER = -999;
-        private RenderResourcesV3<T> resRef;
-        private ResourceDecorate<T> resourceDecorate;
+        private RenderResourcesV3 resRef;
+        private ResourceDecorate resourceDecorate;
         /**
          * 表示 row * col 的图片资源中，哪些地方是有素材填充的（坐标从左上角开始）
          * 比如一个十字行的素材，如下，0表示空白，1表示有资源
@@ -100,7 +100,7 @@ public class RenderResourcesV3<T> {
          */
         private boolean fullMatch;
 
-        public RenderSource(RenderResourcesV3<T> resources) {
+        public RenderSource(RenderResourcesV3 resources) {
             this.resRef = resources;
             missMap = new HashMap<>();
             order = DEFAULT_ORDER;
@@ -128,7 +128,7 @@ public class RenderResourcesV3<T> {
             }
         }
 
-        public T getResource() {
+        public QrResource getResource() {
             return resourceDecorate.getResource();
         }
 
@@ -168,13 +168,13 @@ public class RenderResourcesV3<T> {
             return fullMatch;
         }
 
-        public RenderSource addImg(T img) throws IOException {
+        public RenderSource addImg(QrResource img) throws IOException {
             return addImg(img, NO_LIMIT_COUNT);
         }
 
-        public RenderSource addImg(T img, int count) {
+        public RenderSource addImg(QrResource img, int count) {
             if (this.resourceDecorate == null) {
-                this.resourceDecorate = new ResourceDecorate<>(img, count);
+                this.resourceDecorate = new ResourceDecorate(img, count);
             } else {
                 this.resourceDecorate.addResource(img, count);
             }
@@ -214,7 +214,7 @@ public class RenderResourcesV3<T> {
          * @param xy
          * @return
          */
-        public RenderSource<T> setMiss(String xy) {
+        public RenderSource setMiss(String xy) {
             String[] points = StringUtils.split(xy, ",");
             for (String point : points) {
                 String[] cells = StringUtils.split(point, "-");
@@ -227,7 +227,7 @@ public class RenderResourcesV3<T> {
             return this;
         }
 
-        public RenderResourcesV3<T> build() {
+        public RenderResourcesV3 build() {
             if (row > 1 || col > 1 || !BooleanUtils.isTrue(missMap.get(new Point(0, 0)))) {
                 resRef.sourceList.add(this);
             }
@@ -248,12 +248,12 @@ public class RenderResourcesV3<T> {
                 return;
             }
 
-            ResourceDecorate<T> decorate = null;
-            for (RenderResource<T> renderImg : resourceDecorate.getResourceList()) {
+            ResourceDecorate decorate = null;
+            for (RenderResource renderImg : resourceDecorate.getResourceList()) {
                 // 找一个不限制渲染次数的
                 if (renderImg.count == NO_LIMIT_COUNT) {
                     if (decorate == null) {
-                        decorate = new ResourceDecorate<>(renderImg.resource);
+                        decorate = new ResourceDecorate(renderImg.resource);
                     } else {
                         decorate.addResource(renderImg.resource, NO_LIMIT_COUNT);
                     }
@@ -261,9 +261,9 @@ public class RenderResourcesV3<T> {
             }
             if (decorate == null) {
                 // 所有的都是次数限制，则全部加进去
-                for (RenderResource<T> renderImg : resourceDecorate.getResourceList()) {
+                for (RenderResource renderImg : resourceDecorate.getResourceList()) {
                     if (decorate == null) {
-                        decorate = new ResourceDecorate<>(renderImg.resource);
+                        decorate = new ResourceDecorate(renderImg.resource);
                     } else {
                         decorate.addResource(renderImg.resource, NO_LIMIT_COUNT);
                     }
@@ -279,35 +279,35 @@ public class RenderResourcesV3<T> {
     }
 
 
-    public static class ResourceDecorate<T> {
+    public static class ResourceDecorate {
         private static Random random = new Random();
 
-        private List<RenderResource<T>> resourceList;
+        private List<RenderResource> resourceList;
 
         public boolean empty() {
             return resourceList.isEmpty();
         }
 
-        public ResourceDecorate(T resource) {
+        public ResourceDecorate(QrResource resource) {
             this(resource, NO_LIMIT_COUNT);
         }
 
-        public ResourceDecorate(T resource, int cnt) {
+        public ResourceDecorate(QrResource resource, int cnt) {
             resourceList = new ArrayList<>();
-            resourceList.add(new RenderResource<>(resource, cnt));
+            resourceList.add(new RenderResource(resource, cnt));
         }
 
-        public void addResource(T img, int cnt) {
-            resourceList.add(new RenderResource<>(img, cnt));
+        public void addResource(QrResource img, int cnt) {
+            resourceList.add(new RenderResource(img, cnt));
         }
 
-        public T getResource() {
+        public QrResource getResource() {
             if (resourceList.size() == 0) {
                 return null;
             }
 
             int index = random.nextInt(resourceList.size());
-            RenderResource<T> resource = resourceList.get(index);
+            RenderResource resource = resourceList.get(index);
             if (resource.count == NO_LIMIT_COUNT) {
                 return resource.resource;
             } else if (resource.count > 0) {
@@ -322,22 +322,22 @@ public class RenderResourcesV3<T> {
             return getResource();
         }
 
-        public List<RenderResource<T>> getResourceList() {
+        public List<RenderResource> getResourceList() {
             return resourceList;
         }
     }
 
-    public static class RenderResource<T> {
+    public static class RenderResource {
         /**
          * 绘制图
          */
-        T resource;
+        QrResource resource;
         /**
          * -1表示不限次数， >1 表示最多出现的次数
          */
         int count;
 
-        public RenderResource(T img, int count) {
+        public RenderResource(QrResource img, int count) {
             this.resource = img;
             this.count = count;
         }

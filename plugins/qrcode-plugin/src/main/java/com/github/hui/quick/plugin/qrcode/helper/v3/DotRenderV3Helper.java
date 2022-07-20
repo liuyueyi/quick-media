@@ -1,7 +1,7 @@
 package com.github.hui.quick.plugin.qrcode.helper.v3;
 
-import com.github.hui.quick.plugin.qrcode.helper.v3.entity.PreRenderDot;
-import com.github.hui.quick.plugin.qrcode.helper.v3.entity.RenderDot;
+import com.github.hui.quick.plugin.qrcode.helper.v3.entity.render.PreRenderDot;
+import com.github.hui.quick.plugin.qrcode.helper.v3.entity.render.RenderDot;
 import com.github.hui.quick.plugin.qrcode.helper.v3.entity.RenderResourcesV3;
 import com.google.zxing.qrcode.encoder.ByteMatrix;
 
@@ -16,9 +16,9 @@ import java.util.List;
  * @date 2021/7/28
  */
 public class DotRenderV3Helper {
-    public static <T> List<RenderDot<T>> renderResources(ByteMatrix matrix, RenderResourcesV3<T> imgResources) {
-        List<RenderDot<T>> result = new ArrayList<>();
-        for (RenderResourcesV3.RenderSource<T> renderSource : imgResources.getSourceList()) {
+    public static  List<RenderDot> renderResources(ByteMatrix matrix, RenderResourcesV3 imgResources) {
+        List<RenderDot> result = new ArrayList<>();
+        for (RenderResourcesV3.RenderSource renderSource : imgResources.getSourceList()) {
             result.addAll(renderSpecialResource(matrix, renderSource, renderSource.isFullMatch()));
         }
 
@@ -26,18 +26,18 @@ public class DotRenderV3Helper {
         for (int x = 0; x < matrix.getWidth(); x++) {
             for (int y = 0; y < matrix.getHeight(); y++) {
                 if (matrix.get(x, y) == 1) {
-                    result.add(new PreRenderDot<T>().setRow(1).setCol(1).setX(x).setY(y).setResource(imgResources.getDefaultDrawImg()));
+                    result.add(new PreRenderDot().setRow(1).setCol(1).setX(x).setY(y).setResource(imgResources.getDefaultDrawImg()));
                 }
             }
         }
         return result;
     }
 
-    private static <T> List<RenderDot<T>> renderSpecialResource(ByteMatrix matrix, RenderResourcesV3.RenderSource<T> renderSource, boolean fullMatch) {
+    private static  List<RenderDot> renderSpecialResource(ByteMatrix matrix, RenderResourcesV3.RenderSource renderSource, boolean fullMatch) {
         if (renderSource.countOver()) {
             return Collections.emptyList();
         }
-        List<RenderDot<T>> result = new ArrayList<>();
+        List<RenderDot> result = new ArrayList<>();
         for (int x = 0; x < matrix.getWidth() - renderSource.getCol() + 1; x++) {
             for (int y = 0; y < matrix.getHeight() - renderSource.getRow() + 1; y++) {
                 if (match(matrix, renderSource, x, y, fullMatch)) {
@@ -72,8 +72,8 @@ public class DotRenderV3Helper {
         return true;
     }
 
-    private static <T> RenderDot<T> renderImg(ByteMatrix matrix, RenderResourcesV3.RenderSource<T> renderSource, int x, int y) {
-        PreRenderDot<T> renderDot = new PreRenderDot<>();
+    private static  RenderDot renderImg(ByteMatrix matrix, RenderResourcesV3.RenderSource renderSource, int x, int y) {
+        PreRenderDot renderDot = new PreRenderDot<>();
         renderDot.setCol(renderSource.getCol()).setRow(renderSource.getRow()).setX(x).setY(y).setResource(renderSource.getResource());
 
         // 将命中的标记为已渲染

@@ -1,4 +1,4 @@
-package com.github.hui.quick.plugin.qrcode.helper.v3.entity;
+package com.github.hui.quick.plugin.qrcode.helper.v3.entity.render;
 
 import com.github.hui.quick.plugin.qrcode.helper.QrCodeRenderHelper;
 /**
@@ -7,7 +7,7 @@ import com.github.hui.quick.plugin.qrcode.helper.QrCodeRenderHelper;
  * @author YiHui
  * @date 2022/7/20
  */
-public class DetectRenderDot<T> extends RenderDot<T> {
+public class DetectRenderDot extends RenderDot {
     private QrCodeRenderHelper.DetectLocation location;
     private int size;
     /**
@@ -23,7 +23,7 @@ public class DetectRenderDot<T> extends RenderDot<T> {
         return location;
     }
 
-    public DetectRenderDot<T> setLocation(QrCodeRenderHelper.DetectLocation location) {
+    public DetectRenderDot setLocation(QrCodeRenderHelper.DetectLocation location) {
         this.location = location;
         return this;
     }
@@ -32,7 +32,7 @@ public class DetectRenderDot<T> extends RenderDot<T> {
         return size;
     }
 
-    public DetectRenderDot<T> setSize(int size) {
+    public DetectRenderDot setSize(int size) {
         this.size = size;
         return this;
     }
@@ -41,7 +41,7 @@ public class DetectRenderDot<T> extends RenderDot<T> {
         return outBorder;
     }
 
-    public DetectRenderDot<T> setOutBorder(Boolean outBorder) {
+    public DetectRenderDot setOutBorder(Boolean outBorder) {
         this.outBorder = outBorder;
         return this;
     }

@@ -1,9 +1,9 @@
 package com.github.hui.quick.plugin.qrcode.helper.v3;
 
 import com.github.hui.quick.plugin.qrcode.helper.QrCodeRenderHelper;
-import com.github.hui.quick.plugin.qrcode.helper.v3.entity.BgRenderDot;
-import com.github.hui.quick.plugin.qrcode.helper.v3.entity.DetectRenderDot;
-import com.github.hui.quick.plugin.qrcode.helper.v3.entity.RenderDot;
+import com.github.hui.quick.plugin.qrcode.helper.v3.entity.render.BgRenderDot;
+import com.github.hui.quick.plugin.qrcode.helper.v3.entity.render.DetectRenderDot;
+import com.github.hui.quick.plugin.qrcode.helper.v3.entity.render.RenderDot;
 import com.github.hui.quick.plugin.qrcode.helper.v3.entity.RenderResourcesV3;
 import com.github.hui.quick.plugin.qrcode.helper.v3.req.QrCodeV3Options;
 import com.github.hui.quick.plugin.qrcode.wrapper.BitMatrixEx;

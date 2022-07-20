@@ -6,6 +6,7 @@ import com.github.hui.quick.plugin.qrcode.entity.DotSize;
 import com.github.hui.quick.plugin.qrcode.entity.RenderImgResources;
 import com.github.hui.quick.plugin.qrcode.entity.RenderImgResourcesV2;
 import com.github.hui.quick.plugin.qrcode.helper.QrCodeRenderHelper;
+import com.github.hui.quick.plugin.qrcode.helper.v3.entity.QrResource;
 import com.github.hui.quick.plugin.qrcode.helper.v3.entity.RenderResourcesV3;
 import com.google.zxing.EncodeHintType;
 
@@ -19,7 +20,7 @@ import java.util.Objects;
 /**
  * Created by yihui on 2017/7/17.
  */
-public class QrCodeV3Options<T> {
+public class QrCodeV3Options {
     /**
      * 塞入二维码的信息
      */
@@ -36,21 +37,29 @@ public class QrCodeV3Options<T> {
      */
     private Integer h;
 
+    private Map<EncodeHintType, Object> hints;
+
+
+    /**
+     * 生成二维码图片的格式 png, jpg
+     */
+    private String picType;
+
 
     /**
      * 二维码信息(即传统二维码中的黑色方块) 绘制选项
      */
-    private DrawOptions<T> drawOptions;
+    private DrawOptions drawOptions;
 
     /**
      * 前置图选项
      */
-    private FrontImgOptions ftImgOptions;
+    private FrontOptions ftImgOptions;
 
     /**
      * 背景图样式选项
      */
-    private BgImgOptions bgImgOptions;
+    private BgOptions bgImgOptions;
 
     /**
      * logo 样式选项
@@ -63,16 +72,6 @@ public class QrCodeV3Options<T> {
      * 三个探测图形的样式选项
      */
     private DetectOptions detectOptions;
-
-
-    private Map<EncodeHintType, Object> hints;
-
-
-    /**
-     * 生成二维码图片的格式 png, jpg
-     */
-    private String picType;
-
 
     /**
      * true 表示生成的是动图
@@ -121,19 +120,19 @@ public class QrCodeV3Options<T> {
         this.drawOptions = drawOptions;
     }
 
-    public BgImgOptions getBgImgOptions() {
+    public BgOptions getBgImgOptions() {
         return bgImgOptions;
     }
 
-    public void setBgImgOptions(BgImgOptions bgImgOptions) {
+    public void setBgImgOptions(BgOptions bgImgOptions) {
         this.bgImgOptions = bgImgOptions;
     }
 
-    public FrontImgOptions getFtImgOptions() {
+    public FrontOptions getFtImgOptions() {
         return ftImgOptions;
     }
 
-    public void setFtImgOptions(FrontImgOptions ftImgOptions) {
+    public void setFtImgOptions(FrontOptions ftImgOptions) {
         this.ftImgOptions = ftImgOptions;
     }
 
@@ -199,12 +198,7 @@ public class QrCodeV3Options<T> {
         /**
          * logo 图片
          */
-        private BufferedImage logo;
-
-        /**
-         * logo 样式
-         */
-        private LogoStyle logoStyle;
+        private QrResource logo;
 
         /**
          * logo 占二维码的比例， rate 要求 > 4
@@ -238,35 +232,12 @@ public class QrCodeV3Options<T> {
          */
         private boolean clearLogoArea;
 
-        public LogoOptions() {
-        }
-
-        public LogoOptions(BufferedImage logo, LogoStyle logoStyle, int rate, boolean border, Color borderColor,
-                           Color outerBorderColor, Float opacity, boolean clearLogoArea) {
-            this.logo = logo;
-            this.logoStyle = logoStyle;
-            this.rate = rate;
-            this.border = border;
-            this.borderColor = borderColor;
-            this.outerBorderColor = outerBorderColor;
-            this.opacity = opacity;
-            this.clearLogoArea = clearLogoArea;
-        }
-
-        public BufferedImage getLogo() {
+        public QrResource getLogo() {
             return logo;
         }
 
-        public void setLogo(BufferedImage logo) {
+        public void setLogo(QrResource logo) {
             this.logo = logo;
-        }
-
-        public LogoStyle getLogoStyle() {
-            return logoStyle;
-        }
-
-        public void setLogoStyle(LogoStyle logoStyle) {
-            this.logoStyle = logoStyle;
         }
 
         public int getRate() {
@@ -308,142 +279,17 @@ public class QrCodeV3Options<T> {
         public void setOpacity(Float opacity) {
             this.opacity = opacity;
         }
-
-        @Override
-        public boolean equals(Object o) {
-            if (this == o) {
-                return true;
-            }
-            if (o == null || getClass() != o.getClass()) {
-                return false;
-            }
-            LogoOptions that = (LogoOptions) o;
-            return rate == that.rate && border == that.border && Objects.equals(logo, that.logo) &&
-                    logoStyle == that.logoStyle && Objects.equals(borderColor, that.borderColor) &&
-                    Objects.equals(outerBorderColor, that.outerBorderColor) && Objects.equals(opacity, that.opacity);
-        }
-
-        @Override
-        public int hashCode() {
-
-            return Objects.hash(logo, logoStyle, rate, border, borderColor, outerBorderColor, opacity);
-        }
-
-        @Override
-        public String toString() {
-            return "LogoOptions{" +
-                    "logo=" + logo +
-                    ", logoStyle=" + logoStyle +
-                    ", rate=" + rate +
-                    ", border=" + border +
-                    ", borderColor=" + borderColor +
-                    ", outerBorderColor=" + outerBorderColor +
-                    ", opacity=" + opacity +
-                    ", clearLogoArea=" + clearLogoArea +
-                    '}';
-        }
-
-        public static LogoOptionsBuilder builder() {
-            return new LogoOptionsBuilder();
-        }
-
-        public static class LogoOptionsBuilder {
-            /**
-             * logo 图片
-             */
-            private BufferedImage logo;
-
-            /**
-             * logo 样式
-             */
-            private LogoStyle logoStyle;
-
-            /**
-             * logo 占二维码的比例， 默认为12
-             */
-            private int rate;
-
-            /**
-             * true 表示有边框，
-             * false 表示无边框
-             */
-            private boolean border;
-
-            /**
-             * 边框颜色
-             */
-            private Color borderColor;
-
-            /**
-             * 外围边框颜色
-             */
-            private Color outerBorderColor;
-
-            /**
-             * 用于设置logo的透明度
-             */
-            private Float opacity;
-
-            /**
-             * true 会将logo区域的二维码清除掉
-             */
-            private boolean clearLogoArea = true;
-
-            public LogoOptionsBuilder logo(BufferedImage logo) {
-                this.logo = logo;
-                return this;
-            }
-
-            public LogoOptionsBuilder logoStyle(LogoStyle logoStyle) {
-                this.logoStyle = logoStyle;
-                return this;
-            }
-
-            public LogoOptionsBuilder rate(int rate) {
-                this.rate = rate;
-                return this;
-            }
-
-            public LogoOptionsBuilder border(boolean border) {
-                this.border = border;
-                return this;
-            }
-
-            public LogoOptionsBuilder borderColor(Color borderColor) {
-                this.borderColor = borderColor;
-                return this;
-            }
-
-            public LogoOptionsBuilder outerBorderColor(Color outerBorderColor) {
-                this.outerBorderColor = outerBorderColor;
-                return this;
-            }
-
-            public LogoOptionsBuilder opacity(Float opacity) {
-                this.opacity = opacity;
-                return this;
-            }
-
-            public LogoOptionsBuilder clearLogoArea(boolean clearLogoArea) {
-                this.clearLogoArea = clearLogoArea;
-                return this;
-            }
-
-            public LogoOptions build() {
-                return new LogoOptions(logo, logoStyle, rate, border, borderColor, outerBorderColor, opacity, clearLogoArea);
-            }
-        }
     }
 
 
     /**
      * 背景图的配置信息
      */
-    public static class BgImgOptions {
+    public static class BgOptions {
         /**
          * 背景图
          */
-        private BufferedImage bgImg;
+        private QrResource bgImg;
 
         /**
          * 背景图样式
@@ -497,11 +343,11 @@ public class QrCodeV3Options<T> {
          */
         private int startY;
 
-        public BgImgOptions() {
+        public BgOptions() {
         }
 
-        public BgImgOptions(BufferedImage bgImg, ImgStyle imgStyle, float radius, GifDecoder gifDecoder, int bgW,
-                            int bgH, BgImgStyle bgImgStyle, float opacity, int startX, int startY) {
+        public BgOptions(T bgImg, ImgStyle imgStyle, float radius, GifDecoder gifDecoder, int bgW,
+                         int bgH, BgImgStyle bgImgStyle, float opacity, int startX, int startY) {
             this.bgImg = bgImg;
             this.imgStyle = imgStyle;
             this.radius = radius;
@@ -616,7 +462,7 @@ public class QrCodeV3Options<T> {
             if (o == null || getClass() != o.getClass()) {
                 return false;
             }
-            BgImgOptions that = (BgImgOptions) o;
+            BgOptions that = (BgOptions) o;
             return Float.compare(that.radius, radius) == 0 && bgW == that.bgW && bgH == that.bgH &&
                     Float.compare(that.opacity, opacity) == 0 && startX == that.startX && startY == that.startY &&
                     Objects.equals(bgImg, that.bgImg) && imgStyle == that.imgStyle &&
@@ -747,7 +593,7 @@ public class QrCodeV3Options<T> {
                 return this;
             }
 
-            public BgImgOptions build() {
+            public BgOptions build() {
                 if (imgStyle == null) {
                     imgStyle = ImgStyle.NORMAL;
                 }
@@ -756,7 +602,7 @@ public class QrCodeV3Options<T> {
                     cornerRadius = 0.125f;
                 }
 
-                return new BgImgOptions(bgImg, imgStyle, cornerRadius, gifDecoder, bgW, bgH, bgImgStyle, opacity, startX,
+                return new BgOptions(bgImg, imgStyle, cornerRadius, gifDecoder, bgW, bgH, bgImgStyle, opacity, startX,
                         startY);
             }
         }
@@ -766,7 +612,7 @@ public class QrCodeV3Options<T> {
     /**
      * 前置图的配置信息
      */
-    public static class FrontImgOptions {
+    public static class FrontOptions {
         /**
          * 前置图
          */
@@ -865,11 +711,11 @@ public class QrCodeV3Options<T> {
             return fillColor;
         }
 
-        public FrontImgOptions() {
+        public FrontOptions() {
         }
 
-        public FrontImgOptions(BufferedImage ftImg, ImgStyle imgStyle, float radius, GifDecoder gifDecoder, int ftW,
-                               int ftH, int startX, int startY, Color fillColor) {
+        public FrontOptions(BufferedImage ftImg, ImgStyle imgStyle, float radius, GifDecoder gifDecoder, int ftW,
+                            int ftH, int startX, int startY, Color fillColor) {
             this.ftImg = ftImg;
             this.imgStyle = imgStyle;
             this.radius = radius;
@@ -885,7 +731,7 @@ public class QrCodeV3Options<T> {
         public boolean equals(Object o) {
             if (this == o) return true;
             if (o == null || getClass() != o.getClass()) return false;
-            FrontImgOptions that = (FrontImgOptions) o;
+            FrontOptions that = (FrontOptions) o;
             return Float.compare(that.radius, radius) == 0 &&
                     ftW == that.ftW &&
                     ftH == that.ftH &&
@@ -998,7 +844,7 @@ public class QrCodeV3Options<T> {
                 return this;
             }
 
-            public FrontImgOptions build() {
+            public FrontOptions build() {
                 if (imgStyle == null) {
                     imgStyle = ImgStyle.NORMAL;
                 }
@@ -1007,7 +853,7 @@ public class QrCodeV3Options<T> {
                     radius = 0.125f;
                 }
 
-                return new FrontImgOptions(ftImg, imgStyle, radius, gifDecoder, ftW, ftH, startX,
+                return new FrontOptions(ftImg, imgStyle, radius, gifDecoder, ftW, ftH, startX,
                         startY, fillColor);
             }
         }
@@ -1227,7 +1073,7 @@ public class QrCodeV3Options<T> {
     /**
      * 绘制二维码的配置信息
      */
-    public static class DrawOptions<T> {
+    public static class DrawOptions {
         /**
          * 着色颜色
          */
@@ -1303,7 +1149,7 @@ public class QrCodeV3Options<T> {
          */
         private RenderImgResourcesV2 imgResourcesForV2;
 
-        private RenderResourcesV3<T> renderResourcesV3;
+        private RenderResourcesV3 renderResourcesV3;
 
         public BufferedImage getImage(int row, int col) {
             return getImage(DotSize.create(row, col));
@@ -1422,7 +1268,7 @@ public class QrCodeV3Options<T> {
             return imgResourcesForV2;
         }
 
-        public RenderResourcesV3<T> getRenderResourcesV3() {
+        public RenderResourcesV3 getRenderResourcesV3() {
             return renderResourcesV3;
         }
 

@@ -1,4 +1,6 @@
-package com.github.hui.quick.plugin.qrcode.helper.v3.entity;
+package com.github.hui.quick.plugin.qrcode.helper.v3.entity.render;
+
+import com.github.hui.quick.plugin.qrcode.helper.v3.entity.QrResource;
 
 /**
  * 二维矩阵渲染
@@ -6,20 +8,20 @@ package com.github.hui.quick.plugin.qrcode.helper.v3.entity;
  * @author YiHui
  * @date 2022/7/20
  */
-public class RenderDot<T> {
+public class RenderDot {
     protected int x, y;
     /**
      * 资源类型 0: 探测图形  1: 背景点  2: 信息点
      */
     protected int type;
 
-    private T resource;
+    private QrResource resource;
 
     public int getX() {
         return x;
     }
 
-    public RenderDot<T> setX(int x) {
+    public RenderDot setX(int x) {
         this.x = x;
         return this;
     }
@@ -28,7 +30,7 @@ public class RenderDot<T> {
         return y;
     }
 
-    public RenderDot<T> setY(int y) {
+    public RenderDot setY(int y) {
         this.y = y;
         return this;
     }
@@ -37,11 +39,11 @@ public class RenderDot<T> {
         return type;
     }
 
-    public T getResource() {
+    public QrResource getResource() {
         return resource;
     }
 
-    public RenderDot<T> setResource(T resource) {
+    public RenderDot setResource(QrResource resource) {
         this.resource = resource;
         return this;
     }

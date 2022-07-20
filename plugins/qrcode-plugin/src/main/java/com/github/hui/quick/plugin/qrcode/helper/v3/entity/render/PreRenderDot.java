@@ -1,4 +1,4 @@
-package com.github.hui.quick.plugin.qrcode.helper.v3.entity;
+package com.github.hui.quick.plugin.qrcode.helper.v3.entity.render;
 
 /**
  * 二维矩阵渲染
@@ -6,7 +6,7 @@ package com.github.hui.quick.plugin.qrcode.helper.v3.entity;
  * @author YiHui
  * @date 2022/7/20
  */
-public class PreRenderDot<T> extends RenderDot<T> {
+public class PreRenderDot extends RenderDot {
     private int row, col;
 
     public PreRenderDot() {
@@ -17,7 +17,7 @@ public class PreRenderDot<T> extends RenderDot<T> {
         return row;
     }
 
-    public PreRenderDot<T> setRow(int row) {
+    public PreRenderDot setRow(int row) {
         this.row = row;
         return this;
     }
@@ -26,7 +26,7 @@ public class PreRenderDot<T> extends RenderDot<T> {
         return col;
     }
 
-    public PreRenderDot<T> setCol(int col) {
+    public PreRenderDot setCol(int col) {
         this.col = col;
         return this;
     }
