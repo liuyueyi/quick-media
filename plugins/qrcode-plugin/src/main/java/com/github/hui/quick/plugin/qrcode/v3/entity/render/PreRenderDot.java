@@ -1,4 +1,4 @@
-package com.github.hui.quick.plugin.qrcode.helper.v3.entity.render;
+package com.github.hui.quick.plugin.qrcode.v3.entity.render;
 
 /**
  * 二维矩阵渲染

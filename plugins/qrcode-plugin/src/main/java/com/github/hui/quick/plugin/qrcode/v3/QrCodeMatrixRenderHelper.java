@@ -1,11 +1,12 @@
-package com.github.hui.quick.plugin.qrcode.helper.v3;
+package com.github.hui.quick.plugin.qrcode.v3;
 
 import com.github.hui.quick.plugin.qrcode.helper.QrCodeRenderHelper;
-import com.github.hui.quick.plugin.qrcode.helper.v3.entity.render.BgRenderDot;
-import com.github.hui.quick.plugin.qrcode.helper.v3.entity.render.DetectRenderDot;
-import com.github.hui.quick.plugin.qrcode.helper.v3.entity.render.RenderDot;
-import com.github.hui.quick.plugin.qrcode.helper.v3.entity.RenderResourcesV3;
-import com.github.hui.quick.plugin.qrcode.helper.v3.req.QrCodeV3Options;
+import com.github.hui.quick.plugin.qrcode.v3.entity.QrResource;
+import com.github.hui.quick.plugin.qrcode.v3.entity.render.BgRenderDot;
+import com.github.hui.quick.plugin.qrcode.v3.entity.render.DetectRenderDot;
+import com.github.hui.quick.plugin.qrcode.v3.entity.render.RenderDot;
+import com.github.hui.quick.plugin.qrcode.v3.entity.RenderResourcesV3;
+import com.github.hui.quick.plugin.qrcode.v3.req.QrCodeV3Options;
 import com.github.hui.quick.plugin.qrcode.wrapper.BitMatrixEx;
 
 import java.awt.image.BufferedImage;
@@ -19,17 +20,23 @@ import java.util.List;
  * @date 2022/7/20
  */
 public class QrCodeMatrixRenderHelper {
-
-    public static <T> List<RenderDot<T>> renderMatrix(QrCodeV3Options<T> qrCodeConfig, BitMatrixEx bitMatrix) {
+    /**
+     * 计算渲染资源列表
+     *
+     * @param qrCodeConfig
+     * @param bitMatrix
+     * @return
+     */
+    public static List<RenderDot> calculateRenderDots(QrCodeV3Options qrCodeConfig, BitMatrixEx bitMatrix) {
         // 探测图形的大小
         int detectCornerSize = bitMatrix.getByteMatrix().get(0, 5) == 1 ? 7 : 5;
 
         int matrixW = bitMatrix.getByteMatrix().getWidth();
         int matrixH = bitMatrix.getByteMatrix().getHeight();
 
-        List<RenderDot<T>> result = new ArrayList<>();
+        List<RenderDot> result = new ArrayList<>();
         // 若探测图形特殊绘制，则提前处理掉
-        RenderResourcesV3<T> imgResourcesV3 = qrCodeConfig.getDrawOptions().getRenderResourcesV3();
+        RenderResourcesV3 imgResourcesV3 = qrCodeConfig.getDrawOptions().getRenderResourcesV3();
         for (int x = 0; x < matrixW; x++) {
             for (int y = 0; y < matrixH; y++) {
                 QrCodeRenderHelper.DetectLocation detectLocation = inDetectCornerArea(x, y, matrixW, matrixH, detectCornerSize);
@@ -42,12 +49,12 @@ public class QrCodeMatrixRenderHelper {
                         }
                     } else {
                         if (bitMatrix.getByteMatrix().get(x, y) == 0 && imgResourcesV3.getDefaultBgImg() != null) {
-                            result.add(new BgRenderDot<T>().setRow(1).setCol(1).setX(x).setY(y).setResource(imgResourcesV3.getDefaultBgImg()));
+                            result.add(new BgRenderDot().setRow(1).setCol(1).setX(x).setY(y).setResource(imgResourcesV3.getDefaultBgImg()));
                         }
                     }
                 } else if (bitMatrix.getByteMatrix().get(x, y) == 0 && imgResourcesV3.getDefaultBgImg() != null) {
                     // 非探测区域内的0点图渲染
-                    result.add(new BgRenderDot<T>().setRow(1).setCol(1).setX(x).setY(y).setResource(imgResourcesV3.getDefaultBgImg()));
+                    result.add(new BgRenderDot().setRow(1).setCol(1).setX(x).setY(y).setResource(imgResourcesV3.getDefaultBgImg()));
                 }
             }
         }
@@ -93,16 +100,16 @@ public class QrCodeMatrixRenderHelper {
      * @param x                目标点x坐标
      * @param y                目标点y坐标
      */
-    private static <T> RenderDot<T> drawDetectImg(QrCodeV3Options qrCodeConfig, BitMatrixEx bitMatrix, int detectCornerSize, int x, int y,
-                                                  QrCodeRenderHelper.DetectLocation detectLocation) {
+    private static RenderDot drawDetectImg(QrCodeV3Options qrCodeConfig, BitMatrixEx bitMatrix, int detectCornerSize, int x, int y,
+                                           QrCodeRenderHelper.DetectLocation detectLocation) {
         int matrixW = bitMatrix.getByteMatrix().getWidth();
         int matrixH = bitMatrix.getByteMatrix().getHeight();
 
-        DetectRenderDot<T> renderDot = new DetectRenderDot<>();
+        DetectRenderDot renderDot = new DetectRenderDot();
         renderDot.setLocation(detectLocation).setX(x).setY(y);
 
-        BufferedImage detectedImg = qrCodeConfig.getDetectOptions().chooseDetectedImg(detectLocation);
-        if (detectedImg != null) {
+        QrResource detectResource = qrCodeConfig.getDetectOptions().chooseDetectResource(detectLocation);
+        if (detectResource != null) {
             // 图片直接渲染完毕之后，将其他探测图形的点设置为0，表示不需要再次渲染
             for (int addX = 0; addX < detectCornerSize; addX++) {
                 for (int addY = 0; addY < detectCornerSize; addY++) {
@@ -114,7 +121,7 @@ public class QrCodeMatrixRenderHelper {
             return renderDot;
         }
 
-        RenderResourcesV3<T> renderResourcesV3 = qrCodeConfig.getDrawOptions().getRenderResourcesV3();
+        RenderResourcesV3 renderResourcesV3 = qrCodeConfig.getDrawOptions().getRenderResourcesV3();
         renderDot.setSize(1)
                 .setOutBorder(inOuterDetectCornerArea(x, y, matrixW, matrixH, detectCornerSize))
                 .setResource(renderResourcesV3.getDefaultDrawImg());
@@ -137,5 +144,6 @@ public class QrCodeMatrixRenderHelper {
         return x == 0 || x == detectCornerSize - 1 || x == matrixW - 1 || x == matrixW - detectCornerSize ||
                 y == 0 || y == detectCornerSize - 1 || y == matrixH - 1 || y == matrixH - detectCornerSize;
     }
+
 
 }

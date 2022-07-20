@@ -1,8 +1,8 @@
-package com.github.hui.quick.plugin.qrcode.helper.v3;
+package com.github.hui.quick.plugin.qrcode.v3;
 
-import com.github.hui.quick.plugin.qrcode.helper.v3.entity.render.PreRenderDot;
-import com.github.hui.quick.plugin.qrcode.helper.v3.entity.render.RenderDot;
-import com.github.hui.quick.plugin.qrcode.helper.v3.entity.RenderResourcesV3;
+import com.github.hui.quick.plugin.qrcode.v3.entity.render.PreRenderDot;
+import com.github.hui.quick.plugin.qrcode.v3.entity.render.RenderDot;
+import com.github.hui.quick.plugin.qrcode.v3.entity.RenderResourcesV3;
 import com.google.zxing.qrcode.encoder.ByteMatrix;
 
 import java.util.ArrayList;
@@ -41,7 +41,7 @@ public class DotRenderV3Helper {
         for (int x = 0; x < matrix.getWidth() - renderSource.getCol() + 1; x++) {
             for (int y = 0; y < matrix.getHeight() - renderSource.getRow() + 1; y++) {
                 if (match(matrix, renderSource, x, y, fullMatch)) {
-                    result.add(renderImg(matrix, renderSource, x, y));
+                    result.add(renderResource(matrix, renderSource, x, y));
                     if (renderSource.countOver()) {
                         return result;
                     }
@@ -72,8 +72,8 @@ public class DotRenderV3Helper {
         return true;
     }
 
-    private static  RenderDot renderImg(ByteMatrix matrix, RenderResourcesV3.RenderSource renderSource, int x, int y) {
-        PreRenderDot renderDot = new PreRenderDot<>();
+    private static  RenderDot renderResource(ByteMatrix matrix, RenderResourcesV3.RenderSource renderSource, int x, int y) {
+        PreRenderDot renderDot = new PreRenderDot();
         renderDot.setCol(renderSource.getCol()).setRow(renderSource.getRow()).setX(x).setY(y).setResource(renderSource.getResource());
 
         // 将命中的标记为已渲染

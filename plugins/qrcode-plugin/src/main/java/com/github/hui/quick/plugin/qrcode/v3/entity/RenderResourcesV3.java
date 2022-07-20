@@ -1,4 +1,4 @@
-package com.github.hui.quick.plugin.qrcode.helper.v3.entity;
+package com.github.hui.quick.plugin.qrcode.v3.entity;
 
 import org.apache.commons.lang3.BooleanUtils;
 import org.apache.commons.lang3.StringUtils;

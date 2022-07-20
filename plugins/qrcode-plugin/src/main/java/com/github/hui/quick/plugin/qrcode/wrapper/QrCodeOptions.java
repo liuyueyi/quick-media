@@ -6,7 +6,6 @@ import com.github.hui.quick.plugin.qrcode.entity.DotSize;
 import com.github.hui.quick.plugin.qrcode.entity.RenderImgResourcesV2;
 import com.github.hui.quick.plugin.qrcode.entity.RenderImgResources;
 import com.github.hui.quick.plugin.qrcode.helper.QrCodeRenderHelper;
-import com.github.hui.quick.plugin.qrcode.helper.v3.entity.RenderResourcesV3;
 import com.google.zxing.EncodeHintType;
 
 import java.awt.*;
@@ -1303,8 +1302,6 @@ public class QrCodeOptions {
          */
         private RenderImgResourcesV2 imgResourcesForV2;
 
-        private RenderResourcesV3 renderResourcesV3;
-
         public BufferedImage getImage(int row, int col) {
             return getImage(DotSize.create(row, col));
         }
@@ -1420,10 +1417,6 @@ public class QrCodeOptions {
 
         public RenderImgResourcesV2 getImgResourcesForV2() {
             return imgResourcesForV2;
-        }
-
-        public RenderResourcesV3 getRenderResourcesV3() {
-            return renderResourcesV3;
         }
 
         public ImgStyle getQrStyle() {
