@@ -9,8 +9,16 @@ import java.awt.*;
  * 探测图形的配置信息
  */
 public class DetectOptions {
+    private QrCodeV3Options options;
+
+    /**
+     * 外层颜色
+     */
     private Color outColor;
 
+    /**
+     * 内层颜色
+     */
     private Color inColor;
     /**
      * 兜底的资源
@@ -33,6 +41,15 @@ public class DetectOptions {
      * false 表示探测图形的样式更随二维码的主样式
      */
     private Boolean special;
+
+    /**
+     * true 表示一个探测图形只用一个资源进行填充；适用于指定探测图形图片、svg节点的场景
+     */
+    private Boolean whole;
+
+    public DetectOptions(QrCodeV3Options options) {
+        this.options = options;
+    }
 
     public Color getOutColor() {
         return outColor;
@@ -100,6 +117,15 @@ public class DetectOptions {
         return this;
     }
 
+    public Boolean getWhole() {
+        return whole;
+    }
+
+    public DetectOptions setWhole(Boolean whole) {
+        this.whole = whole;
+        return this;
+    }
+
     public QrResource chooseDetectResource(QrCodeRenderHelper.DetectLocation detectLocation) {
         switch (detectLocation) {
             case LD:
@@ -111,5 +137,10 @@ public class DetectOptions {
             default:
                 return null;
         }
+    }
+
+    public QrCodeV3Options complete() {
+        if (special == null) special = false;
+        return options;
     }
 }

@@ -28,4 +28,40 @@ public class QrResource {
      * svg tag
      */
     private String svg;
+
+    public GifDecoder getGifDecoder() {
+        return gifDecoder;
+    }
+
+    public QrResource setGifDecoder(GifDecoder gifDecoder) {
+        this.gifDecoder = gifDecoder;
+        return this;
+    }
+
+    public BufferedImage getImg() {
+        return img;
+    }
+
+    public QrResource setImg(BufferedImage img) {
+        this.img = img;
+        return this;
+    }
+
+    public String getText() {
+        return text;
+    }
+
+    public QrResource setText(String text) {
+        this.text = text;
+        return this;
+    }
+
+    public String getSvg() {
+        return svg;
+    }
+
+    public QrResource setSvg(String svg) {
+        this.svg = svg;
+        return this;
+    }
 }

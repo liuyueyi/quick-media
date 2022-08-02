@@ -1,6 +1,11 @@
 package com.github.hui.quick.plugin.qrcode.v3.entity.render;
 
 import com.github.hui.quick.plugin.qrcode.helper.QrCodeRenderHelper;
+import com.github.hui.quick.plugin.qrcode.v3.constants.RenderDotType;
+import com.github.hui.quick.plugin.qrcode.v3.constants.RenderFunc;
+
+import java.awt.*;
+
 /**
  * 二维矩阵渲染
  *
@@ -9,14 +14,14 @@ import com.github.hui.quick.plugin.qrcode.helper.QrCodeRenderHelper;
  */
 public class DetectRenderDot extends RenderDot {
     private QrCodeRenderHelper.DetectLocation location;
-    private int size;
+    private int dotNum;
     /**
      * 当size == 1时，用这个来区分当前这个是在码眼外层的还是内层的框上
      */
     private Boolean outBorder;
 
     public DetectRenderDot() {
-        this.type = 0;
+        this.type = RenderDotType.DETECT.getType();
     }
 
     public QrCodeRenderHelper.DetectLocation getLocation() {
@@ -28,12 +33,12 @@ public class DetectRenderDot extends RenderDot {
         return this;
     }
 
-    public int getSize() {
-        return size;
+    public int getDotNum() {
+        return dotNum;
     }
 
-    public DetectRenderDot setSize(int size) {
-        this.size = size;
+    public DetectRenderDot setDotNum(int dotNum) {
+        this.dotNum = dotNum;
         return this;
     }
 
@@ -44,5 +49,35 @@ public class DetectRenderDot extends RenderDot {
     public DetectRenderDot setOutBorder(Boolean outBorder) {
         this.outBorder = outBorder;
         return this;
+    }
+
+    @Override
+    public void renderGeometry(Graphics2D g2d, RenderFunc.GeometryDrawFunc imgFunc) {
+        // 多个探测图形
+        imgFunc.draw(g2d, x, y, dotNum * size, dotNum * size);
+    }
+
+    @Override
+    public void renderImg(Graphics2D g2d, RenderFunc.ImgDrawFunc drawFunc) {
+        drawFunc.draw(g2d, resource.getImg(), x, y, size * dotNum, size * dotNum);
+    }
+
+    @Override
+    public void renderTxt(Graphics2D g2d, RenderFunc.TxtImgDrawFunc drawFunc) {
+        drawFunc.draw(g2d, resource.getText(), x, y, size * dotNum);
+    }
+
+    @Override
+    public String toString() {
+        return "DetectRenderDot{" +
+                "location=" + location +
+                ", dotNum=" + dotNum +
+                ", outBorder=" + outBorder +
+                ", x=" + x +
+                ", y=" + y +
+                ", size=" + size +
+                ", type=" + type +
+                ", resource=" + resource +
+                '}';
     }
 }

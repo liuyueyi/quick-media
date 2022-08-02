@@ -1,5 +1,6 @@
 package com.github.hui.quick.plugin.qrcode.v3.req;
 
+import com.github.hui.quick.plugin.qrcode.v3.constants.PicStyle;
 import com.github.hui.quick.plugin.qrcode.v3.entity.QrResource;
 
 import java.awt.*;
@@ -8,6 +9,7 @@ import java.awt.*;
  * logo 的配置信息
  */
 public class LogoOptions {
+    private QrCodeV3Options options;
 
     /**
      * logo 图片
@@ -20,10 +22,22 @@ public class LogoOptions {
     private int rate;
 
     /**
-     * true 表示有边框，
-     * false 表示无边框
+     * 用于设置logo的透明度
      */
-    private boolean border;
+    private Float opacity;
+
+    /**
+     * 当存在logo时，默认值为true
+     * <p>
+     * true 表示将logo区域的二维码移除掉
+     * false logo区域的二维码不做任何处理
+     */
+    private Boolean clearLogoArea;
+
+    /**
+     * 图片样式
+     */
+    private PicStyle picStyle;
 
     /**
      * 边框颜色
@@ -35,16 +49,9 @@ public class LogoOptions {
      */
     private Color outerBorderColor;
 
-    /**
-     * 用于设置logo的透明度
-     */
-    private Float opacity;
-
-    /**
-     * true 表示将logo区域的二维码移除掉
-     * false logo区域的二维码不做任何处理
-     */
-    private boolean clearLogoArea;
+    public LogoOptions(QrCodeV3Options options) {
+        this.options = options;
+    }
 
     public QrResource getLogo() {
         return logo;
@@ -64,12 +71,30 @@ public class LogoOptions {
         return this;
     }
 
-    public boolean isBorder() {
-        return border;
+    public Float getOpacity() {
+        return opacity;
     }
 
-    public LogoOptions setBorder(boolean border) {
-        this.border = border;
+    public LogoOptions setOpacity(Float opacity) {
+        this.opacity = opacity;
+        return this;
+    }
+
+    public Boolean getClearLogoArea() {
+        return clearLogoArea;
+    }
+
+    public LogoOptions setClearLogoArea(boolean clearLogoArea) {
+        this.clearLogoArea = clearLogoArea;
+        return this;
+    }
+
+    public PicStyle getPicStyle() {
+        return picStyle;
+    }
+
+    public LogoOptions setPicStyle(PicStyle picStyle) {
+        this.picStyle = picStyle;
         return this;
     }
 
@@ -91,21 +116,11 @@ public class LogoOptions {
         return this;
     }
 
-    public Float getOpacity() {
-        return opacity;
-    }
+    public QrCodeV3Options complete() {
+        if (rate <= 4) rate = 10;
+        if (picStyle == null) picStyle = PicStyle.NORMAL;
+        if (clearLogoArea == null) clearLogoArea = true;
 
-    public LogoOptions setOpacity(Float opacity) {
-        this.opacity = opacity;
-        return this;
-    }
-
-    public boolean isClearLogoArea() {
-        return clearLogoArea;
-    }
-
-    public LogoOptions setClearLogoArea(boolean clearLogoArea) {
-        this.clearLogoArea = clearLogoArea;
-        return this;
+        return this.options;
     }
 }

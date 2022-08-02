@@ -9,10 +9,12 @@ import java.awt.*;
  * 前置图的配置信息
  */
 public class FrontOptions {
+    private QrCodeV3Options options;
+
     /**
      * 前置图
      */
-    private QrResource ftResource;
+    private QrResource ft;
 
     /**
      * 背景图样式
@@ -50,12 +52,16 @@ public class FrontOptions {
      */
     private Color fillColor;
 
-    public QrResource getFtResource() {
-        return ftResource;
+    public FrontOptions(QrCodeV3Options options) {
+        this.options = options;
     }
 
-    public FrontOptions setFtResource(QrResource ftResource) {
-        this.ftResource = ftResource;
+    public QrResource getFt() {
+        return ft;
+    }
+
+    public FrontOptions setFt(QrResource ft) {
+        this.ft = ft;
         return this;
     }
 
@@ -120,5 +126,9 @@ public class FrontOptions {
     public FrontOptions setFillColor(Color fillColor) {
         this.fillColor = fillColor;
         return this;
+    }
+
+    public QrCodeV3Options complete() {
+        return options;
     }
 }

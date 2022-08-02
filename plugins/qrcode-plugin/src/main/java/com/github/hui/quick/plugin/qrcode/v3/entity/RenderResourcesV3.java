@@ -46,10 +46,20 @@ public class RenderResourcesV3 {
         return sourceList;
     }
 
+    /**
+     * 默认的兜底绘制图
+     *
+     * @return
+     */
     public QrResource getDefaultDrawImg() {
-        return defaultRenderDrawImg.getResource();
+        return defaultRenderDrawImg == null ? null : defaultRenderDrawImg.getResource();
     }
 
+    /**
+     * 默认的背景图
+     *
+     * @return
+     */
     public QrResource getDefaultBgImg() {
         return defaultRenderBgImg == null ? null : defaultRenderBgImg.getResource();
     }

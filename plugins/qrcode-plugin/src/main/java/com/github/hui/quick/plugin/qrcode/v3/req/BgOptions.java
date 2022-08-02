@@ -1,6 +1,5 @@
 package com.github.hui.quick.plugin.qrcode.v3.req;
 
-import com.github.hui.quick.plugin.base.gif.GifDecoder;
 import com.github.hui.quick.plugin.qrcode.v3.constants.BgStyle;
 import com.github.hui.quick.plugin.qrcode.v3.constants.PicStyle;
 import com.github.hui.quick.plugin.qrcode.v3.entity.QrResource;
@@ -9,10 +8,11 @@ import com.github.hui.quick.plugin.qrcode.v3.entity.QrResource;
  * 背景图的配置信息
  */
 public class BgOptions {
+    private QrCodeV3Options options;
     /**
      * 背景图
      */
-    private QrResource resource;
+    private QrResource bg;
 
     /**
      * 背景图样式
@@ -22,7 +22,7 @@ public class BgOptions {
     /**
      * 圆角弧度，默认为宽高中较小值的 1/8
      */
-    private float radius;
+    private float radiusRate;
 
     /**
      * 背景图宽
@@ -61,12 +61,16 @@ public class BgOptions {
      */
     private int startY;
 
-    public QrResource getResource() {
-        return resource;
+    public BgOptions(QrCodeV3Options options) {
+        this.options = options;
     }
 
-    public BgOptions setResource(QrResource resource) {
-        this.resource = resource;
+    public QrResource getBg() {
+        return bg;
+    }
+
+    public BgOptions setBg(QrResource bg) {
+        this.bg = bg;
         return this;
     }
 
@@ -79,12 +83,12 @@ public class BgOptions {
         return this;
     }
 
-    public float getRadius() {
-        return radius;
+    public float getRadiusRate() {
+        return radiusRate;
     }
 
-    public BgOptions setRadius(float radius) {
-        this.radius = radius;
+    public BgOptions setRadiusRate(float radiusRate) {
+        this.radiusRate = radiusRate;
         return this;
     }
 
@@ -140,5 +144,21 @@ public class BgOptions {
     public BgOptions setStartY(int startY) {
         this.startY = startY;
         return this;
+    }
+
+    public QrCodeV3Options complete() {
+        if (radiusRate <= 0.01) radiusRate = 1 / 8f;
+        if (bg != null) {
+            
+        }
+
+        if (bgW <= 0) {
+            if (bg != null && bg.getImg() != null) {
+                bgW = bg.getImg().getWidth();
+            }
+        }
+
+
+        return options;
     }
 }

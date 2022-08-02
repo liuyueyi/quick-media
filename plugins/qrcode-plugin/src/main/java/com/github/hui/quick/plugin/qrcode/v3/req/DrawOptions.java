@@ -12,6 +12,8 @@ import java.awt.*;
  * 绘制二维码的配置信息
  */
 public class DrawOptions {
+    private QrCodeV3Options options;
+
     /**
      * 着色颜色
      */
@@ -55,19 +57,27 @@ public class DrawOptions {
     /**
      * 图片透明处填充，true则表示透明处用bgColor填充； false则透明处依旧透明
      */
-    private boolean diaphaneityFill;
+    private boolean transparencyFill;
 
     /**
      * 生成二维码的图片样式，一般来讲不推荐使用圆形，默认为normal；如果是圆角，则可以配套设置 cornerRadius
      */
-    private PicStyle qrStyle;
+    private PicStyle picStyle;
 
     /**
      * 圆角的弧度，默认为 1 / 8
      */
     private Float cornerRadius;
 
+    /**
+     * 渲染资源
+     */
     private RenderResourcesV3 renderResourcesV3;
+
+    public DrawOptions(QrCodeV3Options options) {
+        this.options = options;
+        renderResourcesV3 = RenderResourcesV3.create();
+    }
 
     public Color getPreColor() {
         return preColor;
@@ -132,21 +142,21 @@ public class DrawOptions {
         return this;
     }
 
-    public boolean isDiaphaneityFill() {
-        return diaphaneityFill;
+    public boolean isTransparencyFill() {
+        return transparencyFill;
     }
 
-    public DrawOptions setDiaphaneityFill(boolean diaphaneityFill) {
-        this.diaphaneityFill = diaphaneityFill;
+    public DrawOptions setTransparencyFill(boolean transparencyFill) {
+        this.transparencyFill = transparencyFill;
         return this;
     }
 
-    public PicStyle getQrStyle() {
-        return qrStyle;
+    public PicStyle getPicStyle() {
+        return picStyle;
     }
 
-    public DrawOptions setQrStyle(PicStyle qrStyle) {
-        this.qrStyle = qrStyle;
+    public DrawOptions setPicStyle(PicStyle picStyle) {
+        this.picStyle = picStyle;
         return this;
     }
 
@@ -166,5 +176,14 @@ public class DrawOptions {
     public DrawOptions setRenderResourcesV3(RenderResourcesV3 renderResourcesV3) {
         this.renderResourcesV3 = renderResourcesV3;
         return this;
+    }
+
+    public QrCodeV3Options complete() {
+        if (bgColor == null) bgColor = Color.WHITE;
+        if (preColor == null) preColor = Color.BLACK;
+        if (drawStyle == null) drawStyle = DrawStyle.RECT;
+        if (picStyle == null) picStyle = PicStyle.NORMAL;
+
+        return options;
     }
 }

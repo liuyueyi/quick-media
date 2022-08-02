@@ -1,7 +1,5 @@
 package com.github.hui.quick.plugin.qrcode.v3.constants;
 
-import com.github.hui.quick.plugin.qrcode.v3.req.QrCodeV3Options;
-
 /**
  * 背景图样式
  *
