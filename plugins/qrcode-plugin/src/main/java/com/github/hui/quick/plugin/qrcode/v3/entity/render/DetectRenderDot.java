@@ -59,12 +59,12 @@ public class DetectRenderDot extends RenderDot {
 
     @Override
     public void renderImg(Graphics2D g2d, RenderFunc.ImgDrawFunc drawFunc) {
-        drawFunc.draw(g2d, resource.getImg(), x, y, size * dotNum, size * dotNum);
+        drawFunc.draw(g2d, resource == null ? null : resource.getImg(), x, y, size * dotNum, size * dotNum);
     }
 
     @Override
     public void renderTxt(Graphics2D g2d, RenderFunc.TxtImgDrawFunc drawFunc) {
-        drawFunc.draw(g2d, resource.getText(), x, y, size * dotNum);
+        drawFunc.draw(g2d, resource == null ? null : resource.getText(), x, y, size * dotNum);
     }
 
     @Override

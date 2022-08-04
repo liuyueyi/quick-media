@@ -57,7 +57,7 @@ public class QrRenderDotGenerator {
 
         List<RenderDot> result = new ArrayList<>();
         // 若探测图形特殊绘制，则提前处理掉
-        RenderResourcesV3 imgResourcesV3 = qrCodeConfig.getDrawOptions().getRenderResourcesV3();
+        RenderResourcesV3 imgResourcesV3 = qrCodeConfig.getDrawOptions().getResources();
         scanMatrix(matrixW, matrixH, (x, y) -> {
             QrCodeRenderHelper.DetectLocation detectLocation = inDetectCornerArea(x, y, matrixW, matrixH, detectCornerSize);
             if (detectLocation.detectedArea() && qrCodeConfig.getDetectOptions().getSpecial()) {
@@ -143,7 +143,7 @@ public class QrRenderDotGenerator {
         DetectRenderDot renderDot = new DetectRenderDot();
         renderDot.setLocation(detectLocation)
                 .setX(bitMatrix.getLeftPadding() + x * bitMatrix.getMultiple())
-                .setY(bitMatrix.getTopPadding() + y + bitMatrix.getMultiple())
+                .setY(bitMatrix.getTopPadding() + y * bitMatrix.getMultiple())
                 .setSize(bitMatrix.getMultiple());
 
         QrResource detectResource = qrCodeConfig.getDetectOptions().chooseDetectResource(detectLocation);
@@ -151,12 +151,12 @@ public class QrRenderDotGenerator {
             // 图片直接渲染完毕之后，将其他探测图形的点设置为0，表示不需要再次渲染
             scanMatrix(detectCornerSize, detectCornerSize, (addX, addY) -> bitMatrix.getByteMatrix().set(x + addX, y + addY, 0));
             // 码眼整个用一张资源渲染
-            renderDot.setOutBorder(false).setDotNum(detectCornerSize);
+            renderDot.setOutBorder(false).setDotNum(detectCornerSize).setResource(detectResource);
             return renderDot;
         }
 
-        RenderResourcesV3 renderResourcesV3 = qrCodeConfig.getDrawOptions().getRenderResourcesV3();
-        renderDot.setDotNum(1).setOutBorder(inOuterDetectCornerArea(x, y, matrixW, matrixH, detectCornerSize)).setResource(renderResourcesV3.getDefaultBgImg());
+        RenderResourcesV3 renderResourcesV3 = qrCodeConfig.getDrawOptions().getResources();
+        renderDot.setDotNum(1).setOutBorder(inOuterDetectCornerArea(x, y, matrixW, matrixH, detectCornerSize));//.setResource(renderResourcesV3.getDefaultDrawImg());
         bitMatrix.getByteMatrix().set(x, y, 0);
         return renderDot;
     }

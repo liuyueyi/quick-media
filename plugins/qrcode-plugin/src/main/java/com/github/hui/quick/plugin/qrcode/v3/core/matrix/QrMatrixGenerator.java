@@ -53,7 +53,7 @@ public class QrMatrixGenerator {
     }
 
     private static void clearLogo(BitMatrixEx bitMatrixEx, LogoOptions logoOptions) {
-        if (logoOptions == null || BooleanUtils.isNotTrue(logoOptions.getClearLogoArea())) {
+        if (logoOptions == null || logoOptions.getLogo() == null || BooleanUtils.isNotTrue(logoOptions.getClearLogoArea())) {
             return;
         }
 

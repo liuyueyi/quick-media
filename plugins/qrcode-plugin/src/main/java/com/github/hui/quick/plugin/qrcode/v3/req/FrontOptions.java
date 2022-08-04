@@ -1,9 +1,9 @@
 package com.github.hui.quick.plugin.qrcode.v3.req;
 
-import com.github.hui.quick.plugin.qrcode.v3.constants.PicStyle;
 import com.github.hui.quick.plugin.qrcode.v3.entity.QrResource;
 
 import java.awt.*;
+import java.awt.image.BufferedImage;
 
 /**
  * 前置图的配置信息
@@ -101,6 +101,14 @@ public class FrontOptions {
     }
 
     public QrCodeV3Options complete() {
+        if (ft != null) {
+            BufferedImage rImg = ft.getImg() != null ? ft.getImg() : (ft.getGifDecoder() != null ? ft.getGifDecoder().getImage() : null);
+            if (rImg != null) {
+                if (ftW <= 0) ftW = rImg.getWidth();
+                if (ftH <= 0) ftH = rImg.getHeight();
+            }
+        }
+
         return options;
     }
 }

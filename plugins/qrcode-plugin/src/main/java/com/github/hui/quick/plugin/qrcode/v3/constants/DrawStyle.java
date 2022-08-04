@@ -97,7 +97,13 @@ public enum DrawStyle {
     IMAGE(1) {
         @Override
         public void imgDrawFunc(Graphics2D g2d, BufferedImage img, int x, int y, int w, int h) {
-            g2d.drawImage(img.getScaledInstance(w, h, Image.SCALE_SMOOTH), x, y, null);
+            if (img == null) {
+                // 兜底的绘制方式
+                g2d.setColor(Color.BLACK);
+                g2d.fillRect(x, y, w, h);
+            } else {
+                g2d.drawImage(img.getScaledInstance(w, h, Image.SCALE_SMOOTH), x, y, null);
+            }
         }
     },
 
@@ -107,13 +113,19 @@ public enum DrawStyle {
     TXT(2) {
         @Override
         public void txtImgDrawFunc(Graphics2D g2d, String txt, int x, int y, int size) {
-            Font oldFont = g2d.getFont();
-            if (oldFont.getSize() != size) {
-                Font newFont = QuickQrUtil.font(oldFont.getName(), oldFont.getStyle(), size);
-                g2d.setFont(newFont);
+            if (txt == null) {
+                g2d.setColor(Color.BLACK);
+                g2d.fillRect(x, y, size, size);
             }
-            g2d.drawString(txt, x, y + size);
-            g2d.setFont(oldFont);
+            else{
+                Font oldFont = g2d.getFont();
+                if (oldFont.getSize() != size) {
+                    Font newFont = QuickQrUtil.font(oldFont.getName(), oldFont.getStyle(), size);
+                    g2d.setFont(newFont);
+                }
+                g2d.drawString(txt, x, y + size);
+                g2d.setFont(oldFont);
+            }
         }
     },
 

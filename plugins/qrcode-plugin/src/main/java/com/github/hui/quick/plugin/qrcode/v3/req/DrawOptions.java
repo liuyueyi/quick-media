@@ -4,6 +4,7 @@ package com.github.hui.quick.plugin.qrcode.v3.req;
 import com.github.hui.quick.plugin.qrcode.v3.constants.DrawStyle;
 import com.github.hui.quick.plugin.qrcode.v3.constants.PicStyle;
 import com.github.hui.quick.plugin.qrcode.v3.constants.TxtMode;
+import com.github.hui.quick.plugin.qrcode.v3.entity.QrResource;
 import com.github.hui.quick.plugin.qrcode.v3.entity.RenderResourcesV3;
 
 import java.awt.*;
@@ -72,11 +73,11 @@ public class DrawOptions {
     /**
      * 渲染资源
      */
-    private RenderResourcesV3 renderResourcesV3;
+    private RenderResourcesV3 resources;
 
     public DrawOptions(QrCodeV3Options options) {
         this.options = options;
-        renderResourcesV3 = RenderResourcesV3.create();
+        resources = RenderResourcesV3.create(this);
     }
 
     public Color getPreColor() {
@@ -169,13 +170,30 @@ public class DrawOptions {
         return this;
     }
 
-    public RenderResourcesV3 getRenderResourcesV3() {
-        return renderResourcesV3;
+    public RenderResourcesV3 getResources() {
+        return resources;
     }
 
-    public DrawOptions setRenderResourcesV3(RenderResourcesV3 renderResourcesV3) {
-        this.renderResourcesV3 = renderResourcesV3;
+    /**
+     * 只有一个图片的场景，用这个接口
+     *
+     * @param pre 1点对应的图
+     * @param bg  0点对应的图
+     * @return
+     */
+    public DrawOptions setRenderResource(QrResource pre, QrResource bg) {
+        resources.addSource(1, 1, pre).build().addSource(1, 1, bg).setMiss(0, 0).build();
         return this;
+    }
+
+    /**
+     * 添加资源
+     *
+     * @param resource
+     * @return
+     */
+    public RenderResourcesV3.RenderSource newRenderResource(int row, int col, QrResource resource) {
+        return resources.addSource(row, col, resource);
     }
 
     public QrCodeV3Options complete() {

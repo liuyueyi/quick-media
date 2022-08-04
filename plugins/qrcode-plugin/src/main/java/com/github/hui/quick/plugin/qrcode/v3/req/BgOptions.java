@@ -24,7 +24,7 @@ public class BgOptions {
     private int bgH;
 
     /**
-     * 背景图样式
+     * 背景图样式，默认为 OVERRIDE
      */
     private BgStyle bgStyle;
 

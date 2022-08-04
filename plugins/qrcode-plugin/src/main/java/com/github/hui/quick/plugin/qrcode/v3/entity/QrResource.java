@@ -1,9 +1,11 @@
 package com.github.hui.quick.plugin.qrcode.v3.entity;
 
+import com.github.hui.quick.plugin.base.awt.ImageLoadUtil;
 import com.github.hui.quick.plugin.base.gif.GifDecoder;
 import com.github.hui.quick.plugin.qrcode.v3.constants.PicStyle;
 
 import java.awt.image.BufferedImage;
+import java.io.IOException;
 
 /**
  * @author YiHui
@@ -57,6 +59,10 @@ public class QrResource {
     public QrResource setImg(BufferedImage img) {
         this.img = img;
         return this;
+    }
+
+    public QrResource setImg(String img) throws IOException {
+        return setImg(ImageLoadUtil.getImageByPath(img));
     }
 
     public String getText() {

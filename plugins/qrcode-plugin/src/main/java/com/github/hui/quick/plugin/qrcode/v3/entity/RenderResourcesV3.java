@@ -1,10 +1,10 @@
 package com.github.hui.quick.plugin.qrcode.v3.entity;
 
+import com.github.hui.quick.plugin.qrcode.v3.req.DrawOptions;
 import org.apache.commons.lang3.BooleanUtils;
 import org.apache.commons.lang3.StringUtils;
 
 import java.awt.*;
-import java.io.IOException;
 import java.util.List;
 import java.util.*;
 
@@ -15,6 +15,8 @@ import java.util.*;
  * @date 2022/7/20
  */
 public class RenderResourcesV3 {
+    private DrawOptions ref;
+
     public static final int NO_LIMIT_COUNT = -1;
 
     /**
@@ -33,12 +35,17 @@ public class RenderResourcesV3 {
     private ResourceDecorate defaultRenderBgImg;
 
 
-    public static RenderResourcesV3 create() {
-        return new RenderResourcesV3();
+    public static RenderResourcesV3 create(DrawOptions ref) {
+        return new RenderResourcesV3(ref);
     }
 
-    private RenderResourcesV3() {
+    private RenderResourcesV3(DrawOptions ref) {
+        this.ref = ref;
         sourceList = new ArrayList<>();
+    }
+
+    public DrawOptions over() {
+        return this.ref;
     }
 
 
@@ -64,11 +71,17 @@ public class RenderResourcesV3 {
         return defaultRenderBgImg == null ? null : defaultRenderBgImg.getResource();
     }
 
+    public RenderSource addSource(int row, int col, QrResource resource) {
+        return new RenderSource(this)
+                .setRow(row)
+                .setCol(col)
+                .addResource(resource);
+    }
+
     public RenderSource addSource(int row, int col) {
-        RenderSource renderSource = new RenderSource(this);
-        renderSource.setRow(row);
-        renderSource.setCol(col);
-        return renderSource;
+        return new RenderSource(this)
+                .setRow(row)
+                .setCol(col);
     }
 
     public static class RenderSource implements Comparable<RenderSource> {
@@ -178,11 +191,11 @@ public class RenderResourcesV3 {
             return fullMatch;
         }
 
-        public RenderSource addImg(QrResource img) throws IOException {
-            return addImg(img, NO_LIMIT_COUNT);
+        public RenderSource addResource(QrResource img) {
+            return addResource(img, NO_LIMIT_COUNT);
         }
 
-        public RenderSource addImg(QrResource img, int count) {
+        public RenderSource addResource(QrResource img, int count) {
             if (this.resourceDecorate == null) {
                 this.resourceDecorate = new ResourceDecorate(img, count);
             } else {
