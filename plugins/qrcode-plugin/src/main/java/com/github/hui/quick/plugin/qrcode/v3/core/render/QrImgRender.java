@@ -5,6 +5,7 @@ import com.github.hui.quick.plugin.base.awt.ImageOperateUtil;
 import com.github.hui.quick.plugin.qrcode.v3.constants.BgStyle;
 import com.github.hui.quick.plugin.qrcode.v3.constants.PicStyle;
 import com.github.hui.quick.plugin.qrcode.v3.constants.RenderDotType;
+import com.github.hui.quick.plugin.qrcode.v3.entity.QrResource;
 import com.github.hui.quick.plugin.qrcode.v3.entity.render.DetectRenderDot;
 import com.github.hui.quick.plugin.qrcode.v3.entity.render.RenderDot;
 import com.github.hui.quick.plugin.qrcode.v3.req.BgOptions;
@@ -35,7 +36,7 @@ public class QrImgRender {
     public static BufferedImage drawQrInfo(List<RenderDot> dotList, QrCodeV3Options options) {
         BufferedImage qrImg = GraphicUtil.createImg(options.getW(), options.getH(), BufferedImage.TYPE_INT_ARGB);
         Graphics2D g2d = GraphicUtil.getG2d(qrImg);
-        if (!options.getDrawOptions().isTransparencyFill()) {
+        if (options.getDrawOptions().isTransparencyBgFill()) {
             // 当二维码中的透明区域，不填充时，如下设置，可以让图片中的透明度覆盖背景色
             g2d.setComposite(AlphaComposite.Src);
         }
@@ -71,7 +72,8 @@ public class QrImgRender {
      * 背景图
      */
     public static BufferedImage drawBackground(BufferedImage qrImg, BgOptions bgImgOptions) {
-        if (bgImgOptions.getBg() == null) return qrImg;
+        QrResource resource = bgImgOptions.getBg();
+        if (resource == null || resource.getImg() == null) return qrImg;
 
         final int qrWidth = qrImg.getWidth();
         final int qrHeight = qrImg.getHeight();
@@ -81,13 +83,13 @@ public class QrImgRender {
         int bgH = Math.max(bgImgOptions.getBgH(), qrHeight);
 
         // 背景图缩放
-        BufferedImage bgImg = bgImgOptions.getBg().getImg();
+        BufferedImage bgImg = resource.getImg();
         if (bgImg.getWidth() != bgW || bgImg.getHeight() != bgH) {
             BufferedImage temp = new BufferedImage(bgW, bgH, BufferedImage.TYPE_INT_ARGB);
             temp.getGraphics().drawImage(bgImg.getScaledInstance(bgW, bgH, Image.SCALE_SMOOTH), 0, 0, null);
             bgImg = temp;
         }
-        bgImg = bgImgOptions.getImgStyle().process(bgImg, (int) (Math.min(bgW, bgH) * bgImgOptions.getRadiusRate()));
+        bgImg = resource.getPicStyle().process(bgImg, (int) (Math.min(bgW, bgH) * resource.getCornerRadius()));
 
         Graphics2D bgImgGraphic = GraphicUtil.getG2d(bgImg);
         if (bgImgOptions.getBgStyle() == BgStyle.FILL) {
@@ -147,12 +149,14 @@ public class QrImgRender {
                 bgGraphic.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_ATOP, 1.0f));
                 bgGraphic.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
                 bgGraphic.drawImage(qrImg.getScaledInstance(qrWidth, qrHeight, Image.SCALE_SMOOTH), bgOffsetX, bgOffsetY, null);
-//                // 实验功能，用于gif生成时缩放
-//                int add = 2 * Math.abs(index - len / 2);
-//                int newQrW = qrWidth + add;
-//                int newQrH = qrHeight + add;
-//
-//                bgGraphic.drawImage(qrImg.getScaledInstance(newQrW, newQrH, Image.SCALE_SMOOTH), bgOffsetX - add / 2, bgOffsetY - add / 2, null);
+                /*
+                    // 实验功能，用于gif生成时缩放
+                    int add = 2 * Math.abs(index - len / 2);
+                    int newQrW = qrWidth + add;
+                    int newQrH = qrHeight + add;
+
+                    bgGraphic.drawImage(qrImg.getScaledInstance(newQrW, newQrH, Image.SCALE_SMOOTH), bgOffsetX - add / 2, bgOffsetY - add / 2, null);
+                 */
             } else {
                 // 全覆盖模式, 设置透明度，避免看不到背景
                 bgGraphic.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_ATOP, bgImgOptions.getOpacity()));
@@ -173,7 +177,8 @@ public class QrImgRender {
      * 前置装饰
      */
     public static BufferedImage drawFront(BufferedImage qrImg, FrontOptions frontImgOptions) {
-        if (frontImgOptions.getFt() == null) return qrImg;
+        QrResource ft = frontImgOptions.getFt();
+        if (ft == null || ft.getImg() == null) return qrImg;
 
         int resW = Math.max(frontImgOptions.getFtW(), qrImg.getWidth());
         int resH = Math.max(frontImgOptions.getFtH(), qrImg.getHeight());
@@ -184,9 +189,8 @@ public class QrImgRender {
                 Math.max(startY, 0), qrImg, frontImgOptions.getFillColor());
 
 
-        BufferedImage ftImg = frontImgOptions.getFt().getImg();
         // 前置图支持设置圆角 or 圆形设置
-        ftImg = frontImgOptions.getImgStyle().process(ftImg, (int) (Math.min(resW, resH) * frontImgOptions.getRadius()));
+        BufferedImage ftImg = frontImgOptions.getFt().processImg();
 
         Graphics2D g2d = GraphicUtil.getG2d(bottomImg);
         boolean needScale = frontImgOptions.getFtW() < ftImg.getWidth() || frontImgOptions.getFtH() < ftImg.getHeight();
@@ -239,34 +243,32 @@ public class QrImgRender {
      * logo
      */
     public static BufferedImage drawLogo(BufferedImage qrImg, LogoOptions logoOptions) {
-        if (logoOptions.getLogo() == null) return qrImg;
+        QrResource logo = logoOptions.getLogo();
+        if (logo == null || logo.getImg() == null) return qrImg;
 
         final int qrWidth = qrImg.getWidth();
         final int qrHeight = qrImg.getHeight();
 
         // 获取logo图片
-        BufferedImage logoImg = logoOptions.getLogo().getImg();
-
+        BufferedImage img = logo.processImg();
         // 默认不处理logo
         int radius = 0;
-        if (logoOptions.getPicStyle() == PicStyle.ROUND) {
+        if (logo.getPicStyle() == PicStyle.ROUND) {
             // 绘制圆角图片
-            radius = logoImg.getWidth() >> 2;
-            logoImg = ImageOperateUtil.makeRoundedCorner(logoImg, radius);
-        } else if (logoOptions.getPicStyle() == PicStyle.CIRCLE) {
+            radius = (int) (Math.min(img.getWidth(), img.getHeight()) * logo.getCornerRadius());
+        } else if (logo.getPicStyle() == PicStyle.CIRCLE) {
             // 绘制圆形logo
-            radius = Math.min(logoImg.getWidth(), logoImg.getHeight());
-            logoImg = ImageOperateUtil.makeRoundImg(logoImg, false, null);
+            radius = Math.min(img.getWidth(), img.getHeight());
         }
 
         // 绘制边框
         if (logoOptions.getBorderColor() != null) {
             if (logoOptions.getOuterBorderColor() != null) {
                 // 两层边框
-                logoImg = ImageOperateUtil.makeRoundBorder(logoImg, radius, logoOptions.getOuterBorderColor());
+                img = ImageOperateUtil.makeRoundBorder(img, radius, logoOptions.getOuterBorderColor());
             }
 
-            logoImg = ImageOperateUtil.makeRoundBorder(logoImg, radius, logoOptions.getBorderColor());
+            img = ImageOperateUtil.makeRoundBorder(img, radius, logoOptions.getBorderColor());
         }
 
         // logo的宽高，避免长图的变形，这里采用等比例缩放的策略
@@ -274,18 +276,18 @@ public class QrImgRender {
         int calculateQrLogoWidth = (qrWidth << 1) / logoRate;
         int calculateQrLogoHeight = (qrHeight << 1) / logoRate;
         int logoWidth, logoHeight;
-        if (calculateQrLogoWidth < logoImg.getWidth()) {
+        if (calculateQrLogoWidth < img.getWidth()) {
             // logo实际宽大于计算的宽度，则需要等比例缩放
             logoWidth = calculateQrLogoWidth;
-            logoHeight = logoWidth * logoImg.getHeight() / logoImg.getWidth();
-        } else if (calculateQrLogoHeight < logoImg.getHeight()) {
+            logoHeight = logoWidth * img.getHeight() / img.getWidth();
+        } else if (calculateQrLogoHeight < img.getHeight()) {
             // logo实际高大于计算的高度，则需要等比例缩放
             logoHeight = calculateQrLogoHeight;
-            logoWidth = logoHeight * logoImg.getWidth() / logoImg.getHeight();
+            logoWidth = logoHeight * img.getWidth() / img.getHeight();
         } else {
             // logo 宽高比计算的要小，不拉伸
-            logoWidth = logoImg.getWidth();
-            logoHeight = logoImg.getHeight();
+            logoWidth = img.getWidth();
+            logoHeight = img.getHeight();
         }
         int logoOffsetX = (qrWidth - logoWidth) >> 1;
         int logoOffsetY = (qrHeight - logoHeight) >> 1;
@@ -297,9 +299,9 @@ public class QrImgRender {
         if (logoOptions.getOpacity() != null) {
             qrImgGraphic.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_ATOP, logoOptions.getOpacity()));
         }
-        qrImgGraphic.drawImage(logoImg.getScaledInstance(logoWidth, logoHeight, BufferedImage.SCALE_SMOOTH), logoOffsetX, logoOffsetY, null);
+        qrImgGraphic.drawImage(img.getScaledInstance(logoWidth, logoHeight, BufferedImage.SCALE_SMOOTH), logoOffsetX, logoOffsetY, null);
         qrImgGraphic.dispose();
-        logoImg.flush();
+        img.flush();
         return qrImg;
     }
 }

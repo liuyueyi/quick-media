@@ -141,6 +141,18 @@ public class DetectOptions {
 
     public QrCodeV3Options complete() {
         if (special == null) special = false;
+
+        if (resource == null) {
+            if (ld != null) resource = ld;
+            else if (lt != null) resource = lt;
+            else if (rt != null) resource = rt;
+        }
+        // 只要一个有资源，则表明探测图形全指定
+        if (resource != null) {
+            whole = true;
+            special = true;
+        }
+
         return options;
     }
 }

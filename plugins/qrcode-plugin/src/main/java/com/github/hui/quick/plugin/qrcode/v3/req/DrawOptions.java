@@ -57,7 +57,7 @@ public class DrawOptions {
     /**
      * 图片透明处填充，true则表示透明处用bgColor填充； false则透明处依旧透明
      */
-    private boolean transparencyFill;
+    private boolean transparencyBgFill = true;
 
     /**
      * 生成二维码的图片样式，一般来讲不推荐使用圆形，默认为normal；如果是圆角，则可以配套设置 cornerRadius
@@ -142,12 +142,12 @@ public class DrawOptions {
         return this;
     }
 
-    public boolean isTransparencyFill() {
-        return transparencyFill;
+    public boolean isTransparencyBgFill() {
+        return transparencyBgFill;
     }
 
-    public DrawOptions setTransparencyFill(boolean transparencyFill) {
-        this.transparencyFill = transparencyFill;
+    public DrawOptions setTransparencyBgFill(boolean transparencyBgFill) {
+        this.transparencyBgFill = transparencyBgFill;
         return this;
     }
 

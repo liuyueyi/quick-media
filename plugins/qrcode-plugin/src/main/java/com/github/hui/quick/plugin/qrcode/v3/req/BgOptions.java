@@ -1,7 +1,6 @@
 package com.github.hui.quick.plugin.qrcode.v3.req;
 
 import com.github.hui.quick.plugin.qrcode.v3.constants.BgStyle;
-import com.github.hui.quick.plugin.qrcode.v3.constants.PicStyle;
 import com.github.hui.quick.plugin.qrcode.v3.entity.QrResource;
 
 /**
@@ -13,16 +12,6 @@ public class BgOptions {
      * 背景图
      */
     private QrResource bg;
-
-    /**
-     * 背景图样式
-     */
-    private PicStyle imgStyle;
-
-    /**
-     * 圆角弧度，默认为宽高中较小值的 1/8
-     */
-    private float radiusRate;
 
     /**
      * 背景图宽
@@ -41,7 +30,7 @@ public class BgOptions {
 
     /**
      * if {@link #bgStyle} ==  BgStyle.OVERRIDE，
-     * 用于设置二维码的透明度
+     * 用于设置二维码的透明度 0 - 1，越小则透明度越高，
      */
     private float opacity;
 
@@ -71,24 +60,6 @@ public class BgOptions {
 
     public BgOptions setBg(QrResource bg) {
         this.bg = bg;
-        return this;
-    }
-
-    public PicStyle getImgStyle() {
-        return imgStyle;
-    }
-
-    public BgOptions setImgStyle(PicStyle imgStyle) {
-        this.imgStyle = imgStyle;
-        return this;
-    }
-
-    public float getRadiusRate() {
-        return radiusRate;
-    }
-
-    public BgOptions setRadiusRate(float radiusRate) {
-        this.radiusRate = radiusRate;
         return this;
     }
 
@@ -147,17 +118,14 @@ public class BgOptions {
     }
 
     public QrCodeV3Options complete() {
-        if (radiusRate <= 0.01) radiusRate = 1 / 8f;
-        if (bg != null) {
-            
+        // 背景图宽高
+        if (bg != null && bg.getImg() != null) {
+            if (bgW <= 0) bgW = bg.getImg().getWidth();
+            if (bgH <= 0) bgH = bg.getImg().getHeight();
         }
 
-        if (bgW <= 0) {
-            if (bg != null && bg.getImg() != null) {
-                bgW = bg.getImg().getWidth();
-            }
-        }
-
+        // 默认采用全覆盖方式
+        if (bgStyle == null) bgStyle = BgStyle.OVERRIDE;
 
         return options;
     }

@@ -17,16 +17,6 @@ public class FrontOptions {
     private QrResource ft;
 
     /**
-     * 背景图样式
-     */
-    private PicStyle imgStyle;
-
-    /**
-     * 圆角弧度，默认为宽高中较小值的 1/8
-     */
-    private float radius;
-
-    /**
      * 前置图宽
      */
     private int ftW;
@@ -62,24 +52,6 @@ public class FrontOptions {
 
     public FrontOptions setFt(QrResource ft) {
         this.ft = ft;
-        return this;
-    }
-
-    public PicStyle getImgStyle() {
-        return imgStyle;
-    }
-
-    public FrontOptions setImgStyle(PicStyle imgStyle) {
-        this.imgStyle = imgStyle;
-        return this;
-    }
-
-    public float getRadius() {
-        return radius;
-    }
-
-    public FrontOptions setRadius(float radius) {
-        this.radius = radius;
         return this;
     }
 

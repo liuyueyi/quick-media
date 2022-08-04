@@ -2,6 +2,7 @@ package com.github.hui.quick.plugin.test.v3;
 
 import com.github.hui.quick.plugin.base.OSUtil;
 import com.github.hui.quick.plugin.base.awt.ImageLoadUtil;
+import com.github.hui.quick.plugin.qrcode.v3.constants.BgStyle;
 import com.github.hui.quick.plugin.qrcode.v3.constants.DrawStyle;
 import com.github.hui.quick.plugin.qrcode.v3.constants.PicStyle;
 import com.github.hui.quick.plugin.qrcode.v3.core.render.QrRenderWrapper;
@@ -36,20 +37,23 @@ public class QrV3GenTest {
     public void testRender() throws Exception {
         QrCodeV3Options qrCodeV3Options = new QrCodeV3Options();
         String bg = "http://ww1.sinaimg.cn/large/8154e929gy1g8vho8x6r0j20b40b43yl.jpg";
+        int size = 500;
         qrCodeV3Options
                 .setMsg(msg)
-                .setW(300)
+                .setW(size)
                 .newDrawOptions()
                 .setBgColor(Color.WHITE)
                 .setPreColor(Color.BLACK)
                 .setDrawStyle(DrawStyle.MINI_RECT)
+                .setTransparencyBgFill(false)
                 .setPicStyle(PicStyle.ROUND).complete()
                 .newLogoOptions()
-                .setLogo(new QrResource().setImg(ImageLoadUtil.getImageByPath("logo.jpg")))
-                .setPicStyle(PicStyle.ROUND)
+                .setLogo(new QrResource().setPicStyle(PicStyle.ROUND).setImg(ImageLoadUtil.getImageByPath("logo.jpg")))
                 .setRate(10).complete()
                 .newBgOptions()
                 .setBg(new QrResource().setImg(ImageLoadUtil.getImageByPath(bg)))
+                .setBgW(size).setBgH(size)
+                .setBgStyle(BgStyle.PENETRATE)
                 .setOpacity(0.5f).complete()
                 .build()
         ;

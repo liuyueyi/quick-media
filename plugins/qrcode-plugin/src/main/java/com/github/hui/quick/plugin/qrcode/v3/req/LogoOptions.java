@@ -35,11 +35,6 @@ public class LogoOptions {
     private Boolean clearLogoArea;
 
     /**
-     * 图片样式
-     */
-    private PicStyle picStyle;
-
-    /**
      * 边框颜色
      */
     private Color borderColor;
@@ -89,15 +84,6 @@ public class LogoOptions {
         return this;
     }
 
-    public PicStyle getPicStyle() {
-        return picStyle;
-    }
-
-    public LogoOptions setPicStyle(PicStyle picStyle) {
-        this.picStyle = picStyle;
-        return this;
-    }
-
     public Color getBorderColor() {
         return borderColor;
     }
@@ -118,7 +104,6 @@ public class LogoOptions {
 
     public QrCodeV3Options complete() {
         if (rate <= 4) rate = 10;
-        if (picStyle == null) picStyle = PicStyle.NORMAL;
         if (clearLogoArea == null) clearLogoArea = true;
 
         return this.options;

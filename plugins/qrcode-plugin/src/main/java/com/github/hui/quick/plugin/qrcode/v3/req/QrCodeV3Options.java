@@ -1,5 +1,7 @@
 package com.github.hui.quick.plugin.qrcode.v3.req;
 
+import com.github.hui.quick.plugin.base.awt.ColorUtil;
+import com.github.hui.quick.plugin.qrcode.v3.constants.BgStyle;
 import com.google.zxing.EncodeHintType;
 import com.google.zxing.qrcode.decoder.ErrorCorrectionLevel;
 
@@ -197,8 +199,7 @@ public class QrCodeV3Options {
     }
 
     public void build() {
-        if (w == null) if (h == null) w = 200;
-        else w = h;
+        if (w == null) w = h == null ? Integer.valueOf(200) : h;
         if (h == null) h = w;
         if (picType == null) picType = "png";
 
@@ -224,6 +225,15 @@ public class QrCodeV3Options {
             if (!hints.containsKey(EncodeHintType.MARGIN)) {
                 hints.put(EncodeHintType.MARGIN, this.getPadding());
             }
+        }
+
+        if (bgOptions.getBgStyle() == BgStyle.PENETRATE) {
+            // 透传，用背景图颜色进行绘制时
+            drawOptions.setTransparencyBgFill(true);
+            drawOptions.setPreColor(ColorUtil.OPACITY);
+            bgOptions.setOpacity(1);
+            detectOptions.setInColor(ColorUtil.OPACITY);
+            detectOptions.setOutColor(ColorUtil.OPACITY);
         }
     }
 }
