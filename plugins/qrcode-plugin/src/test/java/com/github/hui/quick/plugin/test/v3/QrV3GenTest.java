@@ -7,10 +7,9 @@ import com.github.hui.quick.plugin.qrcode.v3.constants.BgStyle;
 import com.github.hui.quick.plugin.qrcode.v3.constants.DrawStyle;
 import com.github.hui.quick.plugin.qrcode.v3.constants.PicStyle;
 import com.github.hui.quick.plugin.qrcode.v3.constants.TxtMode;
-import com.github.hui.quick.plugin.qrcode.v3.core.render.QrRenderWrapper;
+import com.github.hui.quick.plugin.qrcode.v3.core.QrRenderFacade;
 import com.github.hui.quick.plugin.qrcode.v3.entity.QrResource;
 import com.github.hui.quick.plugin.qrcode.v3.req.QrCodeV3Options;
-import com.github.hui.quick.plugin.qrcode.wrapper.QrCodeGenWrapper;
 import com.google.zxing.qrcode.decoder.ErrorCorrectionLevel;
 import org.junit.Before;
 import org.junit.Test;
@@ -19,7 +18,6 @@ import javax.imageio.ImageIO;
 import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.File;
-import java.util.function.BiConsumer;
 
 /**
  * @author YiHui
@@ -40,7 +38,7 @@ public class QrV3GenTest {
     @Test
     public void testRender() {
         try {
-            QrCodeV3Options qrCodeV3Options = new QrCodeV3Options();
+            QrCodeV3Options qrCodeV3Options = new QrCodeV3Options(null);
             String ft = "ft/ft_1.png";
             String bg = "bg.png";
             int size = 1340;
@@ -69,7 +67,7 @@ public class QrV3GenTest {
                     .build()
             ;
 
-            BufferedImage img = QrRenderWrapper.renderAsImg(qrCodeV3Options);
+            BufferedImage img = QrRenderFacade.renderAsImg(qrCodeV3Options);
             System.out.println("over");
         } catch (Exception e) {
             e.printStackTrace();
@@ -85,7 +83,7 @@ public class QrV3GenTest {
         try {
             String bg = "http://img11.hc360.cn/11/busin/109/955/b/11-109955021.jpg";
 
-            QrCodeV3Options qrCodeV3Options = new QrCodeV3Options()
+            QrCodeV3Options qrCodeV3Options = new QrCodeV3Options(null)
                     .setMsg(msg).setW(size)
                     .setErrorCorrection(ErrorCorrectionLevel.H)
                     .newDrawOptions()
@@ -106,7 +104,7 @@ public class QrV3GenTest {
                     .setStartX(10).setStartY(100)
                     .complete();
             qrCodeV3Options.build();
-            BufferedImage img = QrRenderWrapper.renderAsImg(qrCodeV3Options);
+            BufferedImage img = QrRenderFacade.renderAsImg(qrCodeV3Options);
             System.out.println("over");
             ImageIO.write(img, "png", new File(prefix + "/q1.png"));
         } catch (Exception e) {
@@ -118,7 +116,7 @@ public class QrV3GenTest {
     public void testBgImg() throws Exception {
         int size = 500;
 
-        QrCodeV3Options qrCodeV3Options = new QrCodeV3Options()
+        QrCodeV3Options qrCodeV3Options = new QrCodeV3Options(null)
                 .setMsg(msg).setW(size)
                 .setErrorCorrection(ErrorCorrectionLevel.H)
                 .newDrawOptions()
@@ -130,7 +128,7 @@ public class QrV3GenTest {
                 .complete()
                 .newDetectOptions().setSpecial(true).complete();
         qrCodeV3Options.build();
-        BufferedImage img = QrRenderWrapper.renderAsImg(qrCodeV3Options);
+        BufferedImage img = QrRenderFacade.renderAsImg(qrCodeV3Options);
         System.out.println("over");
         ImageIO.write(img, "png", new File(prefix + "/q1.png"));
     }
@@ -138,7 +136,7 @@ public class QrV3GenTest {
     @Test
     public void testTxtImg() throws Exception {
         int size = 300;
-        QrCodeV3Options qrCodeV3Options = new QrCodeV3Options()
+        QrCodeV3Options qrCodeV3Options = new QrCodeV3Options(null)
                 .setMsg(msg).setW(size)
                 .setErrorCorrection(ErrorCorrectionLevel.H)
                 .newDrawOptions()
@@ -147,31 +145,9 @@ public class QrV3GenTest {
                 .complete()
                 .newDetectOptions().setSpecial(true).complete();
         qrCodeV3Options.build();
-        BufferedImage img = QrRenderWrapper.renderAsImg(qrCodeV3Options);
+        BufferedImage img = QrRenderFacade.renderAsImg(qrCodeV3Options);
         System.out.println("over");
         ImageIO.write(img, "png", new File(prefix + "/txt.png"));
-    }
-
-    /**
-     * 默认的二维码生成
-     */
-    @Test
-    public void defaultQr() {
-        try {
-            // 生成二维码，并输出为qr.png图片
-            boolean ans = QrCodeGenWrapper.of(msg).asFile(prefix + "/dq.png");
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
-
-
-    public static <T> void scanMatrix(int w, int h, BiConsumer<Integer, Integer> consumer) {
-        for (int x = 0; x < w; x++) {
-            for (int y = 0; y < h; y++) {
-                consumer.accept(x, y);
-            }
-        }
     }
 
 }

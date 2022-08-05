@@ -2,6 +2,7 @@ package com.github.hui.quick.plugin.qrcode.v3.constants;
 
 import com.github.hui.quick.plugin.qrcode.constants.QuickQrUtil;
 import com.github.hui.quick.plugin.qrcode.v3.entity.render.RenderDot;
+import com.github.hui.quick.plugin.qrcode.v3.entity.svg.*;
 
 import java.awt.*;
 import java.awt.geom.Ellipse2D;
@@ -19,6 +20,26 @@ public enum DrawStyle {
         public void geometryDrawFunc(Graphics2D g2d, int x, int y, int w, int h) {
             g2d.fillRect(x, y, w, h);
         }
+
+        @Override
+        public void svgRenderFunc(SvgTemplate svg, String txt, int x, int y, int w, int h) {
+            svg.addTag(new RectSvgTag().setX(x).setY(y).setW(w).setH(h).setColor(svg.getCurrentColor()));
+        }
+    },
+    /**
+     * 几何 - 圆角矩形
+     */
+    ROUND_RECT(0) {
+        @Override
+        public void geometryDrawFunc(Graphics2D g2d, int x, int y, int w, int h) {
+            int round = (int) Math.floor(Math.min(w, h) / 8.0f);
+            g2d.fillRoundRect(x, y, w, h, round, round);
+        }
+
+        @Override
+        public void svgRenderFunc(SvgTemplate svg, String txt, int x, int y, int w, int h) {
+            svg.addTag(new RoundRectSvgTag().setX(x).setY(y).setW(w).setH(h).setColor(svg.getCurrentColor()));
+        }
     },
     /**
      * 几何 - 小矩形
@@ -30,7 +51,25 @@ public enum DrawStyle {
             int width = w - offsetX * 2, height = h - offsetY * 2;
             g2d.fillRect(x + offsetX, y + offsetY, width, height);
         }
+
+        @Override
+        public void svgRenderFunc(SvgTemplate svg, String txt, int x, int y, int w, int h) {
+            svg.addTag(new MiniRectSvgTag().setX(x).setY(y).setW(w).setH(h).setColor(svg.getCurrentColor()));
+        }
     },
+
+    ROTATE_RECT(0) {
+        @Override
+        public void geometryDrawFunc(Graphics2D g2d, int x, int y, int w, int h) {
+            throw new IllegalStateException("ROTATE_RECT not support for gen QrImg!");
+        }
+
+        @Override
+        public void svgRenderFunc(SvgTemplate svg, String txt, int x, int y, int w, int h) {
+            svg.addTag(new RotateRectSvgTag().setX(x).setY(y).setW(w).setH(h).setColor(svg.getCurrentColor()));
+        }
+    },
+
     /**
      * 几何 - 圆
      */
@@ -38,6 +77,11 @@ public enum DrawStyle {
         @Override
         public void geometryDrawFunc(Graphics2D g2d, int x, int y, int w, int h) {
             g2d.fill(new Ellipse2D.Float(x, y, w, h));
+        }
+
+        @Override
+        public void svgRenderFunc(SvgTemplate svg, String txt, int x, int y, int w, int h) {
+            svg.addTag(new CircleSvgTag().setX(x).setY(y).setW(w).setH(h).setColor(svg.getCurrentColor()));
         }
     },
     /**
@@ -49,6 +93,11 @@ public enum DrawStyle {
             int px[] = {x, x + (w >> 1), x + w};
             int py[] = {y + w, y, y + w};
             g2d.fillPolygon(px, py, 3);
+        }
+
+        @Override
+        public void svgRenderFunc(SvgTemplate svg, String txt, int x, int y, int w, int h) {
+            throw new IllegalStateException("unsupport triangle for svg!");
         }
     },
     /**
@@ -64,7 +113,27 @@ public enum DrawStyle {
             int py[] = {y, y, y + cell2, y + size, y + cell2};
             g2d.fillPolygon(px, py, 5);
         }
+
+        @Override
+        public void svgRenderFunc(SvgTemplate svg, String txt, int x, int y, int w, int h) {
+            svg.addTag(new PentagonSvgTag().setX(x).setY(y).setW(w).setH(h).setColor(svg.getCurrentColor()));
+        }
     },
+    /**
+     * 几何 - 五角星
+     */
+    STAR(0) {
+        @Override
+        public void geometryDrawFunc(Graphics2D g2d, int x, int y, int w, int h) {
+            throw new IllegalStateException("STAR not support for gen QrImg!");
+        }
+
+        @Override
+        public void svgRenderFunc(SvgTemplate svg, String txt, int x, int y, int w, int h) {
+            svg.addTag(new StarSvgTag().setX(x).setY(y).setW(w).setH(h).setColor(svg.getCurrentColor()));
+        }
+    },
+
     /**
      * 几何 - 六边形
      */
@@ -77,7 +146,13 @@ public enum DrawStyle {
             int py[] = {y, y, y + add + add, y + size, y + size, y + add + add};
             g2d.fillPolygon(px, py, 6);
         }
+
+        @Override
+        public void svgRenderFunc(SvgTemplate svg, String txt, int x, int y, int w, int h) {
+            svg.addTag(new HexagonSvgTag().setX(x).setY(y).setW(w).setH(h).setColor(svg.getCurrentColor()));
+        }
     },
+
     /**
      * 几何 - 八边形
      */
@@ -90,7 +165,13 @@ public enum DrawStyle {
             int py[] = {y, y, y + add, y + size - add, y + size, y + size, y + size - add, y + add};
             g2d.fillPolygon(px, py, 8);
         }
+
+        @Override
+        public void svgRenderFunc(SvgTemplate svg, String txt, int x, int y, int w, int h) {
+            throw new IllegalStateException("OCTAGON not support for svg qrcode!");
+        }
     },
+
     /**
      * 图片
      */
@@ -116,8 +197,7 @@ public enum DrawStyle {
             if (txt == null) {
                 g2d.setColor(Color.BLACK);
                 g2d.fillRect(x, y, size, size);
-            }
-            else{
+            } else {
                 Font oldFont = g2d.getFont();
                 if (oldFont.getSize() != size) {
                     Font newFont = QuickQrUtil.font(oldFont.getName(), oldFont.getStyle(), size);
@@ -127,13 +207,24 @@ public enum DrawStyle {
                 g2d.setFont(oldFont);
             }
         }
+
+        @Override
+        public void svgRenderFunc(SvgTemplate svg, String txt, int x, int y, int w, int h) {
+            svg.addTag(new TextSvgTag().setTxt(txt).setX(x).setY(y).setW(w).setH(h).setColor(svg.getCurrentColor()));
+        }
     },
 
     /**
      * svg
      */
     SVG(3) {
-
+        public void svgRenderFunc(SvgTemplate svg, String txt, int x, int y, int w, int h) {
+            if (txt == null) {
+                svg.addTag(new RectSvgTag().setX(x).setY(y).setW(w).setH(h).setColor(svg.getCurrentColor()));
+            } else {
+                svg.addTag(new SymbolSvgTag().setSvgId(txt).setX(x).setY(y).setW(w).setH(h));
+            }
+        }
     };
 
     /**
@@ -146,6 +237,10 @@ public enum DrawStyle {
 
     DrawStyle(int style) {
         this.style = style;
+    }
+
+    public int getStyle() {
+        return style;
     }
 
     public void drawAsImg(Graphics2D g2d, RenderDot renderDot) {
@@ -164,6 +259,10 @@ public enum DrawStyle {
         }
     }
 
+    public void drawAsSvg(SvgTemplate svg, RenderDot renderDot) {
+        renderDot.renderSvg(svg, this::svgRenderFunc);
+    }
+
     public void geometryDrawFunc(Graphics2D g2d, int x, int y, int w, int h) {
     }
 
@@ -173,4 +272,10 @@ public enum DrawStyle {
     public void txtImgDrawFunc(Graphics2D g2d, String txt, int x, int y, int size) {
     }
 
+    public void svgRenderFunc(SvgTemplate svg, String txt, int x, int y, int w, int h) {
+    }
+
+    public boolean isSvg() {
+        return style == 3;
+    }
 }

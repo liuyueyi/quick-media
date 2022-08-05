@@ -71,6 +71,11 @@ public class QrResource {
      */
     private String svg;
 
+    /**
+     * svg tag id
+     */
+    private String svgId;
+
 
     public GifDecoder getGif() {
         return gif;
@@ -120,10 +125,12 @@ public class QrResource {
         if (txtMode == TxtMode.ORDER) indexCnt = new AtomicInteger(0);
         return this;
     }
+
     public QrResource setFontName(String fontName) {
         this.fontName = fontName;
         return this;
     }
+
     public QrResource setFontStyle(int fontStyle) {
         this.fontStyle = fontStyle;
         return this;
@@ -148,8 +155,32 @@ public class QrResource {
     }
 
     public QrResource setSvg(String svg) {
-        this.svg = svg;
+        this.svg = svg.trim();
+        if (svgId == null) {
+            int index = svg.indexOf("id=\"");
+            if (index >= 0) {
+                index += 4;
+                svgId = svg.substring(index, svg.indexOf("\"", index));
+            }
+        }
         return this;
+    }
+
+    public QrResource setSvg(String id, String svg) {
+        this.svgId = id;
+        int index = svg.indexOf("id=\"");
+        if (index >= 0) {
+            index += 4;
+            int end = svg.indexOf("\"", index);
+            this.svg = svg.substring(0, index) + id + svg.substring(end);
+        } else {
+            this.svg = svg;
+        }
+        return this;
+    }
+
+    public String getSvgId() {
+        return svgId;
     }
 
     public float getCornerRadius() {

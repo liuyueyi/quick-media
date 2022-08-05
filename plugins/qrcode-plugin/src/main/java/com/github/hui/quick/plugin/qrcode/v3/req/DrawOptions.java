@@ -54,11 +54,11 @@ public class DrawOptions {
     /**
      * 渲染资源
      */
-    private QrResourcePool resources;
+    private final QrResourcePool resourcePool;
 
     public DrawOptions(QrCodeV3Options options) {
         this.options = options;
-        resources = QrResourcePool.create(this);
+        resourcePool = QrResourcePool.create(this);
     }
 
     public Color getPreColor() {
@@ -124,8 +124,8 @@ public class DrawOptions {
         return this;
     }
 
-    public QrResourcePool getResources() {
-        return resources;
+    public QrResourcePool getResourcePool() {
+        return resourcePool;
     }
 
     /**
@@ -137,17 +137,17 @@ public class DrawOptions {
      */
     public DrawOptions setRenderResource(QrResource pre, QrResource bg) {
         if (pre != null && bg != null) {
-            return resources.addSource(1, 1, pre).build().addSource(1, 1, bg).setMiss(0, 0).build().over();
+            return resourcePool.addSource(1, 1, pre).build().addSource(1, 1, bg).setMiss(0, 0).build().over();
         } else if (pre != null) {
-            return resources.addSource(1, 1, pre).build().over();
+            return resourcePool.addSource(1, 1, pre).build().over();
         } else if (bg != null) {
-            return resources.addSource(1, 1, bg).setMiss(0, 0).build().over();
+            return resourcePool.addSource(1, 1, bg).setMiss(0, 0).build().over();
         }
         return this;
     }
 
     public DrawOptions setRenderResource(QrResource pre) {
-        return resources.addSource(1, 1, pre).build().over();
+        return resourcePool.addSource(1, 1, pre).build().over();
     }
 
     /**
@@ -157,7 +157,7 @@ public class DrawOptions {
      * @return
      */
     public QrResourcePool.QrResourcesDecorate newRenderResource(int row, int col, QrResource resource) {
-        return resources.addSource(row, col, resource);
+        return resourcePool.addSource(row, col, resource);
     }
 
     public QrCodeV3Options complete() {

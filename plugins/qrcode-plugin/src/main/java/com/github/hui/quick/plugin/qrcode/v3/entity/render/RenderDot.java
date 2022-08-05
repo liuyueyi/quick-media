@@ -2,6 +2,7 @@ package com.github.hui.quick.plugin.qrcode.v3.entity.render;
 
 import com.github.hui.quick.plugin.qrcode.v3.constants.RenderFunc;
 import com.github.hui.quick.plugin.qrcode.v3.entity.QrResource;
+import com.github.hui.quick.plugin.qrcode.v3.entity.svg.SvgTemplate;
 
 import java.awt.*;
 
@@ -76,6 +77,10 @@ public class RenderDot {
         drawFunc.draw(g2d, resource.getText(), x, y, size);
         g2d.setFont(oldFont);
 
+    }
+
+    public void renderSvg(SvgTemplate svg, RenderFunc.SvgDrawFunc drawFunc) {
+        drawFunc.draw(svg, resource.getSvgId(), x, y, size, size);
     }
 
     @Override

@@ -1,6 +1,5 @@
 package com.github.hui.quick.plugin.qrcode.v3.req;
 
-import com.github.hui.quick.plugin.qrcode.v3.constants.PicStyle;
 import com.github.hui.quick.plugin.qrcode.v3.entity.QrResource;
 
 import java.awt.*;
@@ -104,7 +103,7 @@ public class LogoOptions {
 
     public QrCodeV3Options complete() {
         if (rate <= 4) rate = 10;
-        if (clearLogoArea == null) clearLogoArea = true;
+        if (logo != null && clearLogoArea == null) clearLogoArea = true;
 
         return this.options;
     }

@@ -1,5 +1,7 @@
 package com.github.hui.quick.plugin.qrcode.v3.constants;
 
+import com.github.hui.quick.plugin.qrcode.v3.entity.svg.SvgTemplate;
+
 import java.awt.*;
 import java.awt.image.BufferedImage;
 
@@ -50,5 +52,10 @@ public class RenderFunc {
          * @param size
          */
         void draw(Graphics2D g2d, String txt, int x, int y, int size);
+    }
+
+    @FunctionalInterface
+    public interface SvgDrawFunc {
+        void draw(SvgTemplate svg, String svgId, int x, int y, int w, int h);
     }
 }

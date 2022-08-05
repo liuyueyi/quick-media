@@ -1,9 +1,12 @@
-package com.github.hui.quick.plugin.qrcode.v3.core.render;
+package com.github.hui.quick.plugin.qrcode.v3.core;
 
 import com.github.hui.quick.plugin.qrcode.v3.constants.BgStyle;
 import com.github.hui.quick.plugin.qrcode.v3.core.calculate.QrRenderDotGenerator;
 import com.github.hui.quick.plugin.qrcode.v3.core.matrix.QrMatrixGenerator;
+import com.github.hui.quick.plugin.qrcode.v3.core.render.QrImgRender;
+import com.github.hui.quick.plugin.qrcode.v3.core.render.QrSvgRender;
 import com.github.hui.quick.plugin.qrcode.v3.entity.render.RenderDot;
+import com.github.hui.quick.plugin.qrcode.v3.entity.svg.SvgTemplate;
 import com.github.hui.quick.plugin.qrcode.v3.req.QrCodeV3Options;
 import com.github.hui.quick.plugin.qrcode.wrapper.BitMatrixEx;
 import org.apache.commons.lang3.tuple.ImmutablePair;
@@ -16,7 +19,7 @@ import java.util.List;
  * @author YiHui
  * @date 2022/8/2
  */
-public class QrRenderWrapper {
+public class QrRenderFacade {
     public static BufferedImage renderAsImg(QrCodeV3Options options) throws Exception {
         BitMatrixEx matrix = QrMatrixGenerator.calculateMatrix(options);
         List<RenderDot> renderDotList = QrRenderDotGenerator.calculateRenderDots(options, matrix);
@@ -83,5 +86,19 @@ public class QrRenderWrapper {
 
         // 前置图为gif的场景
         return QrImgRender.drawFrontGifImg(qrImg, options.getFrontOptions());
+    }
+
+    /**
+     * 生成svg格式的二维码
+     *
+     * @param options
+     * @return
+     * @throws Exception
+     */
+    public static String renderAsSvg(QrCodeV3Options options) throws Exception {
+        BitMatrixEx matrix = QrMatrixGenerator.calculateMatrix(options);
+        List<RenderDot> renderDotList = QrRenderDotGenerator.calculateRenderDots(options, matrix);
+        SvgTemplate svgTemplate = QrSvgRender.drawQrInfo(renderDotList, options);
+        return svgTemplate.toString();
     }
 }

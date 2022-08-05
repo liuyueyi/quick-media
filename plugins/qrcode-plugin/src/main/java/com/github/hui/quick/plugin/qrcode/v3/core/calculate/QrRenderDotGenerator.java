@@ -57,7 +57,7 @@ public class QrRenderDotGenerator {
 
         List<RenderDot> result = new ArrayList<>();
         // 若探测图形特殊绘制，则提前处理掉
-        QrResourcePool resourcePool = qrCodeConfig.getDrawOptions().getResources();
+        QrResourcePool resourcePool = qrCodeConfig.getDrawOptions().getResourcePool();
         scanMatrix(matrixW, matrixH, (x, y) -> {
             QrCodeRenderHelper.DetectLocation detectLocation = inDetectCornerArea(x, y, matrixW, matrixH, detectCornerSize);
             if (detectLocation.detectedArea() && qrCodeConfig.getDetectOptions().getSpecial()) {
