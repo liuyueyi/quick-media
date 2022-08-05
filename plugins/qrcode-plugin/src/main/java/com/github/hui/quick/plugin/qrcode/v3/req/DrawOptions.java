@@ -3,9 +3,8 @@ package com.github.hui.quick.plugin.qrcode.v3.req;
 
 import com.github.hui.quick.plugin.qrcode.v3.constants.DrawStyle;
 import com.github.hui.quick.plugin.qrcode.v3.constants.PicStyle;
-import com.github.hui.quick.plugin.qrcode.v3.constants.TxtMode;
 import com.github.hui.quick.plugin.qrcode.v3.entity.QrResource;
-import com.github.hui.quick.plugin.qrcode.v3.entity.RenderResourcesV3;
+import com.github.hui.quick.plugin.qrcode.v3.entity.QrResourcePool;
 
 import java.awt.*;
 
@@ -29,24 +28,6 @@ public class DrawOptions {
      * 绘制样式
      */
     private DrawStyle drawStyle;
-    /**
-     * 生成文字二维码时的字体
-     */
-    private String fontName;
-
-    /**
-     * 文字二维码渲染模式
-     */
-    private TxtMode txtMode;
-
-    /**
-     * 字体样式
-     * <p>
-     * {@link Font#PLAIN} 0
-     * {@link Font#BOLD}  1
-     * {@link Font#ITALIC} 2
-     */
-    private int fontStyle;
 
     /**
      * true 时表示支持对相邻的着色点进行合并处理 （即用一个大图来绘制相邻的两个着色点）
@@ -73,11 +54,11 @@ public class DrawOptions {
     /**
      * 渲染资源
      */
-    private RenderResourcesV3 resources;
+    private QrResourcePool resources;
 
     public DrawOptions(QrCodeV3Options options) {
         this.options = options;
-        resources = RenderResourcesV3.create(this);
+        resources = QrResourcePool.create(this);
     }
 
     public Color getPreColor() {
@@ -104,33 +85,6 @@ public class DrawOptions {
 
     public DrawOptions setDrawStyle(DrawStyle drawStyle) {
         this.drawStyle = drawStyle;
-        return this;
-    }
-
-    public String getFontName() {
-        return fontName;
-    }
-
-    public DrawOptions setFontName(String fontName) {
-        this.fontName = fontName;
-        return this;
-    }
-
-    public TxtMode getTxtMode() {
-        return txtMode;
-    }
-
-    public DrawOptions setTxtMode(TxtMode txtMode) {
-        this.txtMode = txtMode;
-        return this;
-    }
-
-    public int getFontStyle() {
-        return fontStyle;
-    }
-
-    public DrawOptions setFontStyle(int fontStyle) {
-        this.fontStyle = fontStyle;
         return this;
     }
 
@@ -170,7 +124,7 @@ public class DrawOptions {
         return this;
     }
 
-    public RenderResourcesV3 getResources() {
+    public QrResourcePool getResources() {
         return resources;
     }
 
@@ -182,8 +136,18 @@ public class DrawOptions {
      * @return
      */
     public DrawOptions setRenderResource(QrResource pre, QrResource bg) {
-        resources.addSource(1, 1, pre).build().addSource(1, 1, bg).setMiss(0, 0).build();
+        if (pre != null && bg != null) {
+            return resources.addSource(1, 1, pre).build().addSource(1, 1, bg).setMiss(0, 0).build().over();
+        } else if (pre != null) {
+            return resources.addSource(1, 1, pre).build().over();
+        } else if (bg != null) {
+            return resources.addSource(1, 1, bg).setMiss(0, 0).build().over();
+        }
         return this;
+    }
+
+    public DrawOptions setRenderResource(QrResource pre) {
+        return resources.addSource(1, 1, pre).build().over();
     }
 
     /**
@@ -192,7 +156,7 @@ public class DrawOptions {
      * @param resource
      * @return
      */
-    public RenderResourcesV3.RenderSource newRenderResource(int row, int col, QrResource resource) {
+    public QrResourcePool.QrResourcesDecorate newRenderResource(int row, int col, QrResource resource) {
         return resources.addSource(row, col, resource);
     }
 

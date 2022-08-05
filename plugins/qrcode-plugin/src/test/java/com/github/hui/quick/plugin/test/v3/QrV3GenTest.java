@@ -6,6 +6,7 @@ import com.github.hui.quick.plugin.base.awt.ImageLoadUtil;
 import com.github.hui.quick.plugin.qrcode.v3.constants.BgStyle;
 import com.github.hui.quick.plugin.qrcode.v3.constants.DrawStyle;
 import com.github.hui.quick.plugin.qrcode.v3.constants.PicStyle;
+import com.github.hui.quick.plugin.qrcode.v3.constants.TxtMode;
 import com.github.hui.quick.plugin.qrcode.v3.core.render.QrRenderWrapper;
 import com.github.hui.quick.plugin.qrcode.v3.entity.QrResource;
 import com.github.hui.quick.plugin.qrcode.v3.req.QrCodeV3Options;
@@ -80,8 +81,6 @@ public class QrV3GenTest {
      */
     @Test
     public void testImgRender() {
-        String msg = "http://weixin.qq.com/r/FS9waAPEg178rUcL93oH";
-
         int size = 500;
         try {
             String bg = "http://img11.hc360.cn/11/busin/109/955/b/11-109955021.jpg";
@@ -117,7 +116,6 @@ public class QrV3GenTest {
 
     @Test
     public void testBgImg() throws Exception {
-        String msg = "http://weixin.qq.com/r/FS9waAPEg178rUcL93oH";
         int size = 500;
 
         QrCodeV3Options qrCodeV3Options = new QrCodeV3Options()
@@ -135,6 +133,23 @@ public class QrV3GenTest {
         BufferedImage img = QrRenderWrapper.renderAsImg(qrCodeV3Options);
         System.out.println("over");
         ImageIO.write(img, "png", new File(prefix + "/q1.png"));
+    }
+
+    @Test
+    public void testTxtImg() throws Exception {
+        int size = 300;
+        QrCodeV3Options qrCodeV3Options = new QrCodeV3Options()
+                .setMsg(msg).setW(size)
+                .setErrorCorrection(ErrorCorrectionLevel.H)
+                .newDrawOptions()
+                .setDrawStyle(DrawStyle.TXT)
+                .setRenderResource(new QrResource().setText("璧月香风万家帘幕烟如昼").setTxtMode(TxtMode.ORDER))
+                .complete()
+                .newDetectOptions().setSpecial(true).complete();
+        qrCodeV3Options.build();
+        BufferedImage img = QrRenderWrapper.renderAsImg(qrCodeV3Options);
+        System.out.println("over");
+        ImageIO.write(img, "png", new File(prefix + "/txt.png"));
     }
 
     /**

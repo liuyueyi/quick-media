@@ -2,7 +2,7 @@ package com.github.hui.quick.plugin.qrcode.v3.core.calculate;
 
 import com.github.hui.quick.plugin.qrcode.helper.QrCodeRenderHelper;
 import com.github.hui.quick.plugin.qrcode.v3.entity.QrResource;
-import com.github.hui.quick.plugin.qrcode.v3.entity.RenderResourcesV3;
+import com.github.hui.quick.plugin.qrcode.v3.entity.QrResourcePool;
 import com.github.hui.quick.plugin.qrcode.v3.entity.render.BgRenderDot;
 import com.github.hui.quick.plugin.qrcode.v3.entity.render.DetectRenderDot;
 import com.github.hui.quick.plugin.qrcode.v3.entity.render.PreRenderDot;
@@ -57,7 +57,7 @@ public class QrRenderDotGenerator {
 
         List<RenderDot> result = new ArrayList<>();
         // 若探测图形特殊绘制，则提前处理掉
-        RenderResourcesV3 imgResourcesV3 = qrCodeConfig.getDrawOptions().getResources();
+        QrResourcePool resourcePool = qrCodeConfig.getDrawOptions().getResources();
         scanMatrix(matrixW, matrixH, (x, y) -> {
             QrCodeRenderHelper.DetectLocation detectLocation = inDetectCornerArea(x, y, matrixW, matrixH, detectCornerSize);
             if (detectLocation.detectedArea() && qrCodeConfig.getDetectOptions().getSpecial()) {
@@ -68,10 +68,10 @@ public class QrRenderDotGenerator {
                 }
             } else {
                 // 非探测区域内的0点图渲染
-                drawImgBgInfo(bitMatrix, x, y, imgResourcesV3).ifPresent(result::add);
+                drawImgBgInfo(bitMatrix, x, y, resourcePool).ifPresent(result::add);
             }
         });
-        result.addAll(drawQrInfo(bitMatrix, imgResourcesV3));
+        result.addAll(drawQrInfo(bitMatrix, resourcePool));
         return result;
     }
 
@@ -81,11 +81,11 @@ public class QrRenderDotGenerator {
      * @param bitMatrix
      * @param x
      * @param y
-     * @param imgResourcesV3
+     * @param resourcePool
      * @return
      */
-    private static Optional<RenderDot> drawImgBgInfo(BitMatrixEx bitMatrix, int x, int y, RenderResourcesV3 imgResourcesV3) {
-        if (bitMatrix.getByteMatrix().get(x, y) == 0 && imgResourcesV3.getDefaultBgImg() != null) {
+    private static Optional<RenderDot> drawImgBgInfo(BitMatrixEx bitMatrix, int x, int y, QrResourcePool resourcePool) {
+        if (bitMatrix.getByteMatrix().get(x, y) == 0 && resourcePool.getDefaultBgImg() != null) {
             // 非探测区域内的0点图渲染
             return Optional.of(new BgRenderDot()
                     .setRow(1)
@@ -93,7 +93,7 @@ public class QrRenderDotGenerator {
                     .setX(bitMatrix.getLeftPadding() + x * bitMatrix.getMultiple())
                     .setY(bitMatrix.getTopPadding() + y * bitMatrix.getMultiple())
                     .setSize(bitMatrix.getMultiple())
-                    .setResource(imgResourcesV3.getDefaultBgImg()));
+                    .setResource(resourcePool.getDefaultBgImg()));
         }
         return Optional.empty();
     }
@@ -154,9 +154,7 @@ public class QrRenderDotGenerator {
             renderDot.setOutBorder(false).setDotNum(detectCornerSize).setResource(detectResource);
             return renderDot;
         }
-
-        RenderResourcesV3 renderResourcesV3 = qrCodeConfig.getDrawOptions().getResources();
-        renderDot.setDotNum(1).setOutBorder(inOuterDetectCornerArea(x, y, matrixW, matrixH, detectCornerSize));//.setResource(renderResourcesV3.getDefaultDrawImg());
+        renderDot.setDotNum(1).setOutBorder(inOuterDetectCornerArea(x, y, matrixW, matrixH, detectCornerSize));
         bitMatrix.getByteMatrix().set(x, y, 0);
         return renderDot;
     }
@@ -183,10 +181,10 @@ public class QrRenderDotGenerator {
      * @param imgResources
      * @return
      */
-    private static List<RenderDot> drawQrInfo(BitMatrixEx matrixEx, RenderResourcesV3 imgResources) {
+    private static List<RenderDot> drawQrInfo(BitMatrixEx matrixEx, QrResourcePool imgResources) {
         ByteMatrix matrix = matrixEx.getByteMatrix();
         List<RenderDot> result = new ArrayList<>();
-        for (RenderResourcesV3.RenderSource renderSource : imgResources.getSourceList()) {
+        for (QrResourcePool.QrResourcesDecorate renderSource : imgResources.getSourceList()) {
             result.addAll(renderSpecialResource(matrixEx, renderSource, renderSource.isFullMatch()));
         }
 
@@ -206,7 +204,7 @@ public class QrRenderDotGenerator {
         return result;
     }
 
-    private static List<RenderDot> renderSpecialResource(BitMatrixEx matrixEx, RenderResourcesV3.RenderSource renderSource, boolean fullMatch) {
+    private static List<RenderDot> renderSpecialResource(BitMatrixEx matrixEx, QrResourcePool.QrResourcesDecorate renderSource, boolean fullMatch) {
         if (renderSource.countOver()) {
             return Collections.emptyList();
         }
@@ -225,7 +223,7 @@ public class QrRenderDotGenerator {
         return result;
     }
 
-    private static boolean match(ByteMatrix matrix, RenderResourcesV3.RenderSource renderSource, int startX, int startY, boolean fullMatch) {
+    private static boolean match(ByteMatrix matrix, QrResourcePool.QrResourcesDecorate renderSource, int startX, int startY, boolean fullMatch) {
         // 要求矩阵的1点图，能完全覆盖 renderSource
         for (int x = 0; x < renderSource.getCol(); x++) {
             for (int y = 0; y < renderSource.getRow(); y++) {
@@ -246,7 +244,7 @@ public class QrRenderDotGenerator {
         return true;
     }
 
-    private static RenderDot renderDot(BitMatrixEx matrixEx, RenderResourcesV3.RenderSource renderSource, int x, int y) {
+    private static RenderDot renderDot(BitMatrixEx matrixEx, QrResourcePool.QrResourcesDecorate renderSource, int x, int y) {
         PreRenderDot renderDot = new PreRenderDot();
         renderDot.setCol(renderSource.getCol()).setRow(renderSource.getRow()).setX(matrixEx.getLeftPadding() + x * matrixEx.getMultiple()).setY(matrixEx.getTopPadding() + y * matrixEx.getMultiple()).setSize(matrixEx.getMultiple()).setResource(renderSource.getResource());
 

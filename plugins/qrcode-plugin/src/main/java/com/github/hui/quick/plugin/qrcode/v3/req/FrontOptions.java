@@ -102,7 +102,7 @@ public class FrontOptions {
 
     public QrCodeV3Options complete() {
         if (ft != null) {
-            BufferedImage rImg = ft.getImg() != null ? ft.getImg() : (ft.getGifDecoder() != null ? ft.getGifDecoder().getImage() : null);
+            BufferedImage rImg = ft.getImg() != null ? ft.getImg() : (ft.getGif() != null ? ft.getGif().getImage() : null);
             if (rImg != null) {
                 if (ftW <= 0) ftW = rImg.getWidth();
                 if (ftH <= 0) ftH = rImg.getHeight();

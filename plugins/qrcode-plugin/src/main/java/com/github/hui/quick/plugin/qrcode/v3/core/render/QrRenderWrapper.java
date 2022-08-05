@@ -40,8 +40,8 @@ public class QrRenderWrapper {
     }
 
     public static List<ImmutablePair<BufferedImage, Integer>> renderAsGif(QrCodeV3Options options) throws Exception {
-        boolean preGif = options.getFrontOptions() != null && options.getFrontOptions().getFt() != null && options.getFrontOptions().getFt().getGifDecoder().getFrameCount() > 0;
-        boolean bgGif = options.getBgOptions() != null && options.getBgOptions().getBg() != null && options.getBgOptions().getBg().getGifDecoder().getFrameCount() > 0;
+        boolean preGif = options.getFrontOptions() != null && options.getFrontOptions().getFt() != null && options.getFrontOptions().getFt().getGif().getFrameCount() > 0;
+        boolean bgGif = options.getBgOptions() != null && options.getBgOptions().getBg() != null && options.getBgOptions().getBg().getGif().getFrameCount() > 0;
         if (!bgGif && !preGif) {
             throw new IllegalArgumentException("animated background image should not be null!");
         }

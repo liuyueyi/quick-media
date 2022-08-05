@@ -1,7 +1,9 @@
 package com.github.hui.quick.plugin.base.gif;
 
+import com.github.hui.quick.plugin.base.constants.MediaType;
 import com.github.hui.quick.plugin.base.file.FileReadUtil;
 import com.github.hui.quick.plugin.base.file.FileWriteUtil;
+import com.github.hui.quick.plugin.base.io.IoUtil;
 import org.apache.commons.lang3.tuple.ImmutablePair;
 
 import java.awt.image.BufferedImage;
@@ -12,6 +14,18 @@ import java.util.List;
  * Created by yihui on 2017/9/14.
  */
 public class GifHelper {
+    public static GifDecoder loadGif(String gif) throws IOException {
+        try (ByteArrayInputStream target = IoUtil.toByteArrayInputStream(FileReadUtil.getStreamByFileName(gif))) {
+            MediaType media = MediaType.typeOfMagicNum(FileReadUtil.getMagicNum(target));
+            if (media == MediaType.ImageGif) {
+                GifDecoder gifDecoder = new GifDecoder();
+                gifDecoder.read(target);
+                return gifDecoder;
+            } else {
+                throw new IllegalArgumentException("illegal gif resource: " + gif);
+            }
+        }
+    }
 
     public static int loadGif(String gif, List<BufferedImage> list) throws IOException {
         return loadGif(FileReadUtil.getStreamByFileName(gif), list);

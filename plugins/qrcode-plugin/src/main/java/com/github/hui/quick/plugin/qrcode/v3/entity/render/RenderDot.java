@@ -71,17 +71,15 @@ public class RenderDot {
     }
 
     public void renderTxt(Graphics2D g2d, RenderFunc.TxtImgDrawFunc drawFunc) {
+        Font oldFont = g2d.getFont();
+        if (oldFont.getSize() != size) g2d.setFont(resource.getFont(size));
         drawFunc.draw(g2d, resource.getText(), x, y, size);
+        g2d.setFont(oldFont);
+
     }
 
     @Override
     public String toString() {
-        return "RenderDot{" +
-                "x=" + x +
-                ", y=" + y +
-                ", size=" + size +
-                ", type=" + type +
-                ", resource=" + resource +
-                '}';
+        return "RenderDot{" + "x=" + x + ", y=" + y + ", size=" + size + ", type=" + type + ", resource=" + resource + '}';
     }
 }

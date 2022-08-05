@@ -115,7 +115,7 @@ public class QrImgRender {
     }
 
     public static List<ImmutablePair<BufferedImage, Integer>> drawGifBackground(BufferedImage qrImg, BgOptions bgImgOptions) {
-        if (bgImgOptions.getBg() == null || bgImgOptions.getBg().getGifDecoder() == null) {
+        if (bgImgOptions.getBg() == null || bgImgOptions.getBg().getGif() == null) {
             return Collections.emptyList();
         }
 
@@ -131,11 +131,11 @@ public class QrImgRender {
         int bgOffsetX = fillMode ? bgImgOptions.getStartX() : (bgW - qrWidth) >> 1;
         int bgOffsetY = fillMode ? bgImgOptions.getStartY() : (bgH - qrHeight) >> 1;
 
-        int gifImgLen = bgImgOptions.getBg().getGifDecoder().getFrameCount();
+        int gifImgLen = bgImgOptions.getBg().getGif().getFrameCount();
         List<ImmutablePair<BufferedImage, Integer>> result = new ArrayList<>(gifImgLen);
         // 背景图缩放
-        for (int index = 0, len = bgImgOptions.getBg().getGifDecoder().getFrameCount(); index < len; index++) {
-            BufferedImage bgImg = bgImgOptions.getBg().getGifDecoder().getFrame(index);
+        for (int index = 0, len = bgImgOptions.getBg().getGif().getFrameCount(); index < len; index++) {
+            BufferedImage bgImg = bgImgOptions.getBg().getGif().getFrame(index);
             // fixme 当背景图为png时，最终透明的地方会是黑色，这里兼容处理成白色
             BufferedImage temp = new BufferedImage(bgW, bgH, BufferedImage.TYPE_INT_RGB);
             temp.getGraphics().setColor(Color.WHITE);
@@ -167,7 +167,7 @@ public class QrImgRender {
             bgGraphic.dispose();
             bgImg.flush();
 
-            result.add(ImmutablePair.of(bgImg, bgImgOptions.getBg().getGifDecoder().getDelay(index)));
+            result.add(ImmutablePair.of(bgImg, bgImgOptions.getBg().getGif().getDelay(index)));
         }
         return result;
     }
@@ -218,22 +218,22 @@ public class QrImgRender {
                 Math.max(startY, 0), qrImg, frontImgOptions.getFillColor());
 
 
-        int gifImgLen = frontImgOptions.getFt().getGifDecoder().getFrameCount();
+        int gifImgLen = frontImgOptions.getFt().getGif().getFrameCount();
         List<ImmutablePair<BufferedImage, Integer>> result = new ArrayList<>(gifImgLen);
         // 背景图缩放
-        BufferedImage ftImg = frontImgOptions.getFt().getGifDecoder().getFrame(0);
+        BufferedImage ftImg = frontImgOptions.getFt().getGif().getFrame(0);
         boolean needScale = frontImgOptions.getFtW() < ftImg.getWidth() || frontImgOptions.getFtH() < ftImg.getHeight();
         for (int index = 0; index < gifImgLen; index++) {
             BufferedImage bgImg = GraphicUtil.createImg(resW, resH, bottomImg);
             Graphics2D bgGraphic = GraphicUtil.getG2d(bgImg);
-            ftImg = frontImgOptions.getFt().getGifDecoder().getFrame(index);
+            ftImg = frontImgOptions.getFt().getGif().getFrame(index);
             bgGraphic.drawImage(!needScale ? ftImg : ftImg.getScaledInstance(frontImgOptions.getFtW(), frontImgOptions.getFtH(), BufferedImage.SCALE_SMOOTH),
                     -Math.min(startX, 0), -Math.min(startY, 0), null);
 
             bgGraphic.dispose();
             bgImg.flush();
 
-            result.add(ImmutablePair.of(bgImg, frontImgOptions.getFt().getGifDecoder().getDelay(index)));
+            result.add(ImmutablePair.of(bgImg, frontImgOptions.getFt().getGif().getDelay(index)));
         }
         return result;
     }

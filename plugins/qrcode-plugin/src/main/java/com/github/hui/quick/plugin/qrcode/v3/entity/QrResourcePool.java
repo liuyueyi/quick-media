@@ -9,37 +9,37 @@ import java.util.List;
 import java.util.*;
 
 /**
- * 二维矩阵渲染
+ * 二维矩阵渲染资源池
  *
  * @author YiHui
  * @date 2022/7/20
  */
-public class RenderResourcesV3 {
-    private DrawOptions ref;
-
+public class QrResourcePool {
     public static final int NO_LIMIT_COUNT = -1;
+
+    private final DrawOptions ref;
 
     /**
      * 所有渲染的资源列表
      */
-    private List<RenderSource> sourceList;
+    private final List<QrResourcesDecorate> sourceList;
 
     /**
      * 兜底的1x1 渲染图
      */
-    private ResourceDecorate defaultRenderDrawImg;
+    private QrResourceSet defaultRenderDrawImg;
 
     /**
      * 兜底的1x1 背景图
      */
-    private ResourceDecorate defaultRenderBgImg;
+    private QrResourceSet defaultRenderBgImg;
 
 
-    public static RenderResourcesV3 create(DrawOptions ref) {
-        return new RenderResourcesV3(ref);
+    public static QrResourcePool create(DrawOptions ref) {
+        return new QrResourcePool(ref);
     }
 
-    private RenderResourcesV3(DrawOptions ref) {
+    private QrResourcePool(DrawOptions ref) {
         this.ref = ref;
         sourceList = new ArrayList<>();
     }
@@ -49,7 +49,7 @@ public class RenderResourcesV3 {
     }
 
 
-    public List<RenderSource> getSourceList() {
+    public List<QrResourcesDecorate> getSourceList() {
         return sourceList;
     }
 
@@ -71,23 +71,21 @@ public class RenderResourcesV3 {
         return defaultRenderBgImg == null ? null : defaultRenderBgImg.getResource();
     }
 
-    public RenderSource addSource(int row, int col, QrResource resource) {
-        return new RenderSource(this)
-                .setRow(row)
-                .setCol(col)
-                .addResource(resource);
+    public QrResourcesDecorate addSource(int row, int col, QrResource resource) {
+        return new QrResourcesDecorate(this).setRow(row).setCol(col).addResource(resource);
     }
 
-    public RenderSource addSource(int row, int col) {
-        return new RenderSource(this)
-                .setRow(row)
-                .setCol(col);
+    public QrResourcesDecorate addSource(int row, int col) {
+        return new QrResourcesDecorate(this).setRow(row).setCol(col);
     }
 
-    public static class RenderSource implements Comparable<RenderSource> {
+    /**
+     * 资源装饰类, 用于定义每个资源对应的矩阵类型
+     */
+    public static class QrResourcesDecorate implements Comparable<QrResourcesDecorate> {
         private static final int DEFAULT_ORDER = -999;
-        private RenderResourcesV3 resRef;
-        private ResourceDecorate resourceDecorate;
+        private final QrResourcePool resRef;
+        private QrResourceSet resourceDecorate;
         /**
          * 表示 row * col 的图片资源中，哪些地方是有素材填充的（坐标从左上角开始）
          * 比如一个十字行的素材，如下，0表示空白，1表示有资源
@@ -101,7 +99,7 @@ public class RenderResourcesV3 {
          * <p>
          * 特殊case，若fillMap为空，则表示完整填充，不存在缺失的场景
          */
-        private Map<Point, Boolean> missMap;
+        private final Map<Point, Boolean> missMap;
 
         /**
          * 图片占用的二维码行数
@@ -119,18 +117,23 @@ public class RenderResourcesV3 {
         private int order;
 
         /**
-         * true 表示全匹配，false 则表示只要有图的地方能满足即可
+         * true 表示全匹配
+         * false 则表示只要有图的地方能满足即可
+         * <p>
+         * 举例说明，现在有一个 十字图片
+         * 当 fullMatch = true, 则对应一个 3 x 3 的区域的，当 (0,0),(0,2),(2,0),(2,2) 四个位置为0  且 (0,1),(1,0),(1,1),(1,2),(2,1) 五个位置为1时，这个资源才能使用
+         * 当 fullMatch = false, 则对应 3 x 3 区域，只要 (0,1),(1,0),(1,1),(1,2),(2,1) 五个位置为1，这个资源就可以使用
          */
         private boolean fullMatch;
 
-        public RenderSource(RenderResourcesV3 resources) {
+        public QrResourcesDecorate(QrResourcePool resources) {
             this.resRef = resources;
             missMap = new HashMap<>();
             order = DEFAULT_ORDER;
         }
 
         @Override
-        public int compareTo(RenderSource o) {
+        public int compareTo(QrResourcesDecorate o) {
             if (o == null) {
                 return 1;
             }
@@ -191,40 +194,40 @@ public class RenderResourcesV3 {
             return fullMatch;
         }
 
-        public RenderSource addResource(QrResource img) {
+        public QrResourcesDecorate addResource(QrResource img) {
             return addResource(img, NO_LIMIT_COUNT);
         }
 
-        public RenderSource addResource(QrResource img, int count) {
+        public QrResourcesDecorate addResource(QrResource img, int count) {
             if (this.resourceDecorate == null) {
-                this.resourceDecorate = new ResourceDecorate(img, count);
+                this.resourceDecorate = new QrResourceSet(img, count);
             } else {
                 this.resourceDecorate.addResource(img, count);
             }
             return this;
         }
 
-        public RenderSource setRow(int row) {
+        public QrResourcesDecorate setRow(int row) {
             this.row = row;
             return this;
         }
 
-        public RenderSource setCol(int col) {
+        public QrResourcesDecorate setCol(int col) {
             this.col = col;
             return this;
         }
 
-        public RenderSource setOrder(int order) {
+        public QrResourcesDecorate setOrder(int order) {
             this.order = order;
             return this;
         }
 
-        public RenderSource setMiss(int x, int y) {
+        public QrResourcesDecorate setMiss(int x, int y) {
             this.missMap.put(new Point(x, y), true);
             return this;
         }
 
-        public RenderSource setFullMatch() {
+        public QrResourcesDecorate setFullMatch() {
             this.fullMatch = true;
             return this;
         }
@@ -237,7 +240,7 @@ public class RenderResourcesV3 {
          * @param xy
          * @return
          */
-        public RenderSource setMiss(String xy) {
+        public QrResourcesDecorate setMiss(String xy) {
             String[] points = StringUtils.split(xy, ",");
             for (String point : points) {
                 String[] cells = StringUtils.split(point, "-");
@@ -250,7 +253,7 @@ public class RenderResourcesV3 {
             return this;
         }
 
-        public RenderResourcesV3 build() {
+        public QrResourcePool build() {
             if (row > 1 || col > 1 || !BooleanUtils.isTrue(missMap.get(new Point(0, 0)))) {
                 resRef.sourceList.add(this);
             }
@@ -271,12 +274,12 @@ public class RenderResourcesV3 {
                 return;
             }
 
-            ResourceDecorate decorate = null;
-            for (RenderResource renderImg : resourceDecorate.getResourceList()) {
+            QrResourceSet decorate = null;
+            for (QrCountResource renderImg : resourceDecorate.getResourceList()) {
                 // 找一个不限制渲染次数的
                 if (renderImg.count == NO_LIMIT_COUNT) {
                     if (decorate == null) {
-                        decorate = new ResourceDecorate(renderImg.resource);
+                        decorate = new QrResourceSet(renderImg.resource);
                     } else {
                         decorate.addResource(renderImg.resource, NO_LIMIT_COUNT);
                     }
@@ -284,9 +287,9 @@ public class RenderResourcesV3 {
             }
             if (decorate == null) {
                 // 所有的都是次数限制，则全部加进去
-                for (RenderResource renderImg : resourceDecorate.getResourceList()) {
+                for (QrCountResource renderImg : resourceDecorate.getResourceList()) {
                     if (decorate == null) {
-                        decorate = new ResourceDecorate(renderImg.resource);
+                        decorate = new QrResourceSet(renderImg.resource);
                     } else {
                         decorate.addResource(renderImg.resource, NO_LIMIT_COUNT);
                     }
@@ -302,26 +305,29 @@ public class RenderResourcesV3 {
     }
 
 
-    public static class ResourceDecorate {
-        private static Random random = new Random();
+    /**
+     * 资源集合
+     */
+    public static class QrResourceSet {
+        private static final Random RAND = new Random();
 
-        private List<RenderResource> resourceList;
+        private final List<QrCountResource> resourceList;
 
         public boolean empty() {
             return resourceList.isEmpty();
         }
 
-        public ResourceDecorate(QrResource resource) {
+        public QrResourceSet(QrResource resource) {
             this(resource, NO_LIMIT_COUNT);
         }
 
-        public ResourceDecorate(QrResource resource, int cnt) {
+        public QrResourceSet(QrResource resource, int cnt) {
             resourceList = new ArrayList<>();
-            resourceList.add(new RenderResource(resource, cnt));
+            resourceList.add(new QrCountResource(resource, cnt));
         }
 
         public void addResource(QrResource img, int cnt) {
-            resourceList.add(new RenderResource(img, cnt));
+            resourceList.add(new QrCountResource(img, cnt));
         }
 
         public QrResource getResource() {
@@ -329,8 +335,8 @@ public class RenderResourcesV3 {
                 return null;
             }
 
-            int index = random.nextInt(resourceList.size());
-            RenderResource resource = resourceList.get(index);
+            int index = RAND.nextInt(resourceList.size());
+            QrCountResource resource = resourceList.get(index);
             if (resource.count == NO_LIMIT_COUNT) {
                 return resource.resource;
             } else if (resource.count > 0) {
@@ -345,12 +351,15 @@ public class RenderResourcesV3 {
             return getResource();
         }
 
-        public List<RenderResource> getResourceList() {
+        public List<QrCountResource> getResourceList() {
             return resourceList;
         }
     }
 
-    public static class RenderResource {
+    /**
+     * 待计数的资源
+     */
+    public static class QrCountResource {
         /**
          * 绘制图
          */
@@ -360,7 +369,7 @@ public class RenderResourcesV3 {
          */
         int count;
 
-        public RenderResource(QrResource img, int count) {
+        public QrCountResource(QrResource img, int count) {
             this.resource = img;
             this.count = count;
         }

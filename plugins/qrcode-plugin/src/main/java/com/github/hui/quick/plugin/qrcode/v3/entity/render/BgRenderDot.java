@@ -48,7 +48,10 @@ public class BgRenderDot extends RenderDot {
 
     @Override
     public void renderTxt(Graphics2D g2d, RenderFunc.TxtImgDrawFunc drawFunc) {
+        Font oldFont = g2d.getFont();
+        if (oldFont.getSize() != size) g2d.setFont(resource.getFont(size));
         drawFunc.draw(g2d, resource.getText(), x, y, row * size);
+        g2d.setFont(oldFont);
     }
 
     @Override

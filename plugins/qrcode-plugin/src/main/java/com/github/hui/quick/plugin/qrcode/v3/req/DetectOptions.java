@@ -112,6 +112,12 @@ public class DetectOptions {
         return special;
     }
 
+    /**
+     * true 表示探测图形单独处理；若制定了探测图形的图片，则这个值必然是true；若没有指定探测图形资源，则探测图形采用标准的黑色回字
+     *
+     * @param special
+     * @return
+     */
     public DetectOptions setSpecial(Boolean special) {
         this.special = special;
         return this;
