@@ -88,8 +88,8 @@ public class QrRenderDotGenerator {
         if (bitMatrix.getByteMatrix().get(x, y) == 0 && resourcePool.getDefaultBgImg() != null) {
             // 非探测区域内的0点图渲染
             return Optional.of(new BgRenderDot()
-                    .setRow(1)
-                    .setCol(1)
+                    .setH(1)
+                    .setW(1)
                     .setX(bitMatrix.getLeftPadding() + x * bitMatrix.getMultiple())
                     .setY(bitMatrix.getTopPadding() + y * bitMatrix.getMultiple())
                     .setSize(bitMatrix.getMultiple())
@@ -192,8 +192,8 @@ public class QrRenderDotGenerator {
         scanMatrix(matrix.getWidth(), matrix.getHeight(), (x, y) -> {
             if (matrix.get(x, y) == 1) {
                 result.add(new PreRenderDot()
-                        .setRow(1)
-                        .setCol(1)
+                        .setH(1)
+                        .setW(1)
                         .setX(matrixEx.getLeftPadding() + x * matrixEx.getMultiple())
                         .setY(matrixEx.getTopPadding() + y * matrixEx.getMultiple())
                         .setSize(matrixEx.getMultiple())
@@ -210,8 +210,8 @@ public class QrRenderDotGenerator {
         }
         List<RenderDot> result = new ArrayList<>();
         ByteMatrix matrix = matrixEx.getByteMatrix();
-        for (int x = 0; x < matrix.getWidth() - renderSource.getCol() + 1; x++) {
-            for (int y = 0; y < matrix.getHeight() - renderSource.getRow() + 1; y++) {
+        for (int x = 0; x < matrix.getWidth() - renderSource.getWidth() + 1; x++) {
+            for (int y = 0; y < matrix.getHeight() - renderSource.getHeight() + 1; y++) {
                 if (match(matrix, renderSource, x, y, fullMatch)) {
                     result.add(renderDot(matrixEx, renderSource, x, y));
                     if (renderSource.countOver()) {
@@ -225,8 +225,8 @@ public class QrRenderDotGenerator {
 
     private static boolean match(ByteMatrix matrix, QrResourcePool.QrResourcesDecorate renderSource, int startX, int startY, boolean fullMatch) {
         // 要求矩阵的1点图，能完全覆盖 renderSource
-        for (int x = 0; x < renderSource.getCol(); x++) {
-            for (int y = 0; y < renderSource.getRow(); y++) {
+        for (int x = 0; x < renderSource.getWidth(); x++) {
+            for (int y = 0; y < renderSource.getHeight(); y++) {
                 if (!renderSource.miss(x, y) && matrix.get(startX + x, startY + y) == 0) {
                     // 资源图存在，但是矩阵点不存在，则表示未满足条件，直接退出
                     return false;
@@ -246,15 +246,15 @@ public class QrRenderDotGenerator {
 
     private static RenderDot renderDot(BitMatrixEx matrixEx, QrResourcePool.QrResourcesDecorate renderSource, int x, int y) {
         PreRenderDot renderDot = new PreRenderDot();
-        renderDot.setCol(renderSource.getCol())
-                .setRow(renderSource.getRow())
+        renderDot.setW(renderSource.getWidth())
+                .setH(renderSource.getHeight())
                 .setX(matrixEx.getLeftPadding() + x * matrixEx.getMultiple())
                 .setY(matrixEx.getTopPadding() + y * matrixEx.getMultiple())
                 .setSize(matrixEx.getMultiple())
                 .setResource(renderSource.getResource());
 
         // 将命中的标记为已渲染
-        scanMatrix(renderSource.getCol(), renderDot.getRow(), (col, row) -> {
+        scanMatrix(renderSource.getWidth(), renderDot.getH(), (col, row) -> {
             if (!renderSource.miss(col, row)) {
                 matrixEx.getByteMatrix().set(x + col, y + row, 0);
             }

@@ -262,6 +262,17 @@ public class QrCodeV3Options {
         return this;
     }
 
+    /**
+     * 设置全局的资源信息
+     *
+     * @param resource
+     * @return
+     */
+    public QrCodeV3Options setDrawGlobalResource(QrResource resource) {
+        newDrawOptions().setGlobalResource(resource);
+        return this;
+    }
+
     // ----------- logo 相关 ----------
 
     public QrCodeV3Options setLogo(QrResource resource) {

@@ -20,6 +20,11 @@ public class QrResourcePool {
     private final DrawOptions ref;
 
     /**
+     * 全局共享资源，如svg的通用样式；图片二维码中的全局字体信息等
+     */
+    private QrResource globalResource;
+
+    /**
      * 所有渲染的资源列表
      */
     private final List<QrResourcesDecorate> sourceList;
@@ -48,6 +53,14 @@ public class QrResourcePool {
         return this.ref;
     }
 
+    public QrResource getGlobalResource() {
+        return globalResource;
+    }
+
+    public QrResourcePool setGlobalResource(QrResource globalResource) {
+        this.globalResource = globalResource;
+        return this;
+    }
 
     public List<QrResourcesDecorate> getSourceList() {
         return sourceList;
@@ -71,12 +84,12 @@ public class QrResourcePool {
         return defaultRenderBgImg == null ? null : defaultRenderBgImg.getResource();
     }
 
-    public QrResourcesDecorate addSource(int row, int col, QrResource resource) {
-        return new QrResourcesDecorate(this).setRow(row).setCol(col).addResource(resource);
+    public QrResourcesDecorate addSource(int width, int height, QrResource resource) {
+        return new QrResourcesDecorate(this).setWidth(width).setHeight(height).addResource(resource);
     }
 
-    public QrResourcesDecorate addSource(int row, int col) {
-        return new QrResourcesDecorate(this).setRow(row).setCol(col);
+    public QrResourcesDecorate addSource(int width, int height) {
+        return new QrResourcesDecorate(this).setWidth(width).setHeight(height);
     }
 
     /**
@@ -104,12 +117,12 @@ public class QrResourcePool {
         /**
          * 图片占用的二维码行数
          */
-        private int row;
+        private int height;
 
         /**
          * 图片占用的二维码列数
          */
-        private int col;
+        private int width;
 
         /**
          * 优先级，值越大，优先级越高
@@ -138,11 +151,11 @@ public class QrResourcePool {
                 return 1;
             }
             if (order == DEFAULT_ORDER) {
-                order = row * col;
+                order = height * width;
             }
 
             if (o.order == DEFAULT_ORDER) {
-                o.order = o.row * o.col;
+                o.order = o.height * o.width;
             }
 
             if (order > o.order) {
@@ -178,12 +191,12 @@ public class QrResourcePool {
             return miss;
         }
 
-        public int getRow() {
-            return row;
+        public int getHeight() {
+            return height;
         }
 
-        public int getCol() {
-            return col;
+        public int getWidth() {
+            return width;
         }
 
         public boolean countOver() {
@@ -207,13 +220,13 @@ public class QrResourcePool {
             return this;
         }
 
-        public QrResourcesDecorate setRow(int row) {
-            this.row = row;
+        public QrResourcesDecorate setHeight(int height) {
+            this.height = height;
             return this;
         }
 
-        public QrResourcesDecorate setCol(int col) {
-            this.col = col;
+        public QrResourcesDecorate setWidth(int width) {
+            this.width = width;
             return this;
         }
 
@@ -254,7 +267,7 @@ public class QrResourcePool {
         }
 
         public QrResourcePool build() {
-            if (row > 1 || col > 1 || !BooleanUtils.isTrue(missMap.get(new Point(0, 0)))) {
+            if (height > 1 || width > 1 || !BooleanUtils.isTrue(missMap.get(new Point(0, 0)))) {
                 resRef.sourceList.add(this);
             }
             Collections.sort(resRef.sourceList);
@@ -266,7 +279,7 @@ public class QrResourcePool {
          * 从现有的资源中，初始化兜底的 1x1 渲染图
          */
         private void initDefaultRenderImg() {
-            if (row > 1 || col > 1) {
+            if (height > 1 || width > 1) {
                 return;
             }
 

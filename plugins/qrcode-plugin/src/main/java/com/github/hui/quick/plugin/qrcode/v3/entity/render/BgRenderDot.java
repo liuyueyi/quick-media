@@ -13,36 +13,39 @@ import java.awt.*;
  * @date 2022/7/20
  */
 public class BgRenderDot extends RenderDot {
-    private int row, col;
+    /**
+     * width & height
+     */
+    private int h, w;
 
     public BgRenderDot() {
         this.type = RenderDotType.BG.getType();
     }
 
-    public int getRow() {
-        return row;
+    public int getH() {
+        return h;
     }
 
-    public BgRenderDot setRow(int row) {
-        this.row = row;
+    public BgRenderDot setH(int h) {
+        this.h = h;
         return this;
     }
 
-    public int getCol() {
-        return col;
+    public int getW() {
+        return w;
     }
 
-    public BgRenderDot setCol(int col) {
-        this.col = col;
+    public BgRenderDot setW(int w) {
+        this.w = w;
         return this;
     }
 
     private int w() {
-        return col * size;
+        return w * size;
     }
 
     private int h() {
-        return row * size;
+        return h * size;
     }
 
     @Override
@@ -52,7 +55,7 @@ public class BgRenderDot extends RenderDot {
 
     @Override
     public void renderImg(Graphics2D g2d, RenderFunc.ImgDrawFunc drawFunc) {
-        drawFunc.draw(g2d, resource.getImg(), x, y,  w(), h());
+        drawFunc.draw(g2d, resource.getImg(), x, y, w(), h());
     }
 
     @Override
@@ -65,14 +68,14 @@ public class BgRenderDot extends RenderDot {
 
     @Override
     public void renderSvg(SvgTemplate svg, RenderFunc.SvgDrawFunc drawFunc) {
-        drawFunc.draw(svg, resource.getSvgId(), x, y,  w(), h());
+        drawFunc.draw(svg, resource.getSvgId(), x, y, w(), h());
     }
 
     @Override
     public String toString() {
         return "BgRenderDot{" +
-                "row=" + row +
-                ", col=" + col +
+                "h=" + h +
+                ", w=" + w +
                 ", x=" + x +
                 ", y=" + y +
                 ", size=" + size +

@@ -13,36 +13,36 @@ import java.awt.*;
  * @date 2022/7/20
  */
 public class PreRenderDot extends RenderDot {
-    private int row, col;
+    private int h, w;
 
     public PreRenderDot() {
         this.type = RenderDotType.PRE.getType();
     }
 
-    public int getRow() {
-        return row;
+    public int getH() {
+        return h;
     }
 
-    public PreRenderDot setRow(int row) {
-        this.row = row;
+    public PreRenderDot setH(int h) {
+        this.h = h;
         return this;
     }
 
-    public int getCol() {
-        return col;
+    public int getW() {
+        return w;
     }
 
-    public PreRenderDot setCol(int col) {
-        this.col = col;
+    public PreRenderDot setW(int w) {
+        this.w = w;
         return this;
     }
 
     private int w() {
-        return col * size;
+        return w * size;
     }
 
     private int h() {
-        return row * size;
+        return h * size;
     }
 
     @Override
@@ -59,7 +59,7 @@ public class PreRenderDot extends RenderDot {
     public void renderTxt(Graphics2D g2d, RenderFunc.TxtImgDrawFunc drawFunc) {
         Font oldFont = g2d.getFont();
         if (oldFont.getSize() != size) g2d.setFont(resource.getFont(size));
-        drawFunc.draw(g2d, resource.getText(), x, y, row * size);
+        drawFunc.draw(g2d, resource.getText(), x, y, h * size);
         g2d.setFont(oldFont);
     }
 
@@ -71,8 +71,8 @@ public class PreRenderDot extends RenderDot {
     @Override
     public String toString() {
         return "PreRenderDot{" +
-                "row=" + row +
-                ", col=" + col +
+                "h=" + h +
+                ", w=" + w +
                 ", x=" + x +
                 ", y=" + y +
                 ", size=" + size +

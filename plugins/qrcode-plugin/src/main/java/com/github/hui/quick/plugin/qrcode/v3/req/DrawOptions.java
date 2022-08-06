@@ -129,6 +129,17 @@ public class DrawOptions {
     }
 
     /**
+     * 设置全局的资源信息
+     *
+     * @param resource
+     * @return
+     */
+    public DrawOptions setGlobalResource(QrResource resource) {
+        resourcePool.setGlobalResource(resource);
+        return this;
+    }
+
+    /**
      * 只有一个图片的场景，用这个接口
      *
      * @param pre 1点对应的图
@@ -156,8 +167,8 @@ public class DrawOptions {
      * @param resource
      * @return
      */
-    public QrResourcePool.QrResourcesDecorate newRenderResource(int row, int col, QrResource resource) {
-        return resourcePool.addSource(row, col, resource);
+    public QrResourcePool.QrResourcesDecorate newRenderResource(int width, int height, QrResource resource) {
+        return resourcePool.addSource(width, height, resource);
     }
 
     public QrCodeV3Options complete() {

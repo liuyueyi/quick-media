@@ -23,6 +23,7 @@ public class QrSvgRender {
     public static SvgTemplate drawQrInfo(List<RenderDot> dotList, QrCodeV3Options options) {
         options.setQrType(QrType.SVG);
         SvgTemplate svgTemplate = new SvgTemplate(options.getW(), options.getH());
+        Optional.ofNullable(options.getDrawOptions().getResourcePool().getGlobalResource()).ifPresent(r -> svgTemplate.setDefs(r.getSvg()));
 
         // 若不存在特殊处理的0点，则使用背景色进行填充
         if (dotList.stream().noneMatch(s -> s instanceof BgRenderDot)) {

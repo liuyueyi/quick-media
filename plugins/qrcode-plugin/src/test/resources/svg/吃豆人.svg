@@ -1,0 +1,413 @@
+<?xml version="1.0" encoding="utf-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="500" height="500" viewBox="0 0 500 500">
+	<symbol id="detect_lt" viewBox="0 0 49 49">
+        <path d="M45.5,42.34c0,1.75-1.38,3.16-3.08,3.16H6.59c-1.7,0-3.09-1.42-3.09-3.16V6.66c0-1.75,1.38-3.16,3.09-3.16h35.83c1.7,0,3.08,1.42,3.08,3.16V42.34z"
+              style="fill: none; stroke: #333333; stroke-width: 7; stroke-linecap: round; stroke-miterlimit: 10"/>
+        <path d="M35,31c0,2.21-1.79,4-4,4H18c-2.21,0-4-1.79-4-4V18c0-2.21,1.79-4,4-4h13c2.21,0,4,1.79,4,4V31z"
+              style="fill: #333333"/>
+    </symbol>
+	<symbol id="symbol_1V" viewBox="0 0 50 50">
+        <path d="M42.82,21.81C42.82,11.98,34.84,4,25,4S7.19,11.98,7.19,21.81L5.5,44l8.03-4.37L19.3,46l5.7-6.37L30.7,46  l5.78-6.37L44.5,44L42.82,21.81z M18.46,27.18c-3.18,0-5.76-2.7-5.76-6.03c0-3.33,2.58-6.03,5.76-6.03s5.76,2.7,5.76,6.03  C24.22,24.48,21.64,27.18,18.46,27.18z M31.54,27.18c-3.18,0-5.76-2.7-5.76-6.03c0-3.33,2.58-6.03,5.76-6.03  c3.18,0,5.76,2.7,5.76,6.03C37.3,24.48,34.72,27.18,31.54,27.18z"
+              style="fill: #7BB72E"/>
+        <ellipse cx="16.63" cy="22.06" rx="2.02" ry="2.4" style="fill: #555555"/>
+        <ellipse cx="29.37" cy="21.74" rx="2.02" ry="2.4" style="fill: #555555"/>
+    </symbol>
+	<symbol id="symbol_1T" viewBox="0 0 100 50">
+        <line x1="17" y1="25" x2="83" y2="25"
+              style="fill: none; stroke: #333333; stroke-width: 20; stroke-linecap: round; stroke-miterlimit: 10"/>
+    </symbol>
+	<symbol id="symbol_1U" viewBox="0 0 100 50">
+        <circle cx="25" cy="25" r="11.5" style="fill: #F98E00"/>
+        <circle cx="75" cy="25" r="11.5" style="fill: #F98E00"/>
+    </symbol>
+	<symbol id="detect_ld" viewBox="0 0 49 49">
+        <path d="M45.5,42.34c0,1.75-1.38,3.16-3.08,3.16H6.59c-1.7,0-3.09-1.42-3.09-3.16V6.66c0-1.75,1.38-3.16,3.09-3.16h35.83c1.7,0,3.08,1.42,3.08,3.16V42.34z"
+              style="fill: none; stroke: #333333; stroke-width: 7; stroke-linecap: round; stroke-miterlimit: 10"/>
+        <path d="M35,31c0,2.21-1.79,4-4,4H18c-2.21,0-4-1.79-4-4V18c0-2.21,1.79-4,4-4h13c2.21,0,4,1.79,4,4V31z"
+              style="fill: #333333"/>
+    </symbol>
+	<symbol id="symbol_1R" viewBox="0 0 50 50">
+        <circle cx="25" cy="25" r="11.5" style="fill: #F98E00"/>
+    </symbol>
+	<symbol id="symbol_1X" viewBox="0 0 50 50">
+        <path d="M42.82,21.81C42.82,11.98,34.84,4,25,4S7.19,11.98,7.19,21.81L5.5,44l8.03-4.37L19.3,46l5.7-6.37L30.7,46  l5.78-6.37L44.5,44L42.82,21.81z M18.46,27.18c-3.18,0-5.76-2.7-5.76-6.03c0-3.33,2.58-6.03,5.76-6.03s5.76,2.7,5.76,6.03  C24.22,24.48,21.64,27.18,18.46,27.18z M31.54,27.18c-3.18,0-5.76-2.7-5.76-6.03c0-3.33,2.58-6.03,5.76-6.03  c3.18,0,5.76,2.7,5.76,6.03C37.3,24.48,34.72,27.18,31.54,27.18z"
+              style="fill: #F98E00"/>
+        <ellipse cx="20.76" cy="22.13" rx="2.02" ry="2.4" style="fill: #555555"/>
+        <ellipse cx="33.51" cy="21.8" rx="2.02" ry="2.4" style="fill: #555555"/>
+    </symbol>
+	<symbol id="symbol_1S" viewBox="0 0 50 150">
+    <line x1="25" y1="20" x2="25" y2="130"
+              style="fill: none; stroke: #333333; stroke-width: 20; stroke-linecap: round; stroke-miterlimit: 10"/>
+    </symbol>
+	<symbol id="symbol_1W" viewBox="0 0 50 50">
+        <path d="M42.82,21.81C42.82,11.98,34.84,4,25,4S7.19,11.98,7.19,21.81L5.5,44l8.03-4.37L19.3,46l5.7-6.37L30.7,46  l5.78-6.37L44.5,44L42.82,21.81z M18.46,27.18c-3.18,0-5.76-2.7-5.76-6.03c0-3.33,2.58-6.03,5.76-6.03s5.76,2.7,5.76,6.03  C24.22,24.48,21.64,27.18,18.46,27.18z M31.54,27.18c-3.18,0-5.76-2.7-5.76-6.03c0-3.33,2.58-6.03,5.76-6.03  c3.18,0,5.76,2.7,5.76,6.03C37.3,24.48,34.72,27.18,31.54,27.18z"
+              style="fill: #40C4ED"/>
+        <ellipse cx="18.63" cy="22.66" rx="2.02" ry="2.4" style="fill: #555555"/>
+        <ellipse cx="31.37" cy="22.34" rx="2.02" ry="2.4" style="fill: #555555"/>
+    </symbol>
+	<symbol id="detect_rt" viewBox="0 0 49 49">
+        <path d="M45.5,42.34c0,1.75-1.38,3.16-3.08,3.16H6.59c-1.7,0-3.09-1.42-3.09-3.16V6.66c0-1.75,1.38-3.16,3.09-3.16h35.83c1.7,0,3.08,1.42,3.08,3.16V42.34z"
+              style="fill: none; stroke: #333333; stroke-width: 7; stroke-linecap: round; stroke-miterlimit: 10"/>
+        <path d="M35,31c0,2.21-1.79,4-4,4H18c-2.21,0-4-1.79-4-4V18c0-2.21,1.79-4,4-4h13c2.21,0,4,1.79,4,4V31z"
+              style="fill: #333333"/>
+    </symbol>
+	<g id="qr">
+		<rect fill="#ffffff" height="500" width="500" y="0" x="0"/>
+		<use xlink:href="#detect_lt" x="28" y="28" width="84" height="84"/>
+		<use xlink:href="#detect_ld" x="28" y="388" width="84" height="84"/>
+		<use xlink:href="#detect_rt" x="388" y="28" width="84" height="84"/>
+		<use xlink:href="#symbol_1S" x="28" y="328" width="12" height="36"/>
+		<use xlink:href="#symbol_1S" x="52" y="256" width="12" height="36"/>
+		<use xlink:href="#symbol_1S" x="52" y="340" width="12" height="36"/>
+		<use xlink:href="#symbol_1S" x="64" y="172" width="12" height="36"/>
+		<use xlink:href="#symbol_1S" x="76" y="124" width="12" height="36"/>
+		<use xlink:href="#symbol_1S" x="76" y="160" width="12" height="36"/>
+		<use xlink:href="#symbol_1S" x="76" y="328" width="12" height="36"/>
+		<use xlink:href="#symbol_1S" x="88" y="184" width="12" height="36"/>
+		<use xlink:href="#symbol_1S" x="124" y="28" width="12" height="36"/>
+		<use xlink:href="#symbol_1S" x="124" y="88" width="12" height="36"/>
+		<use xlink:href="#symbol_1S" x="124" y="196" width="12" height="36"/>
+		<use xlink:href="#symbol_1S" x="124" y="232" width="12" height="36"/>
+		<use xlink:href="#symbol_1S" x="124" y="316" width="12" height="36"/>
+		<use xlink:href="#symbol_1S" x="124" y="412" width="12" height="36"/>
+		<use xlink:href="#symbol_1S" x="136" y="136" width="12" height="36"/>
+		<use xlink:href="#symbol_1S" x="136" y="268" width="12" height="36"/>
+		<use xlink:href="#symbol_1S" x="136" y="304" width="12" height="36"/>
+		<use xlink:href="#symbol_1S" x="148" y="40" width="12" height="36"/>
+		<use xlink:href="#symbol_1S" x="148" y="76" width="12" height="36"/>
+		<use xlink:href="#symbol_1S" x="148" y="148" width="12" height="36"/>
+		<use xlink:href="#symbol_1S" x="148" y="364" width="12" height="36"/>
+		<use xlink:href="#symbol_1S" x="160" y="52" width="12" height="36"/>
+		<use xlink:href="#symbol_1S" x="160" y="184" width="12" height="36"/>
+		<use xlink:href="#symbol_1S" x="172" y="40" width="12" height="36"/>
+		<use xlink:href="#symbol_1S" x="172" y="100" width="12" height="36"/>
+		<use xlink:href="#symbol_1S" x="172" y="184" width="12" height="36"/>
+		<use xlink:href="#symbol_1S" x="172" y="292" width="12" height="36"/>
+		<use xlink:href="#symbol_1S" x="172" y="412" width="12" height="36"/>
+		<use xlink:href="#symbol_1S" x="184" y="244" width="12" height="36"/>
+		<use xlink:href="#symbol_1S" x="184" y="280" width="12" height="36"/>
+		<use xlink:href="#symbol_1S" x="196" y="88" width="12" height="36"/>
+		<use xlink:href="#symbol_1S" x="196" y="172" width="12" height="36"/>
+		<use xlink:href="#symbol_1S" x="196" y="316" width="12" height="36"/>
+		<use xlink:href="#symbol_1S" x="208" y="124" width="12" height="36"/>
+		<use xlink:href="#symbol_1S" x="208" y="196" width="12" height="36"/>
+		<use xlink:href="#symbol_1S" x="220" y="244" width="12" height="36"/>
+		<use xlink:href="#symbol_1S" x="220" y="364" width="12" height="36"/>
+		<use xlink:href="#symbol_1S" x="232" y="196" width="12" height="36"/>
+		<use xlink:href="#symbol_1S" x="232" y="280" width="12" height="36"/>
+		<use xlink:href="#symbol_1S" x="232" y="340" width="12" height="36"/>
+		<use xlink:href="#symbol_1S" x="244" y="340" width="12" height="36"/>
+		<use xlink:href="#symbol_1S" x="244" y="424" width="12" height="36"/>
+		<use xlink:href="#symbol_1S" x="256" y="136" width="12" height="36"/>
+		<use xlink:href="#symbol_1S" x="256" y="340" width="12" height="36"/>
+		<use xlink:href="#symbol_1S" x="256" y="388" width="12" height="36"/>
+		<use xlink:href="#symbol_1S" x="268" y="88" width="12" height="36"/>
+		<use xlink:href="#symbol_1S" x="268" y="244" width="12" height="36"/>
+		<use xlink:href="#symbol_1S" x="280" y="256" width="12" height="36"/>
+		<use xlink:href="#symbol_1S" x="280" y="340" width="12" height="36"/>
+		<use xlink:href="#symbol_1S" x="304" y="196" width="12" height="36"/>
+		<use xlink:href="#symbol_1S" x="304" y="424" width="12" height="36"/>
+		<use xlink:href="#symbol_1S" x="316" y="196" width="12" height="36"/>
+		<use xlink:href="#symbol_1S" x="316" y="304" width="12" height="36"/>
+		<use xlink:href="#symbol_1S" x="328" y="148" width="12" height="36"/>
+		<use xlink:href="#symbol_1S" x="328" y="388" width="12" height="36"/>
+		<use xlink:href="#symbol_1S" x="340" y="172" width="12" height="36"/>
+		<use xlink:href="#symbol_1S" x="340" y="328" width="12" height="36"/>
+		<use xlink:href="#symbol_1S" x="340" y="364" width="12" height="36"/>
+		<use xlink:href="#symbol_1S" x="340" y="412" width="12" height="36"/>
+		<use xlink:href="#symbol_1S" x="352" y="220" width="12" height="36"/>
+		<use xlink:href="#symbol_1S" x="364" y="160" width="12" height="36"/>
+		<use xlink:href="#symbol_1S" x="364" y="196" width="12" height="36"/>
+		<use xlink:href="#symbol_1S" x="364" y="352" width="12" height="36"/>
+		<use xlink:href="#symbol_1S" x="364" y="388" width="12" height="36"/>
+		<use xlink:href="#symbol_1S" x="376" y="148" width="12" height="36"/>
+		<use xlink:href="#symbol_1S" x="376" y="280" width="12" height="36"/>
+		<use xlink:href="#symbol_1S" x="376" y="316" width="12" height="36"/>
+		<use xlink:href="#symbol_1S" x="388" y="172" width="12" height="36"/>
+		<use xlink:href="#symbol_1S" x="388" y="244" width="12" height="36"/>
+		<use xlink:href="#symbol_1S" x="388" y="292" width="12" height="36"/>
+		<use xlink:href="#symbol_1S" x="388" y="412" width="12" height="36"/>
+		<use xlink:href="#symbol_1S" x="400" y="280" width="12" height="36"/>
+		<use xlink:href="#symbol_1S" x="400" y="412" width="12" height="36"/>
+		<use xlink:href="#symbol_1S" x="412" y="220" width="12" height="36"/>
+		<use xlink:href="#symbol_1S" x="412" y="364" width="12" height="36"/>
+		<use xlink:href="#symbol_1S" x="412" y="400" width="12" height="36"/>
+		<use xlink:href="#symbol_1S" x="424" y="184" width="12" height="36"/>
+		<use xlink:href="#symbol_1S" x="424" y="304" width="12" height="36"/>
+		<use xlink:href="#symbol_1S" x="424" y="388" width="12" height="36"/>
+		<use xlink:href="#symbol_1S" x="436" y="196" width="12" height="36"/>
+		<use xlink:href="#symbol_1S" x="448" y="124" width="12" height="36"/>
+		<use xlink:href="#symbol_1S" x="448" y="316" width="12" height="36"/>
+		<use xlink:href="#symbol_1S" x="448" y="364" width="12" height="36"/>
+		<use xlink:href="#symbol_1S" x="460" y="220" width="12" height="36"/>
+		<use xlink:href="#symbol_1S" x="460" y="364" width="12" height="36"/>
+		<use xlink:href="#symbol_1S" x="460" y="412" width="12" height="36"/>
+		<use xlink:href="#symbol_1T" x="28" y="244" width="24" height="12"/>
+		<use xlink:href="#symbol_1U" x="28" y="304" width="24" height="12"/>
+		<use xlink:href="#symbol_1T" x="40" y="196" width="24" height="12"/>
+		<use xlink:href="#symbol_1T" x="40" y="292" width="24" height="12"/>
+		<use xlink:href="#symbol_1U" x="52" y="124" width="24" height="12"/>
+		<use xlink:href="#symbol_1T" x="52" y="232" width="24" height="12"/>
+		<use xlink:href="#symbol_1T" x="64" y="208" width="24" height="12"/>
+		<use xlink:href="#symbol_1T" x="76" y="232" width="24" height="12"/>
+		<use xlink:href="#symbol_1T" x="88" y="148" width="24" height="12"/>
+		<use xlink:href="#symbol_1U" x="88" y="220" width="24" height="12"/>
+		<use xlink:href="#symbol_1U" x="100" y="244" width="24" height="12"/>
+		<use xlink:href="#symbol_1U" x="100" y="268" width="24" height="12"/>
+		<use xlink:href="#symbol_1U" x="100" y="364" width="24" height="12"/>
+		<use xlink:href="#symbol_1T" x="112" y="148" width="24" height="12"/>
+		<use xlink:href="#symbol_1T" x="124" y="172" width="24" height="12"/>
+		<use xlink:href="#symbol_1T" x="124" y="376" width="24" height="12"/>
+		<use xlink:href="#symbol_1U" x="136" y="112" width="24" height="12"/>
+		<use xlink:href="#symbol_1U" x="136" y="208" width="24" height="12"/>
+		<use xlink:href="#symbol_1U" x="136" y="244" width="24" height="12"/>
+		<use xlink:href="#symbol_1T" x="148" y="124" width="24" height="12"/>
+		<use xlink:href="#symbol_1T" x="148" y="256" width="24" height="12"/>
+		<use xlink:href="#symbol_1U" x="148" y="328" width="24" height="12"/>
+		<use xlink:href="#symbol_1T" x="160" y="364" width="24" height="12"/>
+		<use xlink:href="#symbol_1U" x="172" y="76" width="24" height="12"/>
+		<use xlink:href="#symbol_1T" x="172" y="136" width="24" height="12"/>
+		<use xlink:href="#symbol_1U" x="172" y="460" width="24" height="12"/>
+		<use xlink:href="#symbol_1T" x="184" y="208" width="24" height="12"/>
+		<use xlink:href="#symbol_1T" x="184" y="412" width="24" height="12"/>
+		<use xlink:href="#symbol_1T" x="196" y="52" width="24" height="12"/>
+		<use xlink:href="#symbol_1T" x="196" y="292" width="24" height="12"/>
+		<use xlink:href="#symbol_1T" x="220" y="412" width="24" height="12"/>
+		<use xlink:href="#symbol_1T" x="232" y="40" width="24" height="12"/>
+		<use xlink:href="#symbol_1U" x="232" y="88" width="24" height="12"/>
+		<use xlink:href="#symbol_1T" x="232" y="376" width="24" height="12"/>
+		<use xlink:href="#symbol_1T" x="244" y="64" width="24" height="12"/>
+		<use xlink:href="#symbol_1T" x="256" y="40" width="24" height="12"/>
+		<use xlink:href="#symbol_1T" x="256" y="280" width="24" height="12"/>
+		<use xlink:href="#symbol_1T" x="268" y="172" width="24" height="12"/>
+		<use xlink:href="#symbol_1U" x="268" y="448" width="24" height="12"/>
+		<use xlink:href="#symbol_1U" x="280" y="76" width="24" height="12"/>
+		<use xlink:href="#symbol_1U" x="280" y="232" width="24" height="12"/>
+		<use xlink:href="#symbol_1T" x="280" y="304" width="24" height="12"/>
+		<use xlink:href="#symbol_1T" x="280" y="316" width="24" height="12"/>
+		<use xlink:href="#symbol_1U" x="280" y="412" width="24" height="12"/>
+		<use xlink:href="#symbol_1T" x="292" y="64" width="24" height="12"/>
+		<use xlink:href="#symbol_1U" x="292" y="172" width="24" height="12"/>
+		<use xlink:href="#symbol_1U" x="304" y="28" width="24" height="12"/>
+		<use xlink:href="#symbol_1T" x="304" y="160" width="24" height="12"/>
+		<use xlink:href="#symbol_1U" x="304" y="232" width="24" height="12"/>
+		<use xlink:href="#symbol_1U" x="304" y="280" width="24" height="12"/>
+		<use xlink:href="#symbol_1U" x="304" y="340" width="24" height="12"/>
+		<use xlink:href="#symbol_1U" x="328" y="40" width="24" height="12"/>
+		<use xlink:href="#symbol_1U" x="328" y="112" width="24" height="12"/>
+		<use xlink:href="#symbol_1U" x="340" y="136" width="24" height="12"/>
+		<use xlink:href="#symbol_1T" x="352" y="64" width="24" height="12"/>
+		<use xlink:href="#symbol_1U" x="352" y="316" width="24" height="12"/>
+		<use xlink:href="#symbol_1T" x="364" y="244" width="24" height="12"/>
+		<use xlink:href="#symbol_1U" x="364" y="256" width="24" height="12"/>
+		<use xlink:href="#symbol_1T" x="376" y="124" width="24" height="12"/>
+		<use xlink:href="#symbol_1U" x="376" y="364" width="24" height="12"/>
+		<use xlink:href="#symbol_1T" x="376" y="448" width="24" height="12"/>
+		<use xlink:href="#symbol_1T" x="388" y="148" width="24" height="12"/>
+		<use xlink:href="#symbol_1T" x="388" y="340" width="24" height="12"/>
+		<use xlink:href="#symbol_1U" x="412" y="436" width="24" height="12"/>
+		<use xlink:href="#symbol_1T" x="412" y="448" width="24" height="12"/>
+		<use xlink:href="#symbol_1T" x="424" y="256" width="24" height="12"/>
+		<use xlink:href="#symbol_1U" x="436" y="244" width="24" height="12"/>
+		<use xlink:href="#symbol_1T" x="436" y="292" width="24" height="12"/>
+		<use xlink:href="#symbol_1U" x="436" y="448" width="24" height="12"/>
+		<use xlink:href="#symbol_1T" x="448" y="184" width="24" height="12"/>
+		<use xlink:href="#symbol_1U" x="448" y="460" width="24" height="12"/>
+		<use xlink:href="#symbol_1X" x="28" y="136" width="12" height="12"/>
+		<use xlink:href="#symbol_1R" x="28" y="172" width="12" height="12"/>
+		<use xlink:href="#symbol_1X" x="28" y="364" width="12" height="12"/>
+		<use xlink:href="#symbol_1X" x="40" y="208" width="12" height="12"/>
+		<use xlink:href="#symbol_1X" x="40" y="328" width="12" height="12"/>
+		<use xlink:href="#symbol_1R" x="52" y="148" width="12" height="12"/>
+		<use xlink:href="#symbol_1X" x="52" y="172" width="12" height="12"/>
+		<use xlink:href="#symbol_1V" x="64" y="244" width="12" height="12"/>
+		<use xlink:href="#symbol_1V" x="64" y="268" width="12" height="12"/>
+		<use xlink:href="#symbol_1X" x="64" y="328" width="12" height="12"/>
+		<use xlink:href="#symbol_1X" x="64" y="352" width="12" height="12"/>
+		<use xlink:href="#symbol_1V" x="76" y="196" width="12" height="12"/>
+		<use xlink:href="#symbol_1V" x="76" y="292" width="12" height="12"/>
+		<use xlink:href="#symbol_1V" x="76" y="364" width="12" height="12"/>
+		<use xlink:href="#symbol_1V" x="88" y="160" width="12" height="12"/>
+		<use xlink:href="#symbol_1R" x="88" y="280" width="12" height="12"/>
+		<use xlink:href="#symbol_1R" x="88" y="304" width="12" height="12"/>
+		<use xlink:href="#symbol_1V" x="88" y="328" width="12" height="12"/>
+		<use xlink:href="#symbol_1V" x="100" y="124" width="12" height="12"/>
+		<use xlink:href="#symbol_1V" x="100" y="172" width="12" height="12"/>
+		<use xlink:href="#symbol_1R" x="100" y="196" width="12" height="12"/>
+		<use xlink:href="#symbol_1V" x="100" y="292" width="12" height="12"/>
+		<use xlink:href="#symbol_1R" x="100" y="316" width="12" height="12"/>
+		<use xlink:href="#symbol_1V" x="100" y="340" width="12" height="12"/>
+		<use xlink:href="#symbol_1R" x="112" y="208" width="12" height="12"/>
+		<use xlink:href="#symbol_1R" x="112" y="304" width="12" height="12"/>
+		<use xlink:href="#symbol_1X" x="112" y="328" width="12" height="12"/>
+		<use xlink:href="#symbol_1V" x="112" y="352" width="12" height="12"/>
+		<use xlink:href="#symbol_1R" x="124" y="124" width="12" height="12"/>
+		<use xlink:href="#symbol_1X" x="124" y="364" width="12" height="12"/>
+		<use xlink:href="#symbol_1X" x="136" y="52" width="12" height="12"/>
+		<use xlink:href="#symbol_1V" x="136" y="88" width="12" height="12"/>
+		<use xlink:href="#symbol_1X" x="136" y="196" width="12" height="12"/>
+		<use xlink:href="#symbol_1X" x="136" y="412" width="12" height="12"/>
+		<use xlink:href="#symbol_1X" x="148" y="184" width="12" height="12"/>
+		<use xlink:href="#symbol_1V" x="148" y="220" width="12" height="12"/>
+		<use xlink:href="#symbol_1R" x="148" y="292" width="12" height="12"/>
+		<use xlink:href="#symbol_1W" x="148" y="316" width="12" height="12"/>
+		<use xlink:href="#symbol_1V" x="148" y="400" width="12" height="12"/>
+		<use xlink:href="#symbol_1W" x="148" y="424" width="12" height="12"/>
+		<use xlink:href="#symbol_1W" x="148" y="448" width="12" height="12"/>
+		<use xlink:href="#symbol_1X" x="160" y="112" width="12" height="12"/>
+		<use xlink:href="#symbol_1W" x="160" y="148" width="12" height="12"/>
+		<use xlink:href="#symbol_1R" x="160" y="280" width="12" height="12"/>
+		<use xlink:href="#symbol_1V" x="160" y="340" width="12" height="12"/>
+		<use xlink:href="#symbol_1X" x="160" y="376" width="12" height="12"/>
+		<use xlink:href="#symbol_1R" x="172" y="244" width="12" height="12"/>
+		<use xlink:href="#symbol_1V" x="172" y="388" width="12" height="12"/>
+		<use xlink:href="#symbol_1R" x="172" y="448" width="12" height="12"/>
+		<use xlink:href="#symbol_1R" x="184" y="124" width="12" height="12"/>
+		<use xlink:href="#symbol_1V" x="184" y="160" width="12" height="12"/>
+		<use xlink:href="#symbol_1V" x="184" y="172" width="12" height="12"/>
+		<use xlink:href="#symbol_1R" x="184" y="220" width="12" height="12"/>
+		<use xlink:href="#symbol_1R" x="184" y="316" width="12" height="12"/>
+		<use xlink:href="#symbol_1X" x="184" y="352" width="12" height="12"/>
+		<use xlink:href="#symbol_1R" x="184" y="400" width="12" height="12"/>
+		<use xlink:href="#symbol_1X" x="184" y="436" width="12" height="12"/>
+		<use xlink:href="#symbol_1R" x="196" y="64" width="12" height="12"/>
+		<use xlink:href="#symbol_1V" x="196" y="136" width="12" height="12"/>
+		<use xlink:href="#symbol_1V" x="196" y="232" width="12" height="12"/>
+		<use xlink:href="#symbol_1X" x="196" y="376" width="12" height="12"/>
+		<use xlink:href="#symbol_1R" x="196" y="424" width="12" height="12"/>
+		<use xlink:href="#symbol_1V" x="196" y="460" width="12" height="12"/>
+		<use xlink:href="#symbol_1V" x="208" y="28" width="12" height="12"/>
+		<use xlink:href="#symbol_1V" x="208" y="172" width="12" height="12"/>
+		<use xlink:href="#symbol_1V" x="208" y="244" width="12" height="12"/>
+		<use xlink:href="#symbol_1X" x="208" y="268" width="12" height="12"/>
+		<use xlink:href="#symbol_1W" x="208" y="304" width="12" height="12"/>
+		<use xlink:href="#symbol_1R" x="208" y="340" width="12" height="12"/>
+		<use xlink:href="#symbol_1X" x="208" y="352" width="12" height="12"/>
+		<use xlink:href="#symbol_1V" x="208" y="400" width="12" height="12"/>
+		<use xlink:href="#symbol_1X" x="208" y="436" width="12" height="12"/>
+		<use xlink:href="#symbol_1X" x="220" y="52" width="12" height="12"/>
+		<use xlink:href="#symbol_1X" x="220" y="100" width="12" height="12"/>
+		<use xlink:href="#symbol_1W" x="220" y="124" width="12" height="12"/>
+		<use xlink:href="#symbol_1V" x="220" y="184" width="12" height="12"/>
+		<use xlink:href="#symbol_1X" x="220" y="208" width="12" height="12"/>
+		<use xlink:href="#symbol_1W" x="220" y="220" width="12" height="12"/>
+		<use xlink:href="#symbol_1V" x="220" y="280" width="12" height="12"/>
+		<use xlink:href="#symbol_1W" x="220" y="292" width="12" height="12"/>
+		<use xlink:href="#symbol_1W" x="220" y="328" width="12" height="12"/>
+		<use xlink:href="#symbol_1X" x="220" y="460" width="12" height="12"/>
+		<use xlink:href="#symbol_1W" x="232" y="112" width="12" height="12"/>
+		<use xlink:href="#symbol_1W" x="232" y="172" width="12" height="12"/>
+		<use xlink:href="#symbol_1X" x="232" y="232" width="12" height="12"/>
+		<use xlink:href="#symbol_1V" x="232" y="316" width="12" height="12"/>
+		<use xlink:href="#symbol_1V" x="244" y="100" width="12" height="12"/>
+		<use xlink:href="#symbol_1X" x="244" y="124" width="12" height="12"/>
+		<use xlink:href="#symbol_1R" x="244" y="148" width="12" height="12"/>
+		<use xlink:href="#symbol_1W" x="244" y="160" width="12" height="12"/>
+		<use xlink:href="#symbol_1W" x="244" y="208" width="12" height="12"/>
+		<use xlink:href="#symbol_1X" x="244" y="220" width="12" height="12"/>
+		<use xlink:href="#symbol_1R" x="244" y="304" width="12" height="12"/>
+		<use xlink:href="#symbol_1R" x="244" y="388" width="12" height="12"/>
+		<use xlink:href="#symbol_1W" x="256" y="76" width="12" height="12"/>
+		<use xlink:href="#symbol_1V" x="256" y="292" width="12" height="12"/>
+		<use xlink:href="#symbol_1R" x="256" y="316" width="12" height="12"/>
+		<use xlink:href="#symbol_1W" x="256" y="436" width="12" height="12"/>
+		<use xlink:href="#symbol_1X" x="256" y="460" width="12" height="12"/>
+		<use xlink:href="#symbol_1W" x="268" y="64" width="12" height="12"/>
+		<use xlink:href="#symbol_1V" x="268" y="364" width="12" height="12"/>
+		<use xlink:href="#symbol_1W" x="280" y="28" width="12" height="12"/>
+		<use xlink:href="#symbol_1V" x="280" y="52" width="12" height="12"/>
+		<use xlink:href="#symbol_1R" x="280" y="88" width="12" height="12"/>
+		<use xlink:href="#symbol_1X" x="280" y="112" width="12" height="12"/>
+		<use xlink:href="#symbol_1W" x="280" y="124" width="12" height="12"/>
+		<use xlink:href="#symbol_1R" x="280" y="196" width="12" height="12"/>
+		<use xlink:href="#symbol_1R" x="280" y="220" width="12" height="12"/>
+		<use xlink:href="#symbol_1V" x="280" y="400" width="12" height="12"/>
+		<use xlink:href="#symbol_1W" x="280" y="436" width="12" height="12"/>
+		<use xlink:href="#symbol_1V" x="292" y="100" width="12" height="12"/>
+		<use xlink:href="#symbol_1X" x="292" y="184" width="12" height="12"/>
+		<use xlink:href="#symbol_1R" x="292" y="208" width="12" height="12"/>
+		<use xlink:href="#symbol_1V" x="292" y="448" width="12" height="12"/>
+		<use xlink:href="#symbol_1V" x="292" y="460" width="12" height="12"/>
+		<use xlink:href="#symbol_1W" x="304" y="40" width="12" height="12"/>
+		<use xlink:href="#symbol_1V" x="304" y="136" width="12" height="12"/>
+		<use xlink:href="#symbol_1V" x="304" y="292" width="12" height="12"/>
+		<use xlink:href="#symbol_1V" x="304" y="316" width="12" height="12"/>
+		<use xlink:href="#symbol_1W" x="316" y="64" width="12" height="12"/>
+		<use xlink:href="#symbol_1V" x="316" y="76" width="12" height="12"/>
+		<use xlink:href="#symbol_1R" x="316" y="100" width="12" height="12"/>
+		<use xlink:href="#symbol_1R" x="316" y="256" width="12" height="12"/>
+		<use xlink:href="#symbol_1V" x="316" y="388" width="12" height="12"/>
+		<use xlink:href="#symbol_1X" x="316" y="436" width="12" height="12"/>
+		<use xlink:href="#symbol_1W" x="316" y="460" width="12" height="12"/>
+		<use xlink:href="#symbol_1V" x="328" y="88" width="12" height="12"/>
+		<use xlink:href="#symbol_1W" x="328" y="196" width="12" height="12"/>
+		<use xlink:href="#symbol_1V" x="328" y="220" width="12" height="12"/>
+		<use xlink:href="#symbol_1R" x="328" y="292" width="12" height="12"/>
+		<use xlink:href="#symbol_1R" x="328" y="316" width="12" height="12"/>
+		<use xlink:href="#symbol_1W" x="328" y="340" width="12" height="12"/>
+		<use xlink:href="#symbol_1R" x="328" y="364" width="12" height="12"/>
+		<use xlink:href="#symbol_1R" x="340" y="76" width="12" height="12"/>
+		<use xlink:href="#symbol_1W" x="340" y="100" width="12" height="12"/>
+		<use xlink:href="#symbol_1R" x="340" y="232" width="12" height="12"/>
+		<use xlink:href="#symbol_1V" x="340" y="244" width="12" height="12"/>
+		<use xlink:href="#symbol_1V" x="340" y="280" width="12" height="12"/>
+		<use xlink:href="#symbol_1V" x="340" y="304" width="12" height="12"/>
+		<use xlink:href="#symbol_1R" x="340" y="448" width="12" height="12"/>
+		<use xlink:href="#symbol_1X" x="352" y="124" width="12" height="12"/>
+		<use xlink:href="#symbol_1W" x="352" y="160" width="12" height="12"/>
+		<use xlink:href="#symbol_1X" x="352" y="172" width="12" height="12"/>
+		<use xlink:href="#symbol_1R" x="352" y="196" width="12" height="12"/>
+		<use xlink:href="#symbol_1V" x="352" y="268" width="12" height="12"/>
+		<use xlink:href="#symbol_1W" x="352" y="340" width="12" height="12"/>
+		<use xlink:href="#symbol_1V" x="352" y="364" width="12" height="12"/>
+		<use xlink:href="#symbol_1W" x="352" y="388" width="12" height="12"/>
+		<use xlink:href="#symbol_1R" x="352" y="400" width="12" height="12"/>
+		<use xlink:href="#symbol_1V" x="352" y="436" width="12" height="12"/>
+		<use xlink:href="#symbol_1X" x="352" y="460" width="12" height="12"/>
+		<use xlink:href="#symbol_1X" x="364" y="28" width="12" height="12"/>
+		<use xlink:href="#symbol_1X" x="364" y="76" width="12" height="12"/>
+		<use xlink:href="#symbol_1W" x="364" y="100" width="12" height="12"/>
+		<use xlink:href="#symbol_1W" x="364" y="136" width="12" height="12"/>
+		<use xlink:href="#symbol_1V" x="364" y="292" width="12" height="12"/>
+		<use xlink:href="#symbol_1R" x="364" y="424" width="12" height="12"/>
+		<use xlink:href="#symbol_1V" x="376" y="220" width="12" height="12"/>
+		<use xlink:href="#symbol_1W" x="376" y="352" width="12" height="12"/>
+		<use xlink:href="#symbol_1R" x="376" y="412" width="12" height="12"/>
+		<use xlink:href="#symbol_1X" x="376" y="460" width="12" height="12"/>
+		<use xlink:href="#symbol_1R" x="388" y="328" width="12" height="12"/>
+		<use xlink:href="#symbol_1X" x="388" y="388" width="12" height="12"/>
+		<use xlink:href="#symbol_1W" x="400" y="124" width="12" height="12"/>
+		<use xlink:href="#symbol_1X" x="400" y="160" width="12" height="12"/>
+		<use xlink:href="#symbol_1X" x="400" y="184" width="12" height="12"/>
+		<use xlink:href="#symbol_1R" x="400" y="208" width="12" height="12"/>
+		<use xlink:href="#symbol_1W" x="400" y="232" width="12" height="12"/>
+		<use xlink:href="#symbol_1X" x="400" y="256" width="12" height="12"/>
+		<use xlink:href="#symbol_1R" x="400" y="364" width="12" height="12"/>
+		<use xlink:href="#symbol_1X" x="412" y="148" width="12" height="12"/>
+		<use xlink:href="#symbol_1W" x="412" y="172" width="12" height="12"/>
+		<use xlink:href="#symbol_1X" x="412" y="292" width="12" height="12"/>
+		<use xlink:href="#symbol_1R" x="412" y="328" width="12" height="12"/>
+		<use xlink:href="#symbol_1X" x="412" y="340" width="12" height="12"/>
+		<use xlink:href="#symbol_1R" x="424" y="136" width="12" height="12"/>
+		<use xlink:href="#symbol_1R" x="424" y="160" width="12" height="12"/>
+		<use xlink:href="#symbol_1R" x="424" y="268" width="12" height="12"/>
+		<use xlink:href="#symbol_1W" x="436" y="124" width="12" height="12"/>
+		<use xlink:href="#symbol_1R" x="436" y="148" width="12" height="12"/>
+		<use xlink:href="#symbol_1R" x="436" y="316" width="12" height="12"/>
+		<use xlink:href="#symbol_1W" x="436" y="340" width="12" height="12"/>
+		<use xlink:href="#symbol_1X" x="436" y="364" width="12" height="12"/>
+		<use xlink:href="#symbol_1X" x="436" y="388" width="12" height="12"/>
+		<use xlink:href="#symbol_1W" x="436" y="400" width="12" height="12"/>
+		<use xlink:href="#symbol_1V" x="436" y="436" width="12" height="12"/>
+		<use xlink:href="#symbol_1V" x="448" y="220" width="12" height="12"/>
+		<use xlink:href="#symbol_1X" x="448" y="280" width="12" height="12"/>
+		<use xlink:href="#symbol_1W" x="448" y="412" width="12" height="12"/>
+		<use xlink:href="#symbol_1R" x="448" y="424" width="12" height="12"/>
+		<use xlink:href="#symbol_1W" x="460" y="124" width="12" height="12"/>
+		<use xlink:href="#symbol_1R" x="460" y="172" width="12" height="12"/>
+		<use xlink:href="#symbol_1V" x="460" y="292" width="12" height="12"/>
+		<use xlink:href="#symbol_1W" x="460" y="316" width="12" height="12"/>
+		<use xlink:href="#symbol_1W" x="460" y="328" width="12" height="12"/>
+
+	</g>
+</svg>

@@ -18,6 +18,11 @@ public class SvgTemplate {
     private final List<SvgTag> tagList;
 
     /**
+     * 预定义的绘图资源，供其他的symbol进行引用
+     */
+    private String defs;
+
+    /**
      * svg symbol 标识
      */
     private final Set<String> svgSymbols;
@@ -57,6 +62,15 @@ public class SvgTemplate {
         return this;
     }
 
+    public String getDefs() {
+        return defs;
+    }
+
+    public SvgTemplate setDefs(String defs) {
+        this.defs = defs;
+        return this;
+    }
+
     public SvgTemplate addTag(SvgTag tag) {
         tagList.add(tag);
         return this;
@@ -80,6 +94,7 @@ public class SvgTemplate {
     public String toString() {
         StringBuilder builder = new StringBuilder("<?xml version=\"1.0\" encoding=\"utf-8\"?>\n");
         builder.append("<svg xmlns=\"http://www.w3.org/2000/svg\" xmlns:xlink=\"http://www.w3.org/1999/xlink\" ").append("width=\"").append(width).append("\" height=\"").append(height).append("\"").append(" viewBox=\"0 0 ").append(width).append(" ").append(height).append("\">\n");
+        builder.append(defs).append("\n");
         for (String symbol : svgSymbols) {
             builder.append("\t").append(symbol).append("\n");
         }
