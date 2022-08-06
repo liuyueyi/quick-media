@@ -1,6 +1,7 @@
 package com.github.hui.quick.plugin.test.v3;
 
 import com.github.hui.quick.plugin.base.OSUtil;
+import com.github.hui.quick.plugin.base.file.FileReadUtil;
 import com.github.hui.quick.plugin.qrcode.v3.constants.DrawStyle;
 import com.github.hui.quick.plugin.qrcode.v3.constants.QrType;
 import com.github.hui.quick.plugin.qrcode.v3.entity.QrResource;
@@ -76,7 +77,7 @@ public class QrSvgGenTest {
         boolean svg = QrCodeGenV3.of(msg).setW(500)
                 .newDrawOptions()
                 .setDrawStyle(DrawStyle.SVG)
-                .newRenderResource(1, 1, new QrResource().setSvg(" <symbol id=\"symbol_1R\" viewBox=\"0 0 50 50\">\n" +
+                .newRenderResource(new QrResource().setSvg(" <symbol id=\"symbol_1R\" viewBox=\"0 0 50 50\">\n" +
                         "        <circle cx=\"25\" cy=\"25\" r=\"11.5\" style=\"fill: #F98E00\"/>\n" +
                         "    </symbol>")).addResource(new QrResource().setSvg("<symbol id=\"symbol_1X\" viewBox=\"0 0 50 50\">\n" +
                         "        <path d=\"M42.82,21.81C42.82,11.98,34.84,4,25,4S7.19,11.98,7.19,21.81L5.5,44l8.03-4.37L19.3,46l5.7-6.37L30.7,46  l5.78-6.37L44.5,44L42.82,21.81z M18.46,27.18c-3.18,0-5.76-2.7-5.76-6.03c0-3.33,2.58-6.03,5.76-6.03s5.76,2.7,5.76,6.03  C24.22,24.48,21.64,27.18,18.46,27.18z M31.54,27.18c-3.18,0-5.76-2.7-5.76-6.03c0-3.33,2.58-6.03,5.76-6.03  c3.18,0,5.76,2.7,5.76,6.03C37.3,24.48,34.72,27.18,31.54,27.18z\"\n" +
@@ -331,7 +332,7 @@ public class QrSvgGenTest {
                 .newDrawOptions()
                 .setDrawStyle(DrawStyle.SVG)
                 .setGlobalResource(new QrResource().setSvg(birdSvgSymbols.get("defs").get(0)))
-                .newRenderResource(1, 1, new QrResource().setSvg(birdSvgSymbols.get("1x1").get(0)))
+                .newRenderResource(new QrResource().setSvg(birdSvgSymbols.get("1x1").get(0)))
                 .addResource(new QrResource().setSvg(birdSvgSymbols.get("1x1").get(1)))
                 .addResource(new QrResource().setSvg(birdSvgSymbols.get("1x1").get(2)))
                 .build()
@@ -348,5 +349,12 @@ public class QrSvgGenTest {
                 .build()
                 .asFile(prefix + "/愤怒的小鸟.svg");
         System.out.println("--- " + svg);
+    }
+
+    @Test
+    public void svgTemplate() throws Exception {
+        String svgTemplate = FileReadUtil.readAll("svg/svg.template");
+        boolean ans = QrCodeGenV3.of(msg).setW(500).setSvgTemplate(svgTemplate).build().asFile(prefix + "/tep.svg");
+        System.out.println(ans);
     }
 }

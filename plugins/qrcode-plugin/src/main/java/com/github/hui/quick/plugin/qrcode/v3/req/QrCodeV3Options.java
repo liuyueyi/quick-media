@@ -273,6 +273,17 @@ public class QrCodeV3Options {
         return this;
     }
 
+    /**
+     * 传入svg模板
+     *
+     * @return
+     */
+    public QrCodeV3Options setSvgTemplate(String svg) {
+        newDrawOptions().setDrawStyle(DrawStyle.SVG).setSvgTemplates(svg);
+        qrType = QrType.SVG;
+        return this;
+    }
+
     // ----------- logo 相关 ----------
 
     public QrCodeV3Options setLogo(QrResource resource) {

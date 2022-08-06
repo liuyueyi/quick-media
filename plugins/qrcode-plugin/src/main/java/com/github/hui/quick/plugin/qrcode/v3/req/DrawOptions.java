@@ -5,6 +5,7 @@ import com.github.hui.quick.plugin.qrcode.v3.constants.DrawStyle;
 import com.github.hui.quick.plugin.qrcode.v3.constants.PicStyle;
 import com.github.hui.quick.plugin.qrcode.v3.entity.QrResource;
 import com.github.hui.quick.plugin.qrcode.v3.entity.QrResourcePool;
+import com.github.hui.quick.plugin.qrcode.v3.helper.SvgHelper;
 
 import java.awt.*;
 
@@ -129,7 +130,7 @@ public class DrawOptions {
     }
 
     /**
-     * 设置全局的资源信息
+     * 设置全局的资源信息，如svg二维码中的 defs 预定义模板；如二维码图片中文字的全局样式
      *
      * @param resource
      * @return
@@ -157,18 +158,64 @@ public class DrawOptions {
         return this;
     }
 
+    /**
+     * 当只有一个二维码信息点的资源图时，使用这个方法，可以有效减少设置的复杂性
+     *
+     * @param pre
+     * @return
+     */
     public DrawOptions setRenderResource(QrResource pre) {
         return resourcePool.addSource(1, 1, pre).build().over();
     }
 
     /**
-     * 添加资源
+     * 添加资源, 要求必须存在一个1x1的兜底资源位
      *
      * @param resource
      * @return
      */
-    public QrResourcePool.QrResourcesDecorate newRenderResource(int width, int height, QrResource resource) {
-        return resourcePool.addSource(width, height, resource);
+    public QrResourcePool.QrResourcesDecorate newRenderResource(QrResource resource) {
+        return resourcePool.addSource(1, 1, resource);
+    }
+
+    /**
+     * 输入svg模板，主要分两块 defs + symbol；用于减轻一个一个设置svg symbol的复杂性
+     * svg 模板规则，一个实例demo如下：
+     * - defs 标签：内部为预定义的标签，供其他的symbol使用
+     * - symbol 标签组：每个symbol要求必须存在 viewBox，读取其中的width, height；若存在width, height属性，则直接取width，height值
+     *  - 取所有的symbol中的 width, height的最小值作为 1个qrdot 的基本单位
+     *  - 每个symbol的占位  col  = width / qrdot,   row = height / qrdot
+     *     <defs>
+     *         <g id="def_HA62">
+     *             <path d="M5.74,0.06c4.18-0.11,8.34-0.03,12.53,0c0.83-0.02,1.64,0.13,2.43,0.31c0.07,0.96,0.33,1.92,0.28,2.89c-0.06,1.24,0.18,2.5-0.16,3.72C13.95,7,7.08,7.05,0.26,6.67c-0.36-2.1-0.31-4.23-0.07-6.35C1.98-0.05,3.88,0.11,5.74,0.06" style="fill: #8C4410" />
+     *         </g>
+     *         <g id="def_pTxe">
+     *             <path d="M5.74,0.06c4.18-0.11,8.34-0.03,12.53,0c0.83-0.02,1.64,0.13,2.43,0.31c0.07,0.96,0.33,1.92,0.28,2.89c-0.06,1.24,0.18,2.5-0.16,3.72C13.95,7,7.08,7.05,0.26,6.67c-0.36-2.1-0.31-4.23-0.07-6.35C1.98-0.05,3.88,0.11,5.74,0.06" style="fill: #8C4410" />
+     *         </g>
+     *     </defs>
+     *     <symbol id="symbol_1z" viewBox="0 0 49 49">
+     *         <use x="0.4" y="0" xlink:href="#def_HA62" />
+     *         <use x="27.6" y="42" xlink:href="#def_HA62" />
+     *         <use transform="rotate(90)" x="0.4" y="-49" xlink:href="#def_HA62" />
+     *         <use transform="rotate(90)" x="27.6" y="-7" xlink:href="#def_HA62" />
+     *         <path d="M17.68,15.8c4.12-0.29,8.25-0.32,12.39-0.26c1.08,0.1,2.51-0.15,3.12,1c0.71,1.36,0.8,2.96,1.08,4.45  c0.08,1.92,0,3.83,0.01,5.75c-0.12,2.45-0.03,5.03-1.1,7.29c-5.11,0.55-10.27,0.64-15.38,0.22c-2.45-5.39-2.48-11.52-1.55-17.25  C16.29,16.3,16.98,15.81,17.68,15.8" style="fill: #8C4410" />
+     *         <path d="M16.65,29.41c0.58,0.12,1.16,0.26,1.75,0.4c0.12,0.96,0.25,1.92,0.37,2.88c-0.3,0.1-0.91,0.3-1.21,0.39  C17.31,31.85,16.97,30.62,16.65,29.41z" style="fill: #E29126" />
+     *     </symbol>
+     *     <symbol id="symbol_1A" viewBox="0 0 49 49">
+     *         <use x="0.4" y="0" xlink:href="#def_pTxe" />
+     *         <use x="27.6" y="42" xlink:href="#def_pTxe" />
+     *         <use transform="rotate(90)" x="0.4" y="-49" xlink:href="#def_pTxe" />
+     *         <use transform="rotate(90)" x="27.6" y="-7" xlink:href="#def_pTxe" />
+     *         <path d="M17.68,15.8c4.12-0.29,8.25-0.32,12.39-0.26c1.08,0.1,2.51-0.15,3.12,1c0.71,1.36,0.8,2.96,1.08,4.45  c0.08,1.92,0,3.83,0.01,5.75c-0.12,2.45-0.03,5.03-1.1,7.29c-5.11,0.55-10.27,0.64-15.38,0.22c-2.45-5.39-2.48-11.52-1.55-17.25  C16.29,16.3,16.98,15.81,17.68,15.8" style="fill: #8C4410" />
+     *         <path d="M16.65,29.41c0.58,0.12,1.16,0.26,1.75,0.4c0.12,0.96,0.25,1.92,0.37,2.88c-0.3,0.1-0.91,0.3-1.21,0.39  C17.31,31.85,16.97,30.62,16.65,29.41z" style="fill: #E29126" />
+     *     </symbol>
+     * @param svgTemplate
+     * @return
+     */
+    public DrawOptions setSvgTemplates(String svgTemplate) {
+        drawStyle = DrawStyle.SVG;
+        SvgHelper.svgTemplateParseAndInit(options, svgTemplate);
+        return this;
     }
 
     public QrCodeV3Options complete() {

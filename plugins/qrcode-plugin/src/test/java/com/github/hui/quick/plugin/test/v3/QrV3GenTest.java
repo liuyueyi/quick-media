@@ -88,7 +88,7 @@ public class QrV3GenTest {
                     .setErrorCorrection(ErrorCorrectionLevel.H)
                     .newDrawOptions()
                     .setDrawStyle(DrawStyle.IMAGE)
-                    .newRenderResource(1, 1, new QrResource().setImg("jihe/a.png")).build()
+                    .newRenderResource(new QrResource().setImg("jihe/a.png")).build()
                     .addSource(3, 1, new QrResource().setImg("jihe/b.png")).build()
                     .addSource(1, 3, new QrResource().setImg("jihe/c.png")).build()
                     .addSource(3, 2, new QrResource().setImg("jihe/e.png")).build()
@@ -122,7 +122,7 @@ public class QrV3GenTest {
                 .newDrawOptions()
                 .setDrawStyle(DrawStyle.IMAGE)
                 .setBgColor(ColorUtil.OPACITY)
-                .newRenderResource(1, 1, new QrResource().setImg("overbg/a.png")).build()// 这个表示1点对应的图
+                .newRenderResource(new QrResource().setImg("overbg/a.png")).build()// 这个表示1点对应的图
                 .addSource(1, 1).addResource(new QrResource().setImg("overbg/b.png"), -1).setMiss(0, 0).build() // 这个表示0点对应图
                 .over()
                 .complete()

@@ -254,9 +254,9 @@ public class QrRenderDotGenerator {
                 .setResource(renderSource.getResource());
 
         // 将命中的标记为已渲染
-        scanMatrix(renderSource.getWidth(), renderDot.getH(), (col, row) -> {
-            if (!renderSource.miss(col, row)) {
-                matrixEx.getByteMatrix().set(x + col, y + row, 0);
+        scanMatrix(renderSource.getWidth(), renderDot.getH(), (w, h) -> {
+            if (!renderSource.miss(w, h)) {
+                matrixEx.getByteMatrix().set(x + w, y + h, 0);
             }
         });
         return renderDot;
