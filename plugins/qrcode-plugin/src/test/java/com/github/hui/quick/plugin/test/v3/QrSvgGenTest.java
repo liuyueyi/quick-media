@@ -2,12 +2,15 @@ package com.github.hui.quick.plugin.test.v3;
 
 import com.github.hui.quick.plugin.base.OSUtil;
 import com.github.hui.quick.plugin.qrcode.v3.constants.DrawStyle;
+import com.github.hui.quick.plugin.qrcode.v3.constants.QrType;
 import com.github.hui.quick.plugin.qrcode.v3.entity.QrResource;
 import com.github.hui.quick.plugin.qrcode.wrapper.QrCodeGenV3;
+import com.google.zxing.qrcode.decoder.ErrorCorrectionLevel;
 import org.junit.Before;
 import org.junit.Test;
 
 import java.awt.*;
+import java.awt.image.BufferedImage;
 
 /**
  * svg 格式二维码输出测试
@@ -48,13 +51,22 @@ public class QrSvgGenTest {
      */
     @Test
     public void roundRectSvg() throws Exception {
-        String svg = QrCodeGenV3.of(msg).setW(500)
+        boolean svg = QrCodeGenV3.of("一灰灰").setW(500)
+                .setErrorCorrection(ErrorCorrectionLevel.L)
                 .setDrawStyle(DrawStyle.ROUND_RECT)
-                .setPreColor(Color.ORANGE)
-                .setBgColor(Color.LIGHT_GRAY)
+                .setPreColor(Color.RED)
+                .setBgColor(Color.WHITE)
+                .setQrType(QrType.SVG)
                 .build()
-                .asSvg();
+                .asFile(prefix + "/rect.svg");
         System.out.println(svg);
+    }
+
+
+    @Test
+    public void test() throws Exception {
+        BufferedImage img = QrCodeGenV3.of("一灰灰").setErrorCorrection(ErrorCorrectionLevel.L).setW(500).build().asImg();
+        System.out.println("---");
     }
 
     @Test
@@ -119,7 +131,7 @@ public class QrSvgGenTest {
 
     @Test
     public void symbolSvgV2() throws Exception {
-        boolean svg = QrCodeGenV3.of(msg).setW(500)
+        boolean svg = QrCodeGenV3.of("一灰灰").setW(1250).setErrorCorrection(ErrorCorrectionLevel.H)
                 .newDrawOptions()
                 .setDrawStyle(DrawStyle.SVG)
                 .newRenderResource(1, 1, new QrResource().setSvg(" <symbol id=\"symbol_1R\" viewBox=\"0 0 50 50\">\n" +
@@ -140,14 +152,14 @@ public class QrSvgGenTest {
                         "        <ellipse cx=\"16.63\" cy=\"22.06\" rx=\"2.02\" ry=\"2.4\" style=\"fill: #555555\"/>\n" +
                         "        <ellipse cx=\"29.37\" cy=\"21.74\" rx=\"2.02\" ry=\"2.4\" style=\"fill: #555555\"/>\n" +
                         "    </symbol>")).build()
-                .addSource(2, 1, new QrResource().setSvg("<symbol id=\"symbol_1T\" viewBox=\"0 0 100 50\">\n" +
+                .addSource(1, 2, new QrResource().setSvg("<symbol id=\"symbol_1T\" viewBox=\"0 0 100 50\">\n" +
                         "        <line x1=\"17\" y1=\"25\" x2=\"83\" y2=\"25\"\n" +
                         "              style=\"fill: none; stroke: #333333; stroke-width: 20; stroke-linecap: round; stroke-miterlimit: 10\"/>\n" +
                         "    </symbol>")).addResource(new QrResource().setSvg(" <symbol id=\"symbol_1U\" viewBox=\"0 0 100 50\">\n" +
                         "        <circle cx=\"25\" cy=\"25\" r=\"11.5\" style=\"fill: #F98E00\"/>\n" +
                         "        <circle cx=\"75\" cy=\"25\" r=\"11.5\" style=\"fill: #F98E00\"/>\n" +
                         "    </symbol>")).build()
-                .addSource(1, 3, new QrResource().setSvg("<symbol id=\"symbol_1S\" viewBox=\"0 0 50 150\">\n" +
+                .addSource(3, 1, new QrResource().setSvg("<symbol id=\"symbol_1S\" viewBox=\"0 0 50 150\">\n" +
                         "    <line x1=\"25\" y1=\"20\" x2=\"25\" y2=\"130\"\n" +
                         "              style=\"fill: none; stroke: #333333; stroke-width: 20; stroke-linecap: round; stroke-miterlimit: 10\"/>\n" +
                         "    </symbol>")).build().over()
@@ -156,5 +168,11 @@ public class QrSvgGenTest {
                 .build()
                 .asFile(prefix + "/qr2.svg");
         System.out.println(svg);
+    }
+
+    @Test
+    public void testDetect() throws Exception {
+        BufferedImage img = QrCodeGenV3.of("一灰灰").setDetect(new QrResource().setImg("eye3.png")).build().asImg();
+        System.out.println("---over----");
     }
 }

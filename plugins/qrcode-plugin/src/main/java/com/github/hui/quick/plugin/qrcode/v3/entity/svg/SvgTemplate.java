@@ -79,7 +79,7 @@ public class SvgTemplate {
     @Override
     public String toString() {
         StringBuilder builder = new StringBuilder("<?xml version=\"1.0\" encoding=\"utf-8\"?>\n");
-        builder.append("<svg xmlns=\"http://www.w3.org/2000/svg\" xmlns:xlink=\"http://www.w3.org/1999/xlink\"").append("width=\"").append(width).append("\" height=\"").append(height).append("\"").append(" viewBox=\"0 0 ").append(width).append(" ").append(height).append("\">\n");
+        builder.append("<svg xmlns=\"http://www.w3.org/2000/svg\" xmlns:xlink=\"http://www.w3.org/1999/xlink\" ").append("width=\"").append(width).append("\" height=\"").append(height).append("\"").append(" viewBox=\"0 0 ").append(width).append(" ").append(height).append("\">\n");
         for (String symbol : svgSymbols) {
             builder.append("\t").append(symbol).append("\n");
         }

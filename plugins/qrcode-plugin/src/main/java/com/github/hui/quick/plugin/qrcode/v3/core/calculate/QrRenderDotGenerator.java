@@ -246,7 +246,12 @@ public class QrRenderDotGenerator {
 
     private static RenderDot renderDot(BitMatrixEx matrixEx, QrResourcePool.QrResourcesDecorate renderSource, int x, int y) {
         PreRenderDot renderDot = new PreRenderDot();
-        renderDot.setCol(renderSource.getCol()).setRow(renderSource.getRow()).setX(matrixEx.getLeftPadding() + x * matrixEx.getMultiple()).setY(matrixEx.getTopPadding() + y * matrixEx.getMultiple()).setSize(matrixEx.getMultiple()).setResource(renderSource.getResource());
+        renderDot.setCol(renderSource.getCol())
+                .setRow(renderSource.getRow())
+                .setX(matrixEx.getLeftPadding() + x * matrixEx.getMultiple())
+                .setY(matrixEx.getTopPadding() + y * matrixEx.getMultiple())
+                .setSize(matrixEx.getMultiple())
+                .setResource(renderSource.getResource());
 
         // 将命中的标记为已渲染
         scanMatrix(renderSource.getCol(), renderDot.getRow(), (col, row) -> {

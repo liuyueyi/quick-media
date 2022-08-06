@@ -71,7 +71,8 @@ public class ImgRenderV2Helper {
                                   int leftPadding, int topPadding, int infoSize) {
         BufferedImage img = renderSource.getImg();
         // 开始绘制，并将已经绘制过得地方置空
-        QrCodeOptions.DrawStyle.IMAGE_V2.draw(g2d, leftPadding + x * infoSize,
+        QrCodeOptions.DrawStyle.IMAGE_V2.draw(g2d,
+                leftPadding + x * infoSize,
                 topPadding + y * infoSize,
                 renderSource.getCol() * infoSize,
                 renderSource.getRow() * infoSize,

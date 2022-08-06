@@ -37,27 +37,35 @@ public class BgRenderDot extends RenderDot {
         return this;
     }
 
+    private int w() {
+        return col * size;
+    }
+
+    private int h() {
+        return row * size;
+    }
+
     @Override
     public void renderGeometry(Graphics2D g2d, RenderFunc.GeometryDrawFunc imgFunc) {
-        imgFunc.draw(g2d, x, y, row * size, col * size);
+        imgFunc.draw(g2d, x, y, w(), h());
     }
 
     @Override
     public void renderImg(Graphics2D g2d, RenderFunc.ImgDrawFunc drawFunc) {
-        drawFunc.draw(g2d, resource.getImg(), x, y, row * size, col * size);
+        drawFunc.draw(g2d, resource.getImg(), x, y,  w(), h());
     }
 
     @Override
     public void renderTxt(Graphics2D g2d, RenderFunc.TxtImgDrawFunc drawFunc) {
         Font oldFont = g2d.getFont();
         if (oldFont.getSize() != size) g2d.setFont(resource.getFont(size));
-        drawFunc.draw(g2d, resource.getText(), x, y, row * size);
+        drawFunc.draw(g2d, resource.getText(), x, y, w());
         g2d.setFont(oldFont);
     }
 
     @Override
     public void renderSvg(SvgTemplate svg, RenderFunc.SvgDrawFunc drawFunc) {
-        drawFunc.draw(svg, resource.getSvgId(), x, y, row * size, col * size);
+        drawFunc.draw(svg, resource.getSvgId(), x, y,  w(), h());
     }
 
     @Override

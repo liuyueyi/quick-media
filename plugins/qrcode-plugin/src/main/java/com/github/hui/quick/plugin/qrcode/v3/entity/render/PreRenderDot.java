@@ -37,14 +37,22 @@ public class PreRenderDot extends RenderDot {
         return this;
     }
 
+    private int w() {
+        return col * size;
+    }
+
+    private int h() {
+        return row * size;
+    }
+
     @Override
     public void renderGeometry(Graphics2D g2d, RenderFunc.GeometryDrawFunc imgFunc) {
-        imgFunc.draw(g2d, x, y, row * size, col * size);
+        imgFunc.draw(g2d, x, y, w(), h());
     }
 
     @Override
     public void renderImg(Graphics2D g2d, RenderFunc.ImgDrawFunc drawFunc) {
-        drawFunc.draw(g2d, resource.getImg(), x, y, row * size, col * size);
+        drawFunc.draw(g2d, resource.getImg(), x, y, w(), h());
     }
 
     @Override
@@ -57,7 +65,7 @@ public class PreRenderDot extends RenderDot {
 
     @Override
     public void renderSvg(SvgTemplate svg, RenderFunc.SvgDrawFunc drawFunc) {
-        drawFunc.draw(svg, resource == null ? null : resource.getSvgId(), x, y, row * size, col * size);
+        drawFunc.draw(svg, resource == null ? null : resource.getSvgId(), x, y, w(), h());
     }
 
     @Override

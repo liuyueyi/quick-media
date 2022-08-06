@@ -3,6 +3,7 @@ package com.github.hui.quick.plugin.qrcode.v3.core.render;
 import com.github.hui.quick.plugin.base.awt.GraphicUtil;
 import com.github.hui.quick.plugin.base.awt.ImageOperateUtil;
 import com.github.hui.quick.plugin.qrcode.v3.constants.BgStyle;
+import com.github.hui.quick.plugin.qrcode.v3.constants.DrawStyle;
 import com.github.hui.quick.plugin.qrcode.v3.constants.PicStyle;
 import com.github.hui.quick.plugin.qrcode.v3.constants.RenderDotType;
 import com.github.hui.quick.plugin.qrcode.v3.entity.QrResource;
@@ -54,14 +55,27 @@ public class QrImgRender {
                 } else {
                     g2d.setColor(options.getDetectOptions().getInColor());
                 }
+
+                if (dot.getResource() != null && dot.getResource().getImg() != null) {
+                    // 当探测图形存在时，采用image进行渲染
+                    DrawStyle.IMAGE.drawAsImg(g2d, dot);
+                } else {
+                    // 执行渲染
+                    options.getDrawOptions().getDrawStyle().drawAsImg(g2d, dot);
+                }
             } else if (dot.getType() == RenderDotType.BG.getType()) {
                 g2d.setColor(options.getDrawOptions().getBgColor());
+                if (dot.getResource() != null && dot.getResource().getImg() != null) {
+                    // 若背景也指定了对应的图片，则采用图片进行渲染
+                    DrawStyle.IMAGE.drawAsImg(g2d, dot);
+                } else {
+                    // 执行渲染
+                    options.getDrawOptions().getDrawStyle().drawAsImg(g2d, dot);
+                }
             } else {
                 g2d.setColor(options.getDrawOptions().getPreColor());
+                options.getDrawOptions().getDrawStyle().drawAsImg(g2d, dot);
             }
-
-            // 执行渲染
-            options.getDrawOptions().getDrawStyle().drawAsImg(g2d, dot);
         });
         g2d.dispose();
         return qrImg;
