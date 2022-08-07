@@ -10,6 +10,7 @@ import com.github.hui.quick.plugin.qrcode.v3.constants.TxtMode;
 import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
+import java.util.UUID;
 import java.util.concurrent.atomic.AtomicInteger;
 
 /**
@@ -161,6 +162,9 @@ public class QrResource {
             if (index >= 0) {
                 index += 4;
                 svgId = svg.substring(index, svg.indexOf("\"", index));
+            } else {
+                // 当没有id时，默认分配一个
+                svgId = UUID.randomUUID().toString();
             }
         }
         return this;

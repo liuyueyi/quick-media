@@ -2,14 +2,17 @@ package com.github.hui.quick.plugin.qrcode.v3.core.render;
 
 import com.github.hui.quick.plugin.base.awt.ColorUtil;
 import com.github.hui.quick.plugin.qrcode.v3.constants.QrType;
+import com.github.hui.quick.plugin.qrcode.v3.entity.QrResource;
 import com.github.hui.quick.plugin.qrcode.v3.entity.render.BgRenderDot;
 import com.github.hui.quick.plugin.qrcode.v3.entity.render.DetectRenderDot;
 import com.github.hui.quick.plugin.qrcode.v3.entity.render.PreRenderDot;
 import com.github.hui.quick.plugin.qrcode.v3.entity.render.RenderDot;
 import com.github.hui.quick.plugin.qrcode.v3.entity.svg.RectSvgTag;
 import com.github.hui.quick.plugin.qrcode.v3.entity.svg.SvgTemplate;
+import com.github.hui.quick.plugin.qrcode.v3.entity.svg.SymbolSvgTag;
 import com.github.hui.quick.plugin.qrcode.v3.req.QrCodeV3Options;
 import org.apache.commons.lang3.BooleanUtils;
+import org.apache.commons.lang3.StringUtils;
 
 import java.util.List;
 import java.util.Optional;
@@ -48,6 +51,39 @@ public class QrSvgRender {
         });
 
         return svgTemplate;
+    }
+
+
+    /**
+     * 绘制logo
+     *
+     * @param svgTemplate
+     * @param options
+     */
+    public static void drawLogo(SvgTemplate svgTemplate, QrCodeV3Options options) {
+        QrResource logo = options.getLogoOptions().getLogo();
+        if (logo == null || StringUtils.isBlank(logo.getSvg())) {
+            // 无svg格式的logo，直接返回
+            return;
+        }
+
+        // logo的宽高，避免长图的变形，这里采用等比例缩放的策略
+        int qrWidth = svgTemplate.getWidth();
+        int qrHeight = svgTemplate.getHeight();
+
+        int logoRate = options.getLogoOptions().getRate();
+        int logoWidth = (qrWidth << 1) / logoRate;
+        int logoHeight = (qrHeight << 1) / logoRate;
+        int logoOffsetX = (qrWidth - logoWidth) >> 1;
+        int logoOffsetY = (qrHeight - logoHeight) >> 1;
+
+        svgTemplate.addSymbol(logo.getSvg());
+        svgTemplate.addTag(new SymbolSvgTag().setSvgId(logo.getSvgId())
+                .setX(logoOffsetX)
+                .setY(logoOffsetY)
+                .setW(logoWidth)
+                .setH(logoHeight)
+        );
     }
 
 }

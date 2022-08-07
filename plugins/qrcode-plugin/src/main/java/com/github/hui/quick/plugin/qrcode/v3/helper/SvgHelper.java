@@ -45,8 +45,7 @@ public class SvgHelper {
             template = template.substring(0, preStartIndex) + template.substring(preEndIndex + PRE_END_TAG.length());
         }
 
-        List<SymbolTag> dotList = new ArrayList<>();
-        List<SymbolTag> detectList = new ArrayList<>();
+        Map<SymbolTagType, List<SymbolTag>> tagMaps = new HashMap<>(8);
 
         int dotSize = Integer.MAX_VALUE;
         int start = 0;
@@ -55,26 +54,37 @@ public class SvgHelper {
             end += SYMBOL_END_TAG.length();
             String symbol = template.substring(start, end);
             SymbolTag tag = new SymbolTag(symbol);
-            if (tag.detectSvgTag()) {
-                // 探测图形的资源位特殊处理，不参与dot_size的计算
-                detectList.add(tag);
-            } else {
+            tagMaps.computeIfAbsent(tag.tagType, (k) -> new ArrayList<>()).add(tag);
+            if (tag.tagType == SymbolTagType.PRE || tag.tagType == SymbolTagType.BG) {
                 dotSize = Integer.min(dotSize, Integer.min(tag.width, tag.height));
-                dotList.add(tag);
             }
             start = end;
             end = template.indexOf(SYMBOL_END_TAG, start);
         }
 
-        initQrResource(options, dotSize, dotList);
-        initDetectResource(v3Options, detectList);
+        List<SymbolTag> qrList = tagMaps.getOrDefault(SymbolTagType.PRE, new ArrayList<>());
+        qrList.addAll(tagMaps.getOrDefault(SymbolTagType.BG, new ArrayList<>()));
+        initQrResource(options, dotSize, qrList);
+        initDetectResource(v3Options, tagMaps.get(SymbolTagType.DETECT));
+        initLogoResource(v3Options, tagMaps.get(SymbolTagType.LOGO));
     }
 
+    /**
+     * 二维码信息点资源
+     *
+     * @param options
+     * @param dotSize
+     * @param dotList
+     */
     private static void initQrResource(DrawOptions options, int dotSize, List<SymbolTag> dotList) {
         Map<ImmutablePair<Integer, Integer>, List<SymbolTag>> svgSymbols = new HashMap<>(dotList.size());
         for (SymbolTag tag : dotList) {
-            ImmutablePair<Integer, Integer> key = ImmutablePair.of(tag.width / dotSize, tag.height / dotSize);
-            svgSymbols.computeIfAbsent(key, s -> new ArrayList<>()).add(tag);
+            if (tag.size != null && tag.size.size() > 0) {
+                tag.size.forEach(key -> svgSymbols.computeIfAbsent(key, s -> new ArrayList<>()).add(tag));
+            } else {
+                ImmutablePair<Integer, Integer> key = ImmutablePair.of(tag.width / dotSize, tag.height / dotSize);
+                svgSymbols.computeIfAbsent(key, s -> new ArrayList<>()).add(tag);
+            }
         }
 
         if (!svgSymbols.containsKey(ImmutablePair.of(1, 1))) {
@@ -89,9 +99,15 @@ public class SvgHelper {
         options.getResourcePool().over();
     }
 
+    /**
+     * 三个探测图形（码眼）对应的svg资源
+     *
+     * @param v3Options
+     * @param detectList
+     */
     private static void initDetectResource(QrCodeV3Options v3Options, List<SymbolTag> detectList) {
         // 设置探测图形资源位
-        if (detectList.isEmpty()) {
+        if (detectList == null || detectList.isEmpty()) {
             return;
         }
 
@@ -133,6 +149,23 @@ public class SvgHelper {
         }
     }
 
+    /**
+     * logo配置
+     *
+     * @param v3Options
+     * @param logoList
+     */
+    private static void initLogoResource(QrCodeV3Options v3Options, List<SymbolTag> logoList) {
+        if (logoList == null || logoList.size() == 0) {
+            return;
+        }
+
+        // 对应svg格式的二维码，默认移除logo区域的元素信息；如有需要再外部设置处改回
+        v3Options.newLogoOptions()
+                .setClearLogoArea(true)
+                .setLogo(new QrResource().setSvg(logoList.get(0).tag));
+    }
+
     private static class SymbolTag {
         /**
          * 指定的宽，如果不存在，则从viewBox进行解析
@@ -158,22 +191,35 @@ public class SvgHelper {
          */
         private static final String TYPE = "type=\"";
 
+        private static final String SIZE = "size=\"";
+
         private static final String MISS = "-MISS-";
 
+        /**
+         * svg标签型资源
+         */
         String tag;
         int width;
         int height;
         int count;
 
         /**
+         * 这个资源对应的区域大小
+         */
+        List<ImmutablePair<Integer, Integer>> size;
+
+        /**
          * detect = 表示探测图形
          * pre = 表示渲染二维码中1点的资源图
          * bg = 表示渲染二维码中0点的资源图
          */
+        SymbolTagType tagType;
+
         String type;
 
         /**
-         * 传参形如:  <symbol id="symbol_1z" viewBox="0 0 49 49" width="100" height="100" count="20">
+         * 传参形如:
+         * <symbol id="symbol_1z" viewBox="0 0 49 49" width="100" height="100" count="20" type="pre" size="1x1,2x2,3x3">
          *
          * @param tag
          */
@@ -188,8 +234,19 @@ public class SvgHelper {
             else count = Integer.parseInt(c);
 
             type = getVal(symbol, TYPE);
-            if (MISS.equalsIgnoreCase(type)) type = SymbolTagType.PRE.tag;
+            if (MISS.equalsIgnoreCase(type)) tagType = SymbolTagType.PRE;
+            else tagType = tagType(type);
 
+            String sizeStr = getVal(symbol, SIZE);
+            if (!MISS.equalsIgnoreCase(sizeStr)) {
+                this.size = new ArrayList<>();
+                for (String sub : StringUtils.split(sizeStr, ",")) {
+                    String[] wh = StringUtils.split(sub, "x");
+                    this.size.add(new ImmutablePair<>(Integer.valueOf(wh[0].trim()), Integer.valueOf(wh[1].trim())));
+                }
+            }
+
+            // 初始化tag对应的占位宽高
             String w = getVal(symbol, WIDTH);
             if (!MISS.equalsIgnoreCase(w)) width = Integer.parseInt(w);
 
@@ -228,21 +285,30 @@ public class SvgHelper {
             return content.substring(start, end).trim();
         }
 
-        boolean detectSvgTag() {
-            return type.startsWith(SymbolTagType.DETECT.tag);
-        }
+        private SymbolTagType tagType(String type) {
+            if (type == null || SymbolTagType.PRE.tag.equalsIgnoreCase(type)) {
+                return SymbolTagType.PRE;
+            }
 
-        boolean preSvgTag() {
-            return type == null || SymbolTagType.PRE.tag.equalsIgnoreCase(type);
-        }
+            if (SymbolTagType.BG.tag.equalsIgnoreCase(type)) {
+                return SymbolTagType.BG;
+            }
 
-        boolean bgSvgTag() {
-            return SymbolTagType.BG.tag.equalsIgnoreCase(type);
+            if (SymbolTagType.LOGO.tag.equalsIgnoreCase(type)) {
+                return SymbolTagType.LOGO;
+            }
+
+            if (type.startsWith(SymbolTagType.DETECT.tag)) {
+                return SymbolTagType.DETECT;
+            }
+
+            // 其他未命中的，忽略掉
+            return SymbolTagType.OTHER;
         }
     }
 
     private enum SymbolTagType {
-        PRE("pre"), BG("bg"), DETECT("detect"),
+        PRE("pre"), BG("bg"), DETECT("detect"), LOGO("logo"), OTHER("other"),
         ;
         String tag;
 

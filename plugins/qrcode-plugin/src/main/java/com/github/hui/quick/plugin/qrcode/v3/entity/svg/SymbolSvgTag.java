@@ -10,10 +10,6 @@ public class SymbolSvgTag extends SvgTag {
 
     private String svgId;
 
-    public String getSvgId() {
-        return svgId;
-    }
-
     public SymbolSvgTag setSvgId(String svgId) {
         this.svgId = svgId;
         return this;

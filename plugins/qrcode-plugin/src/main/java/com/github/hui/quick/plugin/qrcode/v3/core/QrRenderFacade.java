@@ -99,6 +99,8 @@ public class QrRenderFacade {
         BitMatrixEx matrix = QrMatrixGenerator.calculateMatrix(options);
         List<RenderDot> renderDotList = QrRenderDotGenerator.calculateRenderDots(options, matrix);
         SvgTemplate svgTemplate = QrSvgRender.drawQrInfo(renderDotList, options);
+        // 绘制logo
+        QrSvgRender.drawLogo(svgTemplate, options);
         return svgTemplate.toString();
     }
 }

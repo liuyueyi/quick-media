@@ -351,10 +351,37 @@ public class QrSvgGenTest {
         System.out.println("--- " + svg);
     }
 
+
+    /**
+     * 通过svg 模板的方式来生成 svg二维码
+     *
+     * @throws Exception
+     */
     @Test
     public void svgTemplate() throws Exception {
-        String svgTemplate = FileReadUtil.readAll("svg/svg.template");
-        boolean ans = QrCodeGenV3.of(msg).setW(500).setSvgTemplate(svgTemplate).build().asFile(prefix + "/tep.svg");
+        String svgTemplate = FileReadUtil.readAll("svg/愤怒小猪svg.template");
+        boolean ans = QrCodeGenV3.of(msg).setW(500).setSvgTemplate(svgTemplate).build()
+                .asFile(prefix + "/tep.svg");
+        System.out.println(ans);
+    }
+
+    @Test
+    public void xhrTemplate() throws Exception {
+        String svgTemplate = FileReadUtil.readAll("svg/小黄人.template");
+        boolean ans = QrCodeGenV3.of(msg).setW(500).setSvgTemplate(svgTemplate)
+                .setLogoRate(20)
+                .setErrorCorrection(ErrorCorrectionLevel.H)
+                .build()
+                .asFile(prefix + "/小黄人.svg");
+        System.out.println(ans);
+    }
+
+    @Test
+    public void xhhTemplate() throws Exception {
+        String svgTemplate = FileReadUtil.readAll("svg/小灰灰.template");
+        boolean ans = QrCodeGenV3.of(msg).setW(500).setSvgTemplate(svgTemplate)
+                .setDetectSpecial(true).build()
+                .asFile(prefix + "/小灰灰.svg");
         System.out.println(ans);
     }
 }
