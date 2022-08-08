@@ -1,7 +1,6 @@
 package com.github.hui.quick.plugin.test.draw;
 
-import com.github.hui.quick.plugin.base.GraphicUtil;
-import com.github.hui.quick.plugin.base.ImageLoadUtil;
+import com.github.hui.quick.plugin.base.awt.GraphicUtil;
 import com.github.hui.quick.plugin.base.gif.GifHelper;
 import com.github.hui.quick.plugin.test.SketchTest;
 import org.junit.Test;

@@ -1,6 +1,6 @@
 package com.github.hui.quick.plugin.image.wrapper.wartermark.remove;
 
-import com.github.hui.quick.plugin.base.ColorUtil;
+import com.github.hui.quick.plugin.base.awt.ColorUtil;
 import com.github.hui.quick.plugin.base.NumUtil;
 import com.github.hui.quick.plugin.image.wrapper.wartermark.remove.operator.WaterMarkRemoveTypeEnum;
 

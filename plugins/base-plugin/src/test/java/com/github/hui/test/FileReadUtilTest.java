@@ -1,6 +1,6 @@
 package com.github.hui.test;
 
-import com.github.hui.quick.plugin.base.FileReadUtil;
+import com.github.hui.quick.plugin.base.file.FileReadUtil;
 import org.junit.Test;
 
 import java.io.IOException;

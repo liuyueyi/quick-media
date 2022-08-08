@@ -1,4 +1,4 @@
-package com.github.hui.quick.plugin.base;
+package com.github.hui.quick.plugin.base.io;
 
 import java.io.*;
 

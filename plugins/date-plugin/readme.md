@@ -1,6 +1,6 @@
 ## date-plugin
 
-主要提供音频相关操作，目前实现音频转码
+主要提供公历、农历的转换
 
 ### 1. 依赖
 
@@ -21,7 +21,7 @@ jar包引入，请注意使用最新的版本
 <dependency>
     <groupId>com.github.hui.media</groupId>
     <artifactId>date-plugin</artifactId>
-    <version>2.0</version>
+    <version>3.0.0</version>
 </dependency>
 ```
 

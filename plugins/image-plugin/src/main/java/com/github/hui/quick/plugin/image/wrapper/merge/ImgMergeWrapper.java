@@ -1,7 +1,7 @@
 package com.github.hui.quick.plugin.image.wrapper.merge;
 
 
-import com.github.hui.quick.plugin.base.GraphicUtil;
+import com.github.hui.quick.plugin.base.awt.GraphicUtil;
 import com.github.hui.quick.plugin.image.wrapper.merge.cell.IMergeCell;
 import com.github.hui.quick.plugin.image.wrapper.merge.cell.RectFillCell;
 

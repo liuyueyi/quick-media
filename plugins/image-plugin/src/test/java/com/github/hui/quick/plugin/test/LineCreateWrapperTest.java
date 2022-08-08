@@ -1,7 +1,7 @@
 package com.github.hui.quick.plugin.test;
 
 import com.github.hui.quick.plugin.base.DomUtil;
-import com.github.hui.quick.plugin.base.FileReadUtil;
+import com.github.hui.quick.plugin.base.file.FileReadUtil;
 import com.github.hui.quick.plugin.base.constants.MediaType;
 import com.github.hui.quick.plugin.image.wrapper.create.ImgCreateOptions;
 import com.github.hui.quick.plugin.image.wrapper.create.LineGifCreateWrapper;

@@ -1,7 +1,7 @@
 package com.github.hui.quick.plugin.image.wrapper.merge.template;
 
 
-import com.github.hui.quick.plugin.base.ImageOperateUtil;
+import com.github.hui.quick.plugin.base.awt.ImageOperateUtil;
 import com.github.hui.quick.plugin.image.wrapper.create.ImgCreateOptions;
 import com.github.hui.quick.plugin.image.wrapper.merge.cell.*;
 import com.github.hui.quick.plugin.image.util.FontUtil;

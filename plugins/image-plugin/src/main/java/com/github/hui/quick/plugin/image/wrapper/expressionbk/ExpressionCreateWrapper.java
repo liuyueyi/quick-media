@@ -1,7 +1,7 @@
 package com.github.hui.quick.plugin.image.wrapper.expressionbk;
 
 
-import com.github.hui.quick.plugin.base.ImageLoadUtil;
+import com.github.hui.quick.plugin.base.awt.ImageLoadUtil;
 import com.github.hui.quick.plugin.base.gif.GifHelper;
 import com.github.hui.quick.plugin.image.util.FontUtil;
 import com.github.hui.quick.plugin.image.wrapper.create.ImgCreateOptions;

@@ -1,8 +1,8 @@
 package com.github.hui.quick.plugin.md;
 
 import com.github.hui.quick.plugin.base.Base64Util;
-import com.github.hui.quick.plugin.base.ColorUtil;
-import com.github.hui.quick.plugin.base.FileWriteUtil;
+import com.github.hui.quick.plugin.base.awt.ColorUtil;
+import com.github.hui.quick.plugin.base.file.FileWriteUtil;
 import com.github.hui.quick.plugin.md.entity.HtmlRenderOptions;
 import com.github.hui.quick.plugin.md.entity.MarkdownEntity;
 import com.github.hui.quick.plugin.md.helper.HtmlRenderHelper;

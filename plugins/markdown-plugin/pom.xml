@@ -5,15 +5,17 @@
     <parent>
         <artifactId>plugins</artifactId>
         <groupId>com.github.liuyueyi.media</groupId>
-        <version>2.6.3</version>
+        <version>3.0.0</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
     <artifactId>markdown-plugin</artifactId>
-    <version>2.6.3</version>
+    <version>3.0.0</version>
 
     <properties>
-        <flexmark.version>0.26.4</flexmark.version>
+        <flexmark.version>0.62.2</flexmark.version>
+        <nekohtml.version>1.9.22</nekohtml.version>
+        <base.plugin.version>3.0.0</base.plugin.version>
     </properties>
 
     <scm>
@@ -35,7 +37,7 @@
         <dependency>
             <groupId>com.github.liuyueyi.media</groupId>
             <artifactId>base-plugin</artifactId>
-            <version>2.6.3</version>
+            <version>${base.plugin.version}</version>
         </dependency>
 
 
@@ -58,7 +60,6 @@
         <!--markdown to html end-->
 
 
-
         <!--html to image render-->
         <dependency>
             <groupId>org.xhtmlrenderer</groupId>
@@ -69,7 +70,7 @@
         <dependency>
             <groupId>net.sourceforge.nekohtml</groupId>
             <artifactId>nekohtml</artifactId>
-            <version>1.9.14</version>
+            <version>${nekohtml.version}</version>
         </dependency>
         <!--html to image render-->
     </dependencies>

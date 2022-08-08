@@ -1,10 +1,9 @@
 package com.github.hui.quick.plugin.qrcode.wrapper;
 
-import com.github.hui.quick.plugin.base.ImageLoadUtil;
+import com.github.hui.quick.plugin.base.awt.ImageLoadUtil;
 import com.google.zxing.*;
 import com.google.zxing.client.j2se.BufferedImageLuminanceSource;
 import com.google.zxing.common.HybridBinarizer;
-import com.google.zxing.qrcode.QRCodeReader;
 
 import java.awt.image.BufferedImage;
 import java.io.IOException;
@@ -42,7 +41,7 @@ public class QrCodeDeWrapper {
         LuminanceSource source = new BufferedImageLuminanceSource(image);
         BinaryBitmap bitmap = new BinaryBitmap(new HybridBinarizer(source));
 
-        Map<DecodeHintType,Object> hints = new LinkedHashMap<DecodeHintType,Object>();
+        Map<DecodeHintType, Object> hints = new LinkedHashMap<DecodeHintType, Object>();
         // 解码设置编码方式为：utf-8，
         hints.put(DecodeHintType.CHARACTER_SET, "utf-8");
         //优化精度

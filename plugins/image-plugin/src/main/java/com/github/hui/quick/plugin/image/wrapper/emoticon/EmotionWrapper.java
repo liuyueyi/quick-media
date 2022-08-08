@@ -2,9 +2,9 @@ package com.github.hui.quick.plugin.image.wrapper.emoticon;
 
 
 import com.github.hui.quick.plugin.base.Base64Util;
-import com.github.hui.quick.plugin.base.ColorUtil;
-import com.github.hui.quick.plugin.base.FileReadUtil;
-import com.github.hui.quick.plugin.base.GraphicUtil;
+import com.github.hui.quick.plugin.base.awt.ColorUtil;
+import com.github.hui.quick.plugin.base.file.FileReadUtil;
+import com.github.hui.quick.plugin.base.awt.GraphicUtil;
 import com.github.hui.quick.plugin.base.gif.GifDecoder;
 import com.github.hui.quick.plugin.base.gif.GifHelper;
 import com.github.hui.quick.plugin.image.helper.CalculateHelper;

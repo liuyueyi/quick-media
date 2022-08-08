@@ -1,6 +1,6 @@
 package com.github.hui.quick.plugin.image.helper;
 
-import com.github.hui.quick.plugin.base.GraphicUtil;
+import com.github.hui.quick.plugin.base.awt.GraphicUtil;
 import com.github.hui.quick.plugin.image.wrapper.create.ImgCreateOptions;
 import com.github.hui.quick.plugin.image.util.PunctuationUtil;
 

@@ -1,6 +1,6 @@
 package com.github.hui.quick.plugin.test;
 
-import com.github.hui.quick.plugin.base.ImageLoadUtil;
+import com.github.hui.quick.plugin.base.awt.ImageLoadUtil;
 import com.github.hui.quick.plugin.image.wrapper.wartermark.WaterMarkOptions;
 import com.github.hui.quick.plugin.image.wrapper.wartermark.WaterMarkWrapper;
 import org.junit.Test;

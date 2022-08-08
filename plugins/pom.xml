@@ -7,11 +7,11 @@
     <parent>
         <artifactId>quick-media</artifactId>
         <groupId>com.github.liuyueyi.media</groupId>
-        <version>1.1</version>
+        <version>3.0.0</version>
     </parent>
 
     <artifactId>plugins</artifactId>
-    <version>2.6.3</version>
+    <version>3.0.0</version>
 
     <packaging>pom</packaging>
     <modules>
@@ -24,6 +24,7 @@
         <module>date-plugin</module>
         <module>phantom-plugin</module>
         <module>imagic-plugin</module>
+        <module>photo-plugin</module>
     </modules>
 
     <dependencies>

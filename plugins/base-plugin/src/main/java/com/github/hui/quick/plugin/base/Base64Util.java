@@ -5,6 +5,7 @@ import java.awt.image.BufferedImage;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.nio.charset.StandardCharsets;
 import java.util.Base64;
 
 /**
@@ -23,8 +24,15 @@ public class Base64Util {
     }
 
 
+    /**
+     * base64格式的图片转换为BufferedImage
+     *
+     * @param base64
+     * @return
+     * @throws IOException
+     */
     public static BufferedImage decode2Img(String base64) throws IOException {
-        byte[] bytes = Base64.getDecoder().decode(base64.getBytes("utf-8"));
+        byte[] bytes = Base64.getDecoder().decode(base64.getBytes(StandardCharsets.UTF_8));
         ByteArrayInputStream inputStream = new ByteArrayInputStream(bytes);
         return ImageIO.read(inputStream);
     }

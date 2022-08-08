@@ -1,6 +1,6 @@
 package com.github.hui.quick.plugin.test;
 
-import com.github.hui.quick.plugin.base.ImageLoadUtil;
+import com.github.hui.quick.plugin.base.awt.ImageLoadUtil;
 import com.jhlabs.image.DoGFilter;
 import com.jhlabs.image.ImageUtils;
 import org.junit.Test;

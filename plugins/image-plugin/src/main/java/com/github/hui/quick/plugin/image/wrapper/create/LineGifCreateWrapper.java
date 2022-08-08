@@ -2,7 +2,7 @@ package com.github.hui.quick.plugin.image.wrapper.create;
 
 
 import com.github.hui.quick.plugin.base.Base64Util;
-import com.github.hui.quick.plugin.base.GraphicUtil;
+import com.github.hui.quick.plugin.base.awt.GraphicUtil;
 import com.github.hui.quick.plugin.base.gif.GifHelper;
 
 import java.awt.*;

@@ -1,8 +1,8 @@
 package com.github.hui.quick.plugin.test;
 
 import com.github.hui.quick.plugin.base.Base64Util;
-import com.github.hui.quick.plugin.base.GraphicUtil;
-import com.github.hui.quick.plugin.base.ImageLoadUtil;
+import com.github.hui.quick.plugin.base.awt.GraphicUtil;
+import com.github.hui.quick.plugin.base.awt.ImageLoadUtil;
 import com.github.hui.quick.plugin.qrcode.wrapper.QrCodeGenWrapper;
 import com.github.hui.quick.plugin.qrcode.wrapper.QrCodeOptions;
 import com.google.zxing.WriterException;

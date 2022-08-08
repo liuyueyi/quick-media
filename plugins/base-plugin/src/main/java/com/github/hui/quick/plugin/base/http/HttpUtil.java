@@ -1,4 +1,4 @@
-package com.github.hui.quick.plugin.base;
+package com.github.hui.quick.plugin.base.http;
 
 import org.apache.commons.lang3.StringUtils;
 import org.apache.http.HttpHost;

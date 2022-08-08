@@ -1,9 +1,13 @@
 package com.github.hui.quick.plugin.image.wrapper.pixel;
 
-import com.github.hui.quick.plugin.base.*;
+import com.github.hui.quick.plugin.base.awt.ColorUtil;
+import com.github.hui.quick.plugin.base.awt.GraphicUtil;
 import com.github.hui.quick.plugin.base.constants.MediaType;
+import com.github.hui.quick.plugin.base.file.FileReadUtil;
+import com.github.hui.quick.plugin.base.file.FileWriteUtil;
 import com.github.hui.quick.plugin.base.gif.GifDecoder;
 import com.github.hui.quick.plugin.base.gif.GifHelper;
+import com.github.hui.quick.plugin.base.io.IoUtil;
 import com.github.hui.quick.plugin.image.helper.ImgPixelHelper;
 import com.github.hui.quick.plugin.image.util.FontUtil;
 import com.github.hui.quick.plugin.image.wrapper.pixel.context.PixelContextHolder;

@@ -1,6 +1,6 @@
 package com.github.hui.quick.plugin.photo;
 
-import com.github.hui.quick.plugin.base.FileWriteUtil;
+import com.github.hui.quick.plugin.base.file.FileWriteUtil;
 import com.github.hui.quick.plugin.photo.operator.OperatorEnum;
 import com.github.hui.quick.plugin.photo.options.OperateOptions;
 

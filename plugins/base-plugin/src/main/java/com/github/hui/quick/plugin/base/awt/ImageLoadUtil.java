@@ -1,5 +1,6 @@
-package com.github.hui.quick.plugin.base;
+package com.github.hui.quick.plugin.base.awt;
 
+import com.github.hui.quick.plugin.base.file.FileReadUtil;
 import com.github.hui.quick.plugin.base.gif.GifDecoder;
 import org.apache.commons.lang3.StringUtils;
 

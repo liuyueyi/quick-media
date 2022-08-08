@@ -1,7 +1,7 @@
 package com.github.hui.quick.plugin.imagic;
 
 
-import com.github.hui.quick.plugin.base.FileWriteUtil;
+import com.github.hui.quick.plugin.base.file.FileWriteUtil;
 import com.github.hui.quick.plugin.imagic.base.ImgBaseOperate;
 import com.github.hui.quick.plugin.imagic.exception.ImgOperateException;
 import com.github.hui.quick.plugin.imagic.tool.BytesTool;

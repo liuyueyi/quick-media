@@ -1,7 +1,7 @@
 package com.github.hui.quick.plugin.test.draw;
 
-import com.github.hui.quick.plugin.base.GraphicUtil;
-import com.github.hui.quick.plugin.base.ImageLoadUtil;
+import com.github.hui.quick.plugin.base.awt.GraphicUtil;
+import com.github.hui.quick.plugin.base.awt.ImageLoadUtil;
 import com.github.hui.quick.plugin.test.util.BorderDetectUtil;
 import com.jhlabs.image.DoGFilter;
 import com.jhlabs.image.ImageUtils;

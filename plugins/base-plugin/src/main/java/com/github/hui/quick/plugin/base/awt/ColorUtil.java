@@ -1,4 +1,6 @@
-package com.github.hui.quick.plugin.base;
+package com.github.hui.quick.plugin.base.awt;
+
+import com.github.hui.quick.plugin.base.NumUtil;
 
 import java.awt.*;
 

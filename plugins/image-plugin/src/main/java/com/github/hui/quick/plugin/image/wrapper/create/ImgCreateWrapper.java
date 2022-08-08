@@ -2,9 +2,9 @@ package com.github.hui.quick.plugin.image.wrapper.create;
 
 
 import com.github.hui.quick.plugin.base.Base64Util;
-import com.github.hui.quick.plugin.base.ColorUtil;
-import com.github.hui.quick.plugin.base.GraphicUtil;
-import com.github.hui.quick.plugin.base.ImageLoadUtil;
+import com.github.hui.quick.plugin.base.awt.ColorUtil;
+import com.github.hui.quick.plugin.base.awt.GraphicUtil;
+import com.github.hui.quick.plugin.base.awt.ImageLoadUtil;
 import com.github.hui.quick.plugin.image.helper.CalculateHelper;
 import com.github.hui.quick.plugin.image.helper.ImgDrawHelper;
 import org.apache.commons.lang3.StringUtils;

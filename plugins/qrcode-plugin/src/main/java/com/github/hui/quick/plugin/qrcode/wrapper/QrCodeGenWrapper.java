@@ -1,9 +1,14 @@
 package com.github.hui.quick.plugin.qrcode.wrapper;
 
 import com.github.hui.quick.plugin.base.*;
+import com.github.hui.quick.plugin.base.awt.ColorUtil;
+import com.github.hui.quick.plugin.base.awt.ImageLoadUtil;
 import com.github.hui.quick.plugin.base.constants.MediaType;
+import com.github.hui.quick.plugin.base.file.FileReadUtil;
+import com.github.hui.quick.plugin.base.file.FileWriteUtil;
 import com.github.hui.quick.plugin.base.gif.GifDecoder;
 import com.github.hui.quick.plugin.base.gif.GifHelper;
+import com.github.hui.quick.plugin.base.io.IoUtil;
 import com.github.hui.quick.plugin.qrcode.constants.QuickQrUtil;
 import com.github.hui.quick.plugin.qrcode.entity.RenderImgResources;
 import com.github.hui.quick.plugin.qrcode.entity.RenderImgResourcesV2;

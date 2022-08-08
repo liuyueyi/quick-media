@@ -3,15 +3,14 @@
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <parent>
-        <artifactId>quick-media</artifactId>
+        <artifactId>plugins</artifactId>
         <groupId>com.github.liuyueyi.media</groupId>
-        <version>1.1</version>
-        <relativePath>../../pom.xml</relativePath>
+        <version>3.0.0</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
     <artifactId>photo-plugin</artifactId>
-    <version>2.0.0</version>
+    <version>3.0.0</version>
 
     <scm>
         <connection>scm:git:https://github.com/liuyueyi/quick-media.git</connection>
@@ -28,22 +27,21 @@
         </developer>
     </developers>
 
+    <properties>
+        <base.plugin.version>3.0.0</base.plugin.version>
+        <jhlab.version>1.0</jhlab.version>
+    </properties>
+
     <dependencies>
         <dependency>
             <groupId>com.github.liuyueyi.media</groupId>
             <artifactId>base-plugin</artifactId>
-            <version>2.6.4</version>
+            <version>${base.plugin.version}</version>
         </dependency>
         <dependency>
             <groupId>com.github.liuyueyi</groupId>
             <artifactId>java-jhlabs</artifactId>
-            <version>1.0</version>
-        </dependency>
-        <dependency>
-            <groupId>junit</groupId>
-            <artifactId>junit</artifactId>
-            <version>RELEASE</version>
-            <scope>test</scope>
+            <version>${jhlab.version}</version>
         </dependency>
     </dependencies>
 

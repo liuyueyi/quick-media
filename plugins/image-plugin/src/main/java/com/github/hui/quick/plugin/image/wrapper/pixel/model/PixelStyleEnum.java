@@ -1,6 +1,6 @@
 package com.github.hui.quick.plugin.image.wrapper.pixel.model;
 
-import com.github.hui.quick.plugin.base.ColorUtil;
+import com.github.hui.quick.plugin.base.awt.ColorUtil;
 import com.github.hui.quick.plugin.image.helper.ImgPixelHelper;
 import com.github.hui.quick.plugin.image.wrapper.pixel.ImgPixelOptions;
 import com.github.hui.quick.plugin.image.wrapper.pixel.context.PixelContextHolder;

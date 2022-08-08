@@ -1,8 +1,8 @@
 package com.github.hui.quick.plugin.test;
 
-import com.github.hui.quick.plugin.base.ColorUtil;
-import com.github.hui.quick.plugin.base.GraphicUtil;
 import com.github.hui.quick.plugin.base.OSUtil;
+import com.github.hui.quick.plugin.base.awt.ColorUtil;
+import com.github.hui.quick.plugin.base.awt.GraphicUtil;
 import com.github.hui.quick.plugin.image.wrapper.create.ImgCreateOptions;
 import com.github.hui.quick.plugin.image.wrapper.merge.ImgMergeWrapper;
 import com.github.hui.quick.plugin.image.wrapper.merge.cell.ImgCell;
