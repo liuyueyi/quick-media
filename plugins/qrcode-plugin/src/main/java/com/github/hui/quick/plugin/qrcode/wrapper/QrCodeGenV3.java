@@ -3,6 +3,7 @@ package com.github.hui.quick.plugin.qrcode.wrapper;
 import com.github.hui.quick.plugin.base.Base64Util;
 import com.github.hui.quick.plugin.base.file.FileWriteUtil;
 import com.github.hui.quick.plugin.base.gif.GifHelper;
+import com.github.hui.quick.plugin.qrcode.v3.constants.DrawStyle;
 import com.github.hui.quick.plugin.qrcode.v3.constants.QrType;
 import com.github.hui.quick.plugin.qrcode.v3.core.QrRenderFacade;
 import com.github.hui.quick.plugin.qrcode.v3.req.QrCodeV3Options;
@@ -31,10 +32,12 @@ public class QrCodeGenV3 {
     }
 
     public BufferedImage asImg() throws Exception {
+        options.setQrType(QrType.IMG);
         return QrRenderFacade.renderAsImg(options);
     }
 
     public ByteArrayOutputStream asGif() throws Exception {
+        options.setQrType(QrType.GIF);
         List<ImmutablePair<BufferedImage, Integer>> list = QrRenderFacade.renderAsGif(options);
         ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
         GifHelper.saveGif(list, outputStream);
@@ -42,7 +45,13 @@ public class QrCodeGenV3 {
     }
 
     public String asSvg() throws Exception {
+        options.setQrType(QrType.SVG);
         return QrRenderFacade.renderAsSvg(options);
+    }
+
+    public String asTxt() throws Exception {
+        options.setDrawStyle(DrawStyle.TXT).setQrType(QrType.STR);
+        return QrRenderFacade.renderAsTxt(options);
     }
 
     public String asStr() throws Exception {
@@ -57,9 +66,11 @@ public class QrCodeGenV3 {
                 return Base64Util.encode(outputStream);
             }
         } else if (options.getQrType() == QrType.STR) {
-            return null;
+            return QrRenderFacade.renderAsTxt(options);
+        } else if (options.getQrType() == QrType.SVG) {
+            return asSvg();
         } else {
-            return null;
+            throw new IllegalArgumentException("illegal QrType: " + options.getQrType());
         }
     }
 
@@ -83,13 +94,12 @@ public class QrCodeGenV3 {
             }
             return true;
         } else if (options.getQrType() == QrType.STR) {
-            return false;
+            String txt = asTxt();
+            FileWriteUtil.saveContent(file, txt);
+            return true;
         } else if (options.getQrType() == QrType.SVG) {
             String svg = asSvg();
-            try (FileWriter writer = new FileWriter(file)) {
-                writer.write(svg);
-                writer.flush();
-            }
+            FileWriteUtil.saveContent(file, svg);
             return true;
         }
 

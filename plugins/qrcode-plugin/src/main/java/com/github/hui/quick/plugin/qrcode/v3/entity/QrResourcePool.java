@@ -32,12 +32,12 @@ public class QrResourcePool {
     /**
      * 兜底的1x1 渲染图
      */
-    private QrResourceSet defaultRenderDrawImg;
+    private QrResourceSet defaultRenderDrawResource;
 
     /**
      * 兜底的1x1 背景图
      */
-    private QrResourceSet defaultRenderBgImg;
+    private QrResourceSet defaultRenderBgResource;
 
 
     public static QrResourcePool create(DrawOptions ref) {
@@ -71,8 +71,8 @@ public class QrResourcePool {
      *
      * @return
      */
-    public QrResource getDefaultDrawImg() {
-        return defaultRenderDrawImg == null ? null : defaultRenderDrawImg.getResource();
+    public QrResource getDefaultDrawResource() {
+        return defaultRenderDrawResource == null ? null : defaultRenderDrawResource.getResource();
     }
 
     /**
@@ -80,8 +80,8 @@ public class QrResourcePool {
      *
      * @return
      */
-    public QrResource getDefaultBgImg() {
-        return defaultRenderBgImg == null ? null : defaultRenderBgImg.getResource();
+    public QrResource getDefaultBgResource() {
+        return defaultRenderBgResource == null ? null : defaultRenderBgResource.getResource();
     }
 
     public QrResourcesDecorate addSource(int width, int height, QrResource resource) {
@@ -283,7 +283,7 @@ public class QrResourcePool {
                 return;
             }
 
-            if (resRef.defaultRenderBgImg != null && resRef.defaultRenderDrawImg != null) {
+            if (resRef.defaultRenderBgResource != null && resRef.defaultRenderDrawResource != null) {
                 return;
             }
 
@@ -309,10 +309,10 @@ public class QrResourcePool {
                 }
             }
 
-            if (missMap.isEmpty() && resRef.defaultRenderDrawImg == null) {
-                resRef.defaultRenderDrawImg = decorate;
-            } else if (BooleanUtils.isTrue(missMap.get(new Point(0, 0))) && resRef.defaultRenderBgImg == null) {
-                resRef.defaultRenderBgImg = decorate;
+            if (missMap.isEmpty() && resRef.defaultRenderDrawResource == null) {
+                resRef.defaultRenderDrawResource = decorate;
+            } else if (BooleanUtils.isTrue(missMap.get(new Point(0, 0))) && resRef.defaultRenderBgResource == null) {
+                resRef.defaultRenderBgResource = decorate;
             }
         }
     }

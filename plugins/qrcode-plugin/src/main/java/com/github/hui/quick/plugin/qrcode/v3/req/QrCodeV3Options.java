@@ -378,6 +378,16 @@ public class QrCodeV3Options {
         return this;
     }
 
+    /**
+     * 若指定了gif资源，则返回true
+     * @return
+     */
+    public boolean gifEnable() {
+        return (frontOptions != null && frontOptions.getFt() != null && frontOptions.getFt().getGif().getFrameCount() > 0)
+                || (bgOptions != null && bgOptions.getBg() != null && bgOptions.getBg().getGif().getFrameCount() > 0);
+
+    }
+
     public QrCodeGenV3 build() {
         if (w == null) w = h == null ? Integer.valueOf(200) : h;
         if (h == null) h = w;
@@ -426,7 +436,15 @@ public class QrCodeV3Options {
         }
 
         // 当指定了svg资源时，输出二维码为svg
-        if (qrType == null && drawOptions.getDrawStyle().isSvg()) qrType = QrType.SVG;
+        if (qrType == null){
+            if(drawOptions.getDrawStyle().isSvg()) {
+                qrType = QrType.SVG;
+            } else if (gifEnable()) {
+                qrType = QrType.GIF;
+            } else {
+                qrType = QrType.IMG;
+            }
+        }
         return gen;
     }
 }

@@ -5,6 +5,7 @@ import com.github.hui.quick.plugin.qrcode.v3.core.calculate.QrRenderDotGenerator
 import com.github.hui.quick.plugin.qrcode.v3.core.matrix.QrMatrixGenerator;
 import com.github.hui.quick.plugin.qrcode.v3.core.render.QrImgRender;
 import com.github.hui.quick.plugin.qrcode.v3.core.render.QrSvgRender;
+import com.github.hui.quick.plugin.qrcode.v3.core.render.QrTxtRender;
 import com.github.hui.quick.plugin.qrcode.v3.entity.render.RenderDot;
 import com.github.hui.quick.plugin.qrcode.v3.entity.svg.SvgTemplate;
 import com.github.hui.quick.plugin.qrcode.v3.req.QrCodeV3Options;
@@ -67,13 +68,14 @@ public class QrRenderFacade {
         List<ImmutablePair<BufferedImage, Integer>> bgList = QrImgRender.drawGifBackground(qrImg, options.getBgOptions());
         if (!logoAlreadyDraw && options.getLogoOptions() != null && options.getLogoOptions().getLogo() != null) {
             if (!bgList.isEmpty()) {
-                // 插入logo
+                // 背景为gif时，为gif中的每一帧加上logo
                 List<ImmutablePair<BufferedImage, Integer>> result = new ArrayList<>(bgList.size());
                 for (ImmutablePair<BufferedImage, Integer> pair : bgList) {
                     result.add(ImmutablePair.of(QrImgRender.drawLogo(pair.getLeft(), options.getLogoOptions()), pair.getRight()));
                 }
                 bgList = result;
             } else {
+                // 背景非gif时，直接在qrImg上加上logo
                 qrImg = QrImgRender.drawLogo(qrImg, options.getLogoOptions());
             }
         }
@@ -102,5 +104,17 @@ public class QrRenderFacade {
         // 绘制logo
         QrSvgRender.drawLogo(svgTemplate, options);
         return svgTemplate.toString();
+    }
+
+    /**
+     * 输出文字版二维码
+     *
+     * @param options
+     * @return
+     * @throws Exception
+     */
+    public static String renderAsTxt(QrCodeV3Options options) throws Exception {
+        BitMatrixEx matrix = QrMatrixGenerator.calculateMatrix(options);
+        return QrTxtRender.drawQrInfo(matrix, options).toString();
     }
 }

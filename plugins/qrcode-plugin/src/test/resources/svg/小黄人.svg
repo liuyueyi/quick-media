@@ -49,7 +49,7 @@ null
               style="fill: #8C4410"/>
     </symbol>
 	<g id="qr">
-		<rect fill="#ffffffff" height="500" width="500" y="0" x="0"/>
+		<rect fill="#ffffff" height="500" width="500" y="0" x="0"/>
 		<use xlink:href="#detect_lt" x="28" y="28" width="84" height="84"/>
 		<use xlink:href="#detect_ld" x="28" y="388" width="84" height="84"/>
 		<use xlink:href="#detect_rt" x="388" y="28" width="84" height="84"/>

@@ -16,7 +16,8 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
-import java.util.function.BiConsumer;
+
+import static com.github.hui.quick.plugin.qrcode.util.ForEachUtil.foreach;
 
 /**
  * 二维矩阵渲染
@@ -25,22 +26,6 @@ import java.util.function.BiConsumer;
  * @date 2022/7/20
  */
 public class QrRenderDotGenerator {
-    /**
-     * 二维数组遍历
-     *
-     * @param w
-     * @param h
-     * @param consumer
-     * @param <T>
-     */
-    public static <T> void scanMatrix(int w, int h, BiConsumer<Integer, Integer> consumer) {
-        for (int x = 0; x < w; x++) {
-            for (int y = 0; y < h; y++) {
-                consumer.accept(x, y);
-            }
-        }
-    }
-
     /**
      * 计算渲染资源列表
      *
@@ -58,7 +43,7 @@ public class QrRenderDotGenerator {
         List<RenderDot> result = new ArrayList<>();
         // 若探测图形特殊绘制，则提前处理掉
         QrResourcePool resourcePool = qrCodeConfig.getDrawOptions().getResourcePool();
-        scanMatrix(matrixW, matrixH, (x, y) -> {
+        foreach(matrixW, matrixH, (x, y) -> {
             QrCodeRenderHelper.DetectLocation detectLocation = inDetectCornerArea(x, y, matrixW, matrixH, detectCornerSize);
             if (detectLocation.detectedArea() && qrCodeConfig.getDetectOptions().getSpecial()) {
                 // 若探测图形特殊绘制，则单独处理
@@ -85,7 +70,7 @@ public class QrRenderDotGenerator {
      * @return
      */
     private static Optional<RenderDot> drawImgBgInfo(BitMatrixEx bitMatrix, int x, int y, QrResourcePool resourcePool) {
-        if (bitMatrix.getByteMatrix().get(x, y) == 0 && resourcePool.getDefaultBgImg() != null) {
+        if (bitMatrix.getByteMatrix().get(x, y) == 0 && resourcePool.getDefaultBgResource() != null) {
             // 非探测区域内的0点图渲染
             return Optional.of(new BgRenderDot()
                     .setH(1)
@@ -93,7 +78,7 @@ public class QrRenderDotGenerator {
                     .setX(bitMatrix.getLeftPadding() + x * bitMatrix.getMultiple())
                     .setY(bitMatrix.getTopPadding() + y * bitMatrix.getMultiple())
                     .setSize(bitMatrix.getMultiple())
-                    .setResource(resourcePool.getDefaultBgImg()));
+                    .setResource(resourcePool.getDefaultBgResource()));
         }
         return Optional.empty();
     }
@@ -149,7 +134,7 @@ public class QrRenderDotGenerator {
         QrResource detectResource = qrCodeConfig.getDetectOptions().chooseDetectResource(detectLocation);
         if (detectResource != null && BooleanUtils.isTrue(qrCodeConfig.getDetectOptions().getWhole())) {
             // 图片直接渲染完毕之后，将其他探测图形的点设置为0，表示不需要再次渲染
-            scanMatrix(detectCornerSize, detectCornerSize, (addX, addY) -> bitMatrix.getByteMatrix().set(x + addX, y + addY, 0));
+            foreach(detectCornerSize, detectCornerSize, (addX, addY) -> bitMatrix.getByteMatrix().set(x + addX, y + addY, 0));
             // 码眼整个用一张资源渲染
             renderDot.setOutBorder(false).setDotNum(detectCornerSize).setResource(detectResource);
             return renderDot;
@@ -189,7 +174,7 @@ public class QrRenderDotGenerator {
         }
 
         // 最后走一个兜底的1x1的渲染
-        scanMatrix(matrix.getWidth(), matrix.getHeight(), (x, y) -> {
+        foreach(matrix.getWidth(), matrix.getHeight(), (x, y) -> {
             if (matrix.get(x, y) == 1) {
                 result.add(new PreRenderDot()
                         .setH(1)
@@ -197,7 +182,7 @@ public class QrRenderDotGenerator {
                         .setX(matrixEx.getLeftPadding() + x * matrixEx.getMultiple())
                         .setY(matrixEx.getTopPadding() + y * matrixEx.getMultiple())
                         .setSize(matrixEx.getMultiple())
-                        .setResource(imgResources.getDefaultDrawImg()));
+                        .setResource(imgResources.getDefaultDrawResource()));
             }
         });
 
@@ -254,7 +239,7 @@ public class QrRenderDotGenerator {
                 .setResource(renderSource.getResource());
 
         // 将命中的标记为已渲染
-        scanMatrix(renderSource.getWidth(), renderDot.getH(), (w, h) -> {
+        foreach(renderSource.getWidth(), renderDot.getH(), (w, h) -> {
             if (!renderSource.miss(w, h)) {
                 matrixEx.getByteMatrix().set(x + w, y + h, 0);
             }

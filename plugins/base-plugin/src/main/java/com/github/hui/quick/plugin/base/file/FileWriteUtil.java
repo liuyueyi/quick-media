@@ -1,7 +1,7 @@
 package com.github.hui.quick.plugin.base.file;
 
-import com.github.hui.quick.plugin.base.http.HttpUtil;
 import com.github.hui.quick.plugin.base.OSUtil;
+import com.github.hui.quick.plugin.base.http.HttpUtil;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.time.DateFormatUtils;
 import org.slf4j.Logger;
@@ -197,7 +197,7 @@ public class FileWriteUtil {
                     inputStream.close();
                 }
             } catch (IOException e) {
-                log.error("close stream error! e: {}", e);
+                log.error("close stream error!", e);
             }
         }
     }
@@ -313,6 +313,7 @@ public class FileWriteUtil {
 
     /**
      * 保存文本
+     *
      * @param fileInfo
      * @param content
      * @throws FileNotFoundException
@@ -320,6 +321,21 @@ public class FileWriteUtil {
     public static void saveContent(FileInfo fileInfo, String content) throws FileNotFoundException {
         StringBufferInputStream stringBufferInputStream = new StringBufferInputStream(content);
         saveFileByStream(stringBufferInputStream, fileInfo);
+    }
+
+    /**
+     * 保存文本, 适用于小文本量的保存
+     *
+     * @param file
+     * @param content
+     */
+    public static void saveContent(File file, String content) {
+        try (FileWriter writer = new FileWriter(file)) {
+            writer.write(content);
+            writer.flush();
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     public static class FileInfo {
