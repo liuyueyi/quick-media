@@ -85,6 +85,14 @@ public class QrResourcePool {
     }
 
     public QrResourcesDecorate addSource(int width, int height, QrResource resource) {
+        for (QrResourcesDecorate decorate : sourceList) {
+            // 相同占位的，只保存一个QrResourcesDecorate，之前已经定义过，则直接将新的资源加上去即可
+            if (decorate.getWidth() == width && decorate.getHeight() == height) {
+                decorate.addResource(resource);
+                return decorate;
+            }
+        }
+
         return new QrResourcesDecorate(this).setWidth(width).setHeight(height).addResource(resource);
     }
 

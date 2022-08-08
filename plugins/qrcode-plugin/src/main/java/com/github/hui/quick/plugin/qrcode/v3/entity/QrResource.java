@@ -6,6 +6,7 @@ import com.github.hui.quick.plugin.base.gif.GifHelper;
 import com.github.hui.quick.plugin.qrcode.constants.QuickQrUtil;
 import com.github.hui.quick.plugin.qrcode.v3.constants.PicStyle;
 import com.github.hui.quick.plugin.qrcode.v3.constants.TxtMode;
+import com.github.hui.quick.plugin.qrcode.v3.draw.IDrawing;
 
 import java.awt.*;
 import java.awt.image.BufferedImage;
@@ -76,6 +77,11 @@ public class QrResource {
      * svg tag id
      */
     private String svgId;
+
+    /**
+     * 支持为每个资源位设置特殊的绘制方式
+     */
+    private IDrawing drawStyle;
 
 
     public GifDecoder getGif() {
@@ -202,6 +208,15 @@ public class QrResource {
 
     public QrResource setPicStyle(PicStyle picStyle) {
         this.picStyle = picStyle;
+        return this;
+    }
+
+    public IDrawing getDrawStyle() {
+        return drawStyle;
+    }
+
+    public QrResource setDrawStyle(IDrawing drawStyle) {
+        this.drawStyle = drawStyle;
         return this;
     }
 

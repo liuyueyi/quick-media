@@ -1,6 +1,7 @@
 package com.github.hui.quick.plugin.qrcode.v3.constants;
 
 import com.github.hui.quick.plugin.qrcode.constants.QuickQrUtil;
+import com.github.hui.quick.plugin.qrcode.v3.draw.IDrawing;
 import com.github.hui.quick.plugin.qrcode.v3.entity.render.RenderDot;
 import com.github.hui.quick.plugin.qrcode.v3.entity.svg.*;
 
@@ -9,9 +10,9 @@ import java.awt.geom.Ellipse2D;
 import java.awt.image.BufferedImage;
 
 /**
- * 绘制二维码信息的样式
+ * 预定义的绘制二维码信息的样式
  */
-public enum DrawStyle {
+public enum DrawStyle implements IDrawing {
     /**
      * 几何 - 矩形
      */
@@ -243,24 +244,34 @@ public enum DrawStyle {
         return style;
     }
 
+    @Override
     public void drawAsImg(Graphics2D g2d, RenderDot renderDot) {
-        switch (style) {
-            case 0:
-                renderDot.renderGeometry(g2d, this::geometryDrawFunc);
-                return;
-            case 1:
-                renderDot.renderImg(g2d, this::imgDrawFunc);
-                return;
-            case 2:
-                renderDot.renderTxt(g2d, this::txtImgDrawFunc);
-                return;
-            case 3:
-                return;
+        if (renderDot.getResource() != null && renderDot.getResource().getDrawStyle() != null && renderDot.getResource().getDrawStyle() != this) {
+            renderDot.getResource().getDrawStyle().drawAsImg(g2d, renderDot);
+        } else {
+            switch (style) {
+                case 0:
+                    renderDot.renderGeometry(g2d, this::geometryDrawFunc);
+                    return;
+                case 1:
+                    renderDot.renderImg(g2d, this::imgDrawFunc);
+                    return;
+                case 2:
+                    renderDot.renderTxt(g2d, this::txtImgDrawFunc);
+                    return;
+                case 3:
+                    return;
+            }
         }
     }
 
+    @Override
     public void drawAsSvg(SvgTemplate svg, RenderDot renderDot) {
-        renderDot.renderSvg(svg, this::svgRenderFunc);
+        if (renderDot.getResource() != null && renderDot.getResource().getDrawStyle() != null && renderDot.getResource().getDrawStyle() != this) {
+            renderDot.getResource().getDrawStyle().drawAsSvg(svg, renderDot);
+        } else {
+            renderDot.renderSvg(svg, this::svgRenderFunc);
+        }
     }
 
     public void geometryDrawFunc(Graphics2D g2d, int x, int y, int w, int h) {
@@ -273,9 +284,5 @@ public enum DrawStyle {
     }
 
     public void svgRenderFunc(SvgTemplate svg, String txt, int x, int y, int w, int h) {
-    }
-
-    public boolean isSvg() {
-        return style == 3;
     }
 }

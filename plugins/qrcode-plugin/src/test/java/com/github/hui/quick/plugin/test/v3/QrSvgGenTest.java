@@ -380,6 +380,11 @@ public class QrSvgGenTest {
     public void xhhTemplate() throws Exception {
         String svgTemplate = FileReadUtil.readAll("svg/小灰灰.template");
         boolean ans = QrCodeGenV3.of(msg).setW(500).setSvgTemplate(svgTemplate)
+                // 可以添加特定的资源位
+                .setPreColor(Color.RED)
+                .newDrawOptions().newRenderResource(new QrResource().setDrawStyle(DrawStyle.STAR)).build()
+                .addSource(2, 2, new QrResource().setDrawStyle(DrawStyle.MINI_RECT)).build().over()
+                .complete()
                 .setDetectSpecial(true).build()
                 .asFile(prefix + "/小灰灰.svg");
         System.out.println(ans);

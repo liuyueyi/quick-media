@@ -380,6 +380,7 @@ public class QrCodeV3Options {
 
     /**
      * 若指定了gif资源，则返回true
+     *
      * @return
      */
     public boolean gifEnable() {
@@ -436,8 +437,8 @@ public class QrCodeV3Options {
         }
 
         // 当指定了svg资源时，输出二维码为svg
-        if (qrType == null){
-            if(drawOptions.getDrawStyle().isSvg()) {
+        if (qrType == null) {
+            if (drawOptions.getDrawStyle() == DrawStyle.SVG) {
                 qrType = QrType.SVG;
             } else if (gifEnable()) {
                 qrType = QrType.GIF;

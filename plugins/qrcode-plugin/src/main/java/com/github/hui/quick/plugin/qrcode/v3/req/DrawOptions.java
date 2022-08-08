@@ -3,6 +3,7 @@ package com.github.hui.quick.plugin.qrcode.v3.req;
 
 import com.github.hui.quick.plugin.qrcode.v3.constants.DrawStyle;
 import com.github.hui.quick.plugin.qrcode.v3.constants.PicStyle;
+import com.github.hui.quick.plugin.qrcode.v3.draw.IDrawing;
 import com.github.hui.quick.plugin.qrcode.v3.entity.QrResource;
 import com.github.hui.quick.plugin.qrcode.v3.entity.QrResourcePool;
 
@@ -27,7 +28,7 @@ public class DrawOptions {
     /**
      * 绘制样式
      */
-    private DrawStyle drawStyle;
+    private IDrawing drawStyle;
 
     /**
      * true 时表示支持对相邻的着色点进行合并处理 （即用一个大图来绘制相邻的两个着色点）
@@ -79,11 +80,11 @@ public class DrawOptions {
         return this;
     }
 
-    public DrawStyle getDrawStyle() {
+    public IDrawing getDrawStyle() {
         return drawStyle;
     }
 
-    public DrawOptions setDrawStyle(DrawStyle drawStyle) {
+    public DrawOptions setDrawStyle(IDrawing drawStyle) {
         this.drawStyle = drawStyle;
         return this;
     }
@@ -174,7 +175,11 @@ public class DrawOptions {
      * @return
      */
     public QrResourcePool.QrResourcesDecorate newRenderResource(QrResource resource) {
-        return resourcePool.addSource(1, 1, resource);
+        return newRenderResource(1, 1, resource);
+    }
+
+    public QrResourcePool.QrResourcesDecorate newRenderResource(int width, int height, QrResource resource) {
+        return resourcePool.addSource(width, height, resource);
     }
 
     public QrCodeV3Options complete() {
