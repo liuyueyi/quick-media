@@ -35,6 +35,7 @@ public class SvgTemplate {
     private SvgTemplate() {
         tagList = new ArrayList<>();
         svgSymbols = new HashSet<>();
+        defs = "";
     }
 
 
