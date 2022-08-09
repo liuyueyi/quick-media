@@ -389,4 +389,15 @@ public class QrSvgGenTest {
                 .asFile(prefix + "/小灰灰.svg");
         System.out.println(ans);
     }
+
+    @Test
+    public void springTemplate() throws Exception {
+        String svgTemplate = FileReadUtil.readAll("svg/龙猫.tel");
+        boolean ans = QrCodeGenV3.of(msg).setW(500).setSvgTemplate(svgTemplate)
+//                .setLogoRate(20)
+                .setErrorCorrection(ErrorCorrectionLevel.H)
+                .build()
+                .asFile(prefix + "/龙猫.svg");
+        System.out.println(ans);
+    }
 }
