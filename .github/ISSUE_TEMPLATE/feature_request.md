@@ -1,20 +1,18 @@
 ---
-name: Feature request
-about: Suggest an idea for this project
+name: Feature request(新功能)
+about: Suggest an idea for this project (描述一下希望新增的功能特点)
 title: ''
-labels: ''
+labels: 'feature'
 assignees: ''
 
 ---
 
-**Is your feature request related to a problem? Please describe.**
-A clear and concise description of what the problem is. Ex. I'm always frustrated when [...]
+**Which plugin(请说明一下希望在哪个插件中集成这个新功能)**
 
-**Describe the solution you'd like**
-A clear and concise description of what you want to happen.
 
-**Describe alternatives you've considered**
-A clear and concise description of any alternative solutions or features you've considered.
+**Please describe new feature(请描述下希望实现的功能特点).**
 
-**Additional context**
-Add any other context or screenshots about the feature request here.
+
+**Describe the solution you'd like(请描述下期望实现的方式)**
+
+**Additional context(其他信息)**

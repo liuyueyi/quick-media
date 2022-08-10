@@ -36,10 +36,51 @@ public class ColorUtil {
         return new Color(r, g, b, a);
     }
 
+    /**
+     * html 形如 #ffeecc11 格式的颜色转换为jdk的Color对象
+     * #issues 104
+     *
+     * @param color
+     * @return
+     */
+    public static Color html2color(String color) {
+        if (!color.startsWith("#")) {
+            throw new IllegalArgumentException("html color may be #ffeecc11, but you put:" + color);
+        }
+        int r, g, b, a;
+        color = color.substring(1);
+        if (color.length() == 3) {
+            // #rgb 格式的颜色处理
+            r = NumUtil.decode2int(String.format("0x%s%s", color.charAt(0), color.charAt(0)), 255);
+            g = NumUtil.decode2int(String.format("0x%s%s", color.charAt(1), color.charAt(1)), 255);
+            b = NumUtil.decode2int(String.format("0x%s%s", color.charAt(2), color.charAt(2)), 255);
+            a = 255;
+        } else if (color.length() == 4) {
+            // #rgba 格式
+            r = NumUtil.decode2int(String.format("0x%s%s", color.charAt(0), color.charAt(0)), 255);
+            g = NumUtil.decode2int(String.format("0x%s%s", color.charAt(1), color.charAt(1)), 255);
+            b = NumUtil.decode2int(String.format("0x%s%s", color.charAt(2), color.charAt(2)), 255);
+            a = NumUtil.decode2int(String.format("0x%s%s", color.charAt(3), color.charAt(3)), 255);
+        } else if (color.length() == 6) {
+            // #rrggbb 格式
+            r = NumUtil.decode2int("0x" + color.substring(0, 2), 255);
+            g = NumUtil.decode2int("0x" + color.substring(2, 4), 255);
+            b = NumUtil.decode2int("0x" + color.substring(4, 6), 255);
+            a = 255;
+        } else if (color.length() == 8) {
+            r = NumUtil.decode2int("0x" + color.substring(0, 2), 255);
+            g = NumUtil.decode2int("0x" + color.substring(2, 4), 255);
+            b = NumUtil.decode2int("0x" + color.substring(4, 6), 255);
+            a = NumUtil.decode2int("0x" + color.substring(6, 8), 255);
+        } else {
+            throw new IllegalArgumentException("illegal color format for: " + color);
+        }
+        return new Color(r, g, b, a);
+    }
 
     /**
      * 将Color对象转为html对应的颜色配置信息
-     *
+     * <p>
      * 如  Color.RED  ->  #f00
      *
      * @param color
@@ -55,6 +96,7 @@ public class ColorUtil {
 
     /**
      * 转html对应的颜色配置
+     *
      * @param color
      * @return
      */
