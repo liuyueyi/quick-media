@@ -361,7 +361,7 @@ public class QrSvgGenTest {
     public void svgTemplate() throws Exception {
         String svgTemplate = FileReadUtil.readAll("svg/愤怒小猪svg.template");
         boolean ans = QrCodeGenV3.of(msg).setW(500).setSvgTemplate(svgTemplate).build()
-                .asFile(prefix + "/tep.svg");
+                .asFile(prefix + "/愤怒的小猪.svg");
         System.out.println(ans);
     }
 

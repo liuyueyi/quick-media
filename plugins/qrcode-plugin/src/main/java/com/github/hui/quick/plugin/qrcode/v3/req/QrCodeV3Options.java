@@ -5,7 +5,8 @@ import com.github.hui.quick.plugin.qrcode.v3.constants.BgStyle;
 import com.github.hui.quick.plugin.qrcode.v3.constants.DrawStyle;
 import com.github.hui.quick.plugin.qrcode.v3.constants.QrType;
 import com.github.hui.quick.plugin.qrcode.v3.entity.QrResource;
-import com.github.hui.quick.plugin.qrcode.v3.helper.SvgHelper;
+import com.github.hui.quick.plugin.qrcode.v3.tpl.ImgTplParse;
+import com.github.hui.quick.plugin.qrcode.v3.tpl.SvgTplParse;
 import com.github.hui.quick.plugin.qrcode.wrapper.QrCodeGenV3;
 import com.google.zxing.EncodeHintType;
 import com.google.zxing.qrcode.decoder.ErrorCorrectionLevel;
@@ -310,10 +311,13 @@ public class QrCodeV3Options {
      * @return
      */
     public QrCodeV3Options setSvgTemplate(String svg) {
-        SvgHelper.svgTemplateParseAndInit(this, svg);
-        newDrawOptions().setDrawStyle(DrawStyle.SVG);
-        qrType = QrType.SVG;
-        return this;
+        SvgTplParse.svgTemplateParseAndInit(this, svg);
+        return setDrawStyle(DrawStyle.SVG).setQrType(QrType.SVG);
+    }
+
+    public QrCodeV3Options setImgTemplate(String img) {
+        ImgTplParse.imgTemplateParseAndInit(this, img);
+        return setDrawStyle(DrawStyle.IMAGE).setQrType(QrType.IMG);
     }
 
     // ----------- logo 相关 ----------
@@ -384,8 +388,8 @@ public class QrCodeV3Options {
      * @return
      */
     public boolean gifEnable() {
-        return (frontOptions != null && frontOptions.getFt() != null && frontOptions.getFt().getGif().getFrameCount() > 0)
-                || (bgOptions != null && bgOptions.getBg() != null && bgOptions.getBg().getGif().getFrameCount() > 0);
+        return (frontOptions != null && frontOptions.getFt() != null && frontOptions.getFt().getGif() != null && frontOptions.getFt().getGif().getFrameCount() > 0)
+                || (bgOptions != null && bgOptions.getBg() != null && bgOptions.getBg().getGif() != null && bgOptions.getBg().getGif().getFrameCount() > 0);
 
     }
 
@@ -428,12 +432,17 @@ public class QrCodeV3Options {
             drawOptions.setTransparencyBgFill(true);
             drawOptions.setPreColor(ColorUtil.OPACITY);
             bgOptions.setOpacity(1);
-            detectOptions.setInColor(ColorUtil.OPACITY);
-            detectOptions.setOutColor(ColorUtil.OPACITY);
-        } else if (!BooleanUtils.isTrue(detectOptions.getSpecial())) {
+            if (!BooleanUtils.isTrue(detectOptions.getSpecial())) {
+                // 对于穿透的场景，若探测图形没有特殊处理，则设置颜色为透明
+                detectOptions.setInColor(ColorUtil.OPACITY);
+                detectOptions.setOutColor(ColorUtil.OPACITY);
+            }
+        }
+
+        if (!BooleanUtils.isTrue(detectOptions.getSpecial())) {
             // 探测图形非特殊处理时，直接使用preColor
-            detectOptions.setInColor(drawOptions.getPreColor());
-            detectOptions.setOutColor(drawOptions.getPreColor());
+            if (detectOptions.getInColor() == null) detectOptions.setInColor(drawOptions.getPreColor());
+            if (detectOptions.getOutColor() == null) detectOptions.setOutColor(drawOptions.getPreColor());
         }
 
         // 当指定了svg资源时，输出二维码为svg

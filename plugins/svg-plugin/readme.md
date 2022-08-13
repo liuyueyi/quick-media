@@ -7,10 +7,10 @@
 jar包引入，请注意使用最新的版本
 
 ```xml
+<!-- https://mvnrepository.com/artifact/com.github.liuyueyi.media/svg-plugin -->
 <dependency>
     <groupId>com.github.liuyueyi.media</groupId>
-    <artifactId>svg-plugin</artifactId>
-    <version>2.6.3</version>
+    <artifactId>svg-core</artifactId>
 </dependency>
 ```
 
@@ -132,5 +132,5 @@ public static BufferedImage convertToJpegAsImg(String path, Map<String, Object> 
 
 输出结果如下：
 
-![card](https://gitee.com/liuyueyi/Source/raw/master/img/info/blogInfoV2.png)
+![card](https://spring.hhui.top/spring-blog/imgs/info/info.png)
 

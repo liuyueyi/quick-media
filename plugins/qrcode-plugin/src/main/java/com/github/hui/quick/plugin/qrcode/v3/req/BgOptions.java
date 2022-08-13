@@ -127,6 +127,11 @@ public class BgOptions {
         // 默认采用全覆盖方式
         if (bgStyle == null) bgStyle = BgStyle.OVERRIDE;
 
+        if (bgStyle == BgStyle.OVERRIDE && opacity <= 0) {
+            // 默认将覆盖方式的二维码透明设置为0.8
+            opacity = 0.85F;
+        }
+
         return options;
     }
 }

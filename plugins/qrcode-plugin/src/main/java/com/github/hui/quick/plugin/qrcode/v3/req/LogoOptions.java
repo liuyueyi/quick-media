@@ -21,7 +21,7 @@ public class LogoOptions {
     private int rate;
 
     /**
-     * 用于设置logo的透明度
+     * 用于设置logo的透明度， 0 - 1，越小透明度越高
      */
     private Float opacity;
 
@@ -70,6 +70,8 @@ public class LogoOptions {
     }
 
     public LogoOptions setOpacity(Float opacity) {
+        if (opacity > 1) opacity = 1f;
+        else if (opacity < 0) opacity = 0f;
         this.opacity = opacity;
         return this;
     }

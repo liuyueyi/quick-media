@@ -1,6 +1,8 @@
 package com.github.hui.quick.plugin.base.awt;
 
 import com.github.hui.quick.plugin.base.NumUtil;
+import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang3.math.NumberUtils;
 
 import java.awt.*;
 
@@ -76,6 +78,24 @@ public class ColorUtil {
             throw new IllegalArgumentException("illegal color format for: " + color);
         }
         return new Color(r, g, b, a);
+    }
+
+
+    /**
+     * 字符串格式颜色转Color，支持html、十六进制、十进制转换
+     *
+     * @param color
+     * @return
+     */
+    public static Color str2color(String color) {
+        if (StringUtils.isBlank(color)) return null;
+            // html格式颜色转换
+        else if (color.startsWith("#")) return ColorUtil.html2color(color);
+            // 十六进制颜色
+        else if (color.startsWith("0x")) return ColorUtil.int2color(NumUtil.decode2int(color, null));
+            // 整数类型
+        else if (NumberUtils.isDigits(color)) return ColorUtil.int2color(Integer.parseInt(color));
+        throw new IllegalArgumentException("illegal color value: " + color);
     }
 
     /**

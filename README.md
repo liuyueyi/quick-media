@@ -46,7 +46,6 @@
     <groupId>com.github.liuyueyi.media</groupId>
     <artifactId>qrcode-plugin</artifactId>
     <!-- 以中央仓库最新版本为准 -->
-    <version>2.6.3</version>
 </dependency>
 ```
 
@@ -77,7 +76,7 @@
 <dependency>
     <groupId>com.github.liuyueyi.quick-media</groupId>
     <artifactId>qrcode-plugin</artifactId>
-    <version>2.6.3</version>
+    <version>3.0.0</version>
 </dependency>
 ```
 
@@ -226,7 +225,7 @@ markdown转html，转图片的封装类， 详细内容查看: [markdown-plugin]
 相片、图片处理插件，适用于图像的各种处理，如灰度，素描，滤镜等
 
 ```xml
-<!-- https://mvnrepository.com/artifact/com.github.liuyueyi.media/imagic-plugin -->
+<!-- https://mvnrepository.com/artifact/com.github.liuyueyi.media/photo-plugin -->
 <dependency>
     <groupId>com.github.liuyueyi.media</groupId>
     <artifactId>photo-plugin</artifactId>

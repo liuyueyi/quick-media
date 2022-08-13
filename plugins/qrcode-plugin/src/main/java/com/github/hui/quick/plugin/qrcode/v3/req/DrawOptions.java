@@ -98,6 +98,9 @@ public class DrawOptions {
         return this;
     }
 
+    /**
+     * @return true 表示资源图片中透明的地方，用背景颜色填充
+     */
     public boolean isTransparencyBgFill() {
         return transparencyBgFill;
     }
@@ -187,6 +190,7 @@ public class DrawOptions {
         if (preColor == null) preColor = Color.BLACK;
         if (drawStyle == null) drawStyle = DrawStyle.RECT;
         if (picStyle == null) picStyle = PicStyle.NORMAL;
+        if (cornerRadius == null) cornerRadius = 1 / 8.0f;
 
         return options;
     }

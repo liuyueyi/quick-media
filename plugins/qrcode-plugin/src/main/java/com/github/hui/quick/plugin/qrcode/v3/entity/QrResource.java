@@ -93,9 +93,13 @@ public class QrResource {
         return this;
     }
 
-    public QrResource setGif(String gif) throws IOException {
-        this.gif = GifHelper.loadGif(gif);
-        return this;
+    public QrResource setGif(String gif) {
+        try {
+            this.gif = GifHelper.loadGif(gif);
+            return this;
+        } catch (Exception e) {
+            throw new IllegalArgumentException("illegal gif img: " + gif);
+        }
     }
 
     public BufferedImage getImg() {
@@ -107,8 +111,12 @@ public class QrResource {
         return this;
     }
 
-    public QrResource setImg(String img) throws IOException {
-        return setImg(ImageLoadUtil.getImageByPath(img));
+    public QrResource setImg(String img) {
+        try {
+            return setImg(ImageLoadUtil.getImageByPath(img));
+        } catch (Exception e) {
+            throw new IllegalArgumentException("can't load img: " + img);
+        }
     }
 
     public String getText() {
@@ -203,6 +211,7 @@ public class QrResource {
     }
 
     public PicStyle getPicStyle() {
+        if (picStyle == null) picStyle = PicStyle.NORMAL;
         return picStyle;
     }
 
@@ -221,6 +230,7 @@ public class QrResource {
     }
 
     public BufferedImage processImg() {
+        if (picStyle == null) picStyle = PicStyle.NORMAL;
         return picStyle.process(img, (int) (Math.min(img.getWidth(), img.getHeight()) * cornerRadius));
     }
 }

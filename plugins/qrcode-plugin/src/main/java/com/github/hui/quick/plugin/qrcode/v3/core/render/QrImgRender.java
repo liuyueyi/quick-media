@@ -37,7 +37,7 @@ public class QrImgRender {
     public static BufferedImage drawQrInfo(List<RenderDot> dotList, QrCodeV3Options options) {
         BufferedImage qrImg = GraphicUtil.createImg(options.getW(), options.getH(), BufferedImage.TYPE_INT_ARGB);
         Graphics2D g2d = GraphicUtil.getG2d(qrImg);
-        if (options.getDrawOptions().isTransparencyBgFill()) {
+        if (!options.getDrawOptions().isTransparencyBgFill()) {
             // 当二维码中的透明区域，不填充时，如下设置，可以让图片中的透明度覆盖背景色
             g2d.setComposite(AlphaComposite.Src);
         }
@@ -113,7 +113,7 @@ public class QrImgRender {
             bgImgGraphic.drawImage(qrImg.getScaledInstance(qrWidth, qrHeight, Image.SCALE_SMOOTH), bgImgOptions.getStartX(),
                     bgImgOptions.getStartY(), null);
         } else {
-            // 全覆盖方式
+            // 默认采用居中方式进行全覆盖方式
             int bgOffsetX = (bgW - qrWidth) >> 1;
             int bgOffsetY = (bgH - qrHeight) >> 1;
             // 设置透明度， 避免看不到背景

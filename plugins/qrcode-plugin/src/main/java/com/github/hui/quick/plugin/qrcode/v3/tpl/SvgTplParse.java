@@ -1,4 +1,4 @@
-package com.github.hui.quick.plugin.qrcode.v3.helper;
+package com.github.hui.quick.plugin.qrcode.v3.tpl;
 
 import com.github.hui.quick.plugin.qrcode.v3.entity.QrResource;
 import com.github.hui.quick.plugin.qrcode.v3.entity.QrResourcePool;
@@ -12,10 +12,14 @@ import java.util.*;
 import static com.github.hui.quick.plugin.qrcode.v3.entity.QrResourcePool.NO_LIMIT_COUNT;
 
 /**
+ * svg 模板文件解析
+ * svg 模板定义规则如:
+ *
  * @author YiHui
  * @date 2022/8/6
+ * @see * [3.x资源模板定义 | 一灰灰Learning](https://hhui.top/quick/quick-media/qrcode/3.0%E8%B5%84%E6%BA%90%E6%A8%A1%E6%9D%BF/)
  */
-public class SvgHelper {
+public class SvgTplParse extends BaseTplParse {
     private static final String PRE_START_TAG = "<defs>";
     private static final String PRE_END_TAG = "</defs>";
 
@@ -93,7 +97,7 @@ public class SvgHelper {
 
         svgSymbols.forEach((k, v) -> {
             QrResourcePool.QrResourcesDecorate decorate = options.getResourcePool().addSource(k.getLeft(), k.getRight());
-            v.forEach(tag -> decorate.addResource(new QrResource().setSvg(tag.tag), tag.count));
+            v.forEach(tag -> decorate.addResource(new QrResource().setSvg(tag.tag), tag.count).setMiss(tag.miss));
             decorate.build();
         });
         options.getResourcePool().over();
@@ -191,9 +195,17 @@ public class SvgHelper {
          */
         private static final String TYPE = "type=\"";
 
+        /**
+         * 对应QrResourcePool中的size属性，表示这个资源占据的空间
+         */
         private static final String SIZE = "size=\"";
 
-        private static final String MISS = "-MISS-";
+        /**
+         * 对应QrResourcePool中的miss属性，表示这个资源中空白的位置
+         */
+        private static final String MISS = "miss=\"";
+
+        private static final String NOT_HIT = "-MISS-";
 
         /**
          * svg标签型资源
@@ -203,6 +215,10 @@ public class SvgHelper {
         int height;
         int count;
 
+        /**
+         * 空白位置坐标，定义格式如: 0-0,0-2
+         */
+        private String miss;
         /**
          * 这个资源对应的区域大小
          */
@@ -230,28 +246,28 @@ public class SvgHelper {
             String symbol = tag.substring(start, end);
 
             String c = getVal(symbol, COUNT);
-            if (MISS.equalsIgnoreCase(c)) count = NO_LIMIT_COUNT;
+            if (NOT_HIT.equalsIgnoreCase(c)) count = NO_LIMIT_COUNT;
             else count = Integer.parseInt(c);
 
             type = getVal(symbol, TYPE);
-            if (MISS.equalsIgnoreCase(type)) tagType = SymbolTagType.PRE;
+            if (NOT_HIT.equalsIgnoreCase(type)) tagType = SymbolTagType.PRE;
             else tagType = tagType(type);
 
+            // 二维码资源占位解析
             String sizeStr = getVal(symbol, SIZE);
-            if (!MISS.equalsIgnoreCase(sizeStr)) {
-                this.size = new ArrayList<>();
-                for (String sub : StringUtils.split(sizeStr, ",")) {
-                    String[] wh = StringUtils.split(sub, "x");
-                    this.size.add(new ImmutablePair<>(Integer.valueOf(wh[0].trim()), Integer.valueOf(wh[1].trim())));
-                }
+            if (!NOT_HIT.equalsIgnoreCase(sizeStr)) {
+                this.size = decodeSize(sizeStr);
             }
+
+            this.miss = getVal(symbol, MISS);
+            if (NOT_HIT.equals(miss)) this.miss = "";
 
             // 初始化tag对应的占位宽高
             String w = getVal(symbol, WIDTH);
-            if (!MISS.equalsIgnoreCase(w)) width = Integer.parseInt(w);
+            if (!NOT_HIT.equalsIgnoreCase(w)) width = Integer.parseInt(w);
 
             String h = getVal(symbol, HEIGHT);
-            if (!MISS.equalsIgnoreCase(h)) height = Integer.parseInt(h);
+            if (!NOT_HIT.equalsIgnoreCase(h)) height = Integer.parseInt(h);
 
             if (width > 0 && height > 0) return;
 
@@ -273,13 +289,13 @@ public class SvgHelper {
         private String getVal(String content, String tag) {
             int start = content.indexOf(tag);
             if (start < 0) {
-                return MISS;
+                return NOT_HIT;
             }
 
             start += tag.length();
             int end = content.indexOf("\"", start);
             if (end <= start) {
-                return MISS;
+                return NOT_HIT;
             }
 
             return content.substring(start, end).trim();

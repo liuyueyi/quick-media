@@ -7,9 +7,8 @@ import com.github.hui.quick.plugin.qrcode.v3.constants.BgStyle;
 import com.github.hui.quick.plugin.qrcode.v3.constants.DrawStyle;
 import com.github.hui.quick.plugin.qrcode.v3.constants.PicStyle;
 import com.github.hui.quick.plugin.qrcode.v3.constants.TxtMode;
-import com.github.hui.quick.plugin.qrcode.v3.core.QrRenderFacade;
 import com.github.hui.quick.plugin.qrcode.v3.entity.QrResource;
-import com.github.hui.quick.plugin.qrcode.v3.req.QrCodeV3Options;
+import com.github.hui.quick.plugin.qrcode.wrapper.QrCodeGenV3;
 import com.google.zxing.qrcode.decoder.ErrorCorrectionLevel;
 import org.junit.Before;
 import org.junit.Test;
@@ -36,14 +35,22 @@ public class QrV3GenTest {
     }
 
     @Test
+    public void basicGen() {
+        try {
+            BufferedImage img = QrCodeGenV3.of(msg).build().asImg();
+            System.out.println("---");
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    @Test
     public void testRender() {
         try {
-            QrCodeV3Options qrCodeV3Options = new QrCodeV3Options(null);
             String ft = "ft/ft_1.png";
             String bg = "bg.png";
             int size = 1340;
-            qrCodeV3Options
-                    .setMsg(msg)
+            BufferedImage img = QrCodeGenV3.of(msg)
                     .setW(size)
                     .newDrawOptions()
                     .setBgColor(Color.WHITE)
@@ -65,9 +72,7 @@ public class QrV3GenTest {
                     .setFillColor(Color.WHITE)
                     .setFt(new QrResource().setImg(ImageLoadUtil.getImageByPath(ft))).complete()
                     .build()
-            ;
-
-            BufferedImage img = QrRenderFacade.renderAsImg(qrCodeV3Options);
+                    .asImg();
             System.out.println("over");
         } catch (Exception e) {
             e.printStackTrace();
@@ -82,19 +87,17 @@ public class QrV3GenTest {
         int size = 500;
         try {
             String bg = "http://img11.hc360.cn/11/busin/109/955/b/11-109955021.jpg";
-
-            QrCodeV3Options qrCodeV3Options = new QrCodeV3Options(null)
-                    .setMsg(msg).setW(size)
+            BufferedImage img = QrCodeGenV3.of(msg).setW(size)
                     .setErrorCorrection(ErrorCorrectionLevel.H)
                     .newDrawOptions()
                     .setDrawStyle(DrawStyle.IMAGE)
                     .newRenderResource(new QrResource().setImg("jihe/a.png")).build()
-                    .addSource(3, 1, new QrResource().setImg("jihe/b.png")).build()
-                    .addSource(1, 3, new QrResource().setImg("jihe/c.png")).build()
-                    .addSource(3, 2, new QrResource().setImg("jihe/e.png")).build()
-                    .addSource(2, 3, new QrResource().setImg("jihe/f.png")).build()
+                    .addSource(1, 3, new QrResource().setImg("jihe/b.png")).build()
+                    .addSource(3, 1, new QrResource().setImg("jihe/c.png")).build()
+                    .addSource(2, 3, new QrResource().setImg("jihe/e.png")).build()
+                    .addSource(3, 2, new QrResource().setImg("jihe/f.png")).build()
                     .addSource(2, 2, new QrResource().setImg("jihe/g.png")).build()
-                    .addSource(3, 4, new QrResource().setImg("jihe/h.png")).build().over()
+                    .addSource(4, 3, new QrResource().setImg("jihe/h.png")).build().over()
                     .complete()
                     .newDetectOptions()
                     .setResource(new QrResource().setImg("jihe/PDP.png")).complete()
@@ -102,9 +105,8 @@ public class QrV3GenTest {
                     .setBgStyle(BgStyle.PENETRATE)
                     .setBg(new QrResource().setImg(bg))
                     .setStartX(10).setStartY(100)
-                    .complete();
-            qrCodeV3Options.build();
-            BufferedImage img = QrRenderFacade.renderAsImg(qrCodeV3Options);
+                    .complete()
+                    .build().asImg();
             System.out.println("over");
             ImageIO.write(img, "png", new File(prefix + "/q1.png"));
         } catch (Exception e) {
@@ -112,42 +114,52 @@ public class QrV3GenTest {
         }
     }
 
+    /**
+     * 0点1点都用给的图片进行渲染，输出形如围棋格子的二维码
+     */
     @Test
-    public void testBgImg() throws Exception {
+    public void testBgImg() {
         int size = 500;
-
-        QrCodeV3Options qrCodeV3Options = new QrCodeV3Options(null)
-                .setMsg(msg).setW(size)
-                .setErrorCorrection(ErrorCorrectionLevel.H)
-                .newDrawOptions()
-                .setDrawStyle(DrawStyle.IMAGE)
-                .setBgColor(ColorUtil.OPACITY)
-                .newRenderResource(new QrResource().setImg("overbg/a.png")).build()// 这个表示1点对应的图
-                .addSource(1, 1).addResource(new QrResource().setImg("overbg/b.png"), -1).setMiss(0, 0).build() // 这个表示0点对应图
-                .over()
-                .complete()
-                .newDetectOptions().setSpecial(true).complete();
-        qrCodeV3Options.build();
-        BufferedImage img = QrRenderFacade.renderAsImg(qrCodeV3Options);
-        System.out.println("over");
-        ImageIO.write(img, "png", new File(prefix + "/q1.png"));
+        try {
+            QrCodeGenV3.of(msg).setW(size)
+                    .setErrorCorrection(ErrorCorrectionLevel.H)
+                    .newDrawOptions()
+                    .setDrawStyle(DrawStyle.IMAGE)
+                    .setBgColor(ColorUtil.OPACITY)
+                    .newRenderResource(new QrResource().setImg("overbg/a.png")).build()// 这个表示1点对应的图
+                    .addSource(1, 1).addResource(new QrResource().setImg("overbg/b.png"), -1).setMiss(0, 0).build() // 这个表示0点对应图
+                    .over()
+                    .complete()
+                    .newDetectOptions().setSpecial(true).complete()
+                    .build().asFile(prefix + "q1.png");
+            System.out.println("over");
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
+    /**
+     * 使用文字渲染二维码
+     *
+     * @throws Exception
+     */
     @Test
     public void testTxtImg() throws Exception {
-        int size = 300;
-        QrCodeV3Options qrCodeV3Options = new QrCodeV3Options(null)
-                .setMsg(msg).setW(size)
-                .setErrorCorrection(ErrorCorrectionLevel.H)
-                .newDrawOptions()
-                .setDrawStyle(DrawStyle.TXT)
-                .setRenderResource(new QrResource().setText("璧月香风万家帘幕烟如昼").setTxtMode(TxtMode.ORDER))
-                .complete()
-                .newDetectOptions().setSpecial(true).complete();
-        qrCodeV3Options.build();
-        BufferedImage img = QrRenderFacade.renderAsImg(qrCodeV3Options);
-        System.out.println("over");
-        ImageIO.write(img, "png", new File(prefix + "/txt.png"));
+        try {
+            int size = 300;
+            QrCodeGenV3.of(msg)
+                    .setW(size)
+                    .setErrorCorrection(ErrorCorrectionLevel.H)
+                    .newDrawOptions()
+                    .setDrawStyle(DrawStyle.TXT)
+                    .setRenderResource(new QrResource().setText("璧月香风万家帘幕烟如昼").setTxtMode(TxtMode.ORDER))
+                    .complete()
+                    .newDetectOptions().setSpecial(true).complete()
+                    .build().asFile(prefix + "/txt.png");
+            System.out.println("over");
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
 }
