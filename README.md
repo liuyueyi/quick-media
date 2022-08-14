@@ -16,7 +16,7 @@
 >
 > mult-media process Web Service by FFMPEG & ImageMagic & SpringMVC
 
-组建了一个微信技术交流群，有兴趣的小伙伴欢迎关注公众号`一灰灰blog`，回复加群一起愉快玩耍
+quick-media原理介绍、使用教程、资源模板等相关博文，都可以在专栏 《[quick-media | 一灰灰Learning](https://hhui.top/quick/quick-media/)》 获取哦
 
 ![QrCode](https://spring.hhui.top/spring-blog/imgs/info/info.png) 
 
