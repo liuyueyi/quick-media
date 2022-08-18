@@ -92,12 +92,12 @@ public class QrV3GenTest {
                     .newDrawOptions()
                     .setDrawStyle(DrawStyle.IMAGE)
                     .newRenderResource(new QrResource().setImg("jihe/a.png")).build()
-                    .addSource(1, 3, new QrResource().setImg("jihe/b.png")).build()
-                    .addSource(3, 1, new QrResource().setImg("jihe/c.png")).build()
-                    .addSource(2, 3, new QrResource().setImg("jihe/e.png")).build()
-                    .addSource(3, 2, new QrResource().setImg("jihe/f.png")).build()
-                    .addSource(2, 2, new QrResource().setImg("jihe/g.png")).build()
-                    .addSource(4, 3, new QrResource().setImg("jihe/h.png")).build().over()
+                    .createSource(1, 3, new QrResource().setImg("jihe/b.png")).build()
+                    .createSource(3, 1, new QrResource().setImg("jihe/c.png")).build()
+                    .createSource(2, 3, new QrResource().setImg("jihe/e.png")).build()
+                    .createSource(3, 2, new QrResource().setImg("jihe/f.png")).build()
+                    .createSource(2, 2, new QrResource().setImg("jihe/g.png")).build()
+                    .createSource(4, 3, new QrResource().setImg("jihe/h.png")).build().over()
                     .complete()
                     .newDetectOptions()
                     .setResource(new QrResource().setImg("jihe/PDP.png")).complete()
@@ -127,7 +127,7 @@ public class QrV3GenTest {
                     .setDrawStyle(DrawStyle.IMAGE)
                     .setBgColor(ColorUtil.OPACITY)
                     .newRenderResource(new QrResource().setImg("overbg/a.png")).build()// 这个表示1点对应的图
-                    .addSource(1, 1).addResource(new QrResource().setImg("overbg/b.png"), -1).setMiss(0, 0).build() // 这个表示0点对应图
+                    .createSource(1, 1).addResource(new QrResource().setImg("overbg/b.png"), -1).setMiss(0, 0).build() // 这个表示0点对应图
                     .over()
                     .complete()
                     .newDetectOptions().setSpecial(true).complete()

@@ -35,9 +35,14 @@ public class QrSvgGenTest {
         }
     }
 
+    /**
+     * 最基本的使用姿势
+     *
+     * @throws Exception
+     */
     @Test
     public void basicTest() throws Exception {
-        String svg = QrCodeGenV3.of(msg).build().asSvg();
+        String svg = QrCodeGenV3.of(msg).asSvg();
         System.out.println(svg);
     }
 
@@ -49,8 +54,36 @@ public class QrSvgGenTest {
         System.out.println(svg);
     }
 
+    @Test
+    public void testMiniRect() throws Exception {
+        Boolean svg = QrCodeGenV3.of(msg).setQrType(QrType.SVG).setW(500).setDrawStyle(DrawStyle.MINI_RECT)
+                .setPreColor(Color.BLUE).setDetectSpecial(true)
+                .asFile(prefix + "/mini.svg");
+        System.out.println(svg);
+    }
+
+    @Test
+    public void testRoundRect() throws Exception {
+        Boolean svg = QrCodeGenV3.of(msg).setQrType(QrType.SVG).setW(500).setDrawStyle(DrawStyle.ROUND_RECT)
+                .setPreColor(Color.RED).setDetectSpecial(false)
+                .asFile(prefix + "/round.svg");
+        System.out.println(svg);
+    }
+
+    @Test
+    public void basicTxtSvg() throws Exception {
+        Boolean svg = QrCodeGenV3.of(msg).setW(500)
+                .setQrType(QrType.SVG)
+                .setDrawStyle(DrawStyle.TXT)
+                .setPreColor(Color.RED)
+                .setDetectSpecial(true)
+                .setDrawResource(new QrResource().setText("天地玄黄宇宙洪荒"))
+                .asFile(prefix + "/txt.svg");
+        System.out.println(svg);
+    }
+
     /**
-     * 圆角矩形的二维码
+     * 圆角矩形的二维码; 基于内置的几个svg模板样式生成二维码
      *
      * @throws Exception
      */
@@ -95,14 +128,14 @@ public class QrSvgGenTest {
                         "        <ellipse cx=\"16.63\" cy=\"22.06\" rx=\"2.02\" ry=\"2.4\" style=\"fill: #555555\"/>\n" +
                         "        <ellipse cx=\"29.37\" cy=\"21.74\" rx=\"2.02\" ry=\"2.4\" style=\"fill: #555555\"/>\n" +
                         "    </symbol>")).build()
-                .addSource(2, 1, new QrResource().setSvg("<symbol id=\"symbol_1T\" viewBox=\"0 0 100 50\">\n" +
+                .createSource(2, 1, new QrResource().setSvg("<symbol id=\"symbol_1T\" viewBox=\"0 0 100 50\">\n" +
                         "        <line x1=\"17\" y1=\"25\" x2=\"83\" y2=\"25\"\n" +
                         "              style=\"fill: none; stroke: #333333; stroke-width: 20; stroke-linecap: round; stroke-miterlimit: 10\"/>\n" +
                         "    </symbol>")).addResource(new QrResource().setSvg(" <symbol id=\"symbol_1U\" viewBox=\"0 0 100 50\">\n" +
                         "        <circle cx=\"25\" cy=\"25\" r=\"11.5\" style=\"fill: #F98E00\"/>\n" +
                         "        <circle cx=\"75\" cy=\"25\" r=\"11.5\" style=\"fill: #F98E00\"/>\n" +
                         "    </symbol>")).build()
-                .addSource(1, 3, new QrResource().setSvg("<symbol id=\"symbol_1S\" viewBox=\"0 0 50 150\">\n" +
+                .createSource(1, 3, new QrResource().setSvg("<symbol id=\"symbol_1S\" viewBox=\"0 0 50 150\">\n" +
                         "    <line x1=\"25\" y1=\"20\" x2=\"25\" y2=\"130\"\n" +
                         "              style=\"fill: none; stroke: #333333; stroke-width: 20; stroke-linecap: round; stroke-miterlimit: 10\"/>\n" +
                         "    </symbol>")).build().over()
@@ -322,7 +355,7 @@ public class QrSvgGenTest {
     }
 
     /**
-     * 愤怒的小鸟
+     * 愤怒的小鸟，通过链式传参，设置每一个资源位信息
      */
     @Test
     public void symbolBird() throws Exception {
@@ -331,14 +364,17 @@ public class QrSvgGenTest {
                 .setQrType(QrType.SVG)
                 .newDrawOptions()
                 .setDrawStyle(DrawStyle.SVG)
+                // 设置全局的资源位定义
                 .setGlobalResource(new QrResource().setSvg(birdSvgSymbols.get("defs").get(0)))
+                // 开始设置 1x1 对应的资源位信息，一个位置，可以有多个图，在最终渲染时随机选择
                 .newRenderResource(new QrResource().setSvg(birdSvgSymbols.get("1x1").get(0)))
                 .addResource(new QrResource().setSvg(birdSvgSymbols.get("1x1").get(1)))
                 .addResource(new QrResource().setSvg(birdSvgSymbols.get("1x1").get(2)))
                 .build()
-                .addSource(1, 2, new QrResource().setSvg(birdSvgSymbols.get("1x2").get(0))).build()
-                .addSource(2, 1, new QrResource().setSvg(birdSvgSymbols.get("2x1").get(0))).build()
-                .addSource(2, 2).addResource(new QrResource().setSvg(birdSvgSymbols.get("2x2").get(0)), -1).build()
+                // 指定 WxH 资源位对应的资源信息
+                .createSource(1, 2, new QrResource().setSvg(birdSvgSymbols.get("1x2").get(0))).build()
+                .createSource(2, 1, new QrResource().setSvg(birdSvgSymbols.get("2x1").get(0))).build()
+                .createSource(2, 2).addResource(new QrResource().setSvg(birdSvgSymbols.get("2x2").get(0)), -1).build()
                 .over()
                 .complete()
                 .newDetectOptions()
@@ -365,6 +401,11 @@ public class QrSvgGenTest {
         System.out.println(ans);
     }
 
+    /**
+     * 设置模板中的logo大小
+     *
+     * @throws Exception
+     */
     @Test
     public void xhrTemplate() throws Exception {
         String svgTemplate = FileReadUtil.readAll("svg/小黄人.template");
@@ -376,6 +417,11 @@ public class QrSvgGenTest {
         System.out.println(ans);
     }
 
+    /**
+     * 模板 结合 特定资源渲染方式，可以额外配合内部提供的几何样式，搭配使用
+     *
+     * @throws Exception
+     */
     @Test
     public void xhhTemplate() throws Exception {
         String svgTemplate = FileReadUtil.readAll("svg/小灰灰.template");
@@ -383,21 +429,10 @@ public class QrSvgGenTest {
                 // 可以添加特定的资源位
                 .setPreColor(Color.RED)
                 .newDrawOptions().newRenderResource(new QrResource().setDrawStyle(DrawStyle.STAR)).build()
-                .addSource(2, 2, new QrResource().setDrawStyle(DrawStyle.MINI_RECT)).build().over()
+                .createSource(2, 2, new QrResource().setDrawStyle(DrawStyle.MINI_RECT)).build().over()
                 .complete()
                 .setDetectSpecial(true).build()
                 .asFile(prefix + "/小灰灰.svg");
-        System.out.println(ans);
-    }
-
-    @Test
-    public void springTemplate() throws Exception {
-        String svgTemplate = FileReadUtil.readAll("svg/龙猫.tel");
-        boolean ans = QrCodeGenV3.of(msg).setW(500).setSvgTemplate(svgTemplate)
-//                .setLogoRate(20)
-                .setErrorCorrection(ErrorCorrectionLevel.H)
-                .build()
-                .asFile(prefix + "/龙猫.svg");
         System.out.println(ans);
     }
 }

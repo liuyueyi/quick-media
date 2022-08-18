@@ -80,7 +80,7 @@ public class RenderDot {
     }
 
     public void renderSvg(SvgTemplate svg, RenderFunc.SvgDrawFunc drawFunc) {
-        drawFunc.draw(svg, resource.getSvgId(), x, y, size, size);
+        drawFunc.draw(svg, resource == null ? null : resource.getSvgInfo(), x, y, size, size);
     }
 
     @Override

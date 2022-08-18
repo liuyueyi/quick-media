@@ -53,7 +53,7 @@ public class ImgTplParse extends BaseTplParse {
         for (DrawImgTemplate img : draw.getImgs()) {
             List<ImmutablePair<Integer, Integer>> sizeList = decodeSize(img.size);
             sizeList.forEach(k -> {
-                QrResourcePool.QrResourcesDecorate decorate = drawOptions.getResourcePool().addSource(k.getLeft(), k.getRight());
+                QrResourcePool.QrResourcesDecorate decorate = drawOptions.getResourcePool().createSource(k.getLeft(), k.getRight());
                 if (img.getMiss() != null) decorate.setMiss(img.getMiss());
                 int count = img.count == null ? -1 : img.count;
                 img.getImg().forEach(i -> decorate.addResource(new QrResource().setImg(i), count));

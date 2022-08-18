@@ -73,7 +73,7 @@ public class DetectRenderDot extends RenderDot {
 
     @Override
     public void renderSvg(SvgTemplate svg, RenderFunc.SvgDrawFunc drawFunc) {
-        drawFunc.draw(svg, resource == null ? null : resource.getSvgId(), x, y, dotNum * size, dotNum * size);
+        drawFunc.draw(svg, resource == null ? null : resource.getSvgInfo(), x, y, dotNum * size, dotNum * size);
     }
 
     @Override

@@ -10,7 +10,6 @@ import com.github.hui.quick.plugin.qrcode.v3.draw.IDrawing;
 
 import java.awt.*;
 import java.awt.image.BufferedImage;
-import java.io.IOException;
 import java.util.UUID;
 import java.util.concurrent.atomic.AtomicInteger;
 
@@ -176,9 +175,10 @@ public class QrResource {
             if (index >= 0) {
                 index += 4;
                 svgId = svg.substring(index, svg.indexOf("\"", index));
-            } else {
+            } else if (svg.startsWith("<symbol")) {
                 // 当没有id时，默认分配一个
                 svgId = UUID.randomUUID().toString();
+                this.svg = "<symbol id=\"" + svgId + "\" " + svg.substring("<symbol".length());
             }
         }
         return this;
@@ -195,6 +195,24 @@ public class QrResource {
             this.svg = svg;
         }
         return this;
+    }
+
+    /**
+     * 如果是symbol标签，则返回svgId
+     * 如果是svg 样式模板，则直接返回
+     * 如果是文字，注意一次只返回一个
+     *
+     * @return
+     */
+    public String getSvgInfo() {
+        if (svgId != null) return svgId;
+        if (this.svg != null) return svg;
+        if (text != null) {
+            if (txtMode == null) txtMode = TxtMode.ORDER;
+            if (txtMode == TxtMode.ORDER && indexCnt == null) indexCnt = new AtomicInteger(0);
+            return txtMode.txt(text, indexCnt);
+        }
+        return null;
     }
 
     public String getSvgId() {

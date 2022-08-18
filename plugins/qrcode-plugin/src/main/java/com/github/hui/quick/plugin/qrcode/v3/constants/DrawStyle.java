@@ -211,7 +211,11 @@ public enum DrawStyle implements IDrawing {
 
         @Override
         public void svgRenderFunc(SvgTemplate svg, String txt, int x, int y, int w, int h) {
-            svg.addTag(new TextSvgTag().setTxt(txt).setX(x).setY(y).setW(w).setH(h).setColor(svg.getCurrentColor()));
+            if (txt == null) {
+                svg.addTag(new RectSvgTag().setX(x).setY(y).setW(w).setH(h).setColor(svg.getCurrentColor()));
+            } else {
+                svg.addTag(new TextSvgTag().setTxt(txt).setX(x).setY(y + h).setW(w).setH(h).setColor(svg.getCurrentColor()));
+            }
         }
     },
 
@@ -267,7 +271,9 @@ public enum DrawStyle implements IDrawing {
 
     @Override
     public void drawAsSvg(SvgTemplate svg, RenderDot renderDot) {
-        if (renderDot.getResource() != null && renderDot.getResource().getDrawStyle() != null && renderDot.getResource().getDrawStyle() != this) {
+        if (renderDot.getResource() != null
+                && renderDot.getResource().getDrawStyle() != null
+                && renderDot.getResource().getDrawStyle() != this) {
             renderDot.getResource().getDrawStyle().drawAsSvg(svg, renderDot);
         } else {
             renderDot.renderSvg(svg, this::svgRenderFunc);

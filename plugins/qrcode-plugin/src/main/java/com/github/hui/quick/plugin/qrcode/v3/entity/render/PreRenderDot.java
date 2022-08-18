@@ -65,7 +65,7 @@ public class PreRenderDot extends RenderDot {
 
     @Override
     public void renderSvg(SvgTemplate svg, RenderFunc.SvgDrawFunc drawFunc) {
-        drawFunc.draw(svg, resource == null ? null : resource.getSvgId(), x, y, w(), h());
+        drawFunc.draw(svg, resource == null ? null : resource.getSvgInfo(), x, y, w(), h());
     }
 
     @Override

@@ -1,6 +1,7 @@
 package com.github.hui.quick.plugin.qrcode.v3.core.render;
 
 import com.github.hui.quick.plugin.base.awt.ColorUtil;
+import com.github.hui.quick.plugin.qrcode.v3.constants.DrawStyle;
 import com.github.hui.quick.plugin.qrcode.v3.constants.QrType;
 import com.github.hui.quick.plugin.qrcode.v3.entity.QrResource;
 import com.github.hui.quick.plugin.qrcode.v3.entity.render.BgRenderDot;
@@ -14,6 +15,7 @@ import com.github.hui.quick.plugin.qrcode.v3.req.QrCodeV3Options;
 import org.apache.commons.lang3.BooleanUtils;
 import org.apache.commons.lang3.StringUtils;
 
+import java.awt.*;
 import java.util.List;
 import java.util.Optional;
 
@@ -45,6 +47,13 @@ public class QrSvgRender {
                     svgTemplate.setCurrentColor(options.getDetectOptions().getOutColor());
                 } else {
                     svgTemplate.setCurrentColor(options.getDetectOptions().getInColor());
+                }
+
+                if (BooleanUtils.isTrue(options.getDetectOptions().getSpecial()) &&
+                    dot.getResource() == null || dot.getResource().getSvgInfo() == null) {
+                    // 当探测图形特殊处理，即不与指定前置图样式相同时；首先判断是否有指定特殊的探测图形资源，没有时，则走默认的黑色矩形框设置
+                    svgTemplate.setCurrentColor(Color.BLACK);
+                    dot.setResource(new QrResource().setDrawStyle(DrawStyle.RECT));
                 }
             }
             options.getDrawOptions().getDrawStyle().drawAsSvg(svgTemplate, dot);

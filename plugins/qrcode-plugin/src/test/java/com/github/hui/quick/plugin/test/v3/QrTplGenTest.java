@@ -3,6 +3,7 @@ package com.github.hui.quick.plugin.test.v3;
 import com.github.hui.quick.plugin.base.OSUtil;
 import com.github.hui.quick.plugin.base.file.FileReadUtil;
 import com.github.hui.quick.plugin.qrcode.wrapper.QrCodeGenV3;
+import com.google.zxing.qrcode.decoder.ErrorCorrectionLevel;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -32,5 +33,17 @@ public class QrTplGenTest {
                 .setImgTemplate(content).build()
                 .asFile(prefix + "/flower.png");
         System.out.println("over");
+    }
+
+    @Test
+    public void catTplTest() throws Exception {
+        String svgTemplate = FileReadUtil.readAll("tpl/龙猫.tpl");
+        boolean ans = QrCodeGenV3.of(msg).setW(500)
+                .setSvgTemplate(svgTemplate)
+//                .setLogoRate(20)
+                .setErrorCorrection(ErrorCorrectionLevel.H)
+                .build()
+                .asFile(prefix + "/龙猫.svg");
+        System.out.println(ans);
     }
 }

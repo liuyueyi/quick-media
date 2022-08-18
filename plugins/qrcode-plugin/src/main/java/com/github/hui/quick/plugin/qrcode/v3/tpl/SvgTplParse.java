@@ -96,7 +96,7 @@ public class SvgTplParse extends BaseTplParse {
         }
 
         svgSymbols.forEach((k, v) -> {
-            QrResourcePool.QrResourcesDecorate decorate = options.getResourcePool().addSource(k.getLeft(), k.getRight());
+            QrResourcePool.QrResourcesDecorate decorate = options.getResourcePool().createSource(k.getLeft(), k.getRight());
             v.forEach(tag -> decorate.addResource(new QrResource().setSvg(tag.tag), tag.count).setMiss(tag.miss));
             decorate.build();
         });

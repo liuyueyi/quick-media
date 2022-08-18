@@ -13,6 +13,8 @@ import com.google.zxing.qrcode.decoder.ErrorCorrectionLevel;
 import org.apache.commons.lang3.BooleanUtils;
 
 import java.awt.*;
+import java.awt.image.BufferedImage;
+import java.io.ByteArrayOutputStream;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -456,5 +458,27 @@ public class QrCodeV3Options {
             }
         }
         return gen;
+    }
+
+    // -------------- 下面是输出结果的直接调用方式
+
+    public String asSvg() throws Exception {
+        return build().asSvg();
+    }
+
+    public BufferedImage asImg() throws Exception {
+        return build().asImg();
+    }
+
+    public ByteArrayOutputStream asGif() throws Exception {
+        return build().asGif();
+    }
+
+    public String asStr() throws Exception {
+        return build().asStr();
+    }
+
+    public boolean asFile(String absFileName) throws Exception {
+        return build().asFile(absFileName);
     }
 }
