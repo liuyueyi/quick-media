@@ -45,7 +45,7 @@ public class QrRenderDotGenerator {
         QrResourcePool resourcePool = qrCodeConfig.getDrawOptions().getResourcePool();
         foreach(matrixW, matrixH, (x, y) -> {
             QrCodeRenderHelper.DetectLocation detectLocation = inDetectCornerArea(x, y, matrixW, matrixH, detectCornerSize);
-            if (detectLocation.detectedArea() && qrCodeConfig.getDetectOptions().getSpecial()) {
+            if (detectLocation.detectedArea()) {
                 // 若探测图形特殊绘制，则单独处理
                 if (bitMatrix.getByteMatrix().get(x, y) == 1) {
                     // 绘制三个位置探测图形
@@ -139,7 +139,10 @@ public class QrRenderDotGenerator {
             renderDot.setOutBorder(false).setDotNum(detectCornerSize).setResource(detectResource);
             return renderDot;
         }
-        renderDot.setDotNum(1).setOutBorder(inOuterDetectCornerArea(x, y, matrixW, matrixH, detectCornerSize));
+        renderDot.setDotNum(1)
+                // 设置当前这个点是探测图形的外边框，还是内边框
+                .setOutBorder(inOuterDetectCornerArea(x, y, matrixW, matrixH, detectCornerSize))
+                .setResource(detectResource);
         bitMatrix.getByteMatrix().set(x, y, 0);
         return renderDot;
     }

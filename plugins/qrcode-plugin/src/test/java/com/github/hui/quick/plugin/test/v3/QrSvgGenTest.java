@@ -75,43 +75,6 @@ public class QrSvgGenTest {
     }
 
     @Test
-    public void miniRect() throws Exception {
-        boolean ans = QrCodeGenV3.of(msg).setSize(300).setDrawStyle(DrawStyle.MINI_RECT).asFile(prefix + "/miniRect.svg");
-        System.out.println(ans);
-    }
-
-    @Test
-    public void triangle() throws Exception {
-        boolean ans = QrCodeGenV3.of(msg).setSize(300).setDrawStyle(DrawStyle.TRIANGLE).asFile(prefix + "/triangle.svg");
-        System.out.println(ans);
-    }
-
-    @Test
-    public void diamond() throws Exception {
-        boolean ans = QrCodeGenV3.of(msg).setSize(300).setDrawStyle(DrawStyle.DIAMOND).asFile(prefix + "/diamond.svg");
-        System.out.println(ans);
-    }
-
-    @Test
-    public void star() throws Exception {
-        boolean ans = QrCodeGenV3.of(msg).setW(300)
-                .setDrawStyle(DrawStyle.STAR)
-                .setPreColor(Color.RED)
-                .build()
-                .asFile(prefix + "/star.svg");
-        System.out.println(ans);
-    }
-
-    @Test
-    public void hexagon() throws Exception {
-        boolean ans = QrCodeGenV3.of(msg).setW(300).setDrawStyle(DrawStyle.HEXAGON).asFile(prefix+"/hexagon.svg");
-        System.out.println(ans);
-    }
-
-
-
-
-    @Test
     public void testMiniRect() throws Exception {
         Boolean svg = QrCodeGenV3.of(msg).setQrType(QrType.SVG).setW(500).setDrawStyle(DrawStyle.MINI_RECT)
                 .setPreColor(Color.BLUE).setDetectSpecial(true)

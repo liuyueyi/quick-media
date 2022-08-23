@@ -11,7 +11,10 @@ import org.apache.commons.lang3.tuple.ImmutablePair;
 
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
-import java.io.*;
+import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.util.List;
 
 /**
@@ -59,7 +62,8 @@ public class QrCodeGenV3 {
             try (ByteArrayOutputStream stream = asGif()) {
                 return Base64Util.encode(stream);
             }
-        } else if (options.getQrType() == QrType.IMG) {
+        } else if (options.getQrType() == null || options.getQrType() == QrType.IMG) {
+            // 默认使用图片方式
             BufferedImage bufferedImage = asImg();
             try (ByteArrayOutputStream outputStream = new ByteArrayOutputStream()) {
                 ImageIO.write(bufferedImage, options.getPicType(), outputStream);
@@ -78,6 +82,19 @@ public class QrCodeGenV3 {
     public boolean asFile(String absFileName) throws Exception {
         File file = new File(absFileName);
         FileWriteUtil.mkDir(file.getParentFile());
+        if (options.getQrType() == null) {
+            // 没有指定类型时，根据文件名后缀进行预估
+            String lowFileName = absFileName.toLowerCase();
+            if (lowFileName.endsWith(QrType.SVG.getSuffix())) {
+                options.setQrType(QrType.SVG);
+            } else if (absFileName.toLowerCase().endsWith(QrType.GIF.getSuffix())) {
+                options.setQrType(QrType.GIF);
+            } else if (absFileName.toLowerCase().endsWith(QrType.STR.getSuffix())) {
+                options.setQrType(QrType.STR);
+            } else {
+                options.setQrType(QrType.IMG);
+            }
+        }
 
         if (options.getQrType() == QrType.GIF) {
             try (ByteArrayOutputStream stream = asGif()) {

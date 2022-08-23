@@ -1,7 +1,9 @@
 package com.github.hui.quick.plugin.qrcode.v3.req;
 
 import com.github.hui.quick.plugin.qrcode.helper.QrCodeRenderHelper;
+import com.github.hui.quick.plugin.qrcode.v3.constants.DrawStyle;
 import com.github.hui.quick.plugin.qrcode.v3.entity.QrResource;
+import org.apache.commons.lang3.StringUtils;
 
 import java.awt.*;
 
@@ -74,6 +76,7 @@ public class DetectOptions {
     }
 
     public DetectOptions setLt(QrResource lt) {
+        initDetectResource(lt);
         this.lt = lt;
         this.resource = lt;
         return this;
@@ -84,6 +87,7 @@ public class DetectOptions {
     }
 
     public DetectOptions setRt(QrResource rt) {
+        initDetectResource(rt);
         this.rt = rt;
         this.resource = rt;
         return this;
@@ -94,6 +98,7 @@ public class DetectOptions {
     }
 
     public DetectOptions setLd(QrResource ld) {
+        initDetectResource(ld);
         this.ld = ld;
         this.resource = ld;
         return this;
@@ -104,8 +109,22 @@ public class DetectOptions {
     }
 
     public DetectOptions setResource(QrResource resource) {
+        initDetectResource(resource);
         this.resource = resource;
         return this;
+    }
+
+    /**
+     * 当指定探测图形资源信息之后，我们需要设置其对应的绘制方式，覆盖全局的信息点的DrawStyle
+     *
+     * @param resource
+     */
+    private void initDetectResource(QrResource resource) {
+        if (resource == null || resource.getDrawStyle() != null) return;
+        // 避免出现探测点的绘制被全局的绘制样式覆盖，导致无法正确处理
+        if (resource.getSvgInfo() != null) resource.setDrawStyle(DrawStyle.SVG);
+        else if (resource.getImg() != null) resource.setDrawStyle(DrawStyle.IMAGE);
+        else if (StringUtils.isNotBlank(resource.getText())) resource.setDrawStyle(DrawStyle.TXT);
     }
 
     public Boolean getSpecial() {
@@ -155,7 +174,7 @@ public class DetectOptions {
         }
         // 只要一个有资源，则表明探测图形全指定
         if (resource != null) {
-            whole = true;
+            if (whole == null) whole = true;
             special = true;
         }
 

@@ -120,6 +120,12 @@ public class QrCodeV3Options {
         return this;
     }
 
+    public QrCodeV3Options setSize(Integer size) {
+        this.w = size;
+        this.h = size;
+        return this;
+    }
+
     public Integer getH() {
         return h;
     }
@@ -130,17 +136,14 @@ public class QrCodeV3Options {
     }
 
     public QrType getQrType() {
-        if (qrType != null) {
-            return qrType;
-        }
-
-        if (drawOptions.getDrawStyle() == DrawStyle.SVG) {
-            qrType = QrType.SVG;
-        } else if (bgOptions.getBg() != null && bgOptions.getBg().getGif() != null || (frontOptions.getFt() != null && frontOptions.getFt().getGif() != null)) {
-            picType = "gif";
-            qrType = QrType.GIF;
-        } else {
-            qrType = QrType.IMG;
+        if (qrType == null) {
+            // 未指定时，尝试根据设置的资源进行智能猜测需要输出的是啥
+            if (drawOptions.getDrawStyle() == DrawStyle.SVG) {
+                qrType = QrType.SVG;
+            } else if (bgOptions.getBg() != null && bgOptions.getBg().getGif() != null || (frontOptions.getFt() != null && frontOptions.getFt().getGif() != null)) {
+                qrType = QrType.GIF;
+                picType = qrType.getSuffix();
+            }
         }
         return qrType;
     }
@@ -362,6 +365,17 @@ public class QrCodeV3Options {
         return this;
     }
 
+    /**
+     * 设置探测图形资源是否为一整个
+     *
+     * @param whole
+     * @return
+     */
+    public QrCodeV3Options setDetectWhole(boolean whole) {
+        newDetectOptions().setWhole(whole);
+        return this;
+    }
+
     public QrCodeV3Options setDetectSpecial(Boolean special) {
         newDetectOptions().setSpecial(special);
         return this;
@@ -453,8 +467,6 @@ public class QrCodeV3Options {
                 qrType = QrType.SVG;
             } else if (gifEnable()) {
                 qrType = QrType.GIF;
-            } else {
-                qrType = QrType.IMG;
             }
         }
         return gen;

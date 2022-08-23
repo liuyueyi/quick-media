@@ -33,13 +33,19 @@ public enum DrawStyle implements IDrawing {
     ROUND_RECT(0) {
         @Override
         public void geometryDrawFunc(Graphics2D g2d, int x, int y, int w, int h) {
-            int round = (int) Math.floor(Math.min(w, h) / 8.0f);
-            g2d.fillRoundRect(x, y, w, h, round, round);
+            int offsetX = w / 8, offsetY = h / 8;
+            int width = w - offsetX * 2, height = h - offsetY * 2;
+
+            int round = (int) Math.floor(Math.min(width, height) / 8.0f);
+            g2d.fillRoundRect(x + offsetX, y + offsetY, width, height, round, round);
         }
 
         @Override
         public void svgRenderFunc(SvgTemplate svg, String txt, int x, int y, int w, int h) {
-            svg.addTag(new RoundRectSvgTag().setX(x).setY(y).setW(w).setH(h).setColor(svg.getCurrentColor()));
+            int offsetX = w / 8, offsetY = h / 8;
+            int width = w - offsetX * 2, height = h - offsetY * 2;
+            svg.addTag(new RoundRectSvgTag().setX(x + offsetX).setY(y + offsetY)
+                    .setW(width).setH(height).setColor(svg.getCurrentColor()));
         }
     },
     /**
@@ -98,7 +104,7 @@ public enum DrawStyle implements IDrawing {
 
         @Override
         public void svgRenderFunc(SvgTemplate svg, String txt, int x, int y, int w, int h) {
-            throw new IllegalStateException("unsupport triangle for svg!");
+            svg.addTag(new TriangleSvgTag().setX(x).setY(y).setW(w).setH(h).setColor(svg.getCurrentColor()));
         }
     },
     /**
@@ -138,7 +144,7 @@ public enum DrawStyle implements IDrawing {
     /**
      * 几何 - 六边形
      */
-    SEXANGLE(0) {
+    HEXAGON(0) {
         @Override
         public void geometryDrawFunc(Graphics2D g2d, int x, int y, int w, int h) {
             int size = Math.min(w, h);
@@ -169,7 +175,7 @@ public enum DrawStyle implements IDrawing {
 
         @Override
         public void svgRenderFunc(SvgTemplate svg, String txt, int x, int y, int w, int h) {
-            throw new IllegalStateException("OCTAGON not support for svg qrcode!");
+            svg.addTag(new OctagonSvgTag().setX(x).setY(y).setW(w).setH(h).setColor(svg.getCurrentColor()));
         }
     },
 

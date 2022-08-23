@@ -8,18 +8,28 @@ public enum QrType {
     /**
      * 图
      */
-    IMG,
+    IMG("png,jpg,jpeg,webp"),
     /**
      * 动图
      */
-    GIF,
+    GIF("gif"),
     /**
      * svg格式文本
      */
-    SVG,
+    SVG("svg"),
     /**
      * 二维数组文本
      */
-    STR,
+    STR("txt"),
     ;
+
+    private String suffix;
+
+    QrType(String suffix) {
+        this.suffix = suffix;
+    }
+
+    public String getSuffix() {
+        return suffix;
+    }
 }
