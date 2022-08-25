@@ -6,14 +6,14 @@ import com.google.gson.Gson;
  * @author YiHui
  * @date 2022/8/13
  */
-public class GsonUtil {
+public class GsonImpl implements JsonApi {
     private static final Gson gson = new Gson();
 
-    static <T> T toObj(String str, Class<T> t) {
+    public <T> T toObj(String str, Class<T> t) {
         return gson.fromJson(str, t);
     }
 
-    static <T> String toStr(T t) {
+    public <T> String toStr(T t) {
         return gson.toJson(t);
     }
 }

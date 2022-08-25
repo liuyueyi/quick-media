@@ -152,11 +152,13 @@ public class DrawOptions {
      */
     public DrawOptions setRenderResource(QrResource pre, QrResource bg) {
         if (pre != null && bg != null) {
-            return resourcePool.createSource(1, 1, pre).build().createSource(1, 1, bg).setMiss(0, 0).build().over();
+            return resourcePool.createSource(1, 1).addResource(pre).build()
+                    .createSource(1, 1).addResource(bg).setMiss(0, 0).build()
+                    .over();
         } else if (pre != null) {
-            return resourcePool.createSource(1, 1, pre).build().over();
+            return resourcePool.createSource(1, 1).addResource(pre).build().over();
         } else if (bg != null) {
-            return resourcePool.createSource(1, 1, bg).setMiss(0, 0).build().over();
+            return resourcePool.createSource(1, 1).addResource(bg).setMiss(0, 0).build().over();
         }
         return this;
     }
@@ -168,7 +170,7 @@ public class DrawOptions {
      * @return
      */
     public DrawOptions setRenderResource(QrResource pre) {
-        return resourcePool.createSource(1, 1, pre).build().over();
+        return resourcePool.createSource(1, 1).addResource(pre).build().over();
     }
 
     /**
@@ -182,7 +184,7 @@ public class DrawOptions {
     }
 
     public QrResourcePool.QrResourcesDecorate newRenderResource(int width, int height, QrResource resource) {
-        return resourcePool.createSource(width, height, resource);
+        return resourcePool.createSource(width, height).addResource(resource);
     }
 
     public QrCodeV3Options complete() {

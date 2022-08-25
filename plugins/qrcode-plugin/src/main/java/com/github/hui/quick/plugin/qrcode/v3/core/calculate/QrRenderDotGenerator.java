@@ -26,6 +26,10 @@ import static com.github.hui.quick.plugin.qrcode.util.ForEachUtil.foreach;
  * @date 2022/7/20
  */
 public class QrRenderDotGenerator {
+    private static final int MATRIX_BG = 0;
+    private static final int MATRIX_PRE = 1;
+    private static final int MATRIX_PROCEED = 2;
+
     /**
      * 计算渲染资源列表
      *
@@ -35,7 +39,7 @@ public class QrRenderDotGenerator {
      */
     public static List<RenderDot> calculateRenderDots(QrCodeV3Options qrCodeConfig, BitMatrixEx bitMatrix) {
         // 探测图形的大小
-        int detectCornerSize = bitMatrix.getByteMatrix().get(0, 5) == 1 ? 7 : 5;
+        int detectCornerSize = bitMatrix.getByteMatrix().get(0, 5) == MATRIX_PRE ? 7 : 5;
 
         int matrixW = bitMatrix.getByteMatrix().getWidth();
         int matrixH = bitMatrix.getByteMatrix().getHeight();
@@ -47,9 +51,19 @@ public class QrRenderDotGenerator {
             QrCodeRenderHelper.DetectLocation detectLocation = inDetectCornerArea(x, y, matrixW, matrixH, detectCornerSize);
             if (detectLocation.detectedArea()) {
                 // 若探测图形特殊绘制，则单独处理
-                if (bitMatrix.getByteMatrix().get(x, y) == 1) {
+                if (bitMatrix.getByteMatrix().get(x, y) == MATRIX_PRE) {
                     // 绘制三个位置探测图形
-                    result.add(drawDetectInfo(qrCodeConfig, bitMatrix, detectCornerSize, x, y, detectLocation));
+                    RenderDot renderDot = drawDetectInfo(qrCodeConfig, bitMatrix, detectCornerSize, x, y, detectLocation);
+                    if (BooleanUtils.isNotTrue(qrCodeConfig.getDetectOptions().getSpecial()) && renderDot.getResource() == null) {
+                        // 探测图形非特殊处理时；使用默认的资源进行渲染
+                        renderDot.setResource(resourcePool.getDefaultDrawResource());
+                    }
+                    result.add(renderDot);
+                } else {
+                    if (BooleanUtils.isNotTrue(qrCodeConfig.getDetectOptions().getSpecial())) {
+                        // 探测图形非特殊处理时，0点图渲染
+                        drawImgBgInfo(bitMatrix, x, y, resourcePool).ifPresent(result::add);
+                    }
                 }
             } else {
                 // 非探测区域内的0点图渲染
@@ -70,7 +84,8 @@ public class QrRenderDotGenerator {
      * @return
      */
     private static Optional<RenderDot> drawImgBgInfo(BitMatrixEx bitMatrix, int x, int y, QrResourcePool resourcePool) {
-        if (bitMatrix.getByteMatrix().get(x, y) == 0 && resourcePool.getDefaultBgResource() != null) {
+        if (bitMatrix.getByteMatrix().get(x, y) == MATRIX_BG  && resourcePool.getDefaultBgResource() != null) {
+            bitMatrix.getByteMatrix().set(x, y, MATRIX_PROCEED);
             // 非探测区域内的0点图渲染
             return Optional.of(new BgRenderDot()
                     .setH(1)
@@ -134,7 +149,7 @@ public class QrRenderDotGenerator {
         QrResource detectResource = qrCodeConfig.getDetectOptions().chooseDetectResource(detectLocation);
         if (detectResource != null && BooleanUtils.isTrue(qrCodeConfig.getDetectOptions().getWhole())) {
             // 图片直接渲染完毕之后，将其他探测图形的点设置为0，表示不需要再次渲染
-            foreach(detectCornerSize, detectCornerSize, (addX, addY) -> bitMatrix.getByteMatrix().set(x + addX, y + addY, 0));
+            foreach(detectCornerSize, detectCornerSize, (addX, addY) -> bitMatrix.getByteMatrix().set(x + addX, y + addY, MATRIX_PROCEED));
             // 码眼整个用一张资源渲染
             renderDot.setOutBorder(false).setDotNum(detectCornerSize).setResource(detectResource);
             return renderDot;
@@ -143,7 +158,7 @@ public class QrRenderDotGenerator {
                 // 设置当前这个点是探测图形的外边框，还是内边框
                 .setOutBorder(inOuterDetectCornerArea(x, y, matrixW, matrixH, detectCornerSize))
                 .setResource(detectResource);
-        bitMatrix.getByteMatrix().set(x, y, 0);
+        bitMatrix.getByteMatrix().set(x, y, MATRIX_PROCEED);
         return renderDot;
     }
 
@@ -215,7 +230,7 @@ public class QrRenderDotGenerator {
         // 要求矩阵的1点图，能完全覆盖 renderSource
         for (int x = 0; x < renderSource.getWidth(); x++) {
             for (int y = 0; y < renderSource.getHeight(); y++) {
-                if (!renderSource.miss(x, y) && matrix.get(startX + x, startY + y) == 0) {
+                if (!renderSource.miss(x, y) && matrix.get(startX + x, startY + y) != MATRIX_PRE) {
                     // 资源图存在，但是矩阵点不存在，则表示未满足条件，直接退出
                     return false;
                 }
@@ -223,7 +238,7 @@ public class QrRenderDotGenerator {
                 if (fullMatch) {
                     // 全匹配时，则要求资源图是空格的地方，二维码矩阵也是空白的
                     // 非全匹配时，只要求资源图有的地方，二维码矩阵也有
-                    if (renderSource.miss(x, y) && matrix.get(startX + x, startY + y) == 1) {
+                    if (renderSource.miss(x, y) && matrix.get(startX + x, startY + y) == MATRIX_PRE) {
                         return false;
                     }
                 }
@@ -244,7 +259,7 @@ public class QrRenderDotGenerator {
         // 将命中的标记为已渲染
         foreach(renderSource.getWidth(), renderDot.getH(), (w, h) -> {
             if (!renderSource.miss(w, h)) {
-                matrixEx.getByteMatrix().set(x + w, y + h, 0);
+                matrixEx.getByteMatrix().set(x + w, y + h, MATRIX_PROCEED);
             }
         });
         return renderDot;

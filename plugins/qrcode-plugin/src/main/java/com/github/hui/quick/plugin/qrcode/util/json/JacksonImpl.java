@@ -6,10 +6,10 @@ import com.fasterxml.jackson.databind.ObjectMapper;
  * @author YiHui
  * @date 2022/8/13
  */
-public class JacksonUtil {
+public class JacksonImpl implements JsonApi{
     private static final ObjectMapper jsonMapper = new ObjectMapper();
 
-    static <T> T toObj(String str, Class<T> clz) {
+    public <T> T toObj(String str, Class<T> clz) {
         try {
             return jsonMapper.readValue(str, clz);
         } catch (Exception e) {
@@ -17,7 +17,7 @@ public class JacksonUtil {
         }
     }
 
-    static <T> String toStr(T t) {
+    public <T> String toStr(T t) {
         try {
             return jsonMapper.writeValueAsString(t);
         } catch (Exception e) {

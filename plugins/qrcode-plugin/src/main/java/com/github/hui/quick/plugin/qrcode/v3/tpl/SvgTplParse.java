@@ -6,6 +6,7 @@ import com.github.hui.quick.plugin.qrcode.v3.req.DrawOptions;
 import com.github.hui.quick.plugin.qrcode.v3.req.QrCodeV3Options;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.tuple.ImmutablePair;
+import org.apache.commons.lang3.tuple.ImmutableTriple;
 
 import java.util.*;
 
@@ -81,22 +82,28 @@ public class SvgTplParse extends BaseTplParse {
      * @param dotList
      */
     private static void initQrResource(DrawOptions options, int dotSize, List<SymbolTag> dotList) {
-        Map<ImmutablePair<Integer, Integer>, List<SymbolTag>> svgSymbols = new HashMap<>(dotList.size());
+        Map<ImmutableTriple<String, Integer, Integer>, List<SymbolTag>> svgSymbols = new HashMap<>(dotList.size());
+        boolean containDefaultPreTag = false;
         for (SymbolTag tag : dotList) {
             if (tag.size != null && tag.size.size() > 0) {
-                tag.size.forEach(key -> svgSymbols.computeIfAbsent(key, s -> new ArrayList<>()).add(tag));
+                for (ImmutablePair<Integer, Integer> key : tag.size) {
+                    if (key.left == 1 && key.right == 1 && StringUtils.isBlank(tag.miss)) containDefaultPreTag = true;
+                    svgSymbols.computeIfAbsent(ImmutableTriple.of(tag.miss, key.left, key.right), s -> new ArrayList<>()).add(tag);
+                }
             } else {
                 ImmutablePair<Integer, Integer> key = ImmutablePair.of(tag.width / dotSize, tag.height / dotSize);
-                svgSymbols.computeIfAbsent(key, s -> new ArrayList<>()).add(tag);
+                if (key.left == 1 && key.right == 1 && StringUtils.isBlank(tag.miss)) containDefaultPreTag = true;
+                svgSymbols.computeIfAbsent(ImmutableTriple.of(tag.miss, key.left, key.right), s -> new ArrayList<>()).add(tag);
             }
         }
 
-        if (!svgSymbols.containsKey(ImmutablePair.of(1, 1))) {
+        if (!containDefaultPreTag) {
             throw new IllegalArgumentException("no 1x1 svg symbol in svgTemplate!");
         }
 
         svgSymbols.forEach((k, v) -> {
-            QrResourcePool.QrResourcesDecorate decorate = options.getResourcePool().createSource(k.getLeft(), k.getRight());
+            // width, height, miss 构建一个相同的资源 QrResourcesDecorate
+            QrResourcePool.QrResourcesDecorate decorate = options.getResourcePool().createSource(k.middle, k.right);
             v.forEach(tag -> decorate.addResource(new QrResource().setSvg(tag.tag), tag.count).setMiss(tag.miss));
             decorate.build();
         });

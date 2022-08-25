@@ -88,6 +88,7 @@ public class SvgTemplate {
 
     public SvgTemplate setCurrentColor(Color currentColor) {
         if (currentColor != null) this.currentColor = ColorUtil.color2htmlColor(currentColor);
+        else this.currentColor = null;
         return this;
     }
 
