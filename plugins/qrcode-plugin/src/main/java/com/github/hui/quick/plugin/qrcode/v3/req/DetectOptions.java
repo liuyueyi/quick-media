@@ -71,6 +71,12 @@ public class DetectOptions {
         return this;
     }
 
+    public DetectOptions setColor(Color color) {
+        this.inColor = color;
+        this.outColor = color;
+        return this;
+    }
+
     public QrResource getLt() {
         return lt;
     }

@@ -8,6 +8,7 @@ import com.github.hui.quick.plugin.qrcode.v3.entity.render.BgRenderDot;
 import com.github.hui.quick.plugin.qrcode.v3.entity.render.DetectRenderDot;
 import com.github.hui.quick.plugin.qrcode.v3.entity.render.PreRenderDot;
 import com.github.hui.quick.plugin.qrcode.v3.entity.render.RenderDot;
+import com.github.hui.quick.plugin.qrcode.v3.entity.svg.BorderSvgTag;
 import com.github.hui.quick.plugin.qrcode.v3.entity.svg.RectSvgTag;
 import com.github.hui.quick.plugin.qrcode.v3.entity.svg.SvgTemplate;
 import com.github.hui.quick.plugin.qrcode.v3.entity.svg.SymbolSvgTag;
@@ -56,6 +57,10 @@ public class QrSvgRender {
                     }
                 }
             }
+            // 当特殊指定了绘制颜色时，使用其覆盖默认的颜色
+            if (dot.getResource() != null && dot.getResource().getDrawColor() != null) {
+                svgTemplate.setCurrentColor(dot.getResource().getDrawColor());
+            }
             options.getDrawOptions().getDrawStyle().drawAsSvg(svgTemplate, dot);
         });
 
@@ -71,7 +76,7 @@ public class QrSvgRender {
      */
     public static void drawLogo(SvgTemplate svgTemplate, QrCodeV3Options options) {
         QrResource logo = options.getLogoOptions().getLogo();
-        if (logo == null || StringUtils.isBlank(logo.getSvg())) {
+        if (logo == null || StringUtils.isBlank(logo.getSvg()) && logo.getDrawStyle() == null) {
             // 无svg格式的logo，直接返回
             return;
         }
@@ -86,13 +91,33 @@ public class QrSvgRender {
         int logoOffsetX = (qrWidth - logoWidth) >> 1;
         int logoOffsetY = (qrHeight - logoHeight) >> 1;
 
-        svgTemplate.addSymbol(logo.getSvg());
-        svgTemplate.addTag(new SymbolSvgTag().setSvgId(logo.getSvgId())
-                .setX(logoOffsetX)
-                .setY(logoOffsetY)
-                .setW(logoWidth)
-                .setH(logoHeight)
-        );
-    }
+        if (options.getLogoOptions().getBorderColor() != null) {
+            // 绘制圆角边框
+            svgTemplate.addTag(new BorderSvgTag().setW(logoWidth).setH(logoHeight).setX(logoOffsetX).setY(logoOffsetY)
+                    .setColor(ColorUtil.color2htmlColor(options.getLogoOptions().getBorderColor())));
+        }
 
+        if (logo.getDrawStyle() != null && logo.getDrawStyle() != DrawStyle.SVG) {
+            // 支持绘制样式的logo渲染
+            if (logo.getDrawColor() != null) {
+                svgTemplate.setCurrentColor(logo.getDrawColor());
+            }
+            RenderDot logoDot = new PreRenderDot()
+                    .setW(logoWidth)
+                    .setH(logoHeight)
+                    .setX(logoOffsetX)
+                    .setY(logoOffsetY)
+                    .setSize(1)
+                    .setResource(logo);
+            logo.getDrawStyle().drawAsSvg(svgTemplate, logoDot);
+        } else {
+            svgTemplate.addSymbol(logo.getSvg());
+            svgTemplate.addTag(new SymbolSvgTag().setSvgId(logo.getSvgId())
+                    .setX(logoOffsetX)
+                    .setY(logoOffsetY)
+                    .setW(logoWidth)
+                    .setH(logoHeight)
+            );
+        }
+    }
 }

@@ -84,6 +84,14 @@ public class QrResourcePool {
         return defaultRenderBgResource == null ? null : defaultRenderBgResource.getResource();
     }
 
+    /**
+     * 注意，将width, height, miss相同的资源，放在一个QrResourcesDecorate内；每次调用createSources都会创建一个新的QrResourcesDecorate
+     *
+     * @param width
+     * @param height
+     * @param resource
+     * @return
+     */
     public QrResourcesDecorate createSource(int width, int height, QrResource resource) {
         return new QrResourcesDecorate(this).setWidth(width).setHeight(height).addResource(resource);
     }

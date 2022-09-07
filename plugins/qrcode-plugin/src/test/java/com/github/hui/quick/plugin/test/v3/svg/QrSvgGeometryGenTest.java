@@ -3,6 +3,7 @@ package com.github.hui.quick.plugin.test.v3.svg;
 import com.github.hui.quick.plugin.base.OSUtil;
 import com.github.hui.quick.plugin.qrcode.v3.constants.DrawStyle;
 import com.github.hui.quick.plugin.qrcode.wrapper.QrCodeGenV3;
+import com.github.hui.quick.plugin.test.v3.BasicGenTest;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -15,7 +16,7 @@ import java.awt.*;
  * @author YiHui
  * @date 2022/8/5
  */
-public class QrSvgGeometryGenTest {
+public class QrSvgGeometryGenTest extends BasicGenTest {
 
     private String prefix = "/tmp";
     private static final String msg = "http://weixin.qq.com/r/FS9waAPEg178rUcL93oH";

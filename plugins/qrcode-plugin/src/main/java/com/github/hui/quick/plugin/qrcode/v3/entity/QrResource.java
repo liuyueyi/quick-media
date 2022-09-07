@@ -82,6 +82,11 @@ public class QrResource {
      */
     private IDrawing drawStyle;
 
+    /**
+     * 绘制颜色
+     */
+    private Color drawColor;
+
 
     public GifDecoder getGif() {
         return gif;
@@ -168,17 +173,24 @@ public class QrResource {
         return svg;
     }
 
+    private static final String SVG_START_TAG = "<symbol ";
+    private static final String SVG_ID_TAG = " id=\"";
+
     public QrResource setSvg(String svg) {
+        if (!svg.startsWith(SVG_START_TAG)) {
+            throw new IllegalArgumentException("svg只接受<symbol/>定义资源!");
+        }
+
         this.svg = svg.trim();
         if (svgId == null) {
-            int index = svg.indexOf("id=\"");
+            int index = svg.indexOf(SVG_ID_TAG);
             if (index >= 0) {
-                index += 4;
+                index += SVG_ID_TAG.length();
                 svgId = svg.substring(index, svg.indexOf("\"", index));
-            } else if (svg.startsWith("<symbol")) {
+            } else {
                 // 当没有id时，默认分配一个
                 svgId = UUID.randomUUID().toString();
-                this.svg = "<symbol id=\"" + svgId + "\" " + svg.substring("<symbol".length());
+                this.svg = SVG_START_TAG + SVG_ID_TAG + svgId + "\" " + svg.substring(SVG_START_TAG.length());
             }
         }
         return this;
@@ -186,13 +198,15 @@ public class QrResource {
 
     public QrResource setSvg(String id, String svg) {
         this.svgId = id;
-        int index = svg.indexOf("id=\"");
+        int index = svg.indexOf(SVG_ID_TAG);
         if (index >= 0) {
-            index += 4;
+            // 若id存在，则使用给定的进行替换
+            index += SVG_ID_TAG.length();
             int end = svg.indexOf("\"", index);
             this.svg = svg.substring(0, index) + id + svg.substring(end);
         } else {
-            this.svg = svg;
+            // 需要给svg模板添加id
+            this.svg = SVG_START_TAG + SVG_ID_TAG + svgId + "\" " + svg.substring(SVG_START_TAG.length());
         }
         return this;
     }
@@ -244,6 +258,15 @@ public class QrResource {
 
     public QrResource setDrawStyle(IDrawing drawStyle) {
         this.drawStyle = drawStyle;
+        return this;
+    }
+
+    public Color getDrawColor() {
+        return drawColor;
+    }
+
+    public QrResource setDrawColor(Color drawColor) {
+        this.drawColor = drawColor;
         return this;
     }
 

@@ -47,7 +47,10 @@ public class QrImgRender {
         g2d.fillRect(0, 0, options.getW(), options.getH());
 
         dotList.forEach(dot -> {
-            if (dot.getType() == RenderDotType.DETECT.getType()) {
+            if (dot.getResource() != null && dot.getResource().getDrawColor() != null) {
+                // 资源设置时，若配置了颜色，则使用指定的颜色覆盖默认值
+                g2d.setColor(dot.getResource().getDrawColor());
+            } else if (dot.getType() == RenderDotType.DETECT.getType()) {
                 // 探测图形
                 DetectRenderDot dDot = (DetectRenderDot) dot;
                 if (BooleanUtils.isTrue(dDot.getOutBorder())) {
