@@ -18,14 +18,10 @@ import java.awt.*;
  */
 public class QrSvgGeometryGenTest extends BasicGenTest {
 
-    private String prefix = "/tmp";
-    private static final String msg = "http://weixin.qq.com/r/FS9waAPEg178rUcL93oH";
-
     @Before
     public void init() {
-        if (OSUtil.isWinOS()) {
-            prefix = "d://quick-media/svg";
-        }
+        super.init();
+        prefix += "/svg";
     }
 
     // --------------------- 几何样式 ----------------------

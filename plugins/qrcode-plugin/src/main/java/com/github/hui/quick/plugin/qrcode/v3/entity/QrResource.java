@@ -4,6 +4,7 @@ import com.github.hui.quick.plugin.base.awt.ImageLoadUtil;
 import com.github.hui.quick.plugin.base.gif.GifDecoder;
 import com.github.hui.quick.plugin.base.gif.GifHelper;
 import com.github.hui.quick.plugin.qrcode.constants.QuickQrUtil;
+import com.github.hui.quick.plugin.qrcode.v3.constants.DrawStyle;
 import com.github.hui.quick.plugin.qrcode.v3.constants.PicStyle;
 import com.github.hui.quick.plugin.qrcode.v3.constants.TxtMode;
 import com.github.hui.quick.plugin.qrcode.v3.draw.IDrawing;
@@ -177,7 +178,7 @@ public class QrResource {
     private static final String SVG_ID_TAG = " id=\"";
 
     public QrResource setSvg(String svg) {
-        if (!svg.startsWith(SVG_START_TAG)) {
+        if (!svg.trim().startsWith(SVG_START_TAG)) {
             throw new IllegalArgumentException("svg只接受<symbol/>定义资源!");
         }
 
@@ -193,6 +194,10 @@ public class QrResource {
                 this.svg = SVG_START_TAG + SVG_ID_TAG + svgId + "\" " + svg.substring(SVG_START_TAG.length());
             }
         }
+        if (this.drawStyle == null) {
+            // 设置svg之后，默认更新对应的绘制样式为SVG
+            setDrawStyle(DrawStyle.SVG);
+        }
         return this;
     }
 
@@ -207,6 +212,11 @@ public class QrResource {
         } else {
             // 需要给svg模板添加id
             this.svg = SVG_START_TAG + SVG_ID_TAG + svgId + "\" " + svg.substring(SVG_START_TAG.length());
+        }
+
+        if (this.drawStyle == null) {
+            // 设置svg之后，默认更新对应的绘制样式为SVG
+            setDrawStyle(DrawStyle.SVG);
         }
         return this;
     }

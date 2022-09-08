@@ -6,6 +6,7 @@ import com.github.hui.quick.plugin.qrcode.v3.entity.QrResource;
 import com.github.hui.quick.plugin.qrcode.wrapper.QrCodeGenV3;
 import com.github.hui.quick.plugin.test.v3.BasicGenTest;
 import com.google.zxing.qrcode.decoder.ErrorCorrectionLevel;
+import org.junit.Before;
 import org.junit.Test;
 
 import java.awt.*;
@@ -15,6 +16,11 @@ import java.awt.*;
  * @date 2022/8/23
  */
 public class QrSvgLogoGenTest extends BasicGenTest {
+    @Before
+    public void init() {
+        super.init();
+        prefix += "/svg";
+    }
 
     /**
      * 指定信息点资源
@@ -26,7 +32,7 @@ public class QrSvgLogoGenTest extends BasicGenTest {
                 .setSize(500)
                 .setLogo(new QrResource().setDrawStyle(DrawStyle.TXT)
                         .setTxtMode(TxtMode.FULL)
-                        .setText("灰")
+                        .setText("一")
                         .setFontStyle(Font.BOLD)
                         .setDrawColor(Color.BLUE))
                 .setDrawStyle(DrawStyle.SVG)

@@ -14,7 +14,7 @@ public class BasicGenTest {
     @Before
     public void init() {
         if (OSUtil.isWinOS()) {
-            prefix = "d://quick-media/svg";
+            prefix = "d://quick-media";
         }
     }
 

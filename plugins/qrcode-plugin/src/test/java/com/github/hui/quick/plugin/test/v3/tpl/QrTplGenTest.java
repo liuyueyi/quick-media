@@ -1,10 +1,9 @@
-package com.github.hui.quick.plugin.test.v3;
+package com.github.hui.quick.plugin.test.v3.tpl;
 
-import com.github.hui.quick.plugin.base.OSUtil;
 import com.github.hui.quick.plugin.base.file.FileReadUtil;
 import com.github.hui.quick.plugin.qrcode.wrapper.QrCodeGenV3;
+import com.github.hui.quick.plugin.test.v3.BasicGenTest;
 import com.google.zxing.qrcode.decoder.ErrorCorrectionLevel;
-import org.junit.Before;
 import org.junit.Test;
 
 /**
@@ -13,17 +12,7 @@ import org.junit.Test;
  * @author YiHui
  * @date 2022/8/13
  */
-public class QrTplGenTest {
-
-    private String prefix = "/tmp";
-    private static final String msg = "http://weixin.qq.com/r/FS9waAPEg178rUcL93oH";
-
-    @Before
-    public void init() {
-        if (OSUtil.isWinOS()) {
-            prefix = "d://quick-media";
-        }
-    }
+public class QrTplGenTest extends BasicGenTest {
 
     @Test
     public void imgTplTest() throws Exception {
@@ -31,7 +20,7 @@ public class QrTplGenTest {
         Boolean ans = QrCodeGenV3.of(msg).setW(700)
                 .setDetectSpecial(true)
                 .setImgTemplate(content).build()
-                .asFile(prefix + "/flower.png");
+                .asFile(prefix + "/img/flower.png");
         System.out.println("over");
     }
 
@@ -43,7 +32,7 @@ public class QrTplGenTest {
 //                .setLogoRate(20)
                 .setErrorCorrection(ErrorCorrectionLevel.H)
                 .build()
-                .asFile(prefix + "/龙猫.svg");
+                .asFile(prefix + "/svg/龙猫.svg");
         System.out.println(ans);
     }
 }

@@ -1,6 +1,5 @@
 package com.github.hui.quick.plugin.test.v3.svg;
 
-import com.github.hui.quick.plugin.base.OSUtil;
 import com.github.hui.quick.plugin.qrcode.v3.constants.DrawStyle;
 import com.github.hui.quick.plugin.qrcode.v3.entity.QrResource;
 import com.github.hui.quick.plugin.qrcode.wrapper.QrCodeGenV3;
@@ -18,6 +17,13 @@ import java.awt.*;
  * @date 2022/8/5
  */
 public class QrSvgDetectGenTest extends BasicGenTest {
+
+    @Before
+    public void init() {
+        super.init();
+        prefix += "/svg";
+    }
+
     @Test
     public void detectColor() throws Exception {
         boolean ans = QrCodeGenV3.of(msg).setSize(300)
@@ -75,6 +81,7 @@ public class QrSvgDetectGenTest extends BasicGenTest {
 
     /**
      * 三个探测点采用不同的资源
+     *
      * @throws Exception
      */
     @Test
