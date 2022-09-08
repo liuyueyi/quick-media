@@ -93,7 +93,9 @@ public class QrSvgRender {
 
         if (options.getLogoOptions().getBorderColor() != null) {
             // 绘制圆角边框
-            svgTemplate.addTag(new BorderSvgTag().setW(logoWidth).setH(logoHeight).setX(logoOffsetX).setY(logoOffsetY)
+            svgTemplate.addTag(new BorderSvgTag()
+                    .setFillColor(ColorUtil.color2htmlColor(options.getDrawOptions().getBgColor()))
+                    .setW(logoWidth).setH(logoHeight).setX(logoOffsetX).setY(logoOffsetY)
                     .setColor(ColorUtil.color2htmlColor(options.getLogoOptions().getBorderColor())));
         }
 

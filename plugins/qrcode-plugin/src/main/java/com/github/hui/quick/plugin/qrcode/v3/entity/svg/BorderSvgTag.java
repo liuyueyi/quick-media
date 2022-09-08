@@ -14,10 +14,39 @@ public class BorderSvgTag extends SvgTag {
 
     protected int strokeWidth = 2;
 
+    protected String fillColor = "#ffffff";
+
+    public int getRoundRate() {
+        return roundRate;
+    }
+
+    public BorderSvgTag setRoundRate(int roundRate) {
+        this.roundRate = roundRate;
+        return this;
+    }
+
+    public int getStrokeWidth() {
+        return strokeWidth;
+    }
+
+    public BorderSvgTag setStrokeWidth(int strokeWidth) {
+        this.strokeWidth = strokeWidth;
+        return this;
+    }
+
+    public String getFillColor() {
+        return fillColor;
+    }
+
+    public BorderSvgTag setFillColor(String fillColor) {
+        this.fillColor = fillColor;
+        return this;
+    }
+
     @Override
     public String toString() {
         int round = Math.floorDiv(w, roundRate);
-        return "<rect" + " style=\"stroke:" + color + ";fill:#ffffff; stroke-width:" + strokeWidth +
+        return "<rect" + " style=\"stroke:" + color + ";fill:" + fillColor + "; stroke-width:" + strokeWidth +
                 "\" height=\"" + h + "\" width=\"" + w + "\" y=\"" + y + "\" x=\"" + x + "\" rx=\"" + round + "\" ry=\"" + round + "\" />";
     }
 }
