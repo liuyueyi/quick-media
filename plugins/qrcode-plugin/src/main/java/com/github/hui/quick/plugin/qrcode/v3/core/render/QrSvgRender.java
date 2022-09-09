@@ -16,6 +16,7 @@ import com.github.hui.quick.plugin.qrcode.v3.req.QrCodeV3Options;
 import org.apache.commons.lang3.BooleanUtils;
 import org.apache.commons.lang3.StringUtils;
 
+import java.awt.*;
 import java.util.List;
 import java.util.Optional;
 
@@ -43,14 +44,17 @@ public class QrSvgRender {
             } else if (dot instanceof BgRenderDot) {
                 svgTemplate.setCurrentColor(options.getDrawOptions().getBgColor());
             } else if (dot instanceof DetectRenderDot) {
-                if (BooleanUtils.isTrue(((DetectRenderDot) dot).getOutBorder())) {
-                    svgTemplate.setCurrentColor(options.getDetectOptions().getOutColor());
-                } else {
-                    svgTemplate.setCurrentColor(options.getDetectOptions().getInColor());
+                // 探测图形
+                DetectRenderDot dDot = (DetectRenderDot) dot;
+                Color color = BooleanUtils.isTrue(dDot.getOutBorder()) ? options.getDetectOptions().getOutColor() : options.getDetectOptions().getInColor();
+                if (dot.getResource() != null && dot.getResource().getDrawColor() != null) {
+                    // 若指定绘制资源的颜色，则使用它覆盖外部的outBorderColor, inColor
+                    color = dot.getResource().getDrawColor();
                 }
-
+                svgTemplate.setCurrentColor(color);
                 if (BooleanUtils.isTrue(options.getDetectOptions().getSpecial())
                         && (dot.getResource() == null || dot.getResource().getSvgInfo() == null)) {
+                    svgTemplate.setCurrentColor(color == null ? Color.BLACK: color);
                     if (dot.getResource() == null || dot.getResource().getDrawStyle() == null) {
                         // 当探测图形特殊处理，即不与指定前置图样式相同时；首先判断是否有指定特殊的探测图形资源，没有时，则走默认的黑色矩形框设置
                         dot.setResource(new QrResource().setDrawStyle(DrawStyle.RECT));

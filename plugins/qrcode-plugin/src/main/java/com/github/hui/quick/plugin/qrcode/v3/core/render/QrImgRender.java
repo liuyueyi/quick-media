@@ -53,10 +53,19 @@ public class QrImgRender {
             } else if (dot.getType() == RenderDotType.DETECT.getType()) {
                 // 探测图形
                 DetectRenderDot dDot = (DetectRenderDot) dot;
-                if (BooleanUtils.isTrue(dDot.getOutBorder())) {
-                    g2d.setColor(options.getDetectOptions().getOutColor());
-                } else {
-                    g2d.setColor(options.getDetectOptions().getInColor());
+                Color color = BooleanUtils.isTrue(dDot.getOutBorder()) ? options.getDetectOptions().getOutColor() : options.getDetectOptions().getInColor();
+                if (dot.getResource() != null && dot.getResource().getDrawColor() != null) {
+                    // 若指定绘制资源的颜色，则使用它覆盖外部的outBorderColor, inColor
+                    color = dot.getResource().getDrawColor();
+                }
+                g2d.setColor(color == null ? options.getDrawOptions().getPreColor(): color);
+                if (BooleanUtils.isTrue(options.getDetectOptions().getSpecial())
+                        && (dot.getResource() == null || dot.getResource().getImg() == null)) {
+                    g2d.setColor(color == null ? Color.BLACK: color);
+                    if (dot.getResource() == null || dot.getResource().getDrawStyle() == null) {
+                        // 当探测图形特殊处理，即不与指定前置图样式相同时；首先判断是否有指定特殊的探测图形资源，没有时，则走默认的黑色矩形框设置
+                        dot.setResource(new QrResource().setDrawStyle(DrawStyle.RECT));
+                    }
                 }
             } else if (dot.getType() == RenderDotType.BG.getType()) {
                 g2d.setColor(options.getDrawOptions().getBgColor());

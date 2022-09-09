@@ -43,7 +43,7 @@ public class QrRenderFacade {
 
         // 如果指定了二维码输出图片样式，则需要额外处理一下
         if (options.getDrawOptions().getPicStyle() != null) {
-            options.getDrawOptions().getPicStyle().process(qrImg, options.getDrawOptions().getCornerRadius());
+            qrImg = options.getDrawOptions().getPicStyle().process(qrImg, options.getDrawOptions().getCornerRadius());
         }
         return qrImg;
     }

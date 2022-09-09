@@ -1,6 +1,7 @@
 package com.github.hui.quick.plugin.qrcode.v3.constants;
 
 import com.github.hui.quick.plugin.qrcode.constants.QuickQrUtil;
+import com.github.hui.quick.plugin.qrcode.util.NumUtil;
 import com.github.hui.quick.plugin.qrcode.v3.draw.IDrawing;
 import com.github.hui.quick.plugin.qrcode.v3.entity.render.RenderDot;
 import com.github.hui.quick.plugin.qrcode.v3.entity.svg.*;
@@ -132,7 +133,46 @@ public enum DrawStyle implements IDrawing {
     STAR(0) {
         @Override
         public void geometryDrawFunc(Graphics2D g2d, int x, int y, int w, int h) {
-            throw new IllegalStateException("STAR not support for gen QrImg!");
+//            float rate = NumUtil.divWithScaleFloor(w, 20, 2);
+//            int px[] = {(int) (x + NumUtil.multiplyWithScaleFloor(10, rate, 2)),
+//                    (int) (x + NumUtil.multiplyWithScaleFloor(4, rate, 2)),
+//                    (int) (x + NumUtil.multiplyWithScaleFloor(19, rate, 2)),
+//                    (int)(x + rate),
+//                    (int)(x + NumUtil.multiplyWithScaleFloor(16, rate, 2))
+//            };
+//            int py[] = {(int) (y + rate),
+//                    (int) (y + NumUtil.multiplyWithScaleFloor(19.8f, rate, 2)),
+//                    (int)(y + NumUtil.multiplyWithScaleFloor(7.8f, rate, 2)),
+//                    (int)(y + NumUtil.multiplyWithScaleFloor(7.8f, rate, 2)),
+//                    (int)(y + NumUtil.multiplyWithScaleFloor(19.8f, rate, 2))
+//            };
+
+            float rate = NumUtil.divWithScaleFloor(w, 224, 2);
+            int px[] = {
+                    (int) (x + 112 * rate),
+                    (int) (x + 138 * rate),
+                    (int) (x + 224 * rate),
+                    (int) (x + 152 * rate),
+                    (int) (x + 179 * rate),
+                    (int) (x + 112 * rate),
+                    (int) (x + 45 * rate),
+                    (int) (x + 72 * rate),
+                    (int) (x + 0 * rate),
+                    (int) (x + 87 * rate),
+            };
+            int py[] = {
+                    (int) (y + 8 * rate),
+                    (int) (y + 90 * rate),
+                    (int) (y + 90 * rate),
+                    (int) (y + 140 * rate),
+                    (int) (y + 216 * rate),
+                    (int) (y + 167 * rate),
+                    (int) (y + 216 * rate),
+                    (int) (y + 140 * rate),
+                    (int) (y + 90 * rate),
+                    (int) (y + 90 * rate),
+            };
+            g2d.fillPolygon(px, py, 10);
         }
 
         @Override
@@ -256,7 +296,9 @@ public enum DrawStyle implements IDrawing {
 
     @Override
     public void drawAsImg(Graphics2D g2d, RenderDot renderDot) {
-        if (renderDot.getResource() != null && renderDot.getResource().getDrawStyle() != null && renderDot.getResource().getDrawStyle() != this) {
+        if (renderDot.getResource() != null
+                && renderDot.getResource().getDrawStyle() != null
+                && renderDot.getResource().getDrawStyle() != this) {
             renderDot.getResource().getDrawStyle().drawAsImg(g2d, renderDot);
         } else {
             switch (style) {

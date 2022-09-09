@@ -1,9 +1,7 @@
 package com.github.hui.quick.plugin.qrcode.v3.req;
 
 import com.github.hui.quick.plugin.base.awt.ColorUtil;
-import com.github.hui.quick.plugin.qrcode.v3.constants.BgStyle;
-import com.github.hui.quick.plugin.qrcode.v3.constants.DrawStyle;
-import com.github.hui.quick.plugin.qrcode.v3.constants.QrType;
+import com.github.hui.quick.plugin.qrcode.v3.constants.*;
 import com.github.hui.quick.plugin.qrcode.v3.entity.QrResource;
 import com.github.hui.quick.plugin.qrcode.v3.tpl.ImgTplParse;
 import com.github.hui.quick.plugin.qrcode.v3.tpl.SvgTplParse;
@@ -65,7 +63,7 @@ public class QrCodeV3Options {
     /**
      * 生成二维码图片的格式 png, jpg
      */
-    private String picType;
+    private PicType picType;
 
     /**
      * 输出二维码的类型
@@ -142,7 +140,7 @@ public class QrCodeV3Options {
                 qrType = QrType.SVG;
             } else if (bgOptions.getBg() != null && bgOptions.getBg().getGif() != null || (frontOptions.getFt() != null && frontOptions.getFt().getGif() != null)) {
                 qrType = QrType.GIF;
-                picType = qrType.getSuffix();
+                picType = PicTypeEnum.GIF;
             }
         }
         return qrType;
@@ -162,12 +160,21 @@ public class QrCodeV3Options {
         return this;
     }
 
-    public String getPicType() {
+    public PicType getPicType() {
         return picType;
     }
 
-    public QrCodeV3Options setPicType(String picType) {
+    public QrCodeV3Options setPicType(PicType picType) {
         this.picType = picType;
+        return this;
+    }
+
+    public QrCodeV3Options setPicType(String strPic) {
+        if (PicTypeEnum.isJpg(strPic)) {
+            this.picType = PicTypeEnum.JPG;
+        } else {
+            this.picType = PicTypeEnum.valueOf(strPic.toUpperCase());
+        }
         return this;
     }
 
@@ -256,6 +263,16 @@ public class QrCodeV3Options {
 
     public QrCodeV3Options setBgColor(Color color) {
         newDrawOptions().setBgColor(color);
+        return this;
+    }
+
+    public QrCodeV3Options setPicStyle(PicStyle picStyle) {
+        newDrawOptions().setPicStyle(picStyle);
+        return this;
+    }
+
+    public QrCodeV3Options setCornerRadius(Float radius) {
+        newDrawOptions().setCornerRadius(radius);
         return this;
     }
 
@@ -412,7 +429,7 @@ public class QrCodeV3Options {
     public QrCodeGenV3 build() {
         if (w == null) w = h == null ? Integer.valueOf(200) : h;
         if (h == null) h = w;
-        if (picType == null) picType = "png";
+        if (picType == null) picType = PicTypeEnum.PNG;
 
         if (drawOptions == null) newDrawOptions().complete();
         else drawOptions.complete();

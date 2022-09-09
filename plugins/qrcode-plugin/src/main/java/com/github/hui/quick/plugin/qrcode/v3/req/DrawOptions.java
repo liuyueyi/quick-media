@@ -48,7 +48,7 @@ public class DrawOptions {
     private PicStyle picStyle;
 
     /**
-     * 圆角的弧度，默认为 1 / 8
+     * 当生成二维码的图片需要做圆角处理时，这个参数控制圆角的弧度，默认为 1 / 8
      */
     private Float cornerRadius;
 

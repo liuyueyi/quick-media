@@ -1,15 +1,19 @@
 package com.github.hui.quick.plugin.qrcode.wrapper;
 
 import com.github.hui.quick.plugin.base.Base64Util;
+import com.github.hui.quick.plugin.base.awt.GraphicUtil;
 import com.github.hui.quick.plugin.base.file.FileWriteUtil;
 import com.github.hui.quick.plugin.base.gif.GifHelper;
 import com.github.hui.quick.plugin.qrcode.v3.constants.DrawStyle;
+import com.github.hui.quick.plugin.qrcode.v3.constants.PicType;
+import com.github.hui.quick.plugin.qrcode.v3.constants.PicTypeEnum;
 import com.github.hui.quick.plugin.qrcode.v3.constants.QrType;
 import com.github.hui.quick.plugin.qrcode.v3.core.QrRenderFacade;
 import com.github.hui.quick.plugin.qrcode.v3.req.QrCodeV3Options;
 import org.apache.commons.lang3.tuple.ImmutablePair;
 
 import javax.imageio.ImageIO;
+import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
@@ -65,8 +69,11 @@ public class QrCodeGenV3 {
         } else if (options.getQrType() == null || options.getQrType() == QrType.IMG) {
             // 默认使用图片方式
             BufferedImage bufferedImage = asImg();
+            if (PicTypeEnum.isJpg(options.getPicType().getType())) {
+                bufferedImage = GraphicUtil.pngToJpg(bufferedImage, Color.WHITE);
+            }
             try (ByteArrayOutputStream outputStream = new ByteArrayOutputStream()) {
-                ImageIO.write(bufferedImage, options.getPicType(), outputStream);
+                ImageIO.write(bufferedImage, options.getPicType().getType(), outputStream);
                 return Base64Util.encode(outputStream);
             }
         } else if (options.getQrType() == QrType.STR) {
@@ -106,7 +113,11 @@ public class QrCodeGenV3 {
             }
         } else if (options.getQrType() == QrType.IMG) {
             BufferedImage bufferedImage = asImg();
-            if (!ImageIO.write(bufferedImage, options.getPicType(), file)) {
+            // 如果是输出jpg，则需要特殊处理一下
+            if (PicTypeEnum.isJpg(options.getPicType().getType())) {
+                bufferedImage = GraphicUtil.pngToJpg(bufferedImage, Color.WHITE);
+            }
+            if (!ImageIO.write(bufferedImage, options.getPicType().getType(), file)) {
                 throw new IOException("save QrCode image to: " + absFileName + " error!");
             }
             return true;
