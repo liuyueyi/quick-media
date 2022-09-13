@@ -105,6 +105,9 @@ public class DrawOptions {
         return transparencyBgFill;
     }
 
+    /**
+     * 图片透明处填充，true则表示透明处用bgColor填充； false则透明处依旧透明
+     */
     public DrawOptions setTransparencyBgFill(boolean transparencyBgFill) {
         this.transparencyBgFill = transparencyBgFill;
         return this;

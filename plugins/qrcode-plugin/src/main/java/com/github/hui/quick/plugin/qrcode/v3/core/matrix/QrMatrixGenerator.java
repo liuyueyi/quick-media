@@ -63,6 +63,15 @@ public class QrMatrixGenerator {
         int height = bitMatrixEx.getByteMatrix().getHeight();
         int logoWidth = (int) Math.ceil(width / (float) rate);
         int logoHeight = (int) Math.ceil(height / (float) rate);
+        if (logoOptions.getLogo().getImg() != null && logoOptions.getLogo().getImg().getWidth() != logoOptions.getLogo().getImg().getHeight()) {
+            // 针对logo非矩形的场景，进行适配
+            float logoRate = logoOptions.getLogo().getImg().getWidth() / (float) logoOptions.getLogo().getImg().getHeight();
+            if (logoRate > 1) {
+                logoHeight = (int) (logoHeight / logoRate);
+            } else {
+                logoWidth = (int) (logoWidth * logoRate);
+            }
+        }
         int logoX = (width - logoWidth) / 2;
         int logoY = (height - logoHeight) / 2;
         for (int x = logoX; x <= logoX + logoWidth; x++) {

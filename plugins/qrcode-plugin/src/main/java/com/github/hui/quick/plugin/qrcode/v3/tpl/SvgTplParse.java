@@ -46,7 +46,7 @@ public class SvgTplParse extends BaseTplParse {
             }
 
             String pre = template.substring(preStartIndex + PRE_START_TAG.length(), preEndIndex);
-            options.setGlobalResource(new QrResource().setSvg(pre));
+            options.setGlobalResource(new QrResource().setSvg(pre, true));
             template = template.substring(0, preStartIndex) + template.substring(preEndIndex + PRE_END_TAG.length());
         }
 

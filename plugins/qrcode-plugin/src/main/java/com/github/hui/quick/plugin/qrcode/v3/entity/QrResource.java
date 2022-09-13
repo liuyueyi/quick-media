@@ -177,12 +177,13 @@ public class QrResource {
     private static final String SVG_START_TAG = "<symbol ";
     private static final String SVG_ID_TAG = " id=\"";
 
-    public QrResource setSvg(String svg) {
-        if (!svg.trim().startsWith(SVG_START_TAG)) {
-            throw new IllegalArgumentException("svg只接受<symbol/>定义资源!");
+    public QrResource setSvg(String svg, boolean ignoreCheck) {
+        svg = svg.trim();
+        this.svg = svg;
+        if (!ignoreCheck && !svg.startsWith(SVG_START_TAG)) {
+            throw new IllegalArgumentException("svg只接受<symbol/>, <defs/>定义资源!");
         }
 
-        this.svg = svg.trim();
         if (svgId == null) {
             int index = svg.indexOf(SVG_ID_TAG);
             if (index >= 0) {
@@ -199,6 +200,10 @@ public class QrResource {
             setDrawStyle(DrawStyle.SVG);
         }
         return this;
+    }
+
+    public QrResource setSvg(String svg) {
+        return this.setSvg(svg, false);
     }
 
     public QrResource setSvg(String id, String svg) {

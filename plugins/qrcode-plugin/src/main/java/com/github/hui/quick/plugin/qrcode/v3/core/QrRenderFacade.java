@@ -32,11 +32,11 @@ public class QrRenderFacade {
         // 在覆盖模式下，先设置二维码的透明度，然后绘制在背景图的正中央，最后绘制logo，这样保证logo不会透明，显示清晰
         // 在填充模式下，先绘制logo，然后绘制在背景的指定位置上；若先绘制背景，再绘制logo，则logo大小偏移量的计算会有问题
         if (options.getBgOptions().getBgStyle() == BgStyle.FILL) {
-            qrImg = QrImgRender.drawLogo(qrImg, options.getLogoOptions());
+            qrImg = QrImgRender.drawLogo(qrImg, options);
             qrImg = QrImgRender.drawBackground(qrImg, options.getBgOptions());
         } else {
             qrImg = QrImgRender.drawBackground(qrImg, options.getBgOptions());
-            qrImg = QrImgRender.drawLogo(qrImg, options.getLogoOptions());
+            qrImg = QrImgRender.drawLogo(qrImg, options);
         }
 
         qrImg = QrImgRender.drawFront(qrImg, options.getFrontOptions());
@@ -65,7 +65,7 @@ public class QrRenderFacade {
 
         if (options.getLogoOptions() != null && options.getBgOptions() != null && options.getBgOptions().getBgStyle() == BgStyle.FILL) {
             // 此种模式，先绘制logo
-            qrImg = QrImgRender.drawLogo(qrImg, options.getLogoOptions());
+            qrImg = QrImgRender.drawLogo(qrImg, options);
             logoAlreadyDraw = true;
         }
 
@@ -76,12 +76,12 @@ public class QrRenderFacade {
                 // 背景为gif时，为gif中的每一帧加上logo
                 List<ImmutablePair<BufferedImage, Integer>> result = new ArrayList<>(bgList.size());
                 for (ImmutablePair<BufferedImage, Integer> pair : bgList) {
-                    result.add(ImmutablePair.of(QrImgRender.drawLogo(pair.getLeft(), options.getLogoOptions()), pair.getRight()));
+                    result.add(ImmutablePair.of(QrImgRender.drawLogo(pair.getLeft(), options), pair.getRight()));
                 }
                 bgList = result;
             } else {
                 // 背景非gif时，直接在qrImg上加上logo
-                qrImg = QrImgRender.drawLogo(qrImg, options.getLogoOptions());
+                qrImg = QrImgRender.drawLogo(qrImg, options);
             }
         }
 

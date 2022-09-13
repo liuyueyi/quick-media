@@ -80,7 +80,7 @@ public class QrSvgRender {
      */
     public static void drawLogo(SvgTemplate svgTemplate, QrCodeV3Options options) {
         QrResource logo = options.getLogoOptions().getLogo();
-        if (logo == null || StringUtils.isBlank(logo.getSvg()) && logo.getDrawStyle() == null) {
+        if (logo == null || (StringUtils.isBlank(logo.getSvg()) && logo.getDrawStyle() == null)) {
             // 无svg格式的logo，直接返回
             return;
         }

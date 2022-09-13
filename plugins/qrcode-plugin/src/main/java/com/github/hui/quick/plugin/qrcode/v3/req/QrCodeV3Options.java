@@ -462,7 +462,7 @@ public class QrCodeV3Options {
 
         if (bgOptions.getBgStyle() == BgStyle.PENETRATE) {
             // 透传，用背景图颜色进行绘制时
-            drawOptions.setTransparencyBgFill(true);
+            drawOptions.setTransparencyBgFill(false);
             drawOptions.setPreColor(ColorUtil.OPACITY);
             bgOptions.setOpacity(1);
             if (!BooleanUtils.isTrue(detectOptions.getSpecial())) {

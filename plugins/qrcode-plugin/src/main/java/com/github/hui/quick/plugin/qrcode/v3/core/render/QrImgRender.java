@@ -58,10 +58,10 @@ public class QrImgRender {
                     // 若指定绘制资源的颜色，则使用它覆盖外部的outBorderColor, inColor
                     color = dot.getResource().getDrawColor();
                 }
-                g2d.setColor(color == null ? options.getDrawOptions().getPreColor(): color);
+                g2d.setColor(color == null ? options.getDrawOptions().getPreColor() : color);
                 if (BooleanUtils.isTrue(options.getDetectOptions().getSpecial())
                         && (dot.getResource() == null || dot.getResource().getImg() == null)) {
-                    g2d.setColor(color == null ? Color.BLACK: color);
+                    g2d.setColor(color == null ? Color.BLACK : color);
                     if (dot.getResource() == null || dot.getResource().getDrawStyle() == null) {
                         // 当探测图形特殊处理，即不与指定前置图样式相同时；首先判断是否有指定特殊的探测图形资源，没有时，则走默认的黑色矩形框设置
                         dot.setResource(new QrResource().setDrawStyle(DrawStyle.RECT));
@@ -262,15 +262,37 @@ public class QrImgRender {
     /**
      * logo
      */
-    public static BufferedImage drawLogo(BufferedImage qrImg, LogoOptions logoOptions) {
+    public static BufferedImage drawLogo(BufferedImage qrImg, QrCodeV3Options options) {
+        LogoOptions logoOptions = options.getLogoOptions();
         QrResource logo = logoOptions.getLogo();
-        if (logo == null || logo.getImg() == null) return qrImg;
+        if (logo == null || (logo.getImg() == null && logo.getDrawStyle() == null)) return qrImg;
 
         final int qrWidth = qrImg.getWidth();
         final int qrHeight = qrImg.getHeight();
 
+
+        // logo的宽高，避免长图的变形，这里采用等比例缩放的策略
+        int logoRate = logoOptions.getRate();
+        int calculateQrLogoWidth = (qrWidth << 1) / logoRate;
+        int calculateQrLogoHeight = (qrHeight << 1) / logoRate;
+
         // 获取logo图片
-        BufferedImage img = logo.processImg();
+        BufferedImage img;
+        if (logo.getImg() != null) {
+            // logo 为图片
+            img = logo.processImg();
+        } else {
+            // logo 非图片时，根据自定义的绘制方式进行渲染
+            img = GraphicUtil.createImg(calculateQrLogoWidth, calculateQrLogoHeight, 0, 0, null, options.getDrawOptions().getBgColor());
+            Graphics2D g2d = GraphicUtil.getG2d(img);
+            if (logo.getDrawColor() != null) {
+                g2d.setColor(logo.getDrawColor());
+            } else if (options.getDrawOptions().getPreColor() != null) {
+                g2d.setColor(options.getDrawOptions().getPreColor());
+            }
+            logo.getDrawStyle().drawAsImg(g2d, new RenderDot().setX(0).setY(0).setSize(Math.min(img.getWidth(), img.getHeight())));
+        }
+
         // 默认不处理logo
         int radius = 0;
         if (logo.getPicStyle() == PicStyle.ROUND) {
@@ -291,10 +313,6 @@ public class QrImgRender {
             img = ImageOperateUtil.makeRoundBorder(img, radius, logoOptions.getBorderColor());
         }
 
-        // logo的宽高，避免长图的变形，这里采用等比例缩放的策略
-        int logoRate = logoOptions.getRate();
-        int calculateQrLogoWidth = (qrWidth << 1) / logoRate;
-        int calculateQrLogoHeight = (qrHeight << 1) / logoRate;
         int logoWidth, logoHeight;
         if (calculateQrLogoWidth < img.getWidth()) {
             // logo实际宽大于计算的宽度，则需要等比例缩放

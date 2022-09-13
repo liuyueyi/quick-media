@@ -30,8 +30,6 @@ public class QrImgBasicGenTest extends BasicGenTest {
     public void simpleGen() throws Exception {
         boolean ans = QrCodeGenV3.of(msg)
                 .setSize(500)
-                // 默认输出的是png格式图片，如果希望输出jpg，请指定PicType
-                .setPicType(PicTypeEnum.JPG)
                 .asFile(prefix + "/basic_00.jpg");
         System.out.println(ans);
     }
@@ -45,6 +43,16 @@ public class QrImgBasicGenTest extends BasicGenTest {
     public void errLevel() throws Exception {
         boolean ans = QrCodeGenV3.of(msg).setSize(500).setErrorCorrection(ErrorCorrectionLevel.L)
                 .setPadding(0).asFile(prefix + "/basic_01.png");
+        System.out.println(ans);
+    }
+
+    @Test
+    public void jpgGen() throws Exception {
+        boolean ans = QrCodeGenV3.of(msg)
+                .setSize(500)
+                // 默认输出的是png格式图片，如果希望输出jpg，请指定PicType
+                .setPicType(PicTypeEnum.JPG)
+                .asFile(prefix + "/basic_jpg.jpg");
         System.out.println(ans);
     }
 
