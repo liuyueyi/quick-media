@@ -39,7 +39,8 @@ public class QrRenderFacade {
             qrImg = QrImgRender.drawLogo(qrImg, options);
         }
 
-        qrImg = QrImgRender.drawFront(qrImg, options.getFrontOptions());
+        // 前置图
+        qrImg = QrImgRender.drawFront(qrImg, options);
 
         // 如果指定了二维码输出图片样式，则需要额外处理一下
         if (options.getDrawOptions().getPicStyle() != null) {

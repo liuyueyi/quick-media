@@ -1,5 +1,7 @@
 package com.github.hui.quick.plugin.qrcode.v3.core.matrix;
 
+import com.github.hui.quick.plugin.qrcode.util.ForEachUtil;
+import com.github.hui.quick.plugin.qrcode.v3.core.calculate.QrRenderDotGenerator;
 import com.github.hui.quick.plugin.qrcode.v3.req.LogoOptions;
 import com.github.hui.quick.plugin.qrcode.v3.req.QrCodeV3Options;
 import com.github.hui.quick.plugin.qrcode.wrapper.BitMatrixEx;
@@ -53,32 +55,32 @@ public class QrMatrixGenerator {
     }
 
     private static void clearLogo(BitMatrixEx bitMatrixEx, LogoOptions logoOptions) {
-        if (logoOptions == null || logoOptions.getLogo() == null || BooleanUtils.isNotTrue(logoOptions.getClearLogoArea())) {
+        if (logoOptions == null || BooleanUtils.isNotTrue(logoOptions.getClearLogoArea())) {
             return;
         }
 
         // 将logo所占的点阵区间，全部设置为0，避免出现logo覆盖时，渲染处被部分覆盖的问题
-        int rate = logoOptions.getRate() / 2;
         int width = bitMatrixEx.getByteMatrix().getWidth();
         int height = bitMatrixEx.getByteMatrix().getHeight();
-        int logoWidth = (int) Math.ceil(width / (float) rate);
-        int logoHeight = (int) Math.ceil(height / (float) rate);
-        if (logoOptions.getLogo().getImg() != null && logoOptions.getLogo().getImg().getWidth() != logoOptions.getLogo().getImg().getHeight()) {
-            // 针对logo非矩形的场景，进行适配
+        int logoWidth = (width << 1) / logoOptions.getRate();
+        int logoHeight = (height << 1) / logoOptions.getRate();
+        if (logoOptions.getLogo() != null && logoOptions.getLogo().getImg() != null
+                && logoOptions.getLogo().getImg().getWidth() != logoOptions.getLogo().getImg().getHeight()) {
+            // 针对logo非矩形的场景，进行适配，重新计算实际的宽高留白
             float logoRate = logoOptions.getLogo().getImg().getWidth() / (float) logoOptions.getLogo().getImg().getHeight();
             if (logoRate > 1) {
+                // 当宽 > 高时，需要缩小logo的高度范围
                 logoHeight = (int) (logoHeight / logoRate);
             } else {
+                // 当宽 < 高时，则需要缩小logo的宽度范围
                 logoWidth = (int) (logoWidth * logoRate);
             }
         }
-        int logoX = (width - logoWidth) / 2;
-        int logoY = (height - logoHeight) / 2;
-        for (int x = logoX; x <= logoX + logoWidth; x++) {
-            for (int y = logoY; y <= logoY + logoHeight; y++) {
-                bitMatrixEx.getByteMatrix().set(x, y, 0);
-            }
-        }
+
+        // 将logo区域的信息点抹除
+        int logoX = (width - logoWidth) >> 1;
+        int logoY = (height - logoHeight) >> 1;
+        ForEachUtil.foreach(logoWidth, logoHeight, (x, y) -> bitMatrixEx.getByteMatrix().set(logoX + x, logoY + y, QrRenderDotGenerator.MATRIX_PROCEED));
     }
 
     /**

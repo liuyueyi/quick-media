@@ -1,5 +1,6 @@
 package com.github.hui.quick.plugin.qrcode.v3.core.render;
 
+import com.github.hui.quick.plugin.base.awt.ColorUtil;
 import com.github.hui.quick.plugin.base.awt.GraphicUtil;
 import com.github.hui.quick.plugin.base.awt.ImageOperateUtil;
 import com.github.hui.quick.plugin.qrcode.v3.constants.BgStyle;
@@ -8,6 +9,7 @@ import com.github.hui.quick.plugin.qrcode.v3.constants.PicStyle;
 import com.github.hui.quick.plugin.qrcode.v3.constants.RenderDotType;
 import com.github.hui.quick.plugin.qrcode.v3.entity.QrResource;
 import com.github.hui.quick.plugin.qrcode.v3.entity.render.DetectRenderDot;
+import com.github.hui.quick.plugin.qrcode.v3.entity.render.PreRenderDot;
 import com.github.hui.quick.plugin.qrcode.v3.entity.render.RenderDot;
 import com.github.hui.quick.plugin.qrcode.v3.req.BgOptions;
 import com.github.hui.quick.plugin.qrcode.v3.req.FrontOptions;
@@ -196,9 +198,10 @@ public class QrImgRender {
     /**
      * 前置装饰
      */
-    public static BufferedImage drawFront(BufferedImage qrImg, FrontOptions frontImgOptions) {
+    public static BufferedImage drawFront(BufferedImage qrImg, QrCodeV3Options options) {
+        FrontOptions frontImgOptions = options.getFrontOptions();
         QrResource ft = frontImgOptions.getFt();
-        if (ft == null || ft.getImg() == null) return qrImg;
+        if (ft == null || (ft.getImg() == null && ft.getDrawStyle() == null)) return qrImg;
 
         int resW = Math.max(frontImgOptions.getFtW(), qrImg.getWidth());
         int resH = Math.max(frontImgOptions.getFtH(), qrImg.getHeight());
@@ -210,7 +213,22 @@ public class QrImgRender {
 
 
         // 前置图支持设置圆角 or 圆形设置
-        BufferedImage ftImg = frontImgOptions.getFt().processImg();
+        BufferedImage ftImg;
+        if (frontImgOptions.getFt().getImg() != null) {
+            ftImg = ft.processImg();
+        } else {
+            ftImg = GraphicUtil.createImg(frontImgOptions.getFtW(), frontImgOptions.getFtH(), 0, 0, null, ColorUtil.OPACITY);
+            Graphics2D g2d = GraphicUtil.getG2d(ftImg);
+            if (ft.getDrawColor() != null) {
+                g2d.setColor(ft.getDrawColor());
+            } else if (options.getDrawOptions().getPreColor() != null) {
+                g2d.setColor(options.getDrawOptions().getPreColor());
+            }
+            ft.getDrawStyle().drawAsImg(g2d,
+                    new PreRenderDot().setW(frontImgOptions.getFtW()).setH(frontImgOptions.getFtH())
+                            .setX(0).setY(0).setSize(Math.min(frontImgOptions.getFtW(), frontImgOptions.getFtH()))
+                            .setResource(ft));
+        }
 
         Graphics2D g2d = GraphicUtil.getG2d(bottomImg);
         boolean needScale = frontImgOptions.getFtW() < ftImg.getWidth() || frontImgOptions.getFtH() < ftImg.getHeight();
@@ -290,7 +308,8 @@ public class QrImgRender {
             } else if (options.getDrawOptions().getPreColor() != null) {
                 g2d.setColor(options.getDrawOptions().getPreColor());
             }
-            logo.getDrawStyle().drawAsImg(g2d, new RenderDot().setX(0).setY(0).setSize(Math.min(img.getWidth(), img.getHeight())));
+            logo.getDrawStyle().drawAsImg(g2d, new PreRenderDot().setW(img.getWidth()).setH(img.getHeight())
+                    .setX(0).setY(0).setSize(Math.min(img.getWidth(), img.getHeight())).setResource(logo));
         }
 
         // 默认不处理logo

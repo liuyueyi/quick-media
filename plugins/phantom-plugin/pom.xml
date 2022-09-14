@@ -13,8 +13,8 @@
     <version>3.0.0</version>
 
     <properties>
-        <selenium-java.version>4.2.1</selenium-java.version>
-        <jsoup.version>1.14.3</jsoup.version>
+        <selenium-java.version>4.4.0</selenium-java.version>
+        <jsoup.version>1.15.3</jsoup.version>
         <ghostdriver.version>2.1.0</ghostdriver.version>
         <common-log.version>1.2</common-log.version>
     </properties>

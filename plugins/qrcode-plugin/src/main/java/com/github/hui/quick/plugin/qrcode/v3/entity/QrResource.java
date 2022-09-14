@@ -1,11 +1,13 @@
 package com.github.hui.quick.plugin.qrcode.v3.entity;
 
+import com.github.hui.quick.plugin.base.awt.ColorUtil;
 import com.github.hui.quick.plugin.base.awt.ImageLoadUtil;
 import com.github.hui.quick.plugin.base.gif.GifDecoder;
 import com.github.hui.quick.plugin.base.gif.GifHelper;
 import com.github.hui.quick.plugin.qrcode.constants.QuickQrUtil;
 import com.github.hui.quick.plugin.qrcode.v3.constants.DrawStyle;
 import com.github.hui.quick.plugin.qrcode.v3.constants.PicStyle;
+import com.github.hui.quick.plugin.qrcode.v3.constants.QrType;
 import com.github.hui.quick.plugin.qrcode.v3.constants.TxtMode;
 import com.github.hui.quick.plugin.qrcode.v3.draw.IDrawing;
 
@@ -118,6 +120,11 @@ public class QrResource {
 
     public QrResource setImg(String img) {
         try {
+            if (img.toLowerCase().endsWith(QrType.GIF.getSuffix())) {
+                // 如果传入的是gif图，则转到setGif
+                return setGif(img);
+            }
+
             return setImg(ImageLoadUtil.getImageByPath(img));
         } catch (Exception e) {
             throw new IllegalArgumentException("can't load img: " + img);
@@ -282,6 +289,16 @@ public class QrResource {
 
     public QrResource setDrawColor(Color drawColor) {
         this.drawColor = drawColor;
+        return this;
+    }
+
+    public QrResource setDrawColor(int color) {
+        this.drawColor = ColorUtil.int2color(color);
+        return this;
+    }
+
+    public QrResource setDrawColor(String htmlColor) {
+        this.drawColor = ColorUtil.html2color(htmlColor);
         return this;
     }
 

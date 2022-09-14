@@ -103,7 +103,7 @@ public class QrImgLogoGenTest extends BasicGenTest {
         boolean ans = QrCodeGenV3.of(msg).setSize(500)
                 .setLogo(new QrResource().setDrawStyle(DrawStyle.STAR).setDrawColor(Color.RED))
                 .setBorderColor(ColorUtil.int2color(0xfffefefe))
-                .setOutBorderColo(ColorUtil.int2color(0xffc7c7c7))
+                .setOutBorderColor(ColorUtil.int2color(0xffc7c7c7))
                 .asFile(prefix + "/logo_border.png");
         System.out.println(ans);
     }

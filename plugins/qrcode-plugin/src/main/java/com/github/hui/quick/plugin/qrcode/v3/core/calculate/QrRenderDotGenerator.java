@@ -26,9 +26,9 @@ import static com.github.hui.quick.plugin.qrcode.util.ForEachUtil.foreach;
  * @date 2022/7/20
  */
 public class QrRenderDotGenerator {
-    private static final int MATRIX_BG = 0;
-    private static final int MATRIX_PRE = 1;
-    private static final int MATRIX_PROCEED = 2;
+    public static final int MATRIX_BG = 0;
+    public static final int MATRIX_PRE = 1;
+    public static final int MATRIX_PROCEED = 2;
 
     /**
      * 计算渲染资源列表

@@ -3,6 +3,9 @@ package com.github.hui.quick.plugin.qrcode.v3.req;
 import com.github.hui.quick.plugin.qrcode.v3.constants.BgStyle;
 import com.github.hui.quick.plugin.qrcode.v3.entity.QrResource;
 
+import java.awt.image.BufferedImage;
+import java.util.Optional;
+
 /**
  * 背景图的配置信息
  */
@@ -119,9 +122,12 @@ public class BgOptions {
 
     public QrCodeV3Options complete() {
         // 背景图宽高
-        if (bg != null && bg.getImg() != null) {
-            if (bgW <= 0) bgW = bg.getImg().getWidth();
-            if (bgH <= 0) bgH = bg.getImg().getHeight();
+        if (bg != null) {
+            BufferedImage img = Optional.ofNullable(bg.getImg()).orElse(bg.getGif() != null ? bg.getGif().getImage() : null);
+            Optional.ofNullable(img).ifPresent(i -> {
+                if (bgW <= 0) bgW = img.getWidth();
+                if (bgH <= 0) bgH = img.getHeight();
+            });
         }
 
         // 默认采用全覆盖方式
@@ -131,6 +137,8 @@ public class BgOptions {
             // 默认将覆盖方式的二维码透明设置为0.8
             opacity = 0.85F;
         }
+
+        if (opacity > 1) opacity = 1.0F;
 
         return options;
     }

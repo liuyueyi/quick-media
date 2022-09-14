@@ -2,6 +2,7 @@ package com.github.hui.quick.plugin.qrcode.v3.req;
 
 import com.github.hui.quick.plugin.base.awt.ColorUtil;
 import com.github.hui.quick.plugin.qrcode.v3.constants.*;
+import com.github.hui.quick.plugin.qrcode.v3.draw.IDrawing;
 import com.github.hui.quick.plugin.qrcode.v3.entity.QrResource;
 import com.github.hui.quick.plugin.qrcode.v3.tpl.ImgTplParse;
 import com.github.hui.quick.plugin.qrcode.v3.tpl.SvgTplParse;
@@ -256,9 +257,17 @@ public class QrCodeV3Options {
 
 
     // ----------- 二维码绘制相关参数 -----------
+    public QrCodeV3Options setPreColor(int color) {
+        return setPreColor(ColorUtil.int2color(color));
+    }
+
     public QrCodeV3Options setPreColor(Color color) {
         newDrawOptions().setPreColor(color);
         return this;
+    }
+
+    public QrCodeV3Options setBgColor(int color) {
+        return setBgColor(ColorUtil.int2color(color));
     }
 
     public QrCodeV3Options setBgColor(Color color) {
@@ -276,7 +285,7 @@ public class QrCodeV3Options {
         return this;
     }
 
-    public QrCodeV3Options setDrawStyle(DrawStyle style) {
+    public QrCodeV3Options setDrawStyle(IDrawing style) {
         newDrawOptions().setDrawStyle(style);
         return this;
     }
@@ -298,6 +307,8 @@ public class QrCodeV3Options {
     }
 
     /**
+     * svg模板使用姿势参考： <a href="https://hhui.top/quick/quick-media/qrcode/3.0%E8%B5%84%E6%BA%90%E6%A8%A1%E6%9D%BF/"/>
+     * <p>
      * 输入svg模板，主要分两块 defs + symbol；用于减轻一个一个设置svg symbol的复杂性
      * svg 模板规则，一个实例demo如下：
      * - defs 标签：内部为预定义的标签，供其他的symbol使用
@@ -337,6 +348,12 @@ public class QrCodeV3Options {
         return setDrawStyle(DrawStyle.SVG).setQrType(QrType.SVG);
     }
 
+    /**
+     * 图片资源模板，模板定义参考： <a href="https://hhui.top/quick/quick-media/qrcode/3.0%E8%B5%84%E6%BA%90%E6%A8%A1%E6%9D%BF/"/>
+     *
+     * @param img
+     * @return
+     */
     public QrCodeV3Options setImgTemplate(String img) {
         ImgTplParse.imgTemplateParseAndInit(this, img);
         return setDrawStyle(DrawStyle.IMAGE).setQrType(QrType.IMG);
@@ -365,12 +382,20 @@ public class QrCodeV3Options {
         return this;
     }
 
+    public QrCodeV3Options setBorderColor(int color) {
+        return setBorderColor(ColorUtil.int2color(color));
+    }
+
     public QrCodeV3Options setBorderColor(Color color) {
         newLogoOptions().setBorderColor(color);
         return this;
     }
 
-    public QrCodeV3Options setOutBorderColo(Color color) {
+    public QrCodeV3Options setOutBorderColor(int color) {
+        return setOutBorderColor(ColorUtil.int2color(color));
+    }
+
+    public QrCodeV3Options setOutBorderColor(Color color) {
         newLogoOptions().setOuterBorderColor(color);
         return this;
     }
@@ -380,6 +405,24 @@ public class QrCodeV3Options {
     public QrCodeV3Options setDetect(QrResource resource) {
         newDetectOptions().setResource(resource);
         return this;
+    }
+
+    public QrCodeV3Options setDetectInColor(Color color) {
+        newDetectOptions().setInColor(color);
+        return this;
+    }
+
+    public QrCodeV3Options setDetectInColor(int color) {
+        return setDetectInColor(ColorUtil.int2color(color));
+    }
+
+    public QrCodeV3Options setDetectOutColor(Color color) {
+        newDetectOptions().setOutColor(color);
+        return this;
+    }
+
+    public QrCodeV3Options setDetectOutColor(int color) {
+        return setDetectOutColor(ColorUtil.int2color(color));
     }
 
     /**
@@ -398,6 +441,50 @@ public class QrCodeV3Options {
         return this;
     }
 
+    // ------------- 背景图 ---------
+
+    public QrCodeV3Options setBgResource(QrResource resource) {
+        newBgOptions().setBg(resource);
+        return this;
+    }
+
+    public QrCodeV3Options setBgStyle(BgStyle bgStyle) {
+        newBgOptions().setBgStyle(bgStyle);
+        return this;
+    }
+
+    public QrCodeV3Options setBgW(Integer bgW) {
+        newBgOptions().setBgW(bgW);
+        return this;
+    }
+
+    public QrCodeV3Options setBgH(Integer bgH) {
+        newBgOptions().setBgH(bgH);
+        return this;
+    }
+
+    public QrCodeV3Options setBgX(Integer bgX) {
+        newBgOptions().setStartX(bgX);
+        return this;
+    }
+
+    public QrCodeV3Options setBgY(Integer bgY) {
+        newBgOptions().setStartY(bgY);
+        return this;
+    }
+
+    /**
+     * 适用于bgStyle == OVERRIDE的场景，用于设置二维码的透明度，取值为 0-1，值越小，则二维码越透明
+     *
+     * @param opacity
+     * @return
+     */
+    public QrCodeV3Options setBgOpacity(Float opacity) {
+        newBgOptions().setOpacity(opacity);
+        return this;
+    }
+
+
     // ------------- 前置图 ---------
 
     public QrCodeV3Options setFtResource(QrResource resource) {
@@ -405,15 +492,38 @@ public class QrCodeV3Options {
         return this;
     }
 
-    public QrCodeV3Options setFtStartX(int x) {
+    public QrCodeV3Options setFtW(int w) {
+        newFrontOptions().setFtW(w);
+        return this;
+    }
+
+    public QrCodeV3Options setFtH(int h) {
+        newFrontOptions().setFtH(h);
+        return this;
+    }
+
+    public QrCodeV3Options setFtX(int x) {
         newFrontOptions().setStartX(x);
         return this;
     }
 
-    public QrCodeV3Options setFtStartY(int y) {
+    public QrCodeV3Options setFtY(int y) {
         newFrontOptions().setStartY(y);
         return this;
     }
+
+    /**
+     * 二维码大小比最终输出的图片小时，用来指定二维码周边的填充色，不存在时，默认透明
+     */
+    public QrCodeV3Options setFtFillColor(Color color) {
+        newFrontOptions().setFillColor(color);
+        return this;
+    }
+
+    public QrCodeV3Options setFtFillColor(int color) {
+        return setFtFillColor(ColorUtil.int2color(color));
+    }
+
 
     /**
      * 若指定了gif资源，则返回true
