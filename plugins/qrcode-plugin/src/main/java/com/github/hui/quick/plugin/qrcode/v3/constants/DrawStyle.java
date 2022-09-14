@@ -133,20 +133,6 @@ public enum DrawStyle implements IDrawing {
     STAR(0) {
         @Override
         public void geometryDrawFunc(Graphics2D g2d, int x, int y, int w, int h) {
-//            float rate = NumUtil.divWithScaleFloor(w, 20, 2);
-//            int px[] = {(int) (x + NumUtil.multiplyWithScaleFloor(10, rate, 2)),
-//                    (int) (x + NumUtil.multiplyWithScaleFloor(4, rate, 2)),
-//                    (int) (x + NumUtil.multiplyWithScaleFloor(19, rate, 2)),
-//                    (int)(x + rate),
-//                    (int)(x + NumUtil.multiplyWithScaleFloor(16, rate, 2))
-//            };
-//            int py[] = {(int) (y + rate),
-//                    (int) (y + NumUtil.multiplyWithScaleFloor(19.8f, rate, 2)),
-//                    (int)(y + NumUtil.multiplyWithScaleFloor(7.8f, rate, 2)),
-//                    (int)(y + NumUtil.multiplyWithScaleFloor(7.8f, rate, 2)),
-//                    (int)(y + NumUtil.multiplyWithScaleFloor(19.8f, rate, 2))
-//            };
-
             float rate = NumUtil.divWithScaleFloor(w, 224, 2);
             int px[] = {
                     (int) (x + 112 * rate),

@@ -1,6 +1,7 @@
 package com.github.hui.quick.plugin.test.v3.img;
 
 import com.github.hui.quick.plugin.base.awt.ColorUtil;
+import com.github.hui.quick.plugin.qrcode.constants.QuickQrUtil;
 import com.github.hui.quick.plugin.qrcode.v3.constants.DrawStyle;
 import com.github.hui.quick.plugin.qrcode.v3.constants.TxtMode;
 import com.github.hui.quick.plugin.qrcode.v3.entity.QrResource;
@@ -113,5 +114,19 @@ public class QrImgDrawGenTest extends BasicGenTest {
         System.out.println(ans);
     }
 
+
+    /**
+     * 文字二维码
+     *
+     * @throws Exception
+     */
+    @Test
+    public void fullTxt() throws Exception {
+        boolean ans = QrCodeGenV3.of(msg).setSize(500)
+                .setDrawResource(new QrResource().setText(QuickQrUtil.DEFAULT_QR_TXT).setTxtMode(TxtMode.ORDER))
+                .setDrawStyle(DrawStyle.TXT)
+                .asFile(prefix + "/draw_txt.png");
+        System.out.println(ans);
+    }
 
 }

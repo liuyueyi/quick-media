@@ -1,14 +1,17 @@
 package com.github.hui.quick.plugin.qrcode.v3.req;
 
+import com.github.hui.quick.plugin.base.awt.ColorUtil;
 import com.github.hui.quick.plugin.qrcode.v3.entity.QrResource;
 
 import java.awt.*;
 
 /**
  * logo 的配置信息
+ *
+ * @author YiHui
  */
 public class LogoOptions {
-    private QrCodeV3Options options;
+    private final QrCodeV3Options options;
 
     /**
      * logo 图片
@@ -56,6 +59,11 @@ public class LogoOptions {
         return this;
     }
 
+    public LogoOptions setLogo(String logo) {
+        this.logo = new QrResource(logo);
+        return this;
+    }
+
     public int getRate() {
         return rate;
     }
@@ -94,6 +102,10 @@ public class LogoOptions {
         return this;
     }
 
+    public LogoOptions setBorderColor(int color) {
+        return setBorderColor(ColorUtil.int2color(color));
+    }
+
     public Color getOuterBorderColor() {
         return outerBorderColor;
     }
@@ -101,6 +113,10 @@ public class LogoOptions {
     public LogoOptions setOuterBorderColor(Color outerBorderColor) {
         this.outerBorderColor = outerBorderColor;
         return this;
+    }
+
+    public LogoOptions setOuterBorderColor(int color) {
+        return this.setOuterBorderColor(ColorUtil.int2color(color));
     }
 
     public QrCodeV3Options complete() {

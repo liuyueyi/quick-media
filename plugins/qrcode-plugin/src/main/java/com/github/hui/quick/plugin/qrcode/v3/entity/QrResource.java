@@ -90,6 +90,17 @@ public class QrResource {
      */
     private Color drawColor;
 
+    public QrResource() {
+    }
+
+    public QrResource(String resource) {
+        resource = resource.trim();
+        if (resource.startsWith(SVG_START_TAG)) {
+            setSvg(resource);
+        } else {
+            setImg(resource);
+        }
+    }
 
     public GifDecoder getGif() {
         return gif;

@@ -256,9 +256,25 @@ public class QrCodeV3Options {
     // ===========================
 
 
+    /**
+     * 设置全局的资源信息，当下主要用于svg自定义共享样式中的 <defs>
+     *
+     * @param resource
+     * @return
+     */
+    public QrCodeV3Options setDrawGlobalResource(QrResource resource) {
+        newDrawOptions().setGlobalResource(resource);
+        return this;
+    }
+
+
     // ----------- 二维码绘制相关参数 -----------
     public QrCodeV3Options setPreColor(int color) {
         return setPreColor(ColorUtil.int2color(color));
+    }
+
+    public QrCodeV3Options setPreColor(String color) {
+        return setPreColor(ColorUtil.html2color(color));
     }
 
     public QrCodeV3Options setPreColor(Color color) {
@@ -268,6 +284,10 @@ public class QrCodeV3Options {
 
     public QrCodeV3Options setBgColor(int color) {
         return setBgColor(ColorUtil.int2color(color));
+    }
+
+    public QrCodeV3Options setBgColor(String color) {
+        return setBgColor(ColorUtil.html2color(color));
     }
 
     public QrCodeV3Options setBgColor(Color color) {
@@ -285,6 +305,12 @@ public class QrCodeV3Options {
         return this;
     }
 
+    /**
+     * 设置默认的码元/信息点绘制样式
+     *
+     * @param style
+     * @return
+     */
     public QrCodeV3Options setDrawStyle(IDrawing style) {
         newDrawOptions().setDrawStyle(style);
         return this;
@@ -295,16 +321,11 @@ public class QrCodeV3Options {
         return this;
     }
 
-    /**
-     * 设置全局的资源信息
-     *
-     * @param resource
-     * @return
-     */
-    public QrCodeV3Options setDrawGlobalResource(QrResource resource) {
-        newDrawOptions().setGlobalResource(resource);
-        return this;
+    public QrCodeV3Options setDrawResource(String resource) {
+        return setDrawResource(new QrResource(resource));
     }
+
+    // ------------- 模板初始化配置方式 ----------------
 
     /**
      * svg模板使用姿势参考： <a href="https://hhui.top/quick/quick-media/qrcode/3.0%E8%B5%84%E6%BA%90%E6%A8%A1%E6%9D%BF/"/>
@@ -366,6 +387,10 @@ public class QrCodeV3Options {
         return this;
     }
 
+    public QrCodeV3Options setLogo(String resource) {
+        return setLogo(new QrResource(resource));
+    }
+
     /**
      * 设置 二维码 / logo的比例，值越大，则logo越小
      *
@@ -377,25 +402,51 @@ public class QrCodeV3Options {
         return this;
     }
 
+    /**
+     * true 表示将logo所在中间区域置空； false 则logo所在中间区域依然存在码元信息
+     *
+     * @param clear
+     * @return
+     */
     public QrCodeV3Options clearLogoArea(boolean clear) {
         newLogoOptions().setClearLogoArea(clear);
         return this;
     }
 
-    public QrCodeV3Options setBorderColor(int color) {
-        return setBorderColor(ColorUtil.int2color(color));
+    public QrCodeV3Options setLogoBorderColor(int color) {
+        return setLogoBorderColor(ColorUtil.int2color(color));
     }
 
-    public QrCodeV3Options setBorderColor(Color color) {
+    public QrCodeV3Options setLogoBorderColor(String color) {
+        return setLogoBorderColor(ColorUtil.html2color(color));
+    }
+
+    /**
+     * logo 边框颜色
+     *
+     * @param color
+     * @return
+     */
+    public QrCodeV3Options setLogoBorderColor(Color color) {
         newLogoOptions().setBorderColor(color);
         return this;
     }
 
-    public QrCodeV3Options setOutBorderColor(int color) {
-        return setOutBorderColor(ColorUtil.int2color(color));
+    public QrCodeV3Options setLogoOutBorderColor(int color) {
+        return setLogoOutBorderColor(ColorUtil.int2color(color));
     }
 
-    public QrCodeV3Options setOutBorderColor(Color color) {
+    public QrCodeV3Options setLogoOutBorderColor(String color) {
+        return setLogoOutBorderColor(ColorUtil.html2color(color));
+    }
+
+    /**
+     * logo 外边框颜色
+     *
+     * @param color
+     * @return
+     */
+    public QrCodeV3Options setLogoOutBorderColor(Color color) {
         newLogoOptions().setOuterBorderColor(color);
         return this;
     }
@@ -407,9 +458,26 @@ public class QrCodeV3Options {
         return this;
     }
 
+    public QrCodeV3Options setDetectColor(Color color) {
+        newDetectOptions().setColor(color);
+        return this;
+    }
+
+    public QrCodeV3Options setDetectColor(String color) {
+        return setDetectColor(ColorUtil.html2color(color));
+    }
+
+    public QrCodeV3Options setDetectColor(int color) {
+        return setDetectColor(ColorUtil.int2color(color));
+    }
+
     public QrCodeV3Options setDetectInColor(Color color) {
         newDetectOptions().setInColor(color);
         return this;
+    }
+
+    public QrCodeV3Options setDetectInColor(String color) {
+        return setDetectInColor(ColorUtil.html2color(color));
     }
 
     public QrCodeV3Options setDetectInColor(int color) {
@@ -419,6 +487,10 @@ public class QrCodeV3Options {
     public QrCodeV3Options setDetectOutColor(Color color) {
         newDetectOptions().setOutColor(color);
         return this;
+    }
+
+    public QrCodeV3Options setDetectOutColor(String color) {
+        return setDetectOutColor(ColorUtil.html2color(color));
     }
 
     public QrCodeV3Options setDetectOutColor(int color) {
@@ -446,6 +518,10 @@ public class QrCodeV3Options {
     public QrCodeV3Options setBgResource(QrResource resource) {
         newBgOptions().setBg(resource);
         return this;
+    }
+
+    public QrCodeV3Options setBgResource(String resource) {
+        return setBgResource(new QrResource(resource));
     }
 
     public QrCodeV3Options setBgStyle(BgStyle bgStyle) {
@@ -492,6 +568,10 @@ public class QrCodeV3Options {
         return this;
     }
 
+    public QrCodeV3Options setFtResource(String resource) {
+        return setFtResource(new QrResource(resource));
+    }
+
     public QrCodeV3Options setFtW(int w) {
         newFrontOptions().setFtW(w);
         return this;
@@ -518,6 +598,10 @@ public class QrCodeV3Options {
     public QrCodeV3Options setFtFillColor(Color color) {
         newFrontOptions().setFillColor(color);
         return this;
+    }
+
+    public QrCodeV3Options setFtFillColor(String color) {
+        return setFtFillColor(ColorUtil.html2color(color));
     }
 
     public QrCodeV3Options setFtFillColor(int color) {

@@ -1,7 +1,9 @@
 package com.github.hui.quick.plugin.test.v3.svg;
 
 import com.github.hui.quick.plugin.base.awt.ColorUtil;
+import com.github.hui.quick.plugin.qrcode.constants.QuickQrUtil;
 import com.github.hui.quick.plugin.qrcode.v3.constants.DrawStyle;
+import com.github.hui.quick.plugin.qrcode.v3.constants.QrType;
 import com.github.hui.quick.plugin.qrcode.v3.constants.TxtMode;
 import com.github.hui.quick.plugin.qrcode.v3.entity.QrResource;
 import com.github.hui.quick.plugin.qrcode.wrapper.QrCodeGenV3;
@@ -271,5 +273,15 @@ public class QrSvgDrawGenTest extends BasicGenTest {
                 .build()
                 .asFile(prefix + "/txt.svg");
         System.out.println(svg);
+    }
+
+    @Test
+    public void textQrCodeV2() throws Exception {
+        boolean ans = QrCodeGenV3.of(msg).setSize(500)
+                .setDrawResource(new QrResource().setText(QuickQrUtil.DEFAULT_QR_TXT).setTxtMode(TxtMode.ORDER))
+                .setQrType(QrType.SVG)
+                .setDrawStyle(DrawStyle.TXT)
+                .asFile(prefix + "/txtv2.svg");
+        System.out.println(ans);
     }
 }

@@ -7,9 +7,10 @@ import java.awt.image.BufferedImage;
 
 /**
  * 前置图的配置信息
+ * @author YiHui
  */
 public class FrontOptions {
-    private QrCodeV3Options options;
+    private final QrCodeV3Options options;
 
     /**
      * 前置图
@@ -52,6 +53,11 @@ public class FrontOptions {
 
     public FrontOptions setFt(QrResource ft) {
         this.ft = ft;
+        return this;
+    }
+
+    public FrontOptions setFt(String ft) {
+        this.ft = new QrResource(ft);
         return this;
     }
 

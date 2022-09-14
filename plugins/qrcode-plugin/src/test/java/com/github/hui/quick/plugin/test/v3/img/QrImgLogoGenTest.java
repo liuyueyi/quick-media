@@ -102,8 +102,8 @@ public class QrImgLogoGenTest extends BasicGenTest {
     public void logoBorder() throws Exception {
         boolean ans = QrCodeGenV3.of(msg).setSize(500)
                 .setLogo(new QrResource().setDrawStyle(DrawStyle.STAR).setDrawColor(Color.RED))
-                .setBorderColor(ColorUtil.int2color(0xfffefefe))
-                .setOutBorderColor(ColorUtil.int2color(0xffc7c7c7))
+                .setLogoBorderColor(ColorUtil.int2color(0xfffefefe))
+                .setLogoOutBorderColor(ColorUtil.int2color(0xffc7c7c7))
                 .asFile(prefix + "/logo_border.png");
         System.out.println(ans);
     }
@@ -118,7 +118,7 @@ public class QrImgLogoGenTest extends BasicGenTest {
         boolean ans = QrCodeGenV3.of(msg).setSize(500)
                 .setLogo(new QrResource().setImg("yhhlogo.png").setPicStyle(PicStyle.ROUND))
                 .setLogoRate(5)
-                .setBorderColor(Color.BLUE)
+                .setLogoBorderColor(Color.BLUE)
                 .asFile(prefix + "/logo_round.png");
         System.out.println(ans);
     }

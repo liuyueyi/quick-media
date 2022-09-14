@@ -8,9 +8,11 @@ import java.util.Optional;
 
 /**
  * 背景图的配置信息
+ *
+ * @author YiHui
  */
 public class BgOptions {
-    private QrCodeV3Options options;
+    private final QrCodeV3Options options;
     /**
      * 背景图
      */
@@ -64,6 +66,10 @@ public class BgOptions {
     public BgOptions setBg(QrResource bg) {
         this.bg = bg;
         return this;
+    }
+
+    public BgOptions setBg(String bg) {
+        return setBg(new QrResource(bg));
     }
 
     public int getBgW() {

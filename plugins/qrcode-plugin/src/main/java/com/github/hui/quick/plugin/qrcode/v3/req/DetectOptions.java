@@ -1,5 +1,6 @@
 package com.github.hui.quick.plugin.qrcode.v3.req;
 
+import com.github.hui.quick.plugin.base.awt.ColorUtil;
 import com.github.hui.quick.plugin.qrcode.helper.QrCodeRenderHelper;
 import com.github.hui.quick.plugin.qrcode.v3.constants.DrawStyle;
 import com.github.hui.quick.plugin.qrcode.v3.entity.QrResource;
@@ -9,9 +10,11 @@ import java.awt.*;
 
 /**
  * 探测图形的配置信息
+ *
+ * @author YiHui
  */
 public class DetectOptions {
-    private QrCodeV3Options options;
+    private final QrCodeV3Options options;
 
     /**
      * 外层颜色
@@ -62,6 +65,10 @@ public class DetectOptions {
         return this;
     }
 
+    public DetectOptions setOutColor(int color) {
+        return setOutColor(ColorUtil.int2color(color));
+    }
+
     public Color getInColor() {
         return inColor;
     }
@@ -71,10 +78,18 @@ public class DetectOptions {
         return this;
     }
 
+    public DetectOptions setInColor(int color) {
+        return setInColor(ColorUtil.int2color(color));
+    }
+
     public DetectOptions setColor(Color color) {
         this.inColor = color;
         this.outColor = color;
         return this;
+    }
+
+    public DetectOptions setColor(int color) {
+        return setColor(ColorUtil.int2color(color));
     }
 
     public QrResource getLt() {
@@ -88,6 +103,10 @@ public class DetectOptions {
         return this;
     }
 
+    public DetectOptions setLt(String lt) {
+        return setLt(new QrResource(lt));
+    }
+
     public QrResource getRt() {
         return rt;
     }
@@ -97,6 +116,10 @@ public class DetectOptions {
         this.rt = rt;
         this.resource = rt;
         return this;
+    }
+
+    public DetectOptions setRt(String rt) {
+        return setRt(new QrResource(rt));
     }
 
     public QrResource getLd() {
@@ -110,6 +133,10 @@ public class DetectOptions {
         return this;
     }
 
+    public DetectOptions setLd(String ld) {
+        return setLd(new QrResource(ld));
+    }
+
     public QrResource getResource() {
         return resource;
     }
@@ -118,6 +145,10 @@ public class DetectOptions {
         initDetectResource(resource);
         this.resource = resource;
         return this;
+    }
+
+    public DetectOptions setResource(String resource) {
+        return setResource(new QrResource(resource));
     }
 
     /**

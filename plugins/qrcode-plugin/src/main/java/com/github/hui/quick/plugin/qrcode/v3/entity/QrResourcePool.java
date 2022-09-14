@@ -215,8 +215,16 @@ public class QrResourcePool {
             return fullMatch;
         }
 
+        public QrResourcesDecorate addResource(String img) {
+            return addResource(new QrResource(img));
+        }
+
         public QrResourcesDecorate addResource(QrResource img) {
             return addResource(img, NO_LIMIT_COUNT);
+        }
+
+        public QrResourcesDecorate addResource(String img, int count) {
+            return addResource(new QrResource(img), count);
         }
 
         public QrResourcesDecorate addResource(QrResource img, int count) {

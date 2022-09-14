@@ -224,10 +224,7 @@ public class QrImgRender {
             } else if (options.getDrawOptions().getPreColor() != null) {
                 g2d.setColor(options.getDrawOptions().getPreColor());
             }
-            ft.getDrawStyle().drawAsImg(g2d,
-                    new PreRenderDot().setW(frontImgOptions.getFtW()).setH(frontImgOptions.getFtH())
-                            .setX(0).setY(0).setSize(Math.min(frontImgOptions.getFtW(), frontImgOptions.getFtH()))
-                            .setResource(ft));
+            ft.getDrawStyle().drawAsImg(g2d, new PreRenderDot().setW(frontImgOptions.getFtW()).setH(frontImgOptions.getFtH()).setX(0).setY(0).setSize(1).setResource(ft));
         }
 
         Graphics2D g2d = GraphicUtil.getG2d(bottomImg);
@@ -301,15 +298,14 @@ public class QrImgRender {
             img = logo.processImg();
         } else {
             // logo 非图片时，根据自定义的绘制方式进行渲染
-            img = GraphicUtil.createImg(calculateQrLogoWidth, calculateQrLogoHeight, 0, 0, null, options.getDrawOptions().getBgColor());
+            img = GraphicUtil.createImg(calculateQrLogoWidth, calculateQrLogoHeight, 0, 0, null, ColorUtil.OPACITY);
             Graphics2D g2d = GraphicUtil.getG2d(img);
             if (logo.getDrawColor() != null) {
                 g2d.setColor(logo.getDrawColor());
             } else if (options.getDrawOptions().getPreColor() != null) {
                 g2d.setColor(options.getDrawOptions().getPreColor());
             }
-            logo.getDrawStyle().drawAsImg(g2d, new PreRenderDot().setW(img.getWidth()).setH(img.getHeight())
-                    .setX(0).setY(0).setSize(Math.min(img.getWidth(), img.getHeight())).setResource(logo));
+            logo.getDrawStyle().drawAsImg(g2d, new PreRenderDot().setW(img.getWidth()).setH(img.getHeight()).setX(0).setY(0).setSize(1).setResource(logo));
         }
 
         // 默认不处理logo

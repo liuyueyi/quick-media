@@ -1,6 +1,7 @@
 package com.github.hui.quick.plugin.qrcode.v3.req;
 
 
+import com.github.hui.quick.plugin.base.awt.ColorUtil;
 import com.github.hui.quick.plugin.qrcode.v3.constants.DrawStyle;
 import com.github.hui.quick.plugin.qrcode.v3.constants.PicStyle;
 import com.github.hui.quick.plugin.qrcode.v3.draw.IDrawing;
@@ -11,6 +12,8 @@ import java.awt.*;
 
 /**
  * 绘制二维码的配置信息
+ *
+ * @author YiHui
  */
 public class DrawOptions {
     private QrCodeV3Options options;
@@ -71,6 +74,10 @@ public class DrawOptions {
         return this;
     }
 
+    public DrawOptions setPreColor(int color) {
+        return setPreColor(ColorUtil.int2color(color));
+    }
+
     public Color getBgColor() {
         return bgColor;
     }
@@ -78,6 +85,10 @@ public class DrawOptions {
     public DrawOptions setBgColor(Color bgColor) {
         this.bgColor = bgColor;
         return this;
+    }
+
+    public DrawOptions setBgColor(int color) {
+        return setBgColor(ColorUtil.int2color(color));
     }
 
     public IDrawing getDrawStyle() {
@@ -166,6 +177,10 @@ public class DrawOptions {
         return this;
     }
 
+    public DrawOptions setRenderResource(String pre, String bg) {
+        return setRenderResource(new QrResource(pre), new QrResource(bg));
+    }
+
     /**
      * 当只有一个二维码信息点的资源图时，使用这个方法，可以有效减少设置的复杂性
      *
@@ -176,8 +191,12 @@ public class DrawOptions {
         return resourcePool.createSource(1, 1).addResource(pre).build().over();
     }
 
+    public DrawOptions setRenderResource(String pre) {
+        return setRenderResource(new QrResource(pre));
+    }
+
     /**
-     * 添加资源, 要求必须存在一个1x1的兜底资源位
+     * 添加资源, 要求必须存在一个1x1的兜底资源位，这个方法主要应用于多资源配置的场景
      *
      * @param resource
      * @return
@@ -186,8 +205,16 @@ public class DrawOptions {
         return newRenderResource(1, 1, resource);
     }
 
+    public QrResourcePool.QrResourcesDecorate newRenderResource(String resource) {
+        return newRenderResource(new QrResource(resource));
+    }
+
     public QrResourcePool.QrResourcesDecorate newRenderResource(int width, int height, QrResource resource) {
         return resourcePool.createSource(width, height).addResource(resource);
+    }
+
+    public QrResourcePool.QrResourcesDecorate newRenderResource(int width, int height, String resource) {
+        return newRenderResource(width, height, new QrResource(resource));
     }
 
     public QrCodeV3Options complete() {
