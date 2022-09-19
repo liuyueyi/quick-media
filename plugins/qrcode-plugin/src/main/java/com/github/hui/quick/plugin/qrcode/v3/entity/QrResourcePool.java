@@ -179,6 +179,20 @@ public class QrResourcePool {
             return resourceDecorate.getResource();
         }
 
+        /**
+         * 判断是否存在计数的资源信息
+         *
+         * @return
+         */
+        public boolean hasCountResource() {
+            for (QrCountResource s : resourceDecorate.getResourceList()) {
+                if (s.count > 0) {
+                    return true;
+                }
+            }
+            return false;
+        }
+
         public Map<Point, Boolean> getMissMap() {
             return missMap;
         }

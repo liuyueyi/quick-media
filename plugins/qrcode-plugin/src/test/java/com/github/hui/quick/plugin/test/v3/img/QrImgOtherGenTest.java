@@ -86,4 +86,28 @@ public class QrImgOtherGenTest extends BasicGenTest {
                 .asFile(prefix + "/simple.png");
         System.out.println(ans);
     }
+
+    /**
+     * 在背景图的指定位置上输出二维码
+     *
+     * @throws Exception
+     */
+    @Test
+    public void ftBgLogoQr() throws Exception {
+        boolean ans = QrCodeGenV3.of(msg).setSize(550)
+                .newBgOptions()
+                .setBg(new QrResource().setImg("bgs/qrbg.jpg"))
+                .setBgStyle(BgStyle.FILL)
+                .setStartX(225)
+                .setStartY(320)
+                .complete()
+                .setLogo("logo.jpg")
+                .setFtResource(new QrResource().setImg("ft/ft_1.png"))
+                .setFtX(41 - 225 - 20)
+                .setFtY(53 - 320 - 20)
+                .setFtW(650)
+                .setFtH(650)
+                .asFile(prefix + "/ft_bg_logo.png");
+        System.out.println(ans);
+    }
 }
