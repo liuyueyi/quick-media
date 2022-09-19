@@ -3,9 +3,12 @@ package com.github.hui.quick.plugin.test.v3;
 import com.github.hui.quick.plugin.base.OSUtil;
 import com.github.hui.quick.plugin.base.file.FileReadUtil;
 import com.github.hui.quick.plugin.qrcode.v3.constants.DrawStyle;
+import com.github.hui.quick.plugin.qrcode.v3.constants.PicType;
+import com.github.hui.quick.plugin.qrcode.v3.constants.PicTypeEnum;
 import com.github.hui.quick.plugin.qrcode.v3.constants.QrType;
 import com.github.hui.quick.plugin.qrcode.v3.entity.QrResource;
 import com.github.hui.quick.plugin.qrcode.wrapper.QrCodeGenV3;
+import com.google.zxing.EncodeHintType;
 import com.google.zxing.qrcode.decoder.ErrorCorrectionLevel;
 import org.junit.Before;
 import org.junit.Test;
@@ -59,10 +62,50 @@ public class QrSvgGenTest {
                 .setSize(300)
                 .setErrorCorrection(ErrorCorrectionLevel.L)
                 .setPadding(0)
-                .setQrType(QrType.SVG)
+                .setCode("utf-8")
                 .setPreColor(Color.RED)
+                .setPicType(PicTypeEnum.JPG)
                 .setBgColor(Color.LIGHT_GRAY)
-                .asFile(prefix + "/config.svg");
+                .asFile(prefix + "/config.jpg");
+        System.out.println(ans);
+    }
+
+    @Test
+    public void basicConfigAsSvg() throws Exception {
+        boolean ans = QrCodeGenV3.of(msg)
+                // 设置二维码大小为500x500
+                .setSize(500)
+                // 设置绘制的二维码样式为圆形
+                .setDrawStyle(DrawStyle.CIRCLE)
+                // 设置背景点为 玛瑙灰， 请不要省略前面的 0xff
+                .setBgColor(0xffcfccc9)
+                // 设置信息点/码元为 满天星紫
+                .setPreColor("#2e317c")
+                .setDetectSpecial(true)
+                // 外层颜色：牵牛紫
+                .setDetectOutColor("#681752")
+                // 内层颜色：青蛤壳紫
+                .setDetectInColor("#bc84a8")
+                // 保存二维码到 qr.svg 文件中
+                .asFile(prefix + "/colorQr2.png");
+        System.out.println(ans);
+    }
+
+    @Test
+    public void basicConfigAsJpg() throws Exception {
+        boolean ans = QrCodeGenV3.of(msg)
+                // 设置二维码大小为300x300
+                .setSize(300)
+                // 设置容错级别为L，官方支持 L/M/Q/H ，容错基本依次递增
+                .setErrorCorrection(ErrorCorrectionLevel.L)
+                // 设置边框留白，0表示不希望有边框，默认是1，最大值为4
+                .setPadding(0)
+                // 设置编码格式
+                .setCode("utf-8")
+                // 默认输出的是png格式二维码，这里
+//                .setPicType(PicTypeEnum.JPG)
+                // 保存二维码到 qr.svg 文件中
+                .asFile(prefix + "/qr.jpg");
         System.out.println(ans);
     }
 
