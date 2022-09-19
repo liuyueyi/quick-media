@@ -1,8 +1,8 @@
 package com.github.hui.quick.plugin.audio;
 
-import com.github.hui.quick.plugin.base.FileReadUtil;
-import com.github.hui.quick.plugin.base.FileWriteUtil;
 import com.github.hui.quick.plugin.base.ProcessUtil;
+import com.github.hui.quick.plugin.base.file.FileReadUtil;
+import com.github.hui.quick.plugin.base.file.FileWriteUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

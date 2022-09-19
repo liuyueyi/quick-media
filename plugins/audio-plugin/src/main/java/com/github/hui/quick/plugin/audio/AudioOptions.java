@@ -6,8 +6,7 @@ import java.util.Map;
 /**
  * Created by yihui on 2017/7/13.
  */
-public class
-AudioOptions {
+public class AudioOptions {
 
     private String cmd = "ffmpeg -i ";
 
