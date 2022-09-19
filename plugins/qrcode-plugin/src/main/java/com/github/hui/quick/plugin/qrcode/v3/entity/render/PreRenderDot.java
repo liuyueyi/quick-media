@@ -3,6 +3,7 @@ package com.github.hui.quick.plugin.qrcode.v3.entity.render;
 import com.github.hui.quick.plugin.qrcode.v3.constants.RenderDotType;
 import com.github.hui.quick.plugin.qrcode.v3.constants.RenderFunc;
 import com.github.hui.quick.plugin.qrcode.v3.entity.svg.SvgTemplate;
+import com.github.hui.quick.plugin.qrcode.wrapper.BitMatrixEx;
 
 import java.awt.*;
 
@@ -14,6 +15,11 @@ import java.awt.*;
  */
 public class PreRenderDot extends RenderDot {
     private int h, w;
+
+    /**
+     * 二维矩阵中的起始位置
+     */
+    private int i, j;
 
     public PreRenderDot() {
         this.type = RenderDotType.PRE.getType();
@@ -43,6 +49,24 @@ public class PreRenderDot extends RenderDot {
 
     private int h() {
         return h * size;
+    }
+
+    public int getI() {
+        return i;
+    }
+
+    public PreRenderDot setI(int i) {
+        this.i = i;
+        return this;
+    }
+
+    public int getJ() {
+        return j;
+    }
+
+    public PreRenderDot setJ(int j) {
+        this.j = j;
+        return this;
     }
 
     @Override

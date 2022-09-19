@@ -5,6 +5,7 @@ import com.github.hui.quick.plugin.qrcode.util.json.JsonUtil;
 import com.github.hui.quick.plugin.qrcode.v3.constants.BgStyle;
 import com.github.hui.quick.plugin.qrcode.v3.constants.DrawStyle;
 import com.github.hui.quick.plugin.qrcode.v3.constants.PicStyle;
+import com.github.hui.quick.plugin.qrcode.v3.constants.PicType;
 import com.github.hui.quick.plugin.qrcode.v3.entity.QrResource;
 import com.github.hui.quick.plugin.qrcode.v3.entity.QrResourcePool;
 import com.github.hui.quick.plugin.qrcode.v3.req.*;
@@ -45,6 +46,13 @@ public class ImgTplParse extends BaseTplParse {
             Optional.ofNullable(draw.getPicStyle()).ifPresent(drawOptions::setPicStyle);
         if (drawOptions.getCornerRadius() == null)
             Optional.ofNullable(draw.getCornerRadius()).ifPresent(drawOptions::setCornerRadius);
+        // 大小设置
+        if (options.getW() == null && options.getH() == null)
+            Optional.ofNullable(draw.getSize()).ifPresent(options::setSize);
+        // 图片类型
+        if (options.getPicType() == null)
+            Optional.ofNullable(draw.getPicType()).ifPresent(options::setPicType);
+
         if (draw.getImgs() == null || draw.getImgs().isEmpty()) {
             return;
         }
@@ -190,6 +198,14 @@ public class ImgTplParse extends BaseTplParse {
          * 最终生成二维码，如果时圆角，则这个参数用于控制圆角的弧度，默认为 1 / 8
          */
         private Float cornerRadius;
+        /**
+         * 二维码大小
+         */
+        private Integer size;
+        /**
+         * 生成图片类型
+         */
+        private PicType picType;
 
         public List<DrawImgTemplate> getImgs() {
             return imgs;
@@ -251,6 +267,24 @@ public class ImgTplParse extends BaseTplParse {
 
         public DrawTemplate setCornerRadius(Float cornerRadius) {
             this.cornerRadius = cornerRadius;
+            return this;
+        }
+
+        public Integer getSize() {
+            return size;
+        }
+
+        public DrawTemplate setSize(Integer size) {
+            this.size = size;
+            return this;
+        }
+
+        public PicType getPicType() {
+            return picType;
+        }
+
+        public DrawTemplate setPicType(PicType picType) {
+            this.picType = picType;
             return this;
         }
     }

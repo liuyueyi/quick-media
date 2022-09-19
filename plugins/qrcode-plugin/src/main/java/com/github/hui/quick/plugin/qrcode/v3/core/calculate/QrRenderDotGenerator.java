@@ -12,10 +12,7 @@ import com.github.hui.quick.plugin.qrcode.wrapper.BitMatrixEx;
 import com.google.zxing.qrcode.encoder.ByteMatrix;
 import org.apache.commons.lang3.BooleanUtils;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 import static com.github.hui.quick.plugin.qrcode.util.ForEachUtil.foreach;
 
@@ -29,6 +26,11 @@ public class QrRenderDotGenerator {
     public static final int MATRIX_BG = 0;
     public static final int MATRIX_PRE = 1;
     public static final int MATRIX_PROCEED = 2;
+
+    /**
+     * 已处理的中间态
+     */
+    public static final int MATRIX_TMP_PROCEED = 3;
 
     /**
      * 计算渲染资源列表
@@ -52,13 +54,10 @@ public class QrRenderDotGenerator {
             if (detectLocation.detectedArea()) {
                 // 若探测图形特殊绘制，则单独处理
                 if (bitMatrix.getByteMatrix().get(x, y) == MATRIX_PRE) {
-                    // 绘制三个位置探测图形
-                    RenderDot renderDot = drawDetectInfo(qrCodeConfig, bitMatrix, detectCornerSize, x, y, detectLocation);
-                    if (BooleanUtils.isNotTrue(qrCodeConfig.getDetectOptions().getSpecial()) && renderDot.getResource() == null) {
-                        // 探测图形非特殊处理时；使用默认的资源进行渲染
-                        renderDot.setResource(resourcePool.getDefaultDrawResource());
+                    if (BooleanUtils.isTrue(qrCodeConfig.getDetectOptions().getSpecial())) {
+                        // 绘制三个位置探测图形
+                        result.add(drawDetectInfo(qrCodeConfig, bitMatrix, detectCornerSize, x, y, detectLocation));
                     }
-                    result.add(renderDot);
                 } else {
                     if (BooleanUtils.isNotTrue(qrCodeConfig.getDetectOptions().getSpecial())) {
                         // 探测图形非特殊处理时，0点图渲染
@@ -84,7 +83,7 @@ public class QrRenderDotGenerator {
      * @return
      */
     private static Optional<RenderDot> drawImgBgInfo(BitMatrixEx bitMatrix, int x, int y, QrResourcePool resourcePool) {
-        if (bitMatrix.getByteMatrix().get(x, y) == MATRIX_BG  && resourcePool.getDefaultBgResource() != null) {
+        if (bitMatrix.getByteMatrix().get(x, y) == MATRIX_BG && resourcePool.getDefaultBgResource() != null) {
             bitMatrix.getByteMatrix().set(x, y, MATRIX_PROCEED);
             // 非探测区域内的0点图渲染
             return Optional.of(new BgRenderDot()
@@ -207,22 +206,58 @@ public class QrRenderDotGenerator {
         return result;
     }
 
-    private static List<RenderDot> renderSpecialResource(BitMatrixEx matrixEx, QrResourcePool.QrResourcesDecorate renderSource, boolean fullMatch) {
+    private static List<PreRenderDot> renderSpecialResource(BitMatrixEx matrixEx, QrResourcePool.QrResourcesDecorate renderSource, boolean fullMatch) {
         if (renderSource.countOver()) {
             return Collections.emptyList();
         }
-        List<RenderDot> result = new ArrayList<>();
+
+        // 当资源存在次数限制时，为了避免每次都是前面几个满足条件的位置被渲染，调整一下匹配策略；先捞出全部的，然后再按照资源数量进行挑选
+        List<PreRenderDot> renderDots = new ArrayList<>();
         ByteMatrix matrix = matrixEx.getByteMatrix();
         for (int x = 0; x < matrix.getWidth() - renderSource.getWidth() + 1; x++) {
             for (int y = 0; y < matrix.getHeight() - renderSource.getHeight() + 1; y++) {
                 if (match(matrix, renderSource, x, y, fullMatch)) {
-                    result.add(renderDot(matrixEx, renderSource, x, y));
-                    if (renderSource.countOver()) {
-                        return result;
-                    }
+                    renderDots.add(renderDot(matrixEx, renderSource, x, y));
                 }
             }
         }
+
+        // 判断下是否所有资源都是无次数限制的
+        if (!renderSource.hasCountResource()) {
+            return renderDots;
+        }
+
+
+        // 当存在计数的资源时，将这些计数资源随机分布在计算出来的RenderDot中
+        List<PreRenderDot> result = new ArrayList<>(renderDots.size());
+        // 将渲染资源进行随机排列
+        Collections.shuffle(renderDots);
+        for (PreRenderDot dot : renderDots) {
+            if (renderSource.countOver()) {
+                // 资源已经用完，恢复之前的标记
+                markMatrix(matrixEx, dot, renderSource, MATRIX_PRE);
+            } else {
+                QrResource qrResource = renderSource.getResource();
+                if (qrResource == null) {
+                    markMatrix(matrixEx, dot, renderSource, MATRIX_PRE);
+                } else {
+                    dot.setResource(qrResource);
+                    result.add(dot);
+                    markMatrix(matrixEx, dot, renderSource, MATRIX_PROCEED);
+                }
+            }
+        }
+
+        // 恢复顺序
+        result.sort((o1, o2) -> {
+            if (o1.getI() < o2.getI()) {
+                return -1;
+            } else if (o1.getI() == o2.getI()) {
+                return Objects.compare(o1.getJ(), o2.getJ(), Integer::compare);
+            } else {
+                return 1;
+            }
+        });
         return result;
     }
 
@@ -247,22 +282,31 @@ public class QrRenderDotGenerator {
         return true;
     }
 
-    private static RenderDot renderDot(BitMatrixEx matrixEx, QrResourcePool.QrResourcesDecorate renderSource, int x, int y) {
+    private static PreRenderDot renderDot(BitMatrixEx matrixEx, QrResourcePool.QrResourcesDecorate renderSource, int x, int y) {
         PreRenderDot renderDot = new PreRenderDot();
         renderDot.setW(renderSource.getWidth())
                 .setH(renderSource.getHeight())
+                .setI(x).setJ(y)
                 .setX(matrixEx.getLeftPadding() + x * matrixEx.getMultiple())
                 .setY(matrixEx.getTopPadding() + y * matrixEx.getMultiple())
-                .setSize(matrixEx.getMultiple())
-                .setResource(renderSource.getResource());
+                .setSize(matrixEx.getMultiple());
 
         // 将命中的标记为已渲染
         foreach(renderSource.getWidth(), renderDot.getH(), (w, h) -> {
             if (!renderSource.miss(w, h)) {
-                matrixEx.getByteMatrix().set(x + w, y + h, MATRIX_PROCEED);
+                matrixEx.getByteMatrix().set(x + w, y + h, MATRIX_TMP_PROCEED);
             }
         });
+        markMatrix(matrixEx, renderDot, renderSource, MATRIX_TMP_PROCEED);
         return renderDot;
+    }
+
+    private static void markMatrix(BitMatrixEx matrixEx, PreRenderDot preRenderDot, QrResourcePool.QrResourcesDecorate renderSource, int val) {
+        foreach(renderSource.getWidth(), renderSource.getHeight(), (w, h) -> {
+            if (!renderSource.miss(w, h)) {
+                matrixEx.getByteMatrix().set(preRenderDot.getI() + w, preRenderDot.getJ() + h, val);
+            }
+        });
     }
 
 }
