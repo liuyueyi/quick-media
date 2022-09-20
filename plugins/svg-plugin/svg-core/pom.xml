@@ -5,12 +5,20 @@
     <parent>
         <artifactId>svg-plugin</artifactId>
         <groupId>com.github.liuyueyi.media</groupId>
+<<<<<<< HEAD
         <version>3.0.2</version>
+=======
+        <version>3.0.1</version>
+>>>>>>> 8b5a15a (update svg plugin)
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
     <artifactId>svg-core</artifactId>
+<<<<<<< HEAD
     <version>3.0.2</version>
+=======
+    <version>3.0.1</version>
+>>>>>>> 8b5a15a (update svg plugin)
 
     <scm>
         <connection>scm:git:https://github.com/liuyueyi/quick-media.git</connection>
@@ -32,7 +40,11 @@
         <dependency>
             <groupId>com.github.liuyueyi.media</groupId>
             <artifactId>batik-codec-fix</artifactId>
+<<<<<<< HEAD
             <version>3.0.2</version>
+=======
+            <version>3.0.1</version>
+>>>>>>> 8b5a15a (update svg plugin)
             <exclusions>
                 <exclusion>
                     <groupId>commons-logging</groupId>

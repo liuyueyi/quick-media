@@ -10,7 +10,11 @@
     <modelVersion>4.0.0</modelVersion>
 
     <artifactId>svg-plugin</artifactId>
+<<<<<<< HEAD
     <version>3.0.2</version>
+=======
+    <version>3.0.1</version>
+>>>>>>> 8b5a15a (update svg plugin)
     <description>render svg to image</description>
     <developers>
         <developer>
@@ -28,7 +32,11 @@
     </modules>
 
     <properties>
+<<<<<<< HEAD
         <batik.version>1.16</batik.version>
+=======
+        <batik.version>1.14</batik.version>
+>>>>>>> 8b5a15a (update svg plugin)
     </properties>
 
 

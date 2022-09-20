@@ -10,7 +10,11 @@
     <modelVersion>4.0.0</modelVersion>
 
     <artifactId>batik-codec-fix</artifactId>
+<<<<<<< HEAD
     <version>3.0.2</version>
+=======
+    <version>3.0.1</version>
+>>>>>>> 8b5a15a (update svg plugin)
 
     <description>render svg to image</description>
     <developers>
