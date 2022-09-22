@@ -27,6 +27,7 @@ quick-media原理介绍、使用教程、资源模板等相关博文，都可以
 
 - [http://liuyueyi.gitee.io/quick-media/#/](http://liuyueyi.gitee.io/quick-media/#/)
 - [https://liuyueyi.github.io/quick-media/#/](https://liuyueyi.github.io/quick-media/#/)
+- 3.x 系列教程 [quick-media | 一灰灰Learning](https://hhui.top/quick/quick-media/)
 
 线上体验地址
 
@@ -79,7 +80,7 @@ quick-media原理介绍、使用教程、资源模板等相关博文，都可以
 <dependency>
     <groupId>com.github.liuyueyi.quick-media</groupId>
     <artifactId>qrcode-plugin</artifactId>
-    <version>3.0.0</version>
+    <version>3.0.1</version>
 </dependency>
 ```
 
@@ -255,20 +256,47 @@ markdown转html，转图片的封装类， 详细内容查看: [markdown-plugin]
     - 支持背景图圆角设置
     - 支持base64格式的二维码图片
     - 支持二维码定制绘制信息样式
-     - 三角形
-     - 矩形
-     - 五边形 （五角星待支持）
-     - 六边形
-     - 八边形
-     - 圆
-     - 自定义图片
+      - 三角形
+      - 矩形
+      - 小矩形
+      - 圆角矩形
+      - 五边形 
+      - 六边形
+      - 八边形
+      - 五角星
+      - 圆
+    - 自定义图片, 码元图，背景图，NxM资源图
     - 前置图支持
 - [x] 动态二维码生成支持
 - [x] 二维码信息解析
+- 以下为3.x以上版本新增功能
+- [x] 矢量二维码
+  - svg矢量二维码
+  - 支持logo，logo样式，边框
+  - 默认提供的几何样式
+    - 三角形
+    - 矩形
+    - 小矩形
+    - 圆角矩形
+    - 五边形
+    - 五角星
+    - 六边形
+    - 八遍性
+    - 圆
+    - 文字
+- [x] 支持自定义的渲染扩展
+  - 通过实现 IDrawStyle 来实现自定义的渲染样式支持
+- [x] 支持模板渲染 
+
+**2.x 系列教程**
 
 [查看更多二维码详情](https://liuyueyi.github.io/quick-media/#/插件/二维码/二维码插件使用手册)
 
-<font color="red">最新版本2.5.4，详情查看 [迭代日志](https://liuyueyi.github.io/quick-media/#/%E8%BF%AD%E4%BB%A3/%E6%9B%B4%E6%96%B0%E6%97%A5%E5%BF%97?id=_27-qrcode-plugin)</font>
+**3.x 系列教程**
+
+[3.x系列教程](https://hhui.top/quick/quick-media/qrcode/)
+
+<font color="red">最新版本3.0.1，详情查看 [迭代日志](https://hhui.top/quick/quick-media/version/qrcode-version/)</font>
 
 给出一个实际生成的case如下:
 
@@ -341,15 +369,16 @@ markdown转html，转图片的封装类， 详细内容查看: [markdown-plugin]
 
 [![Stargazers over time](https://starchart.cc/liuyueyi/quick-media.svg)](https://starchart.cc/liuyueyi/quick-media)
 
-### 声明
+### 联系我
 
-尽信书则不如，已上内容，一家之言，因个人能力有限，难免有疏漏和错误之处，如发现bug或者有更好的建议，欢迎批评指正，不吝感激
+如使用过程中遇到了问题，在查看教程无果之后，请优先提issue，当然也欢迎联系我；
 
-- 微博地址: 小灰灰Blog
 - QQ： 一灰灰/3302797840
 - WeChat: 一灰/liuyueyi25
 
 ### 扫描关注
+
+创作不易，你们的支持是我更新的动力
 
 **打赏列表**
 
@@ -368,7 +397,6 @@ markdown转html，转图片的封装类， 详细内容查看: [markdown-plugin]
 **打赏码**
 
 ![pay](https://blog.hhui.top/hexblog/imgs/info/payHhui.png)
-
 
 ---
 
