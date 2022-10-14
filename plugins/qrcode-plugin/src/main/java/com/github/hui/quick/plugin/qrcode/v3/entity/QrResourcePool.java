@@ -96,6 +96,10 @@ public class QrResourcePool {
         return new QrResourcesDecorate(this).setWidth(width).setHeight(height).addResource(resource);
     }
 
+    public QrResourcesDecorate createSource(int width, int height, String resource) {
+        return new QrResourcesDecorate(this).setWidth(width).setHeight(height).addResource(resource);
+    }
+
     public QrResourcesDecorate createSource(int width, int height) {
         return new QrResourcesDecorate(this).setWidth(width).setHeight(height);
     }
