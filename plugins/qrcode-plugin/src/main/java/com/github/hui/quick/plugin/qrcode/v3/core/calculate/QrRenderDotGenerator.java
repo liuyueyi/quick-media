@@ -214,19 +214,13 @@ public class QrRenderDotGenerator {
         // 当资源存在次数限制时，为了避免每次都是前面几个满足条件的位置被渲染，调整一下匹配策略；先捞出全部的，然后再按照资源数量进行挑选
         List<PreRenderDot> renderDots = new ArrayList<>();
         ByteMatrix matrix = matrixEx.getByteMatrix();
-        for (int x = 0; x < matrix.getWidth() - renderSource.getWidth() + 1; x++) {
-            for (int y = 0; y < matrix.getHeight() - renderSource.getHeight() + 1; y++) {
-                if (match(matrix, renderSource, x, y, fullMatch)) {
-                    renderDots.add(renderDot(matrixEx, renderSource, x, y));
-                }
-            }
-        }
-
-        // 判断下是否所有资源都是无次数限制的
-        if (!renderSource.hasCountResource()) {
-            return renderDots;
-        }
-
+        foreach(matrix.getWidth() - renderSource.getWidth() + 1,
+                matrix.getHeight() - renderSource.getHeight() + 1,
+                (x, y) -> {
+                    if (match(matrix, renderSource, x, y, fullMatch)) {
+                        renderDots.add(renderDot(matrixEx, renderSource, x, y));
+                    }
+                });
 
         // 当存在计数的资源时，将这些计数资源随机分布在计算出来的RenderDot中
         List<PreRenderDot> result = new ArrayList<>(renderDots.size());
@@ -236,15 +230,16 @@ public class QrRenderDotGenerator {
             if (renderSource.countOver()) {
                 // 资源已经用完，恢复之前的标记
                 markMatrix(matrixEx, dot, renderSource, MATRIX_PRE);
+                continue;
+            }
+
+            QrResource qrResource = renderSource.getResource();
+            if (qrResource == null) {
+                markMatrix(matrixEx, dot, renderSource, MATRIX_PRE);
             } else {
-                QrResource qrResource = renderSource.getResource();
-                if (qrResource == null) {
-                    markMatrix(matrixEx, dot, renderSource, MATRIX_PRE);
-                } else {
-                    dot.setResource(qrResource);
-                    result.add(dot);
-                    markMatrix(matrixEx, dot, renderSource, MATRIX_PROCEED);
-                }
+                dot.setResource(qrResource);
+                result.add(dot);
+                markMatrix(matrixEx, dot, renderSource, MATRIX_PROCEED);
             }
         }
 
@@ -292,11 +287,6 @@ public class QrRenderDotGenerator {
                 .setSize(matrixEx.getMultiple());
 
         // 将命中的标记为已渲染
-        foreach(renderSource.getWidth(), renderDot.getH(), (w, h) -> {
-            if (!renderSource.miss(w, h)) {
-                matrixEx.getByteMatrix().set(x + w, y + h, MATRIX_TMP_PROCEED);
-            }
-        });
         markMatrix(matrixEx, renderDot, renderSource, MATRIX_TMP_PROCEED);
         return renderDot;
     }
