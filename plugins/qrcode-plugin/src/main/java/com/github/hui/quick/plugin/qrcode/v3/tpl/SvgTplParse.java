@@ -132,6 +132,11 @@ public class SvgTplParse extends BaseTplParse {
         // 根据指定的位置来设置资源位
         List<SymbolTag> notHit = new ArrayList<>();
         for (SymbolTag tag : detectList) {
+            if (tag.tagType == SymbolTagType.CHECKPOINT) {
+                v3Options.newDetectOptions().setCheckPoint(new QrResource().setSvg(tag.tag));
+                continue;
+            }
+
             String type = tag.type.toLowerCase(Locale.ROOT);
             if (type.endsWith("lt")) {
                 v3Options.newDetectOptions().setLt(new QrResource().setSvg(tag.tag));
@@ -317,6 +322,10 @@ public class SvgTplParse extends BaseTplParse {
                 return SymbolTagType.BG;
             }
 
+            if (SymbolTagType.CHECKPOINT.tag.equalsIgnoreCase(type)) {
+                return SymbolTagType.CHECKPOINT;
+            }
+
             if (SymbolTagType.LOGO.tag.equalsIgnoreCase(type)) {
                 return SymbolTagType.LOGO;
             }
@@ -331,7 +340,7 @@ public class SvgTplParse extends BaseTplParse {
     }
 
     private enum SymbolTagType {
-        PRE("pre"), BG("bg"), DETECT("detect"), LOGO("logo"), OTHER("other"),
+        PRE("pre"), BG("bg"), DETECT("detect"), LOGO("logo"), OTHER("other"), CHECKPOINT("checkpoint"),
         ;
         String tag;
 

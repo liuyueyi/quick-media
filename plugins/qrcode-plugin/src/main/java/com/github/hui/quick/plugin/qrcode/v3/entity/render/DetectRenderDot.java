@@ -1,6 +1,6 @@
 package com.github.hui.quick.plugin.qrcode.v3.entity.render;
 
-import com.github.hui.quick.plugin.qrcode.helper.QrCodeRenderHelper;
+import com.github.hui.quick.plugin.qrcode.v3.constants.QrArea;
 import com.github.hui.quick.plugin.qrcode.v3.constants.RenderDotType;
 import com.github.hui.quick.plugin.qrcode.v3.constants.RenderFunc;
 import com.github.hui.quick.plugin.qrcode.v3.entity.svg.SvgTemplate;
@@ -14,10 +14,14 @@ import java.awt.*;
  * @date 2022/7/20
  */
 public class DetectRenderDot extends RenderDot {
-    private QrCodeRenderHelper.DetectLocation location;
+    private QrArea location;
+    /**
+     * 若探测图形用一张资源进行绘制， dotNum 通常为 7，表示占用 7x7的位置
+     * 若探测图形的每个点进行单独绘制，则dotNum = 1
+     */
     private int dotNum;
     /**
-     * 当size == 1时，用这个来区分当前这个是在码眼外层的还是内层的框上
+     * 当dotNum == 1时，用这个来区分当前这个是在码眼外层的还是内层的框上
      */
     private Boolean outBorder;
 
@@ -25,11 +29,11 @@ public class DetectRenderDot extends RenderDot {
         this.type = RenderDotType.DETECT.getType();
     }
 
-    public QrCodeRenderHelper.DetectLocation getLocation() {
+    public QrArea getLocation() {
         return location;
     }
 
-    public DetectRenderDot setLocation(QrCodeRenderHelper.DetectLocation location) {
+    public DetectRenderDot setLocation(QrArea location) {
         this.location = location;
         return this;
     }

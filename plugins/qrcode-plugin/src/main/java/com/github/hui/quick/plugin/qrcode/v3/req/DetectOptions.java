@@ -1,8 +1,8 @@
 package com.github.hui.quick.plugin.qrcode.v3.req;
 
 import com.github.hui.quick.plugin.base.awt.ColorUtil;
-import com.github.hui.quick.plugin.qrcode.helper.QrCodeRenderHelper;
 import com.github.hui.quick.plugin.qrcode.v3.constants.DrawStyle;
+import com.github.hui.quick.plugin.qrcode.v3.constants.QrArea;
 import com.github.hui.quick.plugin.qrcode.v3.entity.QrResource;
 import org.apache.commons.lang3.StringUtils;
 
@@ -42,6 +42,10 @@ public class DetectOptions {
      */
     private QrResource ld;
     /**
+     * 定位点的资源图形
+     */
+    private QrResource checkPoint;
+    /**
      * true 表示探测图形单独处理
      * false 表示探测图形的样式更随二维码的主样式
      */
@@ -62,6 +66,7 @@ public class DetectOptions {
 
     public DetectOptions setOutColor(Color outColor) {
         this.outColor = outColor;
+        this.special = true;
         return this;
     }
 
@@ -75,6 +80,7 @@ public class DetectOptions {
 
     public DetectOptions setInColor(Color inColor) {
         this.inColor = inColor;
+        this.special = true;
         return this;
     }
 
@@ -85,6 +91,7 @@ public class DetectOptions {
     public DetectOptions setColor(Color color) {
         this.inColor = color;
         this.outColor = color;
+        this.special = true;
         return this;
     }
 
@@ -135,6 +142,19 @@ public class DetectOptions {
 
     public DetectOptions setLd(String ld) {
         return setLd(new QrResource(ld));
+    }
+
+    public DetectOptions setCheckPoint(QrResource checkPoint) {
+        this.checkPoint = checkPoint;
+        return this;
+    }
+
+    public DetectOptions setCheckPoint(String cp) {
+        return setCheckPoint(new QrResource(cp));
+    }
+
+    public QrResource getCheckPoint() {
+        return checkPoint;
     }
 
     public QrResource getResource() {
@@ -188,14 +208,16 @@ public class DetectOptions {
         return this;
     }
 
-    public QrResource chooseDetectResource(QrCodeRenderHelper.DetectLocation detectLocation) {
+    public QrResource chooseDetectResource(QrArea detectLocation) {
         switch (detectLocation) {
-            case LD:
+            case DETECT_LD:
                 return ld == null ? resource : ld;
-            case LT:
+            case DETECT_LT:
                 return lt == null ? resource : lt;
-            case RT:
+            case DETECT_RT:
                 return rt == null ? resource : rt;
+            case CHECK_POINT:
+                return checkPoint == null ? resource : checkPoint;
             default:
                 return null;
         }
@@ -208,6 +230,7 @@ public class DetectOptions {
             if (ld != null) resource = ld;
             else if (lt != null) resource = lt;
             else if (rt != null) resource = rt;
+            else if (checkPoint != null) resource = checkPoint;
         }
         // 只要一个有资源，则表明探测图形全指定
         if (resource != null) {
