@@ -1,6 +1,6 @@
 package com.github.hui.quick.plugin.qrcode.v3.core.calculate;
 
-import com.github.hui.quick.plugin.qrcode.helper.QrCodeRenderHelper;
+import com.github.hui.quick.plugin.qrcode.v3.constants.QrArea;
 import com.github.hui.quick.plugin.qrcode.v3.entity.QrResource;
 import com.github.hui.quick.plugin.qrcode.v3.entity.QrResourcePool;
 import com.github.hui.quick.plugin.qrcode.v3.entity.render.BgRenderDot;
@@ -50,13 +50,13 @@ public class QrRenderDotGenerator {
         // 若探测图形特殊绘制，则提前处理掉
         QrResourcePool resourcePool = qrCodeConfig.getDrawOptions().getResourcePool();
         foreach(matrixW, matrixH, (x, y) -> {
-            QrCodeRenderHelper.DetectLocation detectLocation = inDetectCornerArea(x, y, matrixW, matrixH, detectCornerSize);
-            if (detectLocation.detectedArea()) {
+            QrArea qrArea = inDetectCornerArea(x, y, matrixW, matrixH, detectCornerSize);
+            if (qrArea.detectedArea() || qrArea.checkPoint()) {
                 // 若探测图形特殊绘制，则单独处理
                 if (bitMatrix.getByteMatrix().get(x, y) == MATRIX_PRE) {
                     if (BooleanUtils.isTrue(qrCodeConfig.getDetectOptions().getSpecial())) {
-                        // 绘制三个位置探测图形
-                        result.add(drawDetectInfo(qrCodeConfig, bitMatrix, detectCornerSize, x, y, detectLocation));
+                        // 绘制三个位置探测图形、安全校验点
+                        result.add(drawSpecialQrArea(qrCodeConfig, bitMatrix, detectCornerSize, x, y, qrArea));
                     }
                 } else {
                     if (BooleanUtils.isNotTrue(qrCodeConfig.getDetectOptions().getSpecial())) {
@@ -107,23 +107,34 @@ public class QrRenderDotGenerator {
      * @param detectCornerSize 探测图形的大小
      * @return
      */
-    private static QrCodeRenderHelper.DetectLocation inDetectCornerArea(int x, int y, int matrixW, int matrixH, int detectCornerSize) {
+    private static QrArea inDetectCornerArea(int x, int y, int matrixW, int matrixH, int detectCornerSize) {
         if (x < detectCornerSize && y < detectCornerSize) {
             // 左上角
-            return QrCodeRenderHelper.DetectLocation.LT;
+            return QrArea.DETECT_LT;
         }
 
         if (x < detectCornerSize && y >= matrixH - detectCornerSize) {
             // 左下角
-            return QrCodeRenderHelper.DetectLocation.LD;
+            return QrArea.DETECT_LD;
         }
 
         if (x >= matrixW - detectCornerSize && y < detectCornerSize) {
             // 右上角
-            return QrCodeRenderHelper.DetectLocation.RT;
+            return QrArea.DETECT_RT;
         }
 
-        return QrCodeRenderHelper.DetectLocation.NONE;
+        if (detectCornerSize == 5) {
+            // 不存在定位点
+            return QrArea.NONE;
+        }
+
+        if (x >= matrixW - 9 && x < matrixW - 4 && y >= matrixH - 9 && y < matrixH - 4) {
+            // 定位点
+            return QrArea.CHECK_POINT;
+        }
+
+
+        return QrArea.NONE;
     }
 
     /**
@@ -135,17 +146,19 @@ public class QrRenderDotGenerator {
      * @param x                目标点x坐标
      * @param y                目标点y坐标
      */
-    private static RenderDot drawDetectInfo(QrCodeV3Options qrCodeConfig, BitMatrixEx bitMatrix, int detectCornerSize, int x, int y, QrCodeRenderHelper.DetectLocation detectLocation) {
+    private static RenderDot drawSpecialQrArea(QrCodeV3Options qrCodeConfig, BitMatrixEx bitMatrix, int detectCornerSize,
+                                               int x, int y, QrArea qrArea) {
         int matrixW = bitMatrix.getByteMatrix().getWidth();
         int matrixH = bitMatrix.getByteMatrix().getHeight();
+        if (qrArea.checkPoint()) detectCornerSize = 5;
 
         DetectRenderDot renderDot = new DetectRenderDot();
-        renderDot.setLocation(detectLocation)
+        renderDot.setLocation(qrArea)
                 .setX(bitMatrix.getLeftPadding() + x * bitMatrix.getMultiple())
                 .setY(bitMatrix.getTopPadding() + y * bitMatrix.getMultiple())
                 .setSize(bitMatrix.getMultiple());
 
-        QrResource detectResource = qrCodeConfig.getDetectOptions().chooseDetectResource(detectLocation);
+        QrResource detectResource = qrCodeConfig.getDetectOptions().chooseDetectResource(qrArea);
         if (detectResource != null && BooleanUtils.isTrue(qrCodeConfig.getDetectOptions().getWhole())) {
             // 图片直接渲染完毕之后，将其他探测图形的点设置为0，表示不需要再次渲染
             foreach(detectCornerSize, detectCornerSize, (addX, addY) -> bitMatrix.getByteMatrix().set(x + addX, y + addY, MATRIX_PROCEED));
@@ -155,7 +168,7 @@ public class QrRenderDotGenerator {
         }
         renderDot.setDotNum(1)
                 // 设置当前这个点是探测图形的外边框，还是内边框
-                .setOutBorder(inOuterDetectCornerArea(x, y, matrixW, matrixH, detectCornerSize))
+                .setOutBorder(inOuterCornerArea(x, y, matrixW, matrixH, detectCornerSize, qrArea))
                 .setResource(detectResource);
         bitMatrix.getByteMatrix().set(x, y, MATRIX_PROCEED);
         return renderDot;
@@ -171,9 +184,14 @@ public class QrRenderDotGenerator {
      * @param detectCornerSize 探测图形的大小
      * @return
      */
-    private static boolean inOuterDetectCornerArea(int x, int y, int matrixW, int matrixH, int detectCornerSize) {
-        // 外层的框
-        return x == 0 || x == detectCornerSize - 1 || x == matrixW - 1 || x == matrixW - detectCornerSize || y == 0 || y == detectCornerSize - 1 || y == matrixH - 1 || y == matrixH - detectCornerSize;
+    private static boolean inOuterCornerArea(int x, int y, int matrixW, int matrixH, int detectCornerSize, QrArea area) {
+        if (area.detectedArea()) {
+            // 外层的框
+            return x == 0 || x == detectCornerSize - 1 || x == matrixW - 1 || x == matrixW - detectCornerSize || y == 0 || y == detectCornerSize - 1 || y == matrixH - 1 || y == matrixH - detectCornerSize;
+        } else {
+            // 定位点
+            return x == matrixW - 9 || x == matrixW - 5 || y == matrixH - 9 || y == matrixH - 5;
+        }
     }
 
     /**
