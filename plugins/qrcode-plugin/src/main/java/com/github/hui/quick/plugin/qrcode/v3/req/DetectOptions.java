@@ -66,7 +66,6 @@ public class DetectOptions {
 
     public DetectOptions setOutColor(Color outColor) {
         this.outColor = outColor;
-        this.special = true;
         return this;
     }
 
@@ -80,7 +79,6 @@ public class DetectOptions {
 
     public DetectOptions setInColor(Color inColor) {
         this.inColor = inColor;
-        this.special = true;
         return this;
     }
 
@@ -91,7 +89,6 @@ public class DetectOptions {
     public DetectOptions setColor(Color color) {
         this.inColor = color;
         this.outColor = color;
-        this.special = true;
         return this;
     }
 

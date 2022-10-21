@@ -6,6 +6,7 @@ public class SvgTag {
     protected int y;
     protected int w;
     protected int h;
+    protected Float opacity;
 
     public String getColor() {
         return color;
@@ -50,5 +51,26 @@ public class SvgTag {
     public SvgTag setH(int h) {
         this.h = h;
         return this;
+    }
+
+    public SvgTag setOpacity(Float opacity) {
+        this.opacity = opacity;
+        return this;
+    }
+
+    public String getOpacity() {
+        if (opacity == null || opacity >= 1.0f) {
+            return "";
+        }
+        return " opacity=\"" + opacity + "\" ";
+    }
+
+    @Override
+    public String toString() {
+        return " x=\"" + x + "\" " +
+                "y=\"" + y + "\" " +
+                "width=\"" + w + "\" " +
+                "height=\"" + h + "\" " +
+                getOpacity();
     }
 }

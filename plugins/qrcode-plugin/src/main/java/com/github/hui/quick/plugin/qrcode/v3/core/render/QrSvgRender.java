@@ -1,6 +1,10 @@
 package com.github.hui.quick.plugin.qrcode.v3.core.render;
 
+import com.github.hui.quick.plugin.base.Base64Util;
 import com.github.hui.quick.plugin.base.awt.ColorUtil;
+import com.github.hui.quick.plugin.base.awt.GraphicUtil;
+import com.github.hui.quick.plugin.base.constants.MediaType;
+import com.github.hui.quick.plugin.qrcode.v3.constants.BgStyle;
 import com.github.hui.quick.plugin.qrcode.v3.constants.DrawStyle;
 import com.github.hui.quick.plugin.qrcode.v3.constants.QrType;
 import com.github.hui.quick.plugin.qrcode.v3.entity.QrResource;
@@ -8,15 +12,15 @@ import com.github.hui.quick.plugin.qrcode.v3.entity.render.BgRenderDot;
 import com.github.hui.quick.plugin.qrcode.v3.entity.render.DetectRenderDot;
 import com.github.hui.quick.plugin.qrcode.v3.entity.render.PreRenderDot;
 import com.github.hui.quick.plugin.qrcode.v3.entity.render.RenderDot;
-import com.github.hui.quick.plugin.qrcode.v3.entity.svg.BorderSvgTag;
-import com.github.hui.quick.plugin.qrcode.v3.entity.svg.RectSvgTag;
-import com.github.hui.quick.plugin.qrcode.v3.entity.svg.SvgTemplate;
-import com.github.hui.quick.plugin.qrcode.v3.entity.svg.SymbolSvgTag;
+import com.github.hui.quick.plugin.qrcode.v3.entity.svg.*;
+import com.github.hui.quick.plugin.qrcode.v3.req.BgOptions;
 import com.github.hui.quick.plugin.qrcode.v3.req.QrCodeV3Options;
 import org.apache.commons.lang3.BooleanUtils;
 import org.apache.commons.lang3.StringUtils;
 
 import java.awt.*;
+import java.awt.image.BufferedImage;
+import java.io.IOException;
 import java.util.List;
 import java.util.Optional;
 
@@ -32,7 +36,7 @@ public class QrSvgRender {
         Optional.ofNullable(options.getDrawOptions().getResourcePool().getGlobalResource()).ifPresent(r -> svgTemplate.setDefs(r.getSvg()));
 
         // 若不存在特殊处理的0点，则使用背景色进行填充
-        if (dotList.stream().noneMatch(s -> s instanceof BgRenderDot)) {
+        if (!options.getBgOptions().needDrawBg() && dotList.stream().noneMatch(s -> s instanceof BgRenderDot)) {
             svgTemplate.addTag(new RectSvgTag().setX(0).setY(0).setW(options.getW()).setH(options.getH()).setColor(ColorUtil.color2htmlColor(options.getDrawOptions().getBgColor())));
         }
 
@@ -54,7 +58,7 @@ public class QrSvgRender {
                 svgTemplate.setCurrentColor(color);
                 if (BooleanUtils.isTrue(options.getDetectOptions().getSpecial())
                         && (dot.getResource() == null || dot.getResource().getSvgInfo() == null)) {
-                    svgTemplate.setCurrentColor(color == null ? Color.BLACK: color);
+                    svgTemplate.setCurrentColor(color == null ? Color.BLACK : color);
                     if (dot.getResource() == null || dot.getResource().getDrawStyle() == null) {
                         // 当探测图形特殊处理，即不与指定前置图样式相同时；首先判断是否有指定特殊的探测图形资源，没有时，则走默认的黑色矩形框设置
                         dot.setResource(new QrResource().setDrawStyle(DrawStyle.RECT));
@@ -125,5 +129,55 @@ public class QrSvgRender {
                     .setH(logoHeight)
             );
         }
+    }
+
+    public static void drawBackground(SvgTemplate svgTemplate, QrCodeV3Options options) throws IOException {
+        BgOptions bgOptions = options.getBgOptions();
+        if (!bgOptions.needDrawBg()) {
+            return;
+        }
+
+        QrResource bg = bgOptions.getBg();
+        int bgW = bgOptions.getBgW(), bgH = bgOptions.getBgH();
+        int maxW = Math.max(svgTemplate.getWidth(), bgW);
+        int maxH = Math.max(svgTemplate.getHeight(), bgH);
+        if (bgOptions.getBgStyle() == BgStyle.PENETRATE) {
+            // 不支持这种场景
+            return;
+        } else if (bgOptions.getBgStyle() == BgStyle.OVERRIDE) {
+            // 全覆盖方式，将背景图拉升到与二维码等宽高
+            BufferedImage bgImg = bg.getImg();
+            if (bgImg != null && (bgImg.getWidth() != bgW || bgImg.getHeight() != bgH)) {
+                BufferedImage temp = new BufferedImage(bgW, bgH, BufferedImage.TYPE_INT_ARGB);
+                temp.getGraphics().drawImage(bgImg.getScaledInstance(bgW, bgH, Image.SCALE_SMOOTH), 0, 0, null);
+                bgImg = temp;
+                bg.setImg(bgImg);
+            }
+
+            bgW = maxW;
+            bgH = maxH;
+            // 设置二维码信息点的透明度
+            svgTemplate.getTagList().forEach(s -> s.setOpacity(bgOptions.getOpacity()));
+        } else if (bgOptions.getBgStyle() == BgStyle.FILL) {
+            // 指定位置绘制， 因此需要更新其他二维码的偏移量
+            svgTemplate.getTagList().forEach(s -> s.setX(s.getX() + bgOptions.getStartX()).setY(s.getY() + bgOptions.getStartY()));
+            svgTemplate.setWidth(maxW).setHeight(maxH);
+        }
+
+        SvgTag bgTag;
+        if (bg.getImg() != null) {
+            // 图片背景
+            MediaType mediaType = bg.getImg().getType() <= 1 ? MediaType.ImageJpg : MediaType.ImagePng;
+            String base64 = Base64Util.encode(bg.getImg(), mediaType.getExt());
+            bgTag = new ImgSvgTag().setHref("data:" + mediaType.getMime() + ";base64," + base64);
+        } else if (bg.getSvg() != null) {
+            // svg格式背景
+            svgTemplate.addSymbol(bg.getSvg());
+            bgTag = new SymbolSvgTag().setSvgId(bg.getSvgId());
+        } else {
+            return;
+        }
+        bgTag.setX(0).setY(0).setW(bgW).setH(bgH);
+        svgTemplate.setBgTag(bgTag);
     }
 }

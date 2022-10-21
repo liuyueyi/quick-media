@@ -12,11 +12,6 @@ public class RoundRectSvgTag extends SvgTag {
      */
     protected int roundRate = 4;
 
-
-    public int getRoundRate() {
-        return roundRate;
-    }
-
     public RoundRectSvgTag setRoundRate(int roundRate) {
         this.roundRate = roundRate;
         return this;
@@ -25,6 +20,6 @@ public class RoundRectSvgTag extends SvgTag {
     @Override
     public String toString() {
         int round = Math.floorDiv(w, roundRate);
-        return "<rect" + " fill=\"" + color + "\" height=\"" + h + "\" width=\"" + w + "\" y=\"" + y + "\" x=\"" + x + "\" rx=\"" + round + "\" ry=\"" + round + "\" />";
+        return "<rect" + " fill=\"" + color + "\"" + super.toString() + " rx=\"" + round + "\" ry=\"" + round + "\" />";
     }
 }

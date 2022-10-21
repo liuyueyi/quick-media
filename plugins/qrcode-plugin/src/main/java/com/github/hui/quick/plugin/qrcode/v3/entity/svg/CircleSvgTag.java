@@ -6,7 +6,7 @@ public class CircleSvgTag extends SvgTag {
         int r = Math.floorDiv(w, 2);
         x += r;
         y += r;
-        return "<circle cx=\"" + x + "\" cy=\"" + y + "\" r=\"" + r + "\" fill=\"" + color + "\"/>";
+        return "<circle cx=\"" + x + "\" cy=\"" + y + "\" r=\"" + r + "\" fill=\"" + color + "\"" + getOpacity() + "/>";
     }
 }
 

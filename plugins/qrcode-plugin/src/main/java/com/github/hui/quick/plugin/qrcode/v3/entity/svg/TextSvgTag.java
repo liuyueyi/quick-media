@@ -18,6 +18,6 @@ public class TextSvgTag extends SvgTag {
 
     @Override
     public String toString() {
-        return "<text" + " fill=\"" + color + "\" font-size=\"" + w + "\" y=\"" + y + "\" x=\"" + x + "\">" + txt + "</text>";
+        return "<text" + " fill=\"" + color + "\" font-size=\"" + w + "\" y=\"" + y + "\" x=\"" + x + "\"" + getOpacity() + ">" + txt + "</text>";
     }
 }

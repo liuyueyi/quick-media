@@ -17,6 +17,6 @@ public class SymbolSvgTag extends SvgTag {
 
     @Override
     public String toString() {
-        return "<use xlink:href=\"#" + svgId + "\" x=\"" + x + "\" y=\"" + y + "\" width=\"" + w + "\" height=\"" + h + "\"/>";
+        return "<use xlink:href=\"#" + svgId + "\"" + super.toString() + "/>";
     }
 }

@@ -47,6 +47,7 @@ public class BorderSvgTag extends SvgTag {
     public String toString() {
         int round = Math.floorDiv(w, roundRate);
         return "<rect" + " style=\"stroke:" + color + ";fill:" + fillColor + "; stroke-width:" + strokeWidth +
-                "\" height=\"" + h + "\" width=\"" + w + "\" y=\"" + y + "\" x=\"" + x + "\" rx=\"" + round + "\" ry=\"" + round + "\" />";
+                "\" rx=\"" + round + "\" ry=\"" + round + "\"" + super.toString() +
+                " />";
     }
 }
