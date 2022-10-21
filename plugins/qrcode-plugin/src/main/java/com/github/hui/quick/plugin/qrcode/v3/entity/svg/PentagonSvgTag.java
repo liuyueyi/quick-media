@@ -16,6 +16,6 @@ public class PentagonSvgTag extends SvgTag {
                 .append(x + NumUtil.multiplyWithScaleFloor(10, rate, 2)).append(",").append(y + NumUtil.multiplyWithScaleFloor(30, rate, 2)).append(" ")
                 .append(x).append(",").append(y + NumUtil.multiplyWithScaleFloor(15, rate, 2)).append(" ");
 
-        return "<polygon points=\"" + points.toString() + "\"  style=\"fill:" + color + ";fill-rule:nonzero;\" />";
+        return "<polygon points=\"" + points.toString() + "\"  style=\"fill:" + color + ";fill-rule:nonzero;\" " + getOpacity() + " />";
     }
 }

@@ -11,6 +11,6 @@ public class MiniRectSvgTag extends SvgTag {
         h -= offsetY * 2;
         x += offsetX;
         y += offsetY;
-        return "<rect" + " fill=\"" + color + "\" height=\"" + h + "\" width=\"" + w + "\" y=\"" + y + "\" x=\"" + x + "\"/>";
+        return "<rect" + " fill=\"" + color + "\"" + super.toString() + "/>";
     }
 }

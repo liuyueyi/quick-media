@@ -148,4 +148,23 @@ public class BgOptions {
 
         return options;
     }
+
+    public boolean needDrawBg() {
+        if (bg == null) {
+            return false;
+        }
+
+        if (bg.getImg() != null || bg.getGif() != null) {
+            return true;
+        }
+
+        if (bg.getDrawStyle() != null) {
+            return true;
+        }
+
+        if (bg.getSvg() != null) {
+            return true;
+        }
+        return false;
+    }
 }

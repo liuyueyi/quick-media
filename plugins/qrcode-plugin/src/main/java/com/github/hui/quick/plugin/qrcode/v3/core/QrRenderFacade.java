@@ -109,6 +109,8 @@ public class QrRenderFacade {
         SvgTemplate svgTemplate = QrSvgRender.drawQrInfo(renderDotList, options);
         // 绘制logo
         QrSvgRender.drawLogo(svgTemplate, options);
+        // 绘制背景
+        QrSvgRender.drawBackground(svgTemplate, options);
         return svgTemplate.toString();
     }
 

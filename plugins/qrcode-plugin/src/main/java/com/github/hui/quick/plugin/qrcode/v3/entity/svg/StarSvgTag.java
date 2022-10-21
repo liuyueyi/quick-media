@@ -16,6 +16,6 @@ public class StarSvgTag extends SvgTag {
                 .append(x + rate).append(",").append(y + NumUtil.multiplyWithScaleFloor(7.8f, rate, 2)).append(" ")
                 .append(x + NumUtil.multiplyWithScaleFloor(16, rate, 2)).append(",").append(y + NumUtil.multiplyWithScaleFloor(19.8f, rate, 2)).append(" ");
 
-        return "<polygon points=\"" + points + "\"  style=\"fill:" + color + ";fill-rule:nonzero;\" />";
+        return "<polygon points=\"" + points + "\"  style=\"fill:" + color + ";fill-rule:nonzero;\" " + getOpacity() + "/>";
     }
 }

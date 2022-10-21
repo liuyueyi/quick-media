@@ -20,6 +20,6 @@ public class OctagonSvgTag extends SvgTag {
                 .append(x).append(",").append(y + NumUtil.multiplyWithScaleFloor(20, rate, 2)).append(" ")
                 .append(x).append(",").append(y + NumUtil.multiplyWithScaleFloor(10, rate, 2)).append(" ");
 
-        return "<polygon points=\"" + points + "\"  style=\"fill:" + color + ";fill-rule:nonzero;\" />";
+        return "<polygon points=\"" + points + "\"  style=\"fill:" + color + ";fill-rule:nonzero;\" " + getOpacity() + " />";
     }
 }

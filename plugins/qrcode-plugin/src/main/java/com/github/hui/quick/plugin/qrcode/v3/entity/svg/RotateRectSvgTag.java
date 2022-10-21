@@ -13,6 +13,6 @@ public class RotateRectSvgTag extends SvgTag {
                 .append(x + size).append(",").append(y + size * 2).append(" ")
                 .append(x).append(",").append(y + size).append(" ");
 
-        return "<polygon points=\"" + points.toString() + "\"  style=\"fill:" + color + ";fill-rule:nonzero;\" />";
+        return "<polygon points=\"" + points + "\"  style=\"fill:" + color + ";fill-rule:nonzero;\" " + getOpacity() + " />";
     }
 }

@@ -1,6 +1,5 @@
 package com.github.hui.quick.plugin.test.v3.svg;
 
-import com.github.hui.quick.plugin.base.OSUtil;
 import com.github.hui.quick.plugin.qrcode.v3.constants.DrawStyle;
 import com.github.hui.quick.plugin.qrcode.wrapper.QrCodeGenV3;
 import com.github.hui.quick.plugin.test.v3.BasicGenTest;
@@ -49,6 +48,13 @@ public class QrSvgGeometryGenTest extends BasicGenTest {
         boolean ans = QrCodeGenV3.of(msg).setSize(300).setDrawStyle(DrawStyle.ROUND_RECT).asFile(prefix + "/roundRect.svg");
         System.out.println(ans);
     }
+
+    @Test
+    public void rotateRect() throws Exception {
+        boolean ans = QrCodeGenV3.of(msg).setSize(300).setDrawStyle(DrawStyle.ROTATE_RECT).asFile(prefix + "/rotateRect.svg");
+        System.out.println(ans);
+    }
+
 
     @Test
     public void miniRect() throws Exception {

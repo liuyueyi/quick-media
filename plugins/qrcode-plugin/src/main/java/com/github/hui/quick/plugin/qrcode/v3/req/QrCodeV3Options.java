@@ -16,6 +16,7 @@ import java.awt.image.BufferedImage;
 import java.io.ByteArrayOutputStream;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Objects;
 
 /**
  * 二维码配置参数
@@ -669,7 +670,16 @@ public class QrCodeV3Options {
         if (!BooleanUtils.isTrue(detectOptions.getSpecial())) {
             // 探测图形非特殊处理时，直接使用preColor
             if (detectOptions.getInColor() == null) detectOptions.setInColor(drawOptions.getPreColor());
+            // 若inColor特殊指定，则需要特殊进行绘制
+            else detectOptions.setSpecial(true);
             if (detectOptions.getOutColor() == null) detectOptions.setOutColor(drawOptions.getPreColor());
+            else detectOptions.setSpecial(true);
+            // 探测图形的渲染资源继承码元的渲染样式
+            if (drawOptions.getResourcePool() != null && drawOptions.getResourcePool().getDefaultDrawResource() != null) {
+                detectOptions.setResource(drawOptions.getResourcePool().getDefaultDrawResource());
+            } else {
+                detectOptions.setResource(new QrResource().setDrawStyle(drawOptions.getDrawStyle()));
+            }
         }
 
         // 当指定了svg资源时，输出二维码为svg
