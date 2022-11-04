@@ -676,9 +676,9 @@ public class QrCodeV3Options {
             else detectOptions.setSpecial(true);
             // 探测图形的渲染资源继承码元的渲染样式
             if (drawOptions.getResourcePool() != null && drawOptions.getResourcePool().getDefaultDrawResource() != null) {
-                detectOptions.setResource(drawOptions.getResourcePool().getDefaultDrawResource());
+                detectOptions.initResource(drawOptions.getResourcePool().getDefaultDrawResource());
             } else {
-                detectOptions.setResource(new QrResource().setDrawStyle(drawOptions.getDrawStyle()));
+                detectOptions.initResource(new QrResource().setDrawStyle(drawOptions.getDrawStyle()));
             }
         }
 

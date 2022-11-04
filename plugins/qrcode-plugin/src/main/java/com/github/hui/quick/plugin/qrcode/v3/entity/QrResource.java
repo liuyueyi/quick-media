@@ -142,6 +142,9 @@ public class QrResource {
         }
     }
 
+    public boolean txtResource() {
+        return text != null && text.length() > 0;
+    }
     public String getText() {
         if (txtMode == null) {
             setTxtMode(TxtMode.FULL);

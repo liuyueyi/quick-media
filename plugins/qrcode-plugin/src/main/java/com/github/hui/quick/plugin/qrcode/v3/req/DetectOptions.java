@@ -4,7 +4,6 @@ import com.github.hui.quick.plugin.base.awt.ColorUtil;
 import com.github.hui.quick.plugin.qrcode.v3.constants.DrawStyle;
 import com.github.hui.quick.plugin.qrcode.v3.constants.QrArea;
 import com.github.hui.quick.plugin.qrcode.v3.entity.QrResource;
-import org.apache.commons.lang3.StringUtils;
 
 import java.awt.*;
 
@@ -154,6 +153,17 @@ public class DetectOptions {
         return checkPoint;
     }
 
+    /**
+     * 内部初始化时使用，不对外提供
+     *
+     * @param resource
+     * @return
+     */
+    DetectOptions initResource(QrResource resource) {
+        this.resource = resource;
+        return this;
+    }
+
     public QrResource getResource() {
         return resource;
     }
@@ -176,9 +186,9 @@ public class DetectOptions {
     private void initDetectResource(QrResource resource) {
         if (resource == null || resource.getDrawStyle() != null) return;
         // 避免出现探测点的绘制被全局的绘制样式覆盖，导致无法正确处理
-        if (resource.getSvgInfo() != null) resource.setDrawStyle(DrawStyle.SVG);
+        if (resource.txtResource()) resource.setDrawStyle(DrawStyle.TXT);
+        else if (resource.getSvgInfo() != null) resource.setDrawStyle(DrawStyle.SVG);
         else if (resource.getImg() != null) resource.setDrawStyle(DrawStyle.IMAGE);
-        else if (StringUtils.isNotBlank(resource.getText())) resource.setDrawStyle(DrawStyle.TXT);
     }
 
     public Boolean getSpecial() {

@@ -2,7 +2,6 @@ package com.github.hui.quick.plugin.qrcode.v3.core.render;
 
 import com.github.hui.quick.plugin.base.Base64Util;
 import com.github.hui.quick.plugin.base.awt.ColorUtil;
-import com.github.hui.quick.plugin.base.awt.GraphicUtil;
 import com.github.hui.quick.plugin.base.constants.MediaType;
 import com.github.hui.quick.plugin.qrcode.v3.constants.BgStyle;
 import com.github.hui.quick.plugin.qrcode.v3.constants.DrawStyle;
@@ -35,8 +34,8 @@ public class QrSvgRender {
         SvgTemplate svgTemplate = new SvgTemplate(options.getW(), options.getH());
         Optional.ofNullable(options.getDrawOptions().getResourcePool().getGlobalResource()).ifPresent(r -> svgTemplate.setDefs(r.getSvg()));
 
-        // 若不存在特殊处理的0点，则使用背景色进行填充
-        if (!options.getBgOptions().needDrawBg() && dotList.stream().noneMatch(s -> s instanceof BgRenderDot)) {
+        // 若不存在特殊处理的0点 or 背景指定方式渲染时，则使用背景色进行填充
+        if (needDrawBgTag(options.getBgOptions(), dotList)) {
             svgTemplate.addTag(new RectSvgTag().setX(0).setY(0).setW(options.getW()).setH(options.getH()).setColor(ColorUtil.color2htmlColor(options.getDrawOptions().getBgColor())));
         }
 
@@ -179,5 +178,21 @@ public class QrSvgRender {
         }
         bgTag.setX(0).setY(0).setW(bgW).setH(bgH);
         svgTemplate.setBgTag(bgTag);
+    }
+
+    /**
+     * 判断是否需要绘制二维码中的白色背景区域
+     *
+     * @param bgOptions
+     * @param dotList
+     * @return
+     */
+    private static boolean needDrawBgTag(BgOptions bgOptions, List<RenderDot> dotList) {
+        if (bgOptions != null && bgOptions.needDrawBg() && bgOptions.getBgStyle() == BgStyle.OVERRIDE) {
+            // 如果背景渲染存在，则要求非覆盖方式，因为需要采用透明度进行渲染
+            return false;
+        }
+
+        return dotList.stream().noneMatch(s -> s instanceof BgRenderDot);
     }
 }
