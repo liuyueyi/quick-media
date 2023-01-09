@@ -1,27 +1,19 @@
-package com.github.hui.quick.plugin.test.split;
+package com.github.hui.quick.plugin.image.wrapper.split.util;
 
 import com.github.hui.quick.plugin.base.awt.GraphicUtil;
-import com.github.hui.quick.plugin.base.awt.ImageLoadUtil;
-import org.junit.Test;
 
-import javax.imageio.ImageIO;
 import java.awt.*;
 import java.awt.image.BufferedImage;
-import java.io.File;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
 /**
- * 自动拆分图
- *
  * @author YiHui
  * @date 2023/1/9
  */
-public class ImgAutoSplit {
+public class ImgSplitUtil {
 
-    public List<BufferedImage> split(String img) throws IOException {
-        BufferedImage origin = ImageLoadUtil.getImageByPath(img);
+    public static List<BufferedImage> split(BufferedImage origin) {
         List<BufferedImage> ans = new ArrayList<>();
         while (true) {
             BufferedImage o = pickOneImg(origin);
@@ -34,12 +26,13 @@ public class ImgAutoSplit {
         return ans;
     }
 
-    private BufferedImage pickOneImg(BufferedImage img) {
+    private static BufferedImage pickOneImg(BufferedImage img) {
         int pointX = 0, pointY = 0;
         boolean pointChoose = false;
         for (int y = 0; y < img.getHeight(); y++) {
             for (int x = 0; x < img.getWidth(); x++) {
                 if (!bgColor(img.getRGB(x, y))) {
+                    // 找到第一个边界点
                     pointX = x;
                     pointY = y;
                     pointChoose = true;
@@ -170,34 +163,26 @@ public class ImgAutoSplit {
         return out;
     }
 
-    private boolean isBorderPoint(BufferedImage img, int x, int y) {
+    private static boolean isBorderPoint(BufferedImage img, int x, int y) {
         if (bgColor(img.getRGB(x, y))) {
             return false;
         }
 
-        if (y > 0) {
+        if (y > 0 && bgColor(img.getRGB(x, y - 1))) {
             // 若上面的一个点，是背景点，则是边界
-            if (bgColor(img.getRGB(x, y - 1))) {
-                return true;
-            }
+            return true;
         }
 
-        if (x > 0) {
-            if (bgColor(img.getRGB(x - 1, y))) {
-                return true;
-            }
+        if (x > 0 && bgColor(img.getRGB(x - 1, y))) {
+            return true;
         }
 
-        if (x < img.getWidth() - 1) {
-            if (bgColor(img.getRGB(x + 1, y))) {
-                return true;
-            }
+        if (x < img.getWidth() - 1 && bgColor(img.getRGB(x + 1, y))) {
+            return true;
         }
 
-        if (y < img.getHeight() - 1) {
-            if (bgColor(img.getRGB(x, y + 1))) {
-                return true;
-            }
+        if (y < img.getHeight() - 1 && bgColor(img.getRGB(x, y + 1))) {
+            return true;
         }
 
         if (y > 0 && x > 0 && bgColor(img.getRGB(x - 1, y - 1))) {
@@ -223,23 +208,8 @@ public class ImgAutoSplit {
         return false;
     }
 
-    private boolean bgColor(int rgbColor) {
+    private static boolean bgColor(int rgbColor) {
         return new Color(rgbColor, true).getAlpha() == 0;
     }
 
-    public void splitAndSave(String img, String prefix) throws Exception {
-        List<BufferedImage> list = split(img);
-        int i = 1;
-        for (BufferedImage bi : list) {
-            ImageIO.write(bi, "png", new File("d:/quick-media/out/" + prefix + "_" + i + ".png"));
-            i++;
-        }
-    }
-
-
-    @Test
-    public void testSplit() throws Exception {
-        splitAndSave("D:\\quick-media\\resource\\assets\\bundle_item_icon\\img\\fe543675-0383-4438-a5d0-257176768173.64845.png", "fish");
-        System.out.println("over");
-    }
 }
