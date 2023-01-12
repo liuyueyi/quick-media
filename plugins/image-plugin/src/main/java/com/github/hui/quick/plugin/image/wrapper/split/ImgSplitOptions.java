@@ -2,6 +2,7 @@ package com.github.hui.quick.plugin.image.wrapper.split;
 
 import java.awt.image.BufferedImage;
 import java.util.Objects;
+import java.util.function.Predicate;
 
 /**
  * @author YiHui
@@ -27,6 +28,11 @@ public class ImgSplitOptions {
      * 输出文件名的起始下标
      */
     private Integer outputIncrIndex;
+
+    /**
+     * 背景色判断方式，传参为intColor, 如果返回true，表示认定为背景色；否则不是
+     */
+    private Predicate<Integer> bgPredicate;
 
     public ImgSplitOptions() {
     }
@@ -63,21 +69,35 @@ public class ImgSplitOptions {
         this.outputIncrIndex = outputIncrIndex;
     }
 
+    public Predicate<Integer> getBgPredicate() {
+        return bgPredicate;
+    }
+
+    public void setBgPredicate(Predicate<Integer> bgPredicate) {
+        this.bgPredicate = bgPredicate;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         ImgSplitOptions that = (ImgSplitOptions) o;
-        return Objects.equals(img, that.img) && Objects.equals(outputPath, that.outputPath) && Objects.equals(outputName, that.outputName) && Objects.equals(outputIncrIndex, that.outputIncrIndex);
+        return Objects.equals(img, that.img) && Objects.equals(outputPath, that.outputPath) && Objects.equals(outputName, that.outputName) && Objects.equals(outputIncrIndex, that.outputIncrIndex) && Objects.equals(bgPredicate, that.bgPredicate);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(img, outputPath, outputName, outputIncrIndex);
+        return Objects.hash(img, outputPath, outputName, outputIncrIndex, bgPredicate);
     }
 
     @Override
     public String toString() {
-        return super.toString();
+        return "ImgSplitOptions{" +
+                "img=" + img +
+                ", outputPath='" + outputPath + '\'' +
+                ", outputName='" + outputName + '\'' +
+                ", outputIncrIndex=" + outputIncrIndex +
+                ", bgPredicate=" + bgPredicate +
+                '}';
     }
 }

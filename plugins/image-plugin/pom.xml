@@ -10,7 +10,7 @@
     <modelVersion>4.0.0</modelVersion>
 
     <artifactId>image-plugin</artifactId>
-    <version>3.0.0</version>
+    <version>3.0.1</version>
     <scm>
         <connection>scm:git:https://github.com/liuyueyi/quick-media.git</connection>
         <developerConnection>scm:git:https://github.com/liuyueyi/quick-media.git</developerConnection>

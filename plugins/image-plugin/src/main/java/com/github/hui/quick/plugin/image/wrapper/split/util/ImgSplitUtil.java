@@ -6,6 +6,7 @@ import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.function.Predicate;
 
 /**
  * @author YiHui
@@ -13,10 +14,10 @@ import java.util.List;
  */
 public class ImgSplitUtil {
 
-    public static List<BufferedImage> split(BufferedImage origin) {
+    public static List<BufferedImage> split(BufferedImage origin, Predicate<Integer> predicate) {
         List<BufferedImage> ans = new ArrayList<>();
         while (true) {
-            BufferedImage o = pickOneImg(origin);
+            BufferedImage o = pickOneImg(origin, predicate);
             if (o != null) {
                 ans.add(o);
             } else {
@@ -26,12 +27,12 @@ public class ImgSplitUtil {
         return ans;
     }
 
-    private static BufferedImage pickOneImg(BufferedImage img) {
+    private static BufferedImage pickOneImg(BufferedImage img, Predicate<Integer> predicate) {
         int pointX = 0, pointY = 0;
         boolean pointChoose = false;
         for (int y = 0; y < img.getHeight(); y++) {
             for (int x = 0; x < img.getWidth(); x++) {
-                if (!bgColor(img.getRGB(x, y))) {
+                if (!bgColor(predicate, img.getRGB(x, y))) {
                     // 找到第一个边界点
                     pointX = x;
                     pointY = y;
@@ -60,7 +61,7 @@ public class ImgSplitUtil {
 
             // 上
             Point next = new Point(current.x, current.y - 1);
-            if (!scanPoints.contains(next) && isBorderPoint(img, next.x, next.y)) {
+            if (!scanPoints.contains(next) && isBorderPoint(img, next.x, next.y, predicate)) {
                 current = next;
                 upY = Math.min(upY, next.y);
                 scanIndex = 0;
@@ -69,7 +70,7 @@ public class ImgSplitUtil {
 
             // 下
             next.y = current.y + 1;
-            if (!scanPoints.contains(next) && isBorderPoint(img, next.x, next.y)) {
+            if (!scanPoints.contains(next) && isBorderPoint(img, next.x, next.y, predicate)) {
                 current = next;
                 downY = Math.max(downY, next.y);
                 scanIndex = 0;
@@ -79,7 +80,7 @@ public class ImgSplitUtil {
             // 左
             next.y = current.y;
             next.x = current.x - 1;
-            if (!scanPoints.contains(next) && isBorderPoint(img, next.x, next.y)) {
+            if (!scanPoints.contains(next) && isBorderPoint(img, next.x, next.y, predicate)) {
                 current = next;
                 leftX = Math.min(leftX, next.x);
                 scanIndex = 0;
@@ -88,7 +89,7 @@ public class ImgSplitUtil {
 
             // 右
             next.x = current.x + 1;
-            if (!scanPoints.contains(next) && isBorderPoint(img, next.x, next.y)) {
+            if (!scanPoints.contains(next) && isBorderPoint(img, next.x, next.y, predicate)) {
                 current = next;
                 rightX = Math.max(rightX, next.x);
                 scanIndex = 0;
@@ -97,7 +98,7 @@ public class ImgSplitUtil {
 
             next.x = current.x - 1;
             next.y = current.y - 1;
-            if (!scanPoints.contains(next) && isBorderPoint(img, next.x, next.y)) {
+            if (!scanPoints.contains(next) && isBorderPoint(img, next.x, next.y, predicate)) {
                 // 左上
                 current = next;
                 leftX = Math.min(leftX, next.x);
@@ -108,7 +109,7 @@ public class ImgSplitUtil {
 
             next.x = current.x + 1;
             next.y = current.y - 1;
-            if (!scanPoints.contains(next) && isBorderPoint(img, next.x, next.y)) {
+            if (!scanPoints.contains(next) && isBorderPoint(img, next.x, next.y, predicate)) {
                 // 右上
                 current = next;
                 rightX = Math.max(rightX, next.x);
@@ -120,7 +121,7 @@ public class ImgSplitUtil {
 
             next.x = current.x - 1;
             next.y = current.y + 1;
-            if (!scanPoints.contains(next) && isBorderPoint(img, next.x, next.y)) {
+            if (!scanPoints.contains(next) && isBorderPoint(img, next.x, next.y, predicate)) {
                 // 左下
                 current = next;
                 leftX = Math.min(leftX, next.x);
@@ -131,7 +132,7 @@ public class ImgSplitUtil {
 
             next.x = current.x + 1;
             next.y = current.y + 1;
-            if (!scanPoints.contains(next) && isBorderPoint(img, next.x, next.y)) {
+            if (!scanPoints.contains(next) && isBorderPoint(img, next.x, next.y, predicate)) {
                 // 右下
                 current = next;
                 rightX = Math.max(rightX, next.x);
@@ -163,44 +164,44 @@ public class ImgSplitUtil {
         return out;
     }
 
-    private static boolean isBorderPoint(BufferedImage img, int x, int y) {
-        if (bgColor(img.getRGB(x, y))) {
+    private static boolean isBorderPoint(BufferedImage img, int x, int y, Predicate<Integer> predicate) {
+        if (bgColor(predicate, img.getRGB(x, y))) {
             return false;
         }
 
-        if (y > 0 && bgColor(img.getRGB(x, y - 1))) {
+        if (y > 0 && bgColor(predicate, img.getRGB(x, y - 1))) {
             // 若上面的一个点，是背景点，则是边界
             return true;
         }
 
-        if (x > 0 && bgColor(img.getRGB(x - 1, y))) {
+        if (x > 0 && bgColor(predicate, img.getRGB(x - 1, y))) {
             return true;
         }
 
-        if (x < img.getWidth() - 1 && bgColor(img.getRGB(x + 1, y))) {
+        if (x < img.getWidth() - 1 && bgColor(predicate, img.getRGB(x + 1, y))) {
             return true;
         }
 
-        if (y < img.getHeight() - 1 && bgColor(img.getRGB(x, y + 1))) {
+        if (y < img.getHeight() - 1 && bgColor(predicate, img.getRGB(x, y + 1))) {
             return true;
         }
 
-        if (y > 0 && x > 0 && bgColor(img.getRGB(x - 1, y - 1))) {
+        if (y > 0 && x > 0 && bgColor(predicate, img.getRGB(x - 1, y - 1))) {
             // 左上
             return true;
         }
 
-        if (y > 0 && x < img.getWidth() - 1 && bgColor(img.getRGB(x + 1, y - 1))) {
+        if (y > 0 && x < img.getWidth() - 1 && bgColor(predicate, img.getRGB(x + 1, y - 1))) {
             // 右上
             return true;
         }
 
-        if (x > 0 && y < img.getHeight() - 1 && bgColor(img.getRGB(x - 1, y + 1))) {
+        if (x > 0 && y < img.getHeight() - 1 && bgColor(predicate, img.getRGB(x - 1, y + 1))) {
             // 左下
             return true;
         }
 
-        if (x < img.getWidth() - 1 && y < img.getHeight() - 1 && bgColor(img.getRGB(x + 1, y + 1))) {
+        if (x < img.getWidth() - 1 && y < img.getHeight() - 1 && bgColor(predicate, img.getRGB(x + 1, y + 1))) {
             // right down
             return true;
         }
@@ -208,8 +209,8 @@ public class ImgSplitUtil {
         return false;
     }
 
-    private static boolean bgColor(int rgbColor) {
-        return new Color(rgbColor, true).getAlpha() == 0;
+    private static boolean bgColor(Predicate<Integer> predicate, int rgbColor) {
+        return predicate != null ? predicate.test(rgbColor) : new Color(rgbColor, true).getAlpha() == 0;
     }
 
 }
