@@ -1,6 +1,7 @@
 package com.github.hui.quick.plugin.image.wrapper.split;
 
 import com.github.hui.quick.plugin.base.awt.ImageLoadUtil;
+import com.github.hui.quick.plugin.base.file.FileWriteUtil;
 import com.github.hui.quick.plugin.image.wrapper.split.util.ImgSplitUtil;
 
 import javax.imageio.ImageIO;
@@ -32,6 +33,7 @@ public class ImgSplitWrapper {
         List<BufferedImage> imgs = ImgSplitUtil.split(imgSplitOptions.getImg(), imgSplitOptions.getBgPredicate());
         int i = imgSplitOptions.getOutputIncrIndex();
         for (BufferedImage bi : imgs) {
+            FileWriteUtil.mkDir(new File(imgSplitOptions.getOutputPath()));
             ImageIO.write(bi, "png", new File(imgSplitOptions.getOutputPath() + "/" + imgSplitOptions.getOutputName() + "_" + i + ".png"));
             i++;
         }

@@ -1,6 +1,7 @@
 package com.github.hui.quick.plugin.image.wrapper.split.util;
 
 import com.github.hui.quick.plugin.base.awt.GraphicUtil;
+import org.apache.commons.lang3.tuple.ImmutablePair;
 
 import java.awt.*;
 import java.awt.image.BufferedImage;
@@ -17,17 +18,24 @@ public class ImgSplitUtil {
     public static List<BufferedImage> split(BufferedImage origin, Predicate<Integer> predicate) {
         List<BufferedImage> ans = new ArrayList<>();
         while (true) {
-            BufferedImage o = pickOneImg(origin, predicate);
-            if (o != null) {
-                ans.add(o);
-            } else {
+            ImmutablePair<Boolean, BufferedImage> o = pickOneImg(origin, predicate);
+            if (!o.left && o.right != null) {
+                ans.add(o.right);
+            }
+
+            if (o.left) {
                 break;
             }
         }
         return ans;
     }
 
-    private static BufferedImage pickOneImg(BufferedImage img, Predicate<Integer> predicate) {
+    /**
+     * @param img       原图
+     * @param predicate 背景判断表达式
+     * @return true 表示全部拆分完毕 右边为拆分的图
+     */
+    private static ImmutablePair<Boolean, BufferedImage> pickOneImg(BufferedImage img, Predicate<Integer> predicate) {
         int pointX = 0, pointY = 0;
         boolean pointChoose = false;
         for (int y = 0; y < img.getHeight(); y++) {
@@ -46,7 +54,7 @@ public class ImgSplitUtil {
         }
 
         if (!pointChoose) {
-            return null;
+            return ImmutablePair.of(true, null);
         }
 
         int upY = pointY, downY = pointY, leftX = pointX, rightX = pointX;
@@ -150,18 +158,27 @@ public class ImgSplitUtil {
 
         // 上下左右已找到，直接切图
         int w = rightX - leftX, h = downY - upY;
-        BufferedImage out = GraphicUtil.createImg(w, h, 0, 0, null);
-        Graphics2D g2d = GraphicUtil.getG2d(out);
+        Graphics2D g2d = null;
+        BufferedImage out = null;
+        if (w > 0 && h > 0) {
+            out = GraphicUtil.createImg(w, h, 0, 0, null);
+            g2d = GraphicUtil.getG2d(out);
+        }
+
         for (int x = leftX; x <= rightX; x++) {
             for (int y = upY; y <= downY; y++) {
-                g2d.setColor(new Color(img.getRGB(x, y), true));
-                g2d.drawRect(x - leftX, y - upY, 1, 1);
+                if (g2d != null) {
+                    g2d.setColor(new Color(img.getRGB(x, y), true));
+                    g2d.drawRect(x - leftX, y - upY, 1, 1);
+                }
                 // 将裁剪出来的区域全部设置为空
                 img.setRGB(x, y, 0);
             }
         }
-        g2d.dispose();
-        return out;
+        if (g2d != null) {
+            g2d.dispose();
+        }
+        return ImmutablePair.of(false, out);
     }
 
     private static boolean isBorderPoint(BufferedImage img, int x, int y, Predicate<Integer> predicate) {
