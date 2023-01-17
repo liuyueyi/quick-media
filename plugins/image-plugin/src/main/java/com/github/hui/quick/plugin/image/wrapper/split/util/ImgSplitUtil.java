@@ -1,5 +1,6 @@
 package com.github.hui.quick.plugin.image.wrapper.split.util;
 
+import com.github.hui.quick.plugin.base.awt.ColorUtil;
 import com.github.hui.quick.plugin.base.awt.GraphicUtil;
 import org.apache.commons.lang3.tuple.ImmutablePair;
 
@@ -172,7 +173,7 @@ public class ImgSplitUtil {
                     g2d.drawRect(x - leftX, y - upY, 1, 1);
                 }
                 // 将裁剪出来的区域全部设置为空
-                img.setRGB(x, y, 0);
+                img.setRGB(x, y, ColorUtil.OPACITY.getRGB());
             }
         }
         if (g2d != null) {
@@ -182,7 +183,7 @@ public class ImgSplitUtil {
     }
 
     private static boolean isBorderPoint(BufferedImage img, int x, int y, Predicate<Integer> predicate) {
-        if (bgColor(predicate, img.getRGB(x, y))) {
+        if (x < 0 || y < 0 || x >= img.getWidth() || y >= img.getHeight() || bgColor(predicate, img.getRGB(x, y))) {
             return false;
         }
 
