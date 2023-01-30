@@ -10,6 +10,7 @@ import org.w3c.dom.svg.SVGImageElement;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.net.URISyntaxException;
+import java.util.Collections;
 import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
@@ -22,35 +23,34 @@ public class SvgDocumentHelper {
     private static final String SVG_CONTENT_TAG = "<svg";
 
     private static final String SVG_CONTENT_REPLACE_KEY = "svgContent";
-
-
-    private static final int CACHE_MAX_SIZE = 500;
+    public static int CACHE_MAX_SIZE = 100;
     private static Map<String, Document> cacheDocMap = new ConcurrentHashMap<>();
 
-
-    public static Document loadDocument(String path, Map<String, Object> paramMap) throws URISyntaxException, IOException {
-        Document doc = getDocument(path);
+    public static Document loadDocument(String path, Map<String, Object> paramMap, boolean cacheEnable) throws URISyntaxException, IOException {
+        Document doc = getDocument(path, cacheEnable);
         fillById(doc, paramMap);
         return doc;
     }
 
 
-    private static Document getDocument(String path) throws URISyntaxException, IOException {
+    private static Document getDocument(String path, boolean cacheEnable) throws URISyntaxException, IOException {
         Document cache = cacheDocMap.get(path);
         if (cache == null) {
             String parser = XMLResourceDescriptor.getXMLParserClassName();
             SAXSVGDocumentFactory f = new SAXSVGDocumentFactory(parser);
 
-            if (path.startsWith(SVG_CONTENT_TAG)) { // 表示直接传递的svg内容
+            if (path.startsWith(SVG_CONTENT_TAG)) {
+                // 表示直接传递的svg内容
                 cache = f.createDocument(null, new ByteArrayInputStream(path.getBytes()));
             } else { // 传递的是文件形式
                 cache = f.createDocument(UriUtil.getAbsUri(path));
             }
 
-
             // 缓存map数量添加限制，防止内存撑爆
-            if (cacheDocMap.size() < CACHE_MAX_SIZE) {
-                cacheDocMap.put(path, cache);
+            if (cacheEnable) {
+                if (cacheDocMap.size() < CACHE_MAX_SIZE) {
+                    cacheDocMap.put(path, cache);
+                }
             }
         }
 
@@ -58,9 +58,11 @@ public class SvgDocumentHelper {
     }
 
 
-
     private static void fillById(Document doc, Map<String, Object> paramMap) {
         // 遍历参数，填充数据
+        if (paramMap == null) {
+            paramMap = Collections.emptyMap();
+        }
         Set<String> keySet = paramMap.keySet();
         Object conf;
         Element temp;

@@ -6,6 +6,7 @@ import com.github.hui.media.console.annotation.ValidateDot;
 import com.github.hui.media.console.entity.ResponseWrapper;
 import com.github.hui.media.console.entity.Status;
 import com.github.hui.quick.plugin.svg.SvgRenderWrapper;
+import com.github.hui.quick.plugin.svg.model.RenderType;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -13,7 +14,6 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.awt.image.BufferedImage;
-import java.util.Collections;
 
 /**
  * Created by yihui on 2018/1/14.
@@ -30,9 +30,9 @@ public class Svg2ImgAction extends BaseAction {
         try {
             BufferedImage bf;
             if (svg2ImgRequest.genJpegImg()) {
-                bf = SvgRenderWrapper.convertToJpegAsImg(svg2ImgRequest.getSvg(), Collections.emptyMap());
+                bf = SvgRenderWrapper.of(svg2ImgRequest.getSvg()).setType(RenderType.JPEG).asImg();
             } else {
-                bf = SvgRenderWrapper.convertToPngAsImg(svg2ImgRequest.getSvg(), Collections.emptyMap());
+                bf = SvgRenderWrapper.of(svg2ImgRequest.getSvg()).asImg();
             }
             return buildReturn(svg2ImgRequest, bf);
         } catch (Exception e) {
