@@ -30,13 +30,13 @@ public class QrTplGenTest extends BasicGenTest {
 
     @Test
     public void catTplTest() throws Exception {
-        String svgTemplate = FileReadUtil.readAll("tpl/龙猫.tpl");
+        String svgTemplate = FileReadUtil.readAll("svg/小灰灰.template");
         boolean ans = QrCodeGenV3.of(msg).setW(500)
                 .setSvgTemplate(svgTemplate)
 //                .setLogoRate(20)
                 .setErrorCorrection(ErrorCorrectionLevel.H)
                 .build()
-                .asFile(prefix + "/svg/龙猫.svg");
+                .asFile(prefix + "/svg/小灰灰.svg");
         System.out.println(ans);
     }
 
