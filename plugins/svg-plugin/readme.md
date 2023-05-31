@@ -197,12 +197,12 @@ public static BufferedImage convertToJpegAsImg(String path,Map<String, Object> p
 **说明**
 
 - 考虑到某些svg模板是通用的，只是部分图片或文字有些微的区别，所有通过paramMap来实现对svg内容的替换，目前只支持根据id进行替换
-
 - 为了提升性能，内部对svg的模板进行了缓存，提升将svg模板解析为document对象的性能开销；而允许这么做的原因，就是document对象提供了深拷贝的接口
 
 这个的具体使用比较简单，主要是svg模板的使用，友情贡献一个个人名片生成的svg模板
 
 ```html
+
 <svg width="610" height="240" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
     <style type="text/css">
         text {
@@ -302,4 +302,3 @@ public static BufferedImage convertToJpegAsImg(String path,Map<String, Object> p
 输出结果如下：
 
 ![card](https://spring.hhui.top/spring-blog/imgs/info/info.png)
-

@@ -124,6 +124,17 @@ public class SvgRenderWrapper {
             return this;
         }
 
+        public String asSvg() {
+            build();
+            try {
+                Document doc = SvgDocumentHelper.loadDocument(svg, params, cacheEnable);
+                return ImgParseUtil.convertElemToSVG(doc);
+            } catch (Exception e) {
+                log.error("render svgTemplate error! svg:{}, parmas:{}", svg, params, e);
+                throw new RuntimeException("render svgTemplate error!", e);
+            }
+        }
+
         public ByteArrayOutputStream asStream() {
             build();
             try {
