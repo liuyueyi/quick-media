@@ -5,12 +5,12 @@
     <parent>
         <artifactId>svg-plugin</artifactId>
         <groupId>com.github.liuyueyi.media</groupId>
-        <version>3.0.1</version>
+        <version>3.0.2</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
     <artifactId>svg-core</artifactId>
-    <version>3.0.1</version>
+    <version>3.0.2</version>
 
     <scm>
         <connection>scm:git:https://github.com/liuyueyi/quick-media.git</connection>
@@ -32,7 +32,7 @@
         <dependency>
             <groupId>com.github.liuyueyi.media</groupId>
             <artifactId>batik-codec-fix</artifactId>
-            <version>3.0.1</version>
+            <version>3.0.2</version>
             <exclusions>
                 <exclusion>
                     <groupId>commons-logging</groupId>
@@ -63,6 +63,15 @@
             <groupId>org.apache.xmlgraphics</groupId>
             <artifactId>batik-transcoder</artifactId>
             <version>${batik.version}</version>
+        </dependency>
+
+        <!-- 若希望渲染为tiff格式图片，对于jdk8及之下版本，请添加下面的依赖  -->
+        <!-- https://mvnrepository.com/artifact/com.twelvemonkeys.imageio/imageio-tiff -->
+        <dependency>
+            <groupId>com.twelvemonkeys.imageio</groupId>
+            <artifactId>imageio-tiff</artifactId>
+            <version>3.9.4</version>
+            <scope>provided</scope>
         </dependency>
     </dependencies>
 

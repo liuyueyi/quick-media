@@ -1,4 +1,4 @@
-package com.github.hui.quick.plugin.test.draw;
+package com.github.hui.quick.plugin.test.feat.draw;
 
 import com.github.hui.quick.plugin.base.awt.GraphicUtil;
 import com.github.hui.quick.plugin.base.awt.ImageLoadUtil;

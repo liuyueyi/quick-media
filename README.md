@@ -35,9 +35,12 @@ quick-media原理介绍、使用教程、资源模板等相关博文，都可以
 
 ### 使用说明
 
-目前最新版jar包已提交到maven仓库，因此想直接引入的小伙伴，不需要再采用下面的两种方案了（请注意jitpack的包通常来讲更新会更频繁些，而中央仓库的会更稳定些；相同的版本号对应的代码保持一致）
+目前最新版jar包已提交到maven仓库，因此想直接引入的小伙伴，推荐直接使用下面的中央仓库引入方式（请注意jitpack的包通常来讲更新会更频繁些，而中央仓库的会更稳定些；相同的版本号对应的代码保持一致）
 
-中央仓库引入地址: [https://mvnrepository.com/artifact/com.github.liuyueyi.media](https://mvnrepository.com/artifact/com.github.liuyueyi.media)
+中央仓库引入地址: 
+
+- 引入依赖：[https://mvnrepository.com/artifact/com.github.liuyueyi.media](https://mvnrepository.com/artifact/com.github.liuyueyi.media)
+- 历史版本：[version in mvn repository*](https://repo1.maven.org/maven2/com/github/liuyueyi/media/)
 
 举例如二维码插件的依赖如下即可
 
@@ -321,6 +324,8 @@ markdown转html，转图片的封装类， 详细内容查看: [markdown-plugin]
 - [x] 灰度化，像素化
 - [x] 转字符图
 - [x] 位图转矢量图
+- [x] 图片自动裁剪
+- [x] jpg/png转svg
 - [ ] 格式转换
 - [ ] 相片处理
   - [x] 相片转素描
