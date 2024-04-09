@@ -94,7 +94,7 @@ public class QrCodeV3Options {
     private LogoOptions logoOptions;
 
     /**
-     * 三个探测图形的样式选项
+     * 三个探测图形/码眼的样式选项
      */
     private DetectOptions detectOptions;
 

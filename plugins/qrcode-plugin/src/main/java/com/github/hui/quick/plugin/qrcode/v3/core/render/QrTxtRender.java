@@ -8,7 +8,7 @@ import com.github.hui.quick.plugin.qrcode.wrapper.BitMatrixEx;
 import org.apache.commons.lang3.StringUtils;
 
 /**
- * 二维字符矩阵
+ * 二维字符的生成方式
  *
  * @author YiHui
  * @date 2022/8/8

@@ -25,19 +25,19 @@ public class DetectOptions {
      */
     private Color inColor;
     /**
-     * 兜底的资源
+     * 兜底的资源，即三个码眼都长一样
      */
     private QrResource resource;
     /**
-     * 左上角的探测图形
+     * 左上角的探测图形 - 码眼
      */
     private QrResource lt;
     /**
-     * 右上角的探测图形
+     * 右上角的探测图形 - 码眼
      */
     private QrResource rt;
     /**
-     * 左下角的探测图形
+     * 左下角的探测图形 - 码眼
      */
     private QrResource ld;
     /**

@@ -19,7 +19,7 @@ public class DrawOptions {
     private QrCodeV3Options options;
 
     /**
-     * 着色颜色
+     * 码点着色颜色
      */
     private Color preColor;
 

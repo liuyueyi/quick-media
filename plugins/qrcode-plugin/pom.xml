@@ -5,16 +5,16 @@
     <parent>
         <artifactId>plugins</artifactId>
         <groupId>com.github.liuyueyi.media</groupId>
-        <version>3.0.0</version>
+        <version>3.1.0</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
     <artifactId>qrcode-plugin</artifactId>
-    <version>3.0.1</version>
+    <version>3.1.0</version>
 
     <properties>
         <zxing.version>3.5.0</zxing.version>
-        <base.plugin.version>3.0.0</base.plugin.version>
+        <base.plugin.version>3.1.0</base.plugin.version>
     </properties>
 
     <scm>
@@ -85,7 +85,7 @@
         <dependency>
             <groupId>com.github.liuyueyi.media</groupId>
             <artifactId>image-plugin</artifactId>
-            <version>3.0.0</version>
+            <version>3.1.0</version>
             <scope>test</scope>
         </dependency>
 

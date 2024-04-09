@@ -21,6 +21,8 @@ import java.util.concurrent.atomic.AtomicInteger;
  * @date 2022/7/20
  */
 public class QrResource {
+
+    // ------------------- 图片资源 ---------------------------
     /**
      * 动态背景图
      */
@@ -41,8 +43,11 @@ public class QrResource {
      */
     private float cornerRadius = 1 / 8.0f;
 
+
+    // -------------------- 文字资源 -------------------------------
+
     /**
-     * 文字
+     * 文字二维码渲染方式中，给定的文字库，建议使用中文方形字体
      */
     private String text;
 
@@ -66,9 +71,12 @@ public class QrResource {
     private int fontStyle;
 
     /**
-     * 文字顺序处理是
+     * 文字顺序处理计数器, 适用于生成文字二维码的场景
      */
     private AtomicInteger indexCnt;
+
+
+    // -------------------- svg资源 -------------------------------
 
     /**
      * svg tag
@@ -80,8 +88,11 @@ public class QrResource {
      */
     private String svgId;
 
+
+    // -------------------- 绘制样式 -------------------------------
+
     /**
-     * 支持为每个资源位设置特殊的绘制方式
+     * 支持为每个资源位设置自定义的绘制方式，增强资源的显示方式
      */
     private IDrawing drawStyle;
 
@@ -145,6 +156,7 @@ public class QrResource {
     public boolean txtResource() {
         return text != null && text.length() > 0;
     }
+
     public String getText() {
         if (txtMode == null) {
             setTxtMode(TxtMode.FULL);

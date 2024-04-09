@@ -8,7 +8,7 @@ import com.github.hui.quick.plugin.qrcode.wrapper.BitMatrixEx;
 import java.awt.*;
 
 /**
- * 二维矩阵渲染
+ * 二维矩阵渲染 - 码点
  *
  * @author YiHui
  * @date 2022/7/20

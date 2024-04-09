@@ -5,12 +5,12 @@
     <parent>
         <artifactId>plugins</artifactId>
         <groupId>com.github.liuyueyi.media</groupId>
-        <version>3.0.0</version>
+        <version>3.1.0</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
     <artifactId>image-plugin</artifactId>
-    <version>3.0.1</version>
+    <version>3.1.0</version>
     <scm>
         <connection>scm:git:https://github.com/liuyueyi/quick-media.git</connection>
         <developerConnection>scm:git:https://github.com/liuyueyi/quick-media.git</developerConnection>
@@ -27,7 +27,7 @@
     </developers>
 
     <properties>
-        <base.plugin.version>3.0.0</base.plugin.version>
+        <base.plugin.version>3.1.0</base.plugin.version>
     </properties>
 
     <dependencies>
