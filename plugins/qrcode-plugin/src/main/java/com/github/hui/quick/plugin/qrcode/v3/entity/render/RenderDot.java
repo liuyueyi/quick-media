@@ -17,7 +17,7 @@ public class RenderDot {
 
     protected int size;
     /**
-     * 资源类型 0: 探测图形  1: 背景点  2: 信息点
+     * 资源类型 0: 探测图形  1: 背景点  2: 信息点|码点
      */
     protected int type;
 

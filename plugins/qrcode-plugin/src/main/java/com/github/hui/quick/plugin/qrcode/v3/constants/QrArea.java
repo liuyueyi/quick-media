@@ -24,6 +24,8 @@ public enum QrArea {
      * 校正点
      */
     CHECK_POINT,
+
+
     NONE;
 
     private static Set<QrArea> detects;

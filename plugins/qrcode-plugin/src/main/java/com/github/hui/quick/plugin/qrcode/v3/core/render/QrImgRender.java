@@ -25,6 +25,8 @@ import java.util.Collections;
 import java.util.List;
 
 /**
+ * 图片二维码的生成方式
+ *
  * @author YiHui
  * @date 2022/8/2
  */

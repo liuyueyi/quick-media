@@ -5,16 +5,20 @@
     <parent>
         <artifactId>svg-plugin</artifactId>
         <groupId>com.github.liuyueyi.media</groupId>
-        <version>3.0.2</version>
+        <version>3.1.0</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
     <artifactId>batik-codec-fix</artifactId>
 <<<<<<< HEAD
+<<<<<<< HEAD
     <version>3.0.2</version>
 =======
     <version>3.0.1</version>
 >>>>>>> 8b5a15a (update svg plugin)
+=======
+    <version>3.1.0</version>
+>>>>>>> 5f2884c (feat: 升级版本)
 
     <description>render svg to image</description>
     <developers>

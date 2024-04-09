@@ -5,6 +5,8 @@ import com.github.hui.quick.plugin.base.awt.ImageOperateUtil;
 import java.awt.image.BufferedImage;
 
 /**
+ * 图片样式
+ *
  * @author yihui
  * @date 22/7/20
  */

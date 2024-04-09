@@ -2,6 +2,7 @@ package com.github.hui.quick.plugin.test.v3;
 
 import com.github.hui.quick.plugin.base.OSUtil;
 import com.github.hui.quick.plugin.qrcode.wrapper.QrCodeGenV3;
+import com.google.zxing.qrcode.decoder.ErrorCorrectionLevel;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -28,7 +29,7 @@ public class QrTxtGenTest {
      */
     @Test
     public void testGen() throws Exception {
-        String txt = QrCodeGenV3.of(msg).build().asTxt();
+        String txt = QrCodeGenV3.of(msg).setSize(10).setErrorCorrection(ErrorCorrectionLevel.L).build().asTxt();
         System.out.println(txt);
     }
 

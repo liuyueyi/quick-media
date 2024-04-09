@@ -32,7 +32,7 @@ public class LogoOptions {
      * 当存在logo时，默认值为true
      * <p>
      * true 表示将logo区域的二维码移除掉
-     * false logo区域的二维码不做任何处理
+     * false logo区域的二维码不做任何处理 --> 即logo采用覆盖的方式，贴在二维码上面
      */
     private Boolean clearLogoArea;
 

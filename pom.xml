@@ -5,7 +5,7 @@
 
     <groupId>com.github.liuyueyi.media</groupId>
     <artifactId>quick-media</artifactId>
-    <version>3.0.0</version>
+    <version>3.1.0</version>
     <modules>
         <module>plugins</module>
         <module>console</module>
@@ -44,10 +44,6 @@
     </developers>
 
     <repositories>
-<!--        <repository>-->
-<!--            <id>yihui-maven-repo</id>-->
-<!--            <url>https://raw.githubusercontent.com/liuyueyi/maven-repository/master/repository</url>-->
-<!--        </repository>-->
         <repository>
             <id>jitpack.io</id>
             <url>https://jitpack.io</url>

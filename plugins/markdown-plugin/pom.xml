@@ -5,17 +5,17 @@
     <parent>
         <artifactId>plugins</artifactId>
         <groupId>com.github.liuyueyi.media</groupId>
-        <version>3.0.0</version>
+        <version>3.1.0</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
     <artifactId>markdown-plugin</artifactId>
-    <version>3.0.0</version>
+    <version>3.1.0</version>
 
     <properties>
         <flexmark.version>0.62.2</flexmark.version>
         <nekohtml.version>1.9.22</nekohtml.version>
-        <base.plugin.version>3.0.0</base.plugin.version>
+        <base.plugin.version>3.1.0</base.plugin.version>
     </properties>
 
     <scm>

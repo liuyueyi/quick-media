@@ -24,6 +24,8 @@ import java.util.List;
 import java.util.Optional;
 
 /**
+ * svg矢量二维码的生成方式
+ *
  * @author YiHui
  * @date 2022/8/5
  */
