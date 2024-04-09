@@ -58,10 +58,18 @@ public class QrImgBgGenTest extends BasicGenTest {
     public void fillBg() throws Exception {
         boolean ans = QrCodeGenV3.of(msg).setSize(550)
                 .newBgOptions()
-                .setBg(new QrResource().setImg("bgs/qrbg.jpg"))
+                .setBg(new QrResource().setImg("bgs/qrbg.jpg").setPicStyle(PicStyle.ROUND))
                 .setBgStyle(BgStyle.FILL)
                 .setStartX(225)
                 .setStartY(320)
+                .complete()
+                .addBgOptions()
+                .setBg(new QrResource().setImg("bgs/xjs.jpg"))
+                .setBgStyle(BgStyle.OVERRIDE)
+                .setOpacity(0.5f)
+                .setStartX(225)
+                .setStartY(320)
+                .setBasicQrSize(400)
                 .complete()
                 .asFile(prefix + "/bg_fill.png");
         System.out.println(ans);

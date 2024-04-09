@@ -1,5 +1,6 @@
 package com.github.hui.quick.plugin.qrcode.v3.core;
 
+import com.github.hui.quick.plugin.qrcode.util.AsyncUtil;
 import com.github.hui.quick.plugin.qrcode.v3.constants.BgStyle;
 import com.github.hui.quick.plugin.qrcode.v3.core.calculate.QrRenderDotGenerator;
 import com.github.hui.quick.plugin.qrcode.v3.core.matrix.QrMatrixGenerator;
@@ -8,6 +9,7 @@ import com.github.hui.quick.plugin.qrcode.v3.core.render.QrSvgRender;
 import com.github.hui.quick.plugin.qrcode.v3.core.render.QrTxtRender;
 import com.github.hui.quick.plugin.qrcode.v3.entity.render.RenderDot;
 import com.github.hui.quick.plugin.qrcode.v3.entity.svg.SvgTemplate;
+import com.github.hui.quick.plugin.qrcode.v3.req.BgOptions;
 import com.github.hui.quick.plugin.qrcode.v3.req.QrCodeV3Options;
 import com.github.hui.quick.plugin.qrcode.wrapper.BitMatrixEx;
 import org.apache.commons.lang3.tuple.ImmutablePair;
@@ -15,6 +17,7 @@ import org.apache.commons.lang3.tuple.ImmutablePair;
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.Future;
 
 /**
  * @author YiHui
@@ -22,6 +25,7 @@ import java.util.List;
  */
 public class QrRenderFacade {
     public static BufferedImage renderAsImg(QrCodeV3Options options) throws Exception {
+        Future<BgOptions> future = AsyncUtil.submit(() -> QrImgRender.preProcessBgImgs(options.getSize(), options.getBgOptionsList()));
         BitMatrixEx matrix = QrMatrixGenerator.calculateMatrix(options);
         List<RenderDot> renderDotList = QrRenderDotGenerator.calculateRenderDots(options, matrix);
 
@@ -31,11 +35,12 @@ public class QrRenderFacade {
         //说明
         // 在覆盖模式下，先设置二维码的透明度，然后绘制在背景图的正中央，最后绘制logo，这样保证logo不会透明，显示清晰
         // 在填充模式下，先绘制logo，然后绘制在背景的指定位置上；若先绘制背景，再绘制logo，则logo大小偏移量的计算会有问题
-        if (options.getBgOptions().getBgStyle() == BgStyle.FILL) {
+        BgOptions bg = future.get();
+        if (bg.getBgStyle() == BgStyle.FILL) {
             qrImg = QrImgRender.drawLogo(qrImg, options);
-            qrImg = QrImgRender.drawBackground(qrImg, options.getBgOptions());
+            qrImg = QrImgRender.drawBackground(qrImg, bg);
         } else {
-            qrImg = QrImgRender.drawBackground(qrImg, options.getBgOptions());
+            qrImg = QrImgRender.drawBackground(qrImg, bg);
             qrImg = QrImgRender.drawLogo(qrImg, options);
         }
 

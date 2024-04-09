@@ -1,7 +1,12 @@
 package com.github.hui.quick.plugin.qrcode.v3.req;
 
 import com.github.hui.quick.plugin.base.awt.ColorUtil;
-import com.github.hui.quick.plugin.qrcode.v3.constants.*;
+import com.github.hui.quick.plugin.qrcode.v3.constants.BgStyle;
+import com.github.hui.quick.plugin.qrcode.v3.constants.DrawStyle;
+import com.github.hui.quick.plugin.qrcode.v3.constants.PicStyle;
+import com.github.hui.quick.plugin.qrcode.v3.constants.PicType;
+import com.github.hui.quick.plugin.qrcode.v3.constants.PicTypeEnum;
+import com.github.hui.quick.plugin.qrcode.v3.constants.QrType;
 import com.github.hui.quick.plugin.qrcode.v3.draw.IDrawing;
 import com.github.hui.quick.plugin.qrcode.v3.entity.QrResource;
 import com.github.hui.quick.plugin.qrcode.v3.tpl.ImgTplParse;
@@ -14,9 +19,10 @@ import org.apache.commons.lang3.BooleanUtils;
 import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.ByteArrayOutputStream;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
-import java.util.Objects;
 
 /**
  * 二维码配置参数
@@ -81,12 +87,28 @@ public class QrCodeV3Options {
     /**
      * 前置图选项
      */
+    @Deprecated
     private FrontOptions frontOptions;
+
+    /**
+     * 多个前置背景图时使用，列表中越往后，则前置图放在最上层
+     */
+    private List<FrontOptions> frontOptionsList;
 
     /**
      * 背景图样式选项
      */
+    @Deprecated
     private BgOptions bgOptions;
+
+    /**
+     * 多个背景图时使用，注意渲染顺序，第一张为最基础底图，后面的图都是在第一张图的基础上进行偏移渲染
+     * 即：第一张图为最底层的图
+     * 第二张图的 startX, startY表示该图在第一张图上的 (x,y) 坐标
+     * 第三张图的 startX, startY同样是该图在第一张图上的 (x,y) 坐标
+     * 注意：这里不支持负数的偏移量
+     */
+    private List<BgOptions> bgOptionsList;
 
     /**
      * logo 样式选项
@@ -124,6 +146,10 @@ public class QrCodeV3Options {
         this.w = size;
         this.h = size;
         return this;
+    }
+
+    public Integer getSize() {
+        return Math.min(this.w, this.h);
     }
 
     public Integer getH() {
@@ -193,18 +219,69 @@ public class QrCodeV3Options {
         return frontOptions;
     }
 
+    public List<FrontOptions> getFrontOptionsList() {
+        return frontOptionsList;
+    }
+
+    @Deprecated
     public FrontOptions newFrontOptions() {
         if (this.frontOptions == null) this.frontOptions = new FrontOptions(this);
+        if (this.frontOptionsList == null) {
+            this.frontOptionsList = new ArrayList<>();
+            this.frontOptionsList.add(this.frontOptions);
+        }
         return frontOptions;
     }
+
+    /**
+     * 用于多张前置图的场景，越后面加的资源，放在越上层
+     *
+     * @return
+     */
+    public FrontOptions addFrontOptions() {
+        if (this.frontOptionsList == null) this.frontOptionsList = new ArrayList<>();
+        FrontOptions fo = new FrontOptions(this);
+        if (this.frontOptions == null) this.frontOptions = fo;
+        this.frontOptionsList.add(fo);
+        return fo;
+    }
+
 
     public BgOptions getBgOptions() {
         return bgOptions;
     }
 
+    public List<BgOptions> getBgOptionsList() {
+        return bgOptionsList;
+    }
+
+    /**
+     * 但背景的简化使用姿势
+     *
+     * @return
+     */
+    @Deprecated
     public BgOptions newBgOptions() {
         if (bgOptions == null) this.bgOptions = new BgOptions(this);
+        if (this.bgOptionsList == null) {
+            // 将当前背景配置，放入列表
+            this.bgOptionsList = new ArrayList<>();
+            this.bgOptionsList.add(bgOptions);
+        }
         return bgOptions;
+    }
+
+    /**
+     * 用于多张背景图的场景下使用， 越后面加进来的，放在越下层
+     *
+     * @return
+     */
+    public BgOptions addBgOptions() {
+        if (bgOptionsList == null) this.bgOptionsList = new ArrayList<>();
+        BgOptions tmp = new BgOptions(this);
+        if (bgOptions == null) bgOptions = tmp;
+        this.bgOptionsList.add(tmp);
+        return tmp;
     }
 
     public LogoOptions getLogoOptions() {
@@ -540,11 +617,23 @@ public class QrCodeV3Options {
         return this;
     }
 
+    /**
+     * 二维码在底图(这里就是背景图）上的 x 坐标
+     *
+     * @param bgX
+     * @return
+     */
     public QrCodeV3Options setBgX(Integer bgX) {
         newBgOptions().setStartX(bgX);
         return this;
     }
 
+    /**
+     * 二维码在底图(这里就是背景图）上的 y 坐标
+     *
+     * @param bgY
+     * @return
+     */
     public QrCodeV3Options setBgY(Integer bgY) {
         newBgOptions().setStartY(bgY);
         return this;
@@ -583,11 +672,23 @@ public class QrCodeV3Options {
         return this;
     }
 
+    /**
+     * 前置图在最终生成底图上的x坐标
+     *
+     * @param x
+     * @return
+     */
     public QrCodeV3Options setFtX(int x) {
         newFrontOptions().setStartX(x);
         return this;
     }
 
+    /**
+     * 前置图在最终生成底图上的y坐标
+     *
+     * @param y
+     * @return
+     */
     public QrCodeV3Options setFtY(int y) {
         newFrontOptions().setStartY(y);
         return this;
@@ -624,19 +725,8 @@ public class QrCodeV3Options {
     public QrCodeGenV3 build() {
         if (w == null) w = h == null ? Integer.valueOf(200) : h;
         if (h == null) h = w;
+        final int size = Math.min(w, h);
         if (picType == null) picType = PicTypeEnum.PNG;
-
-        if (drawOptions == null) newDrawOptions().complete();
-        else drawOptions.complete();
-        if (detectOptions == null) newDetectOptions().complete();
-        else detectOptions.complete();
-        if (frontOptions == null) newFrontOptions().complete();
-        else frontOptions.complete();
-        if (bgOptions == null) newBgOptions().complete();
-        else bgOptions.complete();
-        if (logoOptions == null) newLogoOptions().complete();
-        else logoOptions.complete();
-
 
         if (this.hints == null) {
             this.hints = new HashMap<>(8);
@@ -655,25 +745,53 @@ public class QrCodeV3Options {
             }
         }
 
-        if (bgOptions.getBgStyle() == BgStyle.PENETRATE) {
-            // 透传，用背景图颜色进行绘制时
-            drawOptions.setTransparencyBgFill(false);
-            drawOptions.setPreColor(ColorUtil.OPACITY);
-            bgOptions.setOpacity(1);
-            if (!BooleanUtils.isTrue(detectOptions.getSpecial())) {
-                // 对于穿透的场景，若探测图形没有特殊处理，则设置颜色为透明
-                detectOptions.setInColor(ColorUtil.OPACITY);
-                detectOptions.setOutColor(ColorUtil.OPACITY);
+        if (drawOptions == null) newDrawOptions().complete();
+        else drawOptions.complete();
+
+        if (detectOptions == null) newDetectOptions().complete();
+        else detectOptions.complete();
+
+        if (frontOptions == null) newFrontOptions().complete();
+        else frontOptions.complete();
+        frontOptions.autoApplyBgOptions(size);
+        if (frontOptionsList == null) addFrontOptions().complete();
+        else frontOptionsList.forEach(ft -> {
+            ft.complete();
+            ft.autoApplyBgOptions(size);
+        });
+
+        if (bgOptions == null) newBgOptions().complete();
+        else bgOptions.complete();
+        if (bgOptionsList == null) addBgOptions().complete();
+        else bgOptionsList.forEach(bg -> {
+            bg.complete();
+            bg.autoApplyBgOptions(size);
+            if (bg.getBgStyle() == BgStyle.PENETRATE) {
+                // 透传，用背景图颜色进行绘制时
+                drawOptions.setTransparencyBgFill(false);
+                drawOptions.setPreColor(ColorUtil.OPACITY);
+                bg.setOpacity(1);
+                if (!BooleanUtils.isTrue(detectOptions.getSpecial())) {
+                    // 对于穿透的场景，若探测图形没有特殊处理，则设置颜色为透明
+                    detectOptions.setInColor(ColorUtil.OPACITY);
+                    detectOptions.setOutColor(ColorUtil.OPACITY);
+                }
             }
-        }
+        });
+
+        if (logoOptions == null) newLogoOptions().complete();
+        else logoOptions.complete();
+
 
         if (!BooleanUtils.isTrue(detectOptions.getSpecial())) {
             // 探测图形非特殊处理时，直接使用preColor
             if (detectOptions.getInColor() == null) detectOptions.setInColor(drawOptions.getPreColor());
-            // 若inColor特殊指定，则需要特殊进行绘制
+                // 若inColor特殊指定，则需要特殊进行绘制
             else detectOptions.setSpecial(true);
+
             if (detectOptions.getOutColor() == null) detectOptions.setOutColor(drawOptions.getPreColor());
             else detectOptions.setSpecial(true);
+
             // 探测图形的渲染资源继承码元的渲染样式
             if (drawOptions.getResourcePool() != null && drawOptions.getResourcePool().getDefaultDrawResource() != null) {
                 detectOptions.initResource(drawOptions.getResourcePool().getDefaultDrawResource());
