@@ -2,6 +2,8 @@ package com.github.hui.quick.plugin.qrcode.v3.req;
 
 import com.github.hui.quick.plugin.qrcode.v3.constants.BgStyle;
 import com.github.hui.quick.plugin.qrcode.v3.entity.QrResource;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.awt.image.BufferedImage;
 import java.util.Optional;
@@ -12,11 +14,32 @@ import java.util.Optional;
  * @author YiHui
  */
 public class BgOptions {
+    private static Logger log = LoggerFactory.getLogger(BgOptions.class);
     private final QrCodeV3Options options;
+
+    /**
+     * 内部变量，用于标记现有的参数是否已经自动缩放过
+     */
+    private boolean scaledTag;
+
     /**
      * 背景图
      */
     private QrResource bg;
+
+    /**
+     * 背景图自动缩放策略，配合 basicQrSize 参数共同使用
+     * - 如 basicQrSize = 500, 表示这个背景是为了 500x500 大小的二维码设计的，当我们最终输出的二维码是 250x250时，那么背景图的 bgW, bgH, startX, startY 都减小一半
+     *
+     * <p>
+     * - 默认false, 表示不进行缩放，而是根据给定的图片宽高、startX/startY 来进行渲染
+     */
+    private boolean autoScale;
+
+    /**
+     * 这个背景适用的基准二维码大小，当小于50时，自适应功能不生效
+     */
+    private Integer basicQrSize;
 
     /**
      * 背景图宽
@@ -126,6 +149,47 @@ public class BgOptions {
         return this;
     }
 
+    public boolean isAutoScale() {
+        return autoScale;
+    }
+
+    public BgOptions setAutoScale(boolean autoScale) {
+        this.autoScale = autoScale;
+        return this;
+    }
+
+    public Integer getBasicQrSize() {
+        return basicQrSize;
+    }
+
+    public BgOptions setBasicQrSize(Integer basicQrSize) {
+        this.basicQrSize = basicQrSize;
+        this.autoScale = true;
+        if (basicQrSize != null && basicQrSize <= 50 && log.isDebugEnabled()) {
+            log.debug("BgOptions#basicQrSize should bigger than 50 but you set {}, autoScale will not effect!", basicQrSize);
+        }
+        return this;
+    }
+
+
+    /**
+     * 自适应调整背景相关参数，当 autoScale = true 时生效
+     *
+     * @param qrSize
+     */
+    public void autoApplyBgOptions(Integer qrSize) {
+        if (scaledTag || !autoScale || basicQrSize == null || basicQrSize <= 50) {
+            return;
+        }
+
+        scaledTag = true;
+        float rate = qrSize / (float) basicQrSize;
+        this.bgW = (int) Math.floor(rate * this.bgW);
+        this.bgH = (int) Math.floor(rate * this.bgH);
+        this.startX = (int) Math.floor(rate * this.startX);
+        this.startY = (int) Math.floor(rate * this.startY);
+    }
+
     public QrCodeV3Options complete() {
         // 背景图宽高
         if (bg != null) {
@@ -149,6 +213,11 @@ public class BgOptions {
         return options;
     }
 
+    /**
+     * 判断是否需要绘制背景
+     *
+     * @return
+     */
     public boolean needDrawBg() {
         if (bg == null) {
             return false;

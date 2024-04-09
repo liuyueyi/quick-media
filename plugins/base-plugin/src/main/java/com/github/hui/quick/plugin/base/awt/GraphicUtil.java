@@ -9,6 +9,14 @@ import java.util.Optional;
  */
 public class GraphicUtil {
 
+    public static Image smoothScale(BufferedImage img, int w, int h) {
+        if (img.getWidth() != w || img.getHeight() != h) {
+            return img.getScaledInstance(w, h, Image.SCALE_SMOOTH);
+        }
+
+        return img;
+    }
+
     public static BufferedImage pngToJpg(BufferedImage img, Color bg) {
         BufferedImage newBufferedImage = new BufferedImage(img.getWidth(),
                 img.getHeight(), BufferedImage.TYPE_INT_RGB);

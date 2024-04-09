@@ -91,6 +91,71 @@ public class QrImgRender {
         return qrImg;
     }
 
+    /**
+     * 多背景场景, 实现预处理， 先不考虑gif的场景
+     *
+     * @param size
+     * @param bgOptionsList
+     * @return
+     */
+    public static BgOptions preProcessBgImgs(Integer size, List<BgOptions> bgOptionsList) {
+        if (bgOptionsList.isEmpty()) {
+            return null;
+        }
+        if (bgOptionsList.size() == 1) {
+            return bgOptionsList.get(0);
+        }
+
+        BgOptions basic = null;
+        BufferedImage bgImg = null;
+        Graphics2D bgImgGraphic = null;
+        for (BgOptions bg : bgOptionsList) {
+            if (basic == null) {
+                if (bg.getBg() != null && bg.getBg().getImg() != null) {
+                    // 先处理基础底图
+                    basic = bg;
+                    bgImg = basic.getBg().getImg();
+
+                    // 背景的图宽高不应该小于原图
+                    int bgW = Math.max(basic.getBgW(), size);
+                    int bgH = Math.max(basic.getBgH(), size);
+                    if (bgImg.getWidth() != bgW || bgImg.getHeight() != bgH) {
+                        BufferedImage temp = new BufferedImage(bgW, bgH, BufferedImage.TYPE_INT_ARGB);
+                        temp.getGraphics().drawImage(bgImg.getScaledInstance(bgW, bgH, Image.SCALE_SMOOTH), 0, 0, null);
+                        bgImg = temp;
+                    }
+//                    最后再真实渲染时，进行处理
+//                    bgImg = basic.getBg().getPicStyle().process(bgImg, (int) (Math.min(bgW, bgH) * basic.getBg().getCornerRadius()));
+                    bgImgGraphic = GraphicUtil.getG2d(bgImg);
+                }
+            } else if (bg.getBg() != null && bg.getBg().getImg() != null) {
+                // 其他的背景图，渲染到基础底图上
+                BufferedImage targetImg = bg.getBg().getImg();
+                targetImg = bg.getBg().getPicStyle().process(targetImg, (int) (Math.min(bg.getBgW(), bg.getBgH()) * basic.getBg().getCornerRadius()));
+                if (bg.getBgStyle() == BgStyle.FILL) {
+                    // 选择一块区域进行填充
+                    bgImgGraphic.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_ATOP, 1.0f));
+                    bgImgGraphic.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+                    bgImgGraphic.drawImage(GraphicUtil.smoothScale(targetImg, bg.getBgW(), bg.getBgH()), bg.getStartX(), bg.getStartY(), null);
+                } else {
+                    // 设置透明度， 避免看不到背景
+                    bgImgGraphic.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_ATOP, bg.getOpacity()));
+                    bgImgGraphic.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+                    bgImgGraphic.drawImage(GraphicUtil.smoothScale(targetImg, bg.getBgW(), bg.getBgH()), bg.getStartX(), bg.getStartY(),
+                            null);
+                    bgImgGraphic.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_ATOP, 1.0f));
+                }
+            }
+        }
+        if (bgImgGraphic != null) {
+            bgImgGraphic.dispose();
+            bgImg.flush();
+            basic.getBg().setImg(bgImg);
+            return basic;
+        }
+        return basic;
+    }
+
 
     /**
      * 背景图
@@ -196,7 +261,6 @@ public class QrImgRender {
         return result;
     }
 
-
     /**
      * 前置装饰
      */
@@ -232,8 +296,8 @@ public class QrImgRender {
         Graphics2D g2d = GraphicUtil.getG2d(bottomImg);
         boolean needScale = frontImgOptions.getFtW() < ftImg.getWidth() || frontImgOptions.getFtH() < ftImg.getHeight();
         g2d.drawImage(!needScale ? ftImg : ftImg.getScaledInstance(frontImgOptions.getFtW(), frontImgOptions.getFtH(), BufferedImage.SCALE_SMOOTH),
-                -Math.min(startX, 0),
-                -Math.min(startY, 0),
+                Math.min(startX, 0),
+                Math.min(startY, 0),
                 null);
         g2d.dispose();
         return bottomImg;
@@ -265,7 +329,7 @@ public class QrImgRender {
             Graphics2D bgGraphic = GraphicUtil.getG2d(bgImg);
             ftImg = frontImgOptions.getFt().getGif().getFrame(index);
             bgGraphic.drawImage(!needScale ? ftImg : ftImg.getScaledInstance(frontImgOptions.getFtW(), frontImgOptions.getFtH(), BufferedImage.SCALE_SMOOTH),
-                    -Math.min(startX, 0), -Math.min(startY, 0), null);
+                    Math.min(startX, 0), Math.min(startY, 0), null);
 
             bgGraphic.dispose();
             bgImg.flush();
