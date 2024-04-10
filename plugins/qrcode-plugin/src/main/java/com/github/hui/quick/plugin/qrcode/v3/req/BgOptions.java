@@ -203,8 +203,13 @@ public class BgOptions {
         // 默认采用全覆盖方式
         if (bgStyle == null) bgStyle = BgStyle.OVERRIDE;
 
+        if (opacity <= 0) {
+            // 默认非透明的渲染方式；仅 override 场景下需要做透明穿透，可以看到背景图
+            opacity = 1F;
+        }
+
         if (bgStyle == BgStyle.OVERRIDE && opacity <= 0) {
-            // 默认将覆盖方式的二维码透明设置为0.8
+            // 默认将覆盖方式的二维码透明设置为0.8, 方便看到背景图
             opacity = 0.85F;
         }
 
