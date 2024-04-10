@@ -183,10 +183,11 @@ public class QrImgRender {
         Graphics2D bgImgGraphic = GraphicUtil.getG2d(bgImg);
         if (bgImgOptions.getBgStyle() == BgStyle.FILL) {
             // 选择一块区域进行填充
-            bgImgGraphic.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_ATOP, 1.0f));
+            bgImgGraphic.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_ATOP, bgImgOptions.getOpacity()));
             bgImgGraphic.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
             bgImgGraphic.drawImage(qrImg.getScaledInstance(qrWidth, qrHeight, Image.SCALE_SMOOTH), bgImgOptions.getStartX(),
                     bgImgOptions.getStartY(), null);
+            bgImgGraphic.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_ATOP, 1.0f));
         } else {
             // 默认采用居中方式进行全覆盖方式
             int bgOffsetX = (bgW - qrWidth) >> 1;
@@ -225,37 +226,23 @@ public class QrImgRender {
         // 背景图缩放
         for (int index = 0, len = bgImgOptions.getBg().getGif().getFrameCount(); index < len; index++) {
             BufferedImage bgImg = bgImgOptions.getBg().getGif().getFrame(index);
-            // fixme 当背景图为png时，最终透明的地方会是黑色，这里兼容处理成白色
-            BufferedImage temp = new BufferedImage(bgW, bgH, BufferedImage.TYPE_INT_RGB);
-            temp.getGraphics().setColor(Color.WHITE);
-            temp.getGraphics().fillRect(0, 0, bgW, bgH);
-            temp.getGraphics().drawImage(bgImg.getScaledInstance(bgW, bgH, Image.SCALE_SMOOTH), 0, 0, null);
-            bgImg = temp;
+            if (bgImg.getColorModel().hasAlpha()) {
+                // 说明：当背景图为png时，最终透明的地方会是黑色，这里兼容处理成白色
+                BufferedImage temp = new BufferedImage(bgW, bgH, BufferedImage.TYPE_INT_RGB);
+                temp.getGraphics().setColor(Color.WHITE);
+                temp.getGraphics().fillRect(0, 0, bgW, bgH);
+                temp.getGraphics().drawImage(GraphicUtil.smoothScale(bgImg, bgW, bgH), 0, 0, null);
+                bgImg = temp;
+            }
 
             Graphics2D bgGraphic = GraphicUtil.getG2d(bgImg);
-            if (fillMode) {
-                // 选择一块区域进行填充
-                bgGraphic.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_ATOP, 1.0f));
-                bgGraphic.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
-                bgGraphic.drawImage(qrImg.getScaledInstance(qrWidth, qrHeight, Image.SCALE_SMOOTH), bgOffsetX, bgOffsetY, null);
-                /*
-                    // 实验功能，用于gif生成时缩放
-                    int add = 2 * Math.abs(index - len / 2);
-                    int newQrW = qrWidth + add;
-                    int newQrH = qrHeight + add;
-
-                    bgGraphic.drawImage(qrImg.getScaledInstance(newQrW, newQrH, Image.SCALE_SMOOTH), bgOffsetX - add / 2, bgOffsetY - add / 2, null);
-                 */
-            } else {
-                // 全覆盖模式, 设置透明度，避免看不到背景
-                bgGraphic.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_ATOP, bgImgOptions.getOpacity()));
-                bgGraphic.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
-                bgGraphic.drawImage(qrImg.getScaledInstance(qrWidth, qrHeight, Image.SCALE_SMOOTH), bgOffsetX, bgOffsetY, null);
-                bgGraphic.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_ATOP, 1.0f));
-            }
+            // 选择一块区域进行填充
+            bgGraphic.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_ATOP, bgImgOptions.getOpacity()));
+            bgGraphic.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+            bgGraphic.drawImage(qrImg.getScaledInstance(qrWidth, qrHeight, Image.SCALE_SMOOTH), bgOffsetX, bgOffsetY, null);
+            bgGraphic.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_ATOP, 1.0f));
             bgGraphic.dispose();
             bgImg.flush();
-
             result.add(ImmutablePair.of(bgImg, bgImgOptions.getBg().getGif().getDelay(index)));
         }
         return result;

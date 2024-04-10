@@ -62,13 +62,13 @@ public class QrImgBgGenTest extends BasicGenTest {
                 .setBgStyle(BgStyle.FILL)
                 .setStartX(225)
                 .setStartY(320)
+                .setOpacity(0.6f) // 设置二维码的透明度，让 下面的背景图 xjs.jpg 可以被看到
                 .complete()
                 .addBgOptions()
                 .setBg(new QrResource().setImg("bgs/xjs.jpg"))
                 .setBgStyle(BgStyle.OVERRIDE)
-                .setOpacity(0.5f)
-                .setStartX(225)
-                .setStartY(320)
+                .setStartX(225 * 400 / 550)
+                .setStartY(320* 400 / 550)
                 .setBasicQrSize(400)
                 .complete()
                 .asFile(prefix + "/bg_fill.png");
