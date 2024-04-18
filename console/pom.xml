@@ -126,7 +126,16 @@
             <artifactId>guava</artifactId>
             <version>[30.0-jre,)</version>
         </dependency>
-
+        <dependency>
+            <groupId>io.github.ikfly</groupId>
+            <artifactId>java-tts</artifactId>
+            <version>1.0.2</version>
+        </dependency>
+        <dependency>
+            <groupId>junit</groupId>
+            <artifactId>junit</artifactId>
+            <scope>test</scope>
+        </dependency>
     </dependencies>
 
 
