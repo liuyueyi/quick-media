@@ -15,14 +15,22 @@ public class TtsTest {
     @Test
     public void testTrans() {
         TTSService ts = new TTSService();
-//        ts.setBaseSavePath("d:\\"); // 设置保存路径
+        ts.setBaseSavePath("d:\\"); // 设置保存路径
         SSML ssml = SSML.builder()
                 .outputFormat(OutputFormat.audio_24khz_48kbitrate_mono_mp3)
-                .synthesisText("葡萄 Grape，我喜欢吃葡萄，I love to eat grapes")
-                .outputFileName("grape.mp3")
+                .synthesisText("葡萄 Grape")
+                .outputFileName("grape")
                 .voice(VoiceEnum.zh_CN_XiaoxiaoNeural)
                 .build();
         ts.sendText(ssml);
+
+        ts.sendText(SSML.builder()
+                .outputFormat(OutputFormat.audio_24khz_48kbitrate_mono_mp3)
+                .synthesisText("我喜欢吃葡萄，I love to eat grapes")
+                .outputFileName("grape sentence")
+                .voice(VoiceEnum.zh_CN_XiaoxiaoNeural)
+                .build()
+        );
 //
 //        ts.sendText(SSML.builder()
 //                .synthesisText("文件名自动生成测试文本")
