@@ -127,9 +127,9 @@
             <version>[30.0-jre,)</version>
         </dependency>
         <dependency>
-            <groupId>io.github.ikfly</groupId>
-            <artifactId>java-tts</artifactId>
-            <version>1.0.2</version>
+            <groupId>com.github.liuyueyi.media</groupId>
+            <artifactId>tts-plugin</artifactId>
+            <version>3.1.0</version>
         </dependency>
         <dependency>
             <groupId>junit</groupId>

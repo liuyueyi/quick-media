@@ -187,6 +187,7 @@ public class TTSService {
         if (!getOrCreateWs().send(ssml.toString())) {
             throw TtsException.of("语音合成请求发送失败...");
         }
+        saveHook = ssml.getSaveHook();
         currentText = ssml.getSynthesisText();
         usePlayer = ssml.getUsePlayer();
         outputFileName = ssml.getOutputFileName();

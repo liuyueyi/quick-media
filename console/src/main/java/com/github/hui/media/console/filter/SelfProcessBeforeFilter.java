@@ -2,21 +2,25 @@ package com.github.hui.media.console.filter;
 
 
 import lombok.extern.slf4j.Slf4j;
-import org.apache.catalina.filters.CorsFilter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import javax.servlet.*;
+import javax.servlet.Filter;
+import javax.servlet.FilterChain;
+import javax.servlet.ServletException;
+import javax.servlet.ServletRequest;
+import javax.servlet.ServletResponse;
 import javax.servlet.annotation.WebFilter;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
 /**
+ * 支持异步的场景
  * Created by @author yihui in 11:18 19/9/30.
  */
 @Slf4j
-@WebFilter(urlPatterns = "/*", filterName = "selfProcessBeforeFilter")
+@WebFilter(urlPatterns = "/*", filterName = "selfProcessBeforeFilter", asyncSupported = true)
 public class SelfProcessBeforeFilter implements Filter {
     private static Logger logger = LoggerFactory.getLogger("req");
 

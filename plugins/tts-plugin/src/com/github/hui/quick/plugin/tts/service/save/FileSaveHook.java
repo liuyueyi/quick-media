@@ -1,6 +1,5 @@
 package com.github.hui.quick.plugin.tts.service.save;
 
-import com.github.hui.quick.plugin.base.file.FileWriteUtil;
 import com.github.hui.quick.plugin.tts.exceptions.TtsException;
 import okio.ByteString;
 import org.slf4j.Logger;
@@ -18,12 +17,12 @@ public class FileSaveHook {
 
     public static String save(ByteString data, String saveFileName, String suffix) {
         try {
-            int fileNameIndex = saveFileName.lastIndexOf("/");
-            if (fileNameIndex > 0) {
-                // 文件夹若不存在，则创建
-                String path = saveFileName.substring(0, fileNameIndex);
-                FileWriteUtil.mkDir(new File(path));
-            }
+//            int fileNameIndex = saveFileName.lastIndexOf("/");
+//            if (fileNameIndex > 0) {
+//                // 文件夹若不存在，则创建
+//                String path = saveFileName.substring(0, fileNameIndex);
+//                FileWriteUtil.mkDir(new File(path));
+//            }
 
             String outputFileName = saveFileName + "." + suffix;
             File outputAudioFile = new File(outputFileName);

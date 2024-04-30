@@ -80,6 +80,10 @@ public class SSML implements Serializable {
         return outputFileName;
     }
 
+    public OutputSaveHook getSaveHook() {
+        return saveHook;
+    }
+
     public boolean getUsePlayer() {
         return usePlayer;
     }
