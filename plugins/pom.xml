@@ -25,6 +25,7 @@
         <module>phantom-plugin</module>
         <module>imagic-plugin</module>
         <module>photo-plugin</module>
+        <module>tts-plugin</module>
     </modules>
 
     <dependencies>
