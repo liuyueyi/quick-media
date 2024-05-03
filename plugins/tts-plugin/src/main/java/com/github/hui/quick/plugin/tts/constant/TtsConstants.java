@@ -46,7 +46,12 @@ public interface TtsConstants {
     String AUDIO_CONTENT_TYPE = "Content-Type:audio";
 
 
-    public static String buildWsUrl() {
+    /**
+     * 构建转tts的长连接
+     *
+     * @return ws长连接地址
+     */
+    static String buildWsUrl() {
         return TtsConstants.EDGE_SPEECH_WSS + "?Retry-After=200&TrustedClientToken=" + TtsConstants.TRUSTED_CLIENT_TOKEN + "&ConnectionId=" + TtsTools.getRandomId();
     }
 }

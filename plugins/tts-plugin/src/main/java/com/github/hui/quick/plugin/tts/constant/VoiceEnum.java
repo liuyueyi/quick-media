@@ -170,4 +170,13 @@ public enum VoiceEnum {
     public String getLocale() {
         return locale;
     }
+
+    public static VoiceEnum of(String name) {
+        for (VoiceEnum v : VoiceEnum.values()) {
+            if (v.name().equalsIgnoreCase(name)) {
+                return v;
+            }
+        }
+        return null;
+    }
 }

@@ -228,7 +228,9 @@ public class TTSService {
 
     private OkHttpClient getOkHttpClient() {
         if (okHttpClient == null) {
-            okHttpClient = new OkHttpClient.Builder().pingInterval(20, TimeUnit.SECONDS) // 设置 PING 帧发送间隔
+            okHttpClient = new OkHttpClient.Builder()
+                    // 设置 PING 帧发送间隔
+                    .pingInterval(20, TimeUnit.SECONDS)
                     .build();
         }
         return okHttpClient;
