@@ -1,9 +1,9 @@
 package com.github.hui.web.test;
 
-import io.ikfly.constant.OutputFormat;
-import io.ikfly.constant.VoiceEnum;
-import io.ikfly.model.SSML;
-import io.ikfly.service.TTSService;
+import com.github.hui.quick.plugin.tts.constant.OutputFormatEnum;
+import com.github.hui.quick.plugin.tts.constant.VoiceEnum;
+import com.github.hui.quick.plugin.tts.model.SSML;
+import com.github.hui.quick.plugin.tts.service.TTSService;
 import org.junit.Test;
 
 /**
@@ -17,7 +17,7 @@ public class TtsTest {
         TTSService ts = new TTSService();
         ts.setBaseSavePath("d:\\"); // 设置保存路径
         SSML ssml = SSML.builder()
-                .outputFormat(OutputFormat.audio_24khz_48kbitrate_mono_mp3)
+                .outputFormat(OutputFormatEnum.audio_24khz_48kbitrate_mono_mp3)
                 .synthesisText("Popcorn")
                 .outputFileName("grape")
                 .voice(VoiceEnum.zh_CN_XiaoruiNeural)
@@ -25,7 +25,7 @@ public class TtsTest {
         ts.sendText(ssml);
 
         ts.sendText(SSML.builder()
-                .outputFormat(OutputFormat.audio_24khz_48kbitrate_mono_mp3)
+                .outputFormat(OutputFormatEnum.audio_24khz_48kbitrate_mono_mp3)
                 .synthesisText("我喜欢吃葡萄，I love to eat Popcorn")
                 .outputFileName("grape sentence")
                 .voice(VoiceEnum.zh_CN_XiaoruiNeural)
