@@ -6,6 +6,7 @@ import com.github.hui.quick.plugin.tts.constant.TtsConstants;
 import com.github.hui.quick.plugin.tts.exceptions.TtsException;
 import com.github.hui.quick.plugin.tts.model.SSML;
 import com.github.hui.quick.plugin.tts.model.SpeechConfig;
+import com.github.hui.quick.plugin.tts.model.TtsConfig;
 import com.github.hui.quick.plugin.tts.palyer.Player;
 import com.github.hui.quick.plugin.tts.service.save.FileSaveHook;
 import com.github.hui.quick.plugin.tts.service.save.OutputSaveHook;
@@ -26,6 +27,7 @@ import javax.sound.sampled.UnsupportedAudioFileException;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.util.Objects;
+import java.util.Optional;
 import java.util.concurrent.TimeUnit;
 
 
@@ -53,23 +55,7 @@ public class TTSService {
         this.baseSavePath = baseSavePath;
     }
 
-    /**
-     * 正使用的音频输出格式
-     */
-    private volatile OutputFormatEnum outputFormat;
-    /**
-     * 本次
-     */
-    private volatile String outputFileName;
-    /**
-     * 合成语音后播放
-     */
-    private volatile boolean usePlayer;
-
-    /**
-     * 结果保存
-     */
-    private volatile OutputSaveHook saveHook;
+    private volatile TtsConfig ttsConfig;
 
     //================================
 
@@ -102,7 +88,12 @@ public class TTSService {
         @Override
         public void onClosing(WebSocket webSocket, int code, String reason) {
             super.onClosing(webSocket, code, reason);
-            log.debug("onClosing:" + reason);
+            if (code != 1000) {
+                log.warn("onClosing: {}, {}", code, reason);
+            } else if (log.isDebugEnabled()) {
+                log.warn("onClosing: {}, {}", code, reason);
+            }
+
             TTSService.this.ws = null;
             synthesising = false;
         }
@@ -127,12 +118,9 @@ public class TTSService {
                 audioBuffer.clear();
             } else if (text.contains(TtsConstants.TURN_END)) {
                 // 音频流结束，写为文件
-                if (outputFileName == null || "".equals(outputFileName)) {
-                    outputFileName = (currentText.length() < 6 ? currentText : currentText.substring(0, 5)).replaceAll("[</|*。?\" >\\\\]", "") + TtsTools.localDateTime();
-                }
                 try {
-                    Object absolutePath = writeAudio(outputFormat, audioBuffer.readByteString(), outputFileName);
-                    if (usePlayer && absolutePath instanceof String) {
+                    Object absolutePath = writeAudio(ttsConfig.getOutputFormat(), audioBuffer.readByteString(), ttsConfig.getOutputFileName());
+                    if (ttsConfig.isUsePlayer() && absolutePath instanceof String) {
                         try {
                             Player.autoPlay((String) absolutePath);
                         } catch (IOException | UnsupportedAudioFileException e) {
@@ -140,9 +128,8 @@ public class TTSService {
                         }
                     }
                 } finally {
+                    // 转换完成
                     synthesising = false;
-                    usePlayer = false;
-                    outputFileName = null;
                 }
             }
         }
@@ -163,34 +150,39 @@ public class TTSService {
         }
     };
 
+    public void sendText(SSML ttsConfig) {
+    }
+
     /**
      * 发送合成请求
      *
-     * @param ssml
+     * @param ttsConfig
      */
-    public void sendText(SSML ssml) {
+    public void sendText(TtsConfig ttsConfig) {
+        if (!ttsConfig.checkArgument()) {
+            throw TtsException.of("请指定需要转语音的文本信息");
+        }
+
         while (synthesising) {
             log.info("空转等待上一个语音合成");
             TtsTools.sleep(1);
         }
         synthesising = true;
-        if (Objects.nonNull(ssml.getOutputFormat()) && !ssml.getOutputFormat().equals(outputFormat)) {
-            sendConfig(ssml.getOutputFormat());
-        } else if (outputFormat == null) {
-            // 当没有指定输出的音频格式时，使用默认的输出格式
-            sendConfig(OutputFormatEnum.audio_24khz_48kbitrate_mono_mp3);
+        if (this.ttsConfig == null) {
+            this.ttsConfig = ttsConfig;
+            OutputFormatEnum toUpdateFormat = OutputFormatEnum.audio_24khz_48kbitrate_mono_mp3;
+            sendConfig(toUpdateFormat);
+        } else if (!Objects.equals(ttsConfig.getOutputFormat(), this.ttsConfig.getOutputFormat())) {
+            this.ttsConfig = ttsConfig;
+            sendConfig(Optional.ofNullable(ttsConfig.getOutputFormat()).orElse(OutputFormatEnum.audio_24khz_48kbitrate_mono_mp3));
         }
 
         if (log.isDebugEnabled()) {
-            log.debug("ssml:{}", ssml);
+            log.debug("ssml:{}", ttsConfig.toConfig());
         }
-        if (!getOrCreateWs().send(ssml.toString())) {
+        if (!getOrCreateWs().send(ttsConfig.toConfig())) {
             throw TtsException.of("语音合成请求发送失败...");
         }
-        saveHook = ssml.getSaveHook();
-        currentText = ssml.getSynthesisText();
-        usePlayer = ssml.getUsePlayer();
-        outputFileName = ssml.getOutputFileName();
     }
 
     public void close() {
@@ -222,7 +214,9 @@ public class TTSService {
 
         Request request = new Request.Builder().url(url).addHeader("User-Agent", TtsConstants.UA).addHeader("Origin", origin).build();
         ws = getOkHttpClient().newWebSocket(request, webSocketListener);
-        sendConfig(outputFormat);
+        if (this.ttsConfig != null) {
+            sendConfig(this.ttsConfig.getOutputFormat());
+        }
         return ws;
     }
 
@@ -249,7 +243,6 @@ public class TTSService {
         if (!getOrCreateWs().send(speechConfig.toString())) {
             throw TtsException.of("语音输出格式配置失败...");
         }
-        this.outputFormat = speechConfig.getOutputFormat();
     }
 
 
@@ -266,10 +259,12 @@ public class TTSService {
             String[] split = format.getValue().split("-");
             String suffix = split[split.length - 1];
             String saveFile = buildSaveFileName(fileName);
-            if (saveHook == null) {
-                saveHook = FileSaveHook::save;
+            if (this.ttsConfig.getSaveHook() == null) {
+                this.ttsConfig.saveHook(FileSaveHook::save);
             }
-            return saveHook.save(data, saveFile, suffix);
+            Object ans = this.ttsConfig.getSaveHook().save(data, saveFile, suffix);
+            log.debug("音频保存完成! -> {}.{}", saveFile, suffix);
+            return ans;
         } catch (Exception e) {
             log.error(e.getMessage(), e);
             throw TtsException.of("音频文件写出异常，" + e.getMessage());

@@ -2,6 +2,8 @@ package com.github.hui.quick.plugin.tts;
 
 import com.github.hui.quick.plugin.tts.constant.VoiceEnum;
 import com.github.hui.quick.plugin.tts.model.SSML;
+import com.github.hui.quick.plugin.tts.model.SsmlConfig;
+import com.github.hui.quick.plugin.tts.model.TtsConfig;
 import com.github.hui.quick.plugin.tts.service.TTSService;
 
 import java.util.Optional;
@@ -11,7 +13,7 @@ import java.util.Optional;
  * @date 2024/4/30
  */
 public class TtsWrapper {
-    public String BASE = "d://tmp/audio/";
+    public String BASE = "d://";
     private volatile TTSService ttsService;
     private volatile long lastVisit = 0L;
 
@@ -59,7 +61,11 @@ public class TtsWrapper {
         return this.ttsService;
     }
 
-    public void sendTxt(SSML txt) {
-        getTts().sendText(txt);
+    public static void sendTxt(TtsConfig config) {
+        getInstance().getTts().sendText(config);
+    }
+
+    public static void close() {
+        getInstance().getTts().close();
     }
 }

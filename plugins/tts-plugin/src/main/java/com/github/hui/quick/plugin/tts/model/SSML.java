@@ -49,6 +49,11 @@ public class SSML implements Serializable {
     private boolean usePlayer;
 
     /**
+     * 下一个合成语音的配置相关
+     */
+    private SSML next;
+
+    /**
      * 文件保存的方式
      */
     private OutputSaveHook saveHook;
@@ -96,7 +101,8 @@ public class SSML implements Serializable {
 
             <speak version='1.0' xmlns='http://www.w3.org/2001/10/synthesis' xmlns:mstts='https://www.w3.org/2001/mstts' xml:lang='en-US'>
             <voice name='Microsoft Server Speech Text to Speech Voice (en-GB, LibbyNeural)'>
-            <prosody pitch='+0Hz' rate ='+0%' volume='+0%'>CloseEvent.wasClean Re</prosody></voice></speak>
+            <prosody pitch='+0Hz' rate ='+0%' volume='+0%'>CloseEvent.wasClean Re</prosody></voice>
+            </speak>
          */
     @Override
     public String toString() {
