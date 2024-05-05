@@ -4,12 +4,10 @@ package com.github.hui.quick.plugin.tts.service;
 import com.github.hui.quick.plugin.tts.constant.OutputFormatEnum;
 import com.github.hui.quick.plugin.tts.constant.TtsConstants;
 import com.github.hui.quick.plugin.tts.exceptions.TtsException;
-import com.github.hui.quick.plugin.tts.model.SSML;
 import com.github.hui.quick.plugin.tts.model.SpeechConfig;
 import com.github.hui.quick.plugin.tts.model.TtsConfig;
 import com.github.hui.quick.plugin.tts.palyer.Player;
 import com.github.hui.quick.plugin.tts.service.save.FileSaveHook;
-import com.github.hui.quick.plugin.tts.service.save.OutputSaveHook;
 import com.github.hui.quick.plugin.tts.util.TtsTools;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
@@ -63,11 +61,6 @@ public class TTSService {
      * 正在进行合成...
      */
     private volatile boolean synthesising;
-
-    /**
-     * 正在进行合成的文本
-     */
-    private volatile String currentText;
 
     /**
      * 当前的音频流数据
@@ -150,9 +143,6 @@ public class TTSService {
         }
     };
 
-    public void sendText(SSML ttsConfig) {
-    }
-
     /**
      * 发送合成请求
      *
@@ -180,6 +170,7 @@ public class TTSService {
         if (log.isDebugEnabled()) {
             log.debug("ssml:{}", ttsConfig.toConfig());
         }
+
         if (!getOrCreateWs().send(ttsConfig.toConfig())) {
             throw TtsException.of("语音合成请求发送失败...");
         }

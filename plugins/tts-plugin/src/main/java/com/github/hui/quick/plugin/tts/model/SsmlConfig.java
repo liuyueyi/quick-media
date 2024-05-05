@@ -7,8 +7,10 @@ import java.util.Optional;
 public class SsmlConfig {
     public static String SSML_PATTERN = "<voice name='%s'>\r\n" + "<prosody pitch='+0Hz' rate='%s' volume='%s'>" + "%s" + "</prosody>\n" + "</voice>\n";
 
-
-    private TtsConfig ttsConfig;
+    /**
+     * 全局的语音转换配置
+     */
+    private final TtsConfig ttsConfig;
 
     /**
      * 语音合成文本
@@ -34,11 +36,6 @@ public class SsmlConfig {
      * 以百分比表示：以“+”（可选）或“-”开头且后跟“%”的数字表示，指示相对变化。 例如 <prosody volume="50%">some text</prosody> 或 <prosody volume="+3%">some text</prosody>。
      */
     private String volume;
-
-    /**
-     * 下一个合成的语音
-     */
-    private SsmlConfig next;
 
     protected SsmlConfig(TtsConfig ttsConfig) {
         this.ttsConfig = ttsConfig;
@@ -72,31 +69,17 @@ public class SsmlConfig {
         return this;
     }
 
-    /**
-     * 下一个合成的配置
-     *
-     * @return
-     */
-    public SsmlConfig next(String synthesisText) {
-        this.next = new SsmlConfig(this.ttsConfig).text(synthesisText);
-        return this.next;
-    }
 
     public TtsConfig over() {
         return ttsConfig;
     }
 
     public String toConfig() {
-        String current = String.format(SSML_PATTERN,
+        return String.format(SSML_PATTERN,
                 Optional.ofNullable(voice).orElse(VoiceEnum.zh_CN_XiaoxiaoNeural).getShortName(),
                 Optional.ofNullable(rate).orElse("+0%"),
                 Optional.ofNullable(volume).orElse("+0%"),
                 synthesisText);
-        if (next != null) {
-            String nextConfig = next.toConfig();
-            current = current + "\r\n" + nextConfig;
-        }
-        return current;
     }
 
 }

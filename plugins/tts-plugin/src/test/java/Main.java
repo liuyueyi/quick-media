@@ -1,10 +1,6 @@
 import com.github.hui.quick.plugin.tts.TtsWrapper;
-import com.github.hui.quick.plugin.tts.constant.OutputFormatEnum;
 import com.github.hui.quick.plugin.tts.constant.VoiceEnum;
-import com.github.hui.quick.plugin.tts.model.SSML;
-import com.github.hui.quick.plugin.tts.model.SsmlConfig;
 import com.github.hui.quick.plugin.tts.model.TtsConfig;
-import com.github.hui.quick.plugin.tts.service.TTSService;
 import org.junit.Test;
 
 /**
@@ -32,7 +28,7 @@ public class Main {
 
         TtsWrapper.sendTxt(TtsConfig.newConfig()
                 .outputFileName("测试")
-                .addSsml("我喜欢吃葡萄 I like to eat grape")
+                .setSsml("我喜欢吃葡萄 I like to eat grape")
                         .voice(VoiceEnum.zh_CN_liaoning_XiaobeiNeural)
 //                .next("猴子喜欢吃香蕉 Monkey likes to eat banana")
 //                .voice(VoiceEnum.zh_CN_YunyeNeural)
@@ -46,14 +42,10 @@ public class Main {
     public void testTts() {
         TtsConfig ttsConfig = TtsConfig.newConfig()
                 .outputFileName("测试")
-                .addSsml("我喜欢吃葡萄 I like to eat grape")
+                .setSsml("我喜欢吃葡萄 I like to eat grape")
                 .voice(VoiceEnum.zh_CN_liaoning_XiaobeiNeural)
                 .over();
         TtsWrapper.sendTxt(ttsConfig);
-        ttsConfig.getSsml().text("猴子喜欢吃香蕉 Monkey likes to eat banana")
-                .voice(VoiceEnum.zh_CN_XiaoxiaoNeural).over();
-        TtsWrapper.sendTxt(ttsConfig);
-
         TtsWrapper.close();
     }
 }
