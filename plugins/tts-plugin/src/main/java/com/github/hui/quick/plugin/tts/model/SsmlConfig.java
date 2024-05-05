@@ -1,5 +1,6 @@
 package com.github.hui.quick.plugin.tts.model;
 
+import com.github.hui.quick.plugin.tts.TtsWrapper;
 import com.github.hui.quick.plugin.tts.constant.VoiceEnum;
 
 import java.util.Optional;
@@ -52,6 +53,11 @@ public class SsmlConfig {
 
     public SsmlConfig voice(VoiceEnum voice) {
         this.voice = voice;
+        return this;
+    }
+
+    public SsmlConfig voice(String voice) {
+        this.voice = TtsWrapper.fromVoice(voice);
         return this;
     }
 

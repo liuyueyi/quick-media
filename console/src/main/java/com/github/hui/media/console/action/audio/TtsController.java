@@ -1,9 +1,9 @@
 package com.github.hui.media.console.action.audio;
 
 import com.github.hui.media.console.entity.ResponseWrapper;
+import com.github.hui.quick.plugin.tts.TtsWrapper;
 import com.github.hui.quick.plugin.tts.constant.OutputFormatEnum;
-import com.github.hui.quick.plugin.tts.constant.VoiceEnum;
-import com.github.hui.quick.plugin.tts.model.SSML;
+import com.github.hui.quick.plugin.tts.model.TtsConfig;
 import com.github.hui.quick.plugin.tts.service.TTSService;
 import com.github.hui.quick.plugin.tts.service.save.StreamSaveHook;
 import org.apache.commons.io.IOUtils;
@@ -24,21 +24,17 @@ import java.io.InputStream;
  */
 @RestController
 public class TtsController {
-    private String BASE = "d://tmp/audio/";
-    private volatile TTSService ttsService;
-    private volatile long lastVisit = 0L;
-
     @RequestMapping(path = "tts")
     public ResponseWrapper<String> toTts(String content, String saveFile, String voice) {
         System.out.println("开始转换: " + saveFile);
-        SSML ssml = SSML.builder()
+        TtsConfig ssml = TtsConfig.newConfig()
                 .outputFormat(OutputFormatEnum.audio_24khz_48kbitrate_mono_mp3)
-                .synthesisText(content)
                 .outputFileName(saveFile)
-                .voice(buildVoice(voice))
-                .build();
-        getTts().sendText(ssml);
-        return ResponseWrapper.successReturn(BASE + saveFile + ".mp3");
+                .setSsml(content)
+                .voice(TtsWrapper.fromVoice(voice))
+                .over();
+        TtsWrapper.sendTxt(ssml);
+        return ResponseWrapper.successReturn(TtsWrapper.getInstance().getBaseDir() + saveFile + ".mp3");
     }
 
 
@@ -53,10 +49,11 @@ public class TtsController {
     public void toStream(String content, String voice, HttpServletRequest request) {
         AsyncContext asyncContext = request.startAsync();
         asyncContext.start(() -> {
-            SSML ssml = SSML.builder()
+            TtsConfig ssml = TtsConfig.newConfig()
                     .outputFormat(OutputFormatEnum.audio_24khz_48kbitrate_mono_mp3)
-                    .synthesisText(content)
-                    .voice(buildVoice(voice))
+                    .setSsml(content)
+                    .voice(TtsWrapper.fromVoice(voice))
+                    .over()
                     .saveHook((data, saveName, suffix) -> {
                         InputStream stream = StreamSaveHook.save(data);
                         try {
@@ -70,36 +67,8 @@ public class TtsController {
                             asyncContext.complete();
                         }
                         return null;
-                    })
-                    .build();
-            getTts().sendText(ssml);
+                    });
+            TtsWrapper.sendTxt(ssml);
         });
-    }
-
-
-    private VoiceEnum buildVoice(String voice) {
-        for (VoiceEnum v : VoiceEnum.values()) {
-            if (v.name().equalsIgnoreCase(voice)) {
-                return v;
-            }
-        }
-        return VoiceEnum.zh_CN_XiaoxiaoNeural;
-    }
-
-    private void init() {
-        ttsService = new TTSService();
-        ttsService.setBaseSavePath(BASE);
-        lastVisit = System.currentTimeMillis();
-    }
-
-    public TTSService getTts() {
-        if (System.currentTimeMillis() - lastVisit >= 60_000) {
-            if (ttsService != null) {
-                ttsService.close();
-            }
-            init();
-        }
-        lastVisit = System.currentTimeMillis();
-        return this.ttsService;
     }
 }

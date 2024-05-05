@@ -3,38 +3,61 @@ package com.github.hui.quick.plugin.tts;
 import com.github.hui.quick.plugin.tts.constant.VoiceEnum;
 import com.github.hui.quick.plugin.tts.model.TtsConfig;
 import com.github.hui.quick.plugin.tts.service.TTSService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.Optional;
+import java.util.concurrent.Executors;
+import java.util.concurrent.TimeUnit;
 
 /**
  * @author YiHui
  * @date 2024/4/30
  */
 public class TtsWrapper {
-    public String BASE = "d://";
+    private static final Logger log = LoggerFactory.getLogger(TtsWrapper.class);
+    private volatile String baseDir;
     private volatile TTSService ttsService;
     private volatile long lastVisit = 0L;
 
-    private TtsWrapper() {
+    private TtsWrapper(String baseDir) {
+        this.baseDir = baseDir;
+        Executors.newSingleThreadScheduledExecutor().scheduleAtFixedRate(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    long now = System.currentTimeMillis();
+                    if (now - lastVisit >= 5 * 60 * 1000 && ttsService != null) {
+                        // 超过五分钟没有访问，则主动关闭长连接
+                        ttsService.close();
+                    }
+                } catch (Exception e) {
+                    log.warn("auto close tts ws error! ", e);
+                }
+            }
+        }, 1, 1, TimeUnit.MINUTES);
     }
 
     private static volatile TtsWrapper instance;
 
-    public static TtsWrapper getInstance() {
+    public static TtsWrapper getInstance(String baseDir) {
         if (instance == null) {
             synchronized (TtsWrapper.class) {
                 if (instance == null) {
-                    instance = new TtsWrapper();
+                    instance = new TtsWrapper(baseDir);
                 }
             }
         }
         return instance;
     }
 
+    public static TtsWrapper getInstance() {
+        return getInstance("d://");
+    }
 
     private void init() {
         ttsService = new TTSService();
-        ttsService.setBaseSavePath(BASE);
+        ttsService.setBaseSavePath(baseDir);
         lastVisit = System.currentTimeMillis();
     }
 
@@ -49,6 +72,19 @@ public class TtsWrapper {
         return this.ttsService;
     }
 
+    public String getBaseDir() {
+        return baseDir;
+    }
+
+    /**
+     * 更新全局的默认音频保存路径
+     *
+     * @param baseDir 保存路径
+     */
+    public void updateBaseDir(String baseDir) {
+        this.baseDir = baseDir;
+        getTts().setBaseSavePath(this.baseDir);
+    }
 
     /**
      * 获取音色
