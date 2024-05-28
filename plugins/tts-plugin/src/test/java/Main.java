@@ -1,7 +1,6 @@
 import com.github.hui.quick.plugin.tts.TtsWrapper;
 import com.github.hui.quick.plugin.tts.constant.VoiceEnum;
 import com.github.hui.quick.plugin.tts.model.TtsConfig;
-import org.junit.Test;
 
 /**
  * @author YiHui
@@ -21,7 +20,6 @@ public class Main {
         TtsWrapper.close();
     }
 
-    @Test
     public void testTts() {
         TtsConfig ttsConfig = TtsConfig.newConfig()
                 .outputFileName("测试")

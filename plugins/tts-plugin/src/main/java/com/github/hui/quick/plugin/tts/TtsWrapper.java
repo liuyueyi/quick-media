@@ -19,6 +19,7 @@ public class TtsWrapper {
     private volatile String baseDir;
     private volatile TTSService ttsService;
     private volatile long lastVisit = 0L;
+    public static int EXPIRE_TIME = 5 * 60 * 1000;
 
     private TtsWrapper(String baseDir) {
         this.baseDir = baseDir;
@@ -27,7 +28,7 @@ public class TtsWrapper {
             public void run() {
                 try {
                     long now = System.currentTimeMillis();
-                    if (now - lastVisit >= 5 * 60 * 1000 && ttsService != null) {
+                    if (now - lastVisit >= EXPIRE_TIME && ttsService != null) {
                         // 超过五分钟没有访问，则主动关闭长连接
                         ttsService.close();
                     }
