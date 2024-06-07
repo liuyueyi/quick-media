@@ -43,6 +43,7 @@ public class SsmlConfig {
     }
 
     public SsmlConfig text(String text) {
+        text = text.replaceAll("《", "<").replaceAll("》", ">");
         this.synthesisText = text;
         return this;
     }

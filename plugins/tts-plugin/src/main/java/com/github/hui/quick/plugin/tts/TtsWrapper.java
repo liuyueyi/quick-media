@@ -63,7 +63,7 @@ public class TtsWrapper {
     }
 
     public TTSService getTts() {
-        if (System.currentTimeMillis() - lastVisit >= 60_000) {
+        if (System.currentTimeMillis() - lastVisit >= EXPIRE_TIME) {
             if (ttsService != null) {
                 ttsService.close();
             }
