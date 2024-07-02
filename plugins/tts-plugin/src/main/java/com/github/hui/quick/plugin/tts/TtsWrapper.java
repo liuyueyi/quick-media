@@ -105,7 +105,4 @@ public class TtsWrapper {
         getInstance().getTts().close();
     }
 
-//    public static TtsConfig autoTrans(String text) {
-//        return TtsConfig.newConfig().setSsml(text);
-//    }
 }
