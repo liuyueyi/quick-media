@@ -58,7 +58,7 @@ public class SsmlConfig {
     }
 
     public SsmlConfig voice(String voice) {
-        this.voice = TtsWrapper.fromVoice(voice);
+        this.voice = VoiceEnum.ofOrDefault(voice);
         return this;
     }
 

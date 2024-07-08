@@ -251,6 +251,7 @@ public class TTSService {
             String suffix = split[split.length - 1];
             String saveFile = buildSaveFileName(fileName);
             if (this.ttsConfig.getSaveHook() == null) {
+                // 默认保存到文件中
                 this.ttsConfig.saveHook(FileSaveHook::save);
             }
             Object ans = this.ttsConfig.getSaveHook().save(data, saveFile, suffix);

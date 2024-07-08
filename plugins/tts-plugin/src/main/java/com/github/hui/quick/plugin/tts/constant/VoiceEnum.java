@@ -1,5 +1,7 @@
 package com.github.hui.quick.plugin.tts.constant;
 
+import java.util.Optional;
+
 /**
  * @author zh-hq
  * @date 2023/3/30
@@ -178,5 +180,9 @@ public enum VoiceEnum {
             }
         }
         return null;
+    }
+
+    public static VoiceEnum ofOrDefault(String name) {
+        return Optional.ofNullable(VoiceEnum.of(name)).orElse(VoiceEnum.zh_CN_XiaoxiaoNeural);
     }
 }

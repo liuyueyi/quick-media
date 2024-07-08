@@ -1,12 +1,10 @@
 package com.github.hui.quick.plugin.tts;
 
-import com.github.hui.quick.plugin.tts.constant.VoiceEnum;
 import com.github.hui.quick.plugin.tts.model.TtsConfig;
 import com.github.hui.quick.plugin.tts.service.TTSService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.util.Optional;
 import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
 
@@ -87,15 +85,6 @@ public class TtsWrapper {
         getTts().setBaseSavePath(this.baseDir);
     }
 
-    /**
-     * 获取音色
-     *
-     * @param voice 语音
-     * @return 语音对应的枚举
-     */
-    public static VoiceEnum fromVoice(String voice) {
-        return Optional.ofNullable(VoiceEnum.of(voice)).orElse(VoiceEnum.zh_CN_XiaoxiaoNeural);
-    }
 
     public static void sendTxt(TtsConfig config) {
         getInstance().getTts().sendText(config);

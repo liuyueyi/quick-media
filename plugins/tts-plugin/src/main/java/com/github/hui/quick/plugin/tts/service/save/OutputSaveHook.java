@@ -19,5 +19,5 @@ public interface OutputSaveHook<T> {
      * @param suffix   后缀
      * @return T 返回保存后的信息
      */
-    T save(ByteString data, String saveName, String suffix);
+    T save(ByteString data, String saveName, String suffix) throws Exception;
 }
