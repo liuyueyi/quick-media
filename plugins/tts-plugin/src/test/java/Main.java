@@ -41,7 +41,8 @@ public class Main {
                     FileWriteUtil.saveFileByStream(stream, "mp3");
                     return null;
                 })
-                .setSsml("飞流直下三千尺")
+                .setSsml("飞流直下三千尺 疑是银河落九天")
+
                 .voice(VoiceEnum.zh_CN_liaoning_XiaobeiNeural)
                 .over();
         TtsWrapper.sendTxt(config);

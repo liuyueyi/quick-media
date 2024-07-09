@@ -1,6 +1,5 @@
 package com.github.hui.quick.plugin.tts.model;
 
-import com.github.hui.quick.plugin.tts.TtsWrapper;
 import com.github.hui.quick.plugin.tts.constant.VoiceEnum;
 
 import java.util.Optional;
@@ -43,7 +42,7 @@ public class SsmlConfig {
     }
 
     public SsmlConfig text(String text) {
-        text = text.replaceAll("《", "<").replaceAll("》", ">");
+        text = text.replaceAll("<", "《").replaceAll(">", "》");
         this.synthesisText = text;
         return this;
     }
