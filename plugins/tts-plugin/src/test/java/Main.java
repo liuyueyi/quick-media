@@ -15,7 +15,7 @@ public class Main {
         TtsWrapper.sendTxt(TtsConfig.newConfig()
                         .outputFileName("测试")
                         .setSsml("我喜欢吃葡萄 I like to eat grape")
-                        .voice(VoiceEnum.zh_CN_liaoning_XiaobeiNeural)
+                        .voice(VoiceEnum.zh_TW_HsiaoChenNeural)
 //                .next("猴子喜欢吃香蕉 Monkey likes to eat banana")
 //                .voice(VoiceEnum.zh_CN_YunyeNeural)
                         .over()
