@@ -35,4 +35,14 @@ public class LocaleService {
     public List<VoiceEnum> getVoiceByLocale(LocaleEnum local) {
         return Arrays.stream(VoiceEnum.values()).filter(s -> s.getLocale().equals(local.getLocale())).collect(Collectors.toList());
     }
+
+    /**
+     * 根据语言获取对应的语音列表
+     *
+     * @param lan：zh, en
+     * @return
+     */
+    public List<VoiceEnum> getVoiceByLan(String lan) {
+        return Arrays.stream(VoiceEnum.values()).filter(s -> s.getLocale().startsWith(lan.toLowerCase() + "-")).collect(Collectors.toList());
+    }
 }
