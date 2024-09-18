@@ -1,5 +1,6 @@
 package com.github.hui.quick.plugin.tts;
 
+import com.github.hui.quick.plugin.base.OSUtil;
 import com.github.hui.quick.plugin.tts.model.TtsConfig;
 import com.github.hui.quick.plugin.tts.service.TTSService;
 import org.slf4j.Logger;
@@ -13,26 +14,29 @@ import java.util.concurrent.TimeUnit;
  * @date 2024/4/30
  */
 public class TtsWrapper {
+    private static final String DEFAULT_DIR;
     private static final Logger log = LoggerFactory.getLogger(TtsWrapper.class);
     private volatile String baseDir;
     private volatile TTSService ttsService;
     private volatile long lastVisit = 0L;
     public static int EXPIRE_TIME = 5 * 60 * 1000;
 
+    static {
+        // 调整默认的地址
+        DEFAULT_DIR = OSUtil.isWinOS() ? "c://" : "/tmp";
+    }
+
     private TtsWrapper(String baseDir) {
         this.baseDir = baseDir;
-        Executors.newSingleThreadScheduledExecutor().scheduleAtFixedRate(new Runnable() {
-            @Override
-            public void run() {
-                try {
-                    long now = System.currentTimeMillis();
-                    if (now - lastVisit >= EXPIRE_TIME && ttsService != null) {
-                        // 超过五分钟没有访问，则主动关闭长连接
-                        ttsService.close();
-                    }
-                } catch (Exception e) {
-                    log.warn("auto close tts ws error! ", e);
+        Executors.newSingleThreadScheduledExecutor().scheduleAtFixedRate(() -> {
+            try {
+                long now = System.currentTimeMillis();
+                if (now - lastVisit >= EXPIRE_TIME && ttsService != null) {
+                    // 超过五分钟没有访问，则主动关闭长连接
+                    ttsService.close();
                 }
+            } catch (Exception e) {
+                log.warn("auto close tts ws error! ", e);
             }
         }, 1, 1, TimeUnit.MINUTES);
     }
@@ -51,7 +55,7 @@ public class TtsWrapper {
     }
 
     public static TtsWrapper getInstance() {
-        return getInstance("d://");
+        return getInstance(DEFAULT_DIR);
     }
 
     private void init() {
