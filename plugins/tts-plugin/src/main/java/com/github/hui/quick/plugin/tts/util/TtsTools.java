@@ -72,7 +72,7 @@ public class TtsTools {
 
     public static String localeToEmoji(Locale locale) {
         String countryCode = locale.getCountry();
-        if ("TW".equals(countryCode) && Locale.getDefault().getCountry().equals("CN")) {
+        if ("TW".equals(countryCode) && "CN".equals(Locale.getDefault().getCountry())) {
             return "";
         }
         int firstLetter = Character.codePointAt(countryCode, 0) - 0x41 + 0x1F1E6;
