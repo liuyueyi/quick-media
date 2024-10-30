@@ -3,6 +3,7 @@ package com.github.hui.quick.plugin.test;
 import com.github.hui.quick.plugin.base.Base64Util;
 import com.github.hui.quick.plugin.base.awt.GraphicUtil;
 import com.github.hui.quick.plugin.base.awt.ImageLoadUtil;
+import com.github.hui.quick.plugin.qrcode.wrapper.QrCodeDeWrapper;
 import com.github.hui.quick.plugin.qrcode.wrapper.QrCodeGenWrapper;
 import com.github.hui.quick.plugin.qrcode.wrapper.QrCodeOptions;
 import com.google.zxing.WriterException;
@@ -82,6 +83,14 @@ public class QrDetectTest {
         g2d.fillRect(0, 0, img.getWidth(), img.getHeight());
         g2d.drawImage(img, 0, 0, img.getWidth(), img.getHeight(), null);
         g2d.dispose();
+    }
+    
+
+    @Test
+    public void testReadQrCode() throws Exception {
+        BufferedImage img = ImageLoadUtil.getImageByPath("d://tmp/qq.jpg");
+        String ans = QrCodeDeWrapper.decode(img);
+        System.out.println(ans);
     }
 
 }
