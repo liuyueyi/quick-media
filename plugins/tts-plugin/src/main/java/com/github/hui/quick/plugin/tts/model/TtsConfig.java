@@ -28,7 +28,7 @@ public class TtsConfig {
     /**
      * 文件保存的方式
      */
-    private OutputSaveHook<Object> saveHook;
+    private OutputSaveHook<?> saveHook;
 
 
     /**
@@ -59,7 +59,7 @@ public class TtsConfig {
         return usePlayer;
     }
 
-    public OutputSaveHook getSaveHook() {
+    public OutputSaveHook<?> getSaveHook() {
         return saveHook;
     }
 
@@ -67,7 +67,7 @@ public class TtsConfig {
         return ssml;
     }
 
-    public TtsConfig saveHook(OutputSaveHook saveHook) {
+    public TtsConfig saveHook(OutputSaveHook<?> saveHook) {
         this.saveHook = saveHook;
         return this;
     }
