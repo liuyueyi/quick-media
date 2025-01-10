@@ -1,9 +1,9 @@
 package com.github.hui.quick.plugin.test;
 
+import com.github.hui.quick.plugin.base.OSUtil;
 import com.github.hui.quick.plugin.base.awt.ColorUtil;
 import com.github.hui.quick.plugin.base.awt.GraphicUtil;
 import com.github.hui.quick.plugin.base.awt.ImageLoadUtil;
-import com.github.hui.quick.plugin.base.OSUtil;
 import com.github.hui.quick.plugin.image.wrapper.pixel.ImgPixelWrapper;
 import com.github.hui.quick.plugin.image.wrapper.pixel.model.PixelStyleEnum;
 import org.junit.Before;
@@ -13,6 +13,7 @@ import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.util.List;
+import java.util.function.Predicate;
 
 /**
  * 图片像素化测试类
@@ -105,6 +106,75 @@ public class ImgPixelHelperTest {
     }
 
     @Test
+    public void testBorderOut() throws Exception {
+        String img = "d://quick-media/jyb.jpeg";
+        ImgPixelWrapper wrapper = ImgPixelWrapper.build().setSourceImg(img)
+                .setBlockSize(5)
+                .setFontSize(30)
+                .setChars("1")
+                .setBgChar(' ')
+                .setPixelType(PixelStyleEnum.BLACK_CHAR_BORDER)
+                .setBgPredicate(new Predicate<Integer>() {
+                    @Override
+                    public boolean test(Integer color) {
+                        if (color == 0) {
+                            return true;
+                        }
+
+                        Color rc = ColorUtil.int2color(color);
+                        // 将白色当作背景色
+                        return rc.getRed() >= 40 && rc.getGreen() >= 40 && rc.getBlue() >= 40;
+                    }
+                })
+                .build();
+
+        wrapper.asFile("d://quick-media/out.jpg");
+        for (List<String> s : wrapper.asChars()) {
+            for (String t : s) {
+                System.out.println(t);
+            }
+
+            System.out.println("------- 分割 -------");
+        }
+
+        System.out.println("-- 打印为矩阵方式进行输出 ---");
+        List<String> s = wrapper.asChars().get(0);
+        int row = s.size();
+        int col = s.get(0).length();
+
+        char[][] matrix = new char[col][row];
+        for (int x = 0; x < col; x++) {
+            for (int y = 0; y < row; y++) {
+                char ch = s.get(s.size() - y - 1).charAt(col - x - 1);
+                matrix[x][y] = ch == ' ' ? '0' : ch;
+            }
+        }
+
+
+        StringBuilder out = new StringBuilder("{\n");
+        out.append("\t\"row\":").append(row).append(",\n");
+        out.append("\t\"column\":").append(col).append(",\n");
+        out.append("\t\"matrix\":[").append("\n");
+
+        for (int x = 0; x < col; x++) {
+            for (int y = 0; y < row; y++) {
+                if (y == 0)  out.append("\t\t[");
+                out.append(matrix[x][y]);
+                if (y != row -1) out.append(",");
+                else {
+                    if (x == col- 1) out.append("]\n\t],\n"); // 最后一个
+                    else  out.append("],\n");
+                }
+            }
+        }
+        out.append("\t\"border\":").append("[1,1,1,1]\n").append("}");
+        System.out.println("\n-------------\n");
+        System.out.println(out);
+        System.out.println("\n-----------\n");
+    }
+
+
+    @Test
     public void testBlackCharImg() throws Exception {
         String file = "http://5b0988e595225.cdn.sohucs.com/images/20200410/76499041d3b144b58d6ed83f307df8a3.jpeg";
         ImgPixelWrapper.build()
@@ -135,10 +205,12 @@ public class ImgPixelHelperTest {
     public void testCharLines() {
         String file = "http://pic.dphydh.com/pic/newspic/2017-12-13/505831-1.png";
 //        String file = "https://c-ssl.duitang.com/uploads/item/202003/29/20200329043918_2FUvk.thumb.400_0.gif";
+        file = "d://quick-media/jyb.jpeg";
         java.util.List<java.util.List<String>> list = ImgPixelWrapper.build()
                 .setSourceImg(file)
                 .setBlockSize(3)
                 .setRate(0.6)
+                .setChars(" 1")
                 .setPixelType(PixelStyleEnum.CHAR_BLACK)
                 .build()
                 .asChars();

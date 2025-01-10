@@ -105,6 +105,34 @@ public enum PixelStyleEnum implements IPixelStyle {
     },
 
     /**
+     * 只针对有颜色的边框进行渲染
+     */
+    BLACK_CHAR_BORDER {
+        @Override
+        public Color calculateColor(int red, int green, int blue, int size) {
+            return GRAY_ALG.calculateColor(red, green, blue, size);
+        }
+
+        @Override
+        public void render(Graphics2D g2d, BufferedImage source, ImgPixelOptions options, int x, int y) {
+            char ch = ImgPixelHelper.toChar(options.getChars(), g2d.getColor());
+            if (g2d.getFont() == null || g2d.getFont().getSize() != options.getBlockSize()) {
+                g2d.setFont(options.getFont());
+            }
+
+            if (options.getBgPredicate().test(source.getRGB(x, y))) {
+                // 背景，直接跳过
+                PixelContextHolder.addChar(y, options.getBgChar());
+                return;
+            }
+
+            PixelContextHolder.addChar(y, ch);
+            g2d.setColor(Color.BLACK);
+            g2d.drawString(String.valueOf(ch), x, y);
+        }
+    },
+
+    /**
      * 根据字符顺序绘画
      */
     CHAR_SEQ_SCALE_UP {

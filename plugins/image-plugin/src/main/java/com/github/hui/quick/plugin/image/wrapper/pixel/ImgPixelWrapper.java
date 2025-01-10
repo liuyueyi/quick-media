@@ -316,6 +316,17 @@ public class ImgPixelWrapper {
         }
 
         /**
+         * 设置背景字符
+         *
+         * @param bgChar
+         * @return
+         */
+        public Builder setBgChar(Character bgChar) {
+            pixelOptions.setBgChar(bgChar);
+            return this;
+        }
+
+        /**
          * 设置缩放比例
          *
          * @param rate

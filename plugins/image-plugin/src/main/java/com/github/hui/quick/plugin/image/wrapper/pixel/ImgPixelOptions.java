@@ -59,6 +59,11 @@ public class ImgPixelOptions {
     private String picType;
 
     /**
+     * 背景字符
+     */
+    private Character bgChar = ' ';
+
+    /**
      * 字符图/svg图的背景色
      */
     private Color bgColor;
@@ -167,5 +172,14 @@ public class ImgPixelOptions {
 
     public Predicate<Integer> getBgPredicate() {
         return bgPredicate;
+    }
+
+    public Character getBgChar() {
+        return bgChar;
+    }
+
+    public ImgPixelOptions setBgChar(Character bgChar) {
+        this.bgChar = bgChar;
+        return this;
     }
 }
