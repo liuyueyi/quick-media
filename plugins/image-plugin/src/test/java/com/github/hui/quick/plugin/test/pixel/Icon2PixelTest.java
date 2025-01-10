@@ -20,8 +20,7 @@ import java.util.function.Predicate;
  */
 public class Icon2PixelTest {
 
-    public static List<String> toStr(String path, String file) {
-        int blockSize = 6;
+    public static List<String> toStr(String path, String file, int blockSize) {
         while (true) {
             if (!path.endsWith("/")) path += "/";
             String img = path + file;
@@ -141,12 +140,16 @@ public class Icon2PixelTest {
     public void testBorderOut() throws Exception {
         String absPath = "d://quick-media/pixel-in/";
         String in = "day";
+        // icon 对应的是6
+        int blockSize = 6;
+        // 复杂图，对应大一点
+        blockSize = 26;
         File file = new File(absPath + in);
         int index = 1;
         for (File f : file.listFiles()) {
             String fName = f.getName();
             System.out.println(">>>>>>" + fName);
-            List<String> s = toStr(absPath + in, fName);
+            List<String> s = toStr(absPath + in, fName, blockSize);
             preview(s);
             saveToFile(absPath + "out", "lvl" + index, s);
             index += 1;

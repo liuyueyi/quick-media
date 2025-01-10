@@ -120,7 +120,17 @@ public enum PixelStyleEnum implements IPixelStyle {
                 g2d.setFont(options.getFont());
             }
 
-            if (options.getBgPredicate().test(source.getRGB(x, y))) {
+            int blockSize = options.getBlockSize();
+            int[] colors = ImgPixelHelper.getPixels(source, x, y, blockSize, blockSize);
+            boolean allBg = true;
+            for (int i = 0; i < colors.length; i++) {
+                if (!options.getBgPredicate().test(colors[i])) {
+                    // 这个区域内全部都是背景时，才表示为背景图
+                    allBg = false;
+                    break;
+                }
+            }
+            if (allBg) {
                 // 背景，直接跳过
                 PixelContextHolder.addChar(y, options.getBgChar());
                 return;
