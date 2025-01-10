@@ -77,6 +77,7 @@ public class Icon2PixelTest {
                 blockSize += 1;
                 continue;
             }
+            System.out.println("选中的blockSize = " + blockSize);
             return s;
         }
 
