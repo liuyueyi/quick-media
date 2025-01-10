@@ -107,9 +107,9 @@ public class ImgPixelHelperTest {
 
     @Test
     public void testBorderOut() throws Exception {
-        String img = "d://quick-media/jyb.jpeg";
+        String img = "pixel/slake.jpeg";
         ImgPixelWrapper wrapper = ImgPixelWrapper.build().setSourceImg(img)
-                .setBlockSize(5)
+                .setBlockSize(36)
                 .setFontSize(30)
                 .setChars("1")
                 .setBgChar(' ')
@@ -128,7 +128,6 @@ public class ImgPixelHelperTest {
                 })
                 .build();
 
-        wrapper.asFile("d://quick-media/out.jpg");
         for (List<String> s : wrapper.asChars()) {
             for (String t : s) {
                 System.out.println(t);
@@ -136,41 +135,6 @@ public class ImgPixelHelperTest {
 
             System.out.println("------- 分割 -------");
         }
-
-        System.out.println("-- 打印为矩阵方式进行输出 ---");
-        List<String> s = wrapper.asChars().get(0);
-        int row = s.size();
-        int col = s.get(0).length();
-
-        char[][] matrix = new char[col][row];
-        for (int x = 0; x < col; x++) {
-            for (int y = 0; y < row; y++) {
-                char ch = s.get(s.size() - y - 1).charAt(col - x - 1);
-                matrix[x][y] = ch == ' ' ? '0' : ch;
-            }
-        }
-
-
-        StringBuilder out = new StringBuilder("{\n");
-        out.append("\t\"row\":").append(row).append(",\n");
-        out.append("\t\"column\":").append(col).append(",\n");
-        out.append("\t\"matrix\":[").append("\n");
-
-        for (int x = 0; x < col; x++) {
-            for (int y = 0; y < row; y++) {
-                if (y == 0)  out.append("\t\t[");
-                out.append(matrix[x][y]);
-                if (y != row -1) out.append(",");
-                else {
-                    if (x == col- 1) out.append("]\n\t],\n"); // 最后一个
-                    else  out.append("],\n");
-                }
-            }
-        }
-        out.append("\t\"border\":").append("[1,1,1,1]\n").append("}");
-        System.out.println("\n-------------\n");
-        System.out.println(out);
-        System.out.println("\n-----------\n");
     }
 
 
