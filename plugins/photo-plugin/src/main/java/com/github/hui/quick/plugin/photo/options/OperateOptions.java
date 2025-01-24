@@ -1,10 +1,12 @@
 package com.github.hui.quick.plugin.photo.options;
 
 import com.github.hui.quick.plugin.base.awt.ImageLoadUtil;
+import com.github.hui.quick.plugin.photo.PhotoOperateWrapper;
 import com.github.hui.quick.plugin.photo.operator.PhotoOperator;
 
 import java.awt.image.BufferedImage;
 import java.io.Serializable;
+import java.lang.reflect.Type;
 
 /**
  * @author yihui
@@ -67,4 +69,7 @@ public abstract class OperateOptions<T> implements Serializable {
      */
     public abstract PhotoOperator operator();
 
+    public <T extends OperateOptions<PhotoOperateWrapper>> T parse(T t) {
+        return (T) this;
+    }
 }

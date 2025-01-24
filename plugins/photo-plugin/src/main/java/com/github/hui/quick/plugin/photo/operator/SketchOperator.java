@@ -1,5 +1,6 @@
 package com.github.hui.quick.plugin.photo.operator;
 
+import com.github.hui.quick.plugin.photo.PhotoOperateWrapper;
 import com.github.hui.quick.plugin.photo.options.OperateOptions;
 import com.jhlabs.composite.ColorDodgeComposite;
 import com.jhlabs.image.GaussianFilter;
@@ -12,6 +13,8 @@ import java.awt.image.BufferedImage;
 import java.awt.image.WritableRaster;
 
 /**
+ * 图片素描
+ *
  * @author
  * @date 2022/6/14
  */
@@ -81,6 +84,11 @@ public class SketchOperator implements PhotoOperator {
         @Override
         public PhotoOperator operator() {
             return new SketchOperator(this);
+        }
+
+
+        public static SketchOperateOptions<PhotoOperateWrapper> type() {
+            return new SketchOperateOptions<>(PhotoOperateWrapper.DEFAULT_INSTANCE);
         }
     }
 }

@@ -140,7 +140,7 @@ public class Icon2PixelTest {
     @Test
     public void testBorderOut() throws Exception {
         String absPath = "d://quick-media/pixel-in/";
-        String in = "day";
+        String in = "夏日沙滩";
         // icon 对应的是6
         int blockSize = 6;
         // 复杂图，对应大一点

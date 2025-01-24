@@ -15,6 +15,7 @@ import java.io.IOException;
  */
 public class PhotoOperateWrapper {
     private OperateOptions<PhotoOperateWrapper> options;
+    public static final PhotoOperateWrapper DEFAULT_INSTANCE = new PhotoOperateWrapper();
 
     private PhotoOperateWrapper() {
     }
