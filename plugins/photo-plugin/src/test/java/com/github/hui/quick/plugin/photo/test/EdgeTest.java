@@ -9,13 +9,15 @@ import java.awt.*;
 import java.awt.image.BufferedImage;
 
 /**
+ * 图片边缘检测
+ *
  * @author yihui
  * @date 2022/6/14
  */
 public class EdgeTest {
 
     @Test
-    public void testSketch() {
+    public void testCanny() {
         BufferedImage out = ((EdgeOperator.EdgeOperateOptions<PhotoOperateWrapper>) PhotoOperateWrapper.of(OperatorEnum.EDGE))
                 .setType(EdgeOperator.EdgeType.CANNY)
                 .setBgColor(Color.WHITE)
