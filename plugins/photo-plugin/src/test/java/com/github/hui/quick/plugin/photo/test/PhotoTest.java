@@ -7,6 +7,8 @@ import org.junit.Test;
 import java.awt.image.BufferedImage;
 
 /**
+ * 图片转素描效果
+ *
  * @author yihui
  * @date 2022/6/14
  */

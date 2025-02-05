@@ -1,6 +1,5 @@
 package com.github.hui.quick.plugin.photo.operator;
 
-import com.github.hui.quick.plugin.photo.PhotoOperateWrapper;
 import com.github.hui.quick.plugin.photo.options.OperateOptions;
 
 /**
@@ -16,6 +15,9 @@ public enum OperatorEnum {
             return new SketchOperator.SketchOperateOptions<>(t);
         }
     },
+    /**
+     * 图片边缘检测
+     */
     EDGE() {
         public <T> EdgeOperator.EdgeOperateOptions<T> create(T t) {
             return new EdgeOperator.EdgeOperateOptions<>(t);

@@ -53,10 +53,6 @@ public abstract class OperateOptions<T> implements Serializable {
         return this;
     }
 
-    public T getDelegate() {
-        return delegate;
-    }
-
     public OperateOptions<T> setDelegate(T delegate) {
         this.delegate = delegate;
         return this;
