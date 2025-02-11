@@ -64,7 +64,12 @@ public enum PixelStyleEnum implements IPixelStyle {
             if (g2d.getFont() == null || g2d.getFont().getSize() != options.getBlockSize()) {
                 g2d.setFont(options.getFont());
             }
-            PixelContextHolder.addChar(y, ch);
+            if (options.getBgPredicate().test(g2d.getColor().getRGB())) {
+                // 背景色，使用背景字符进行填充
+                PixelContextHolder.addChar(y, options.getBgChar());
+            } else {
+                PixelContextHolder.addChar(y, ch);
+            }
             g2d.drawString(String.valueOf(ch), x, y);
         }
     },
@@ -95,10 +100,16 @@ public enum PixelStyleEnum implements IPixelStyle {
         @Override
         public void draw(Graphics2D g2d, ImgPixelOptions options, int x, int y) {
             char ch = ImgPixelHelper.toChar(options.getChars(), g2d.getColor());
+            if (options.getBgPredicate().test(g2d.getColor().getRGB())) {
+                // 背景色，使用背景字符进行填充
+                PixelContextHolder.addChar(y, options.getBgChar());
+            } else {
+                PixelContextHolder.addChar(y, ch);
+            }
+
             if (g2d.getFont() == null || g2d.getFont().getSize() != options.getBlockSize()) {
                 g2d.setFont(options.getFont());
             }
-            PixelContextHolder.addChar(y, ch);
             g2d.setColor(Color.BLACK);
             g2d.drawString(String.valueOf(ch), x, y);
         }

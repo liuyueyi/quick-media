@@ -178,56 +178,102 @@ public class ImgPixelWrapper {
         }
     }
 
+    /**
+     * 解析图像并根据像素选项返回处理后的图像和像素字符信息
+     * 此方法负责将源图像按照指定的像素风格和选项进行处理，如果需要放大像素，则调用专门的方法进行处理
+     *
+     * @param source 源图像，基于此图像进行解析和处理
+     * @return 包含处理后图像和像素字符信息的对
+     */
     private ImmutablePair<BufferedImage, PixelContextHolder.ImgPixelChar> parseImg(BufferedImage source) {
+        // 检查是否需要放大像素，如果是，则调用专门的方法进行处理
         if (pixelOptions.getPixelType().scaleUp()) {
             return parseAndScaleImg(source);
         }
 
         try {
+            // 初始化新的像素字符上下文
             PixelContextHolder.newPic();
+
+            // 检查是否需要缩放图像，如果需要，则进行缩放处理
             if (pixelOptions.getRate() != 1) {
                 source = GraphicUtil.scaleImg((int) (source.getWidth() * pixelOptions.getRate()), (int) (source.getHeight() * pixelOptions.getRate()), source);
             }
+
             int picWidth = source.getWidth();
             int picHeight = source.getHeight();
             int blockSize = pixelOptions.getBlockSize();
             IPixelStyle pixelType = pixelOptions.getPixelType();
+
+            // 创建一个新的图像，用于绘制处理后的像素效果
             BufferedImage pixelImg = new BufferedImage(picWidth / blockSize * blockSize, picHeight / blockSize * blockSize, source.getType());
             Graphics2D g2d = GraphicUtil.getG2d(pixelImg);
             g2d.setColor(null);
             g2d.fillRect(0, 0, picWidth, picHeight);
+
+            // 遍历图像的每个像素块，并使用指定的像素风格进行绘制
             for (int y = 0; y < picHeight; y += blockSize) {
                 for (int x = 0; x < picWidth; x += blockSize) {
                     pixelType.render(g2d, source, pixelOptions, x, y);
                 }
             }
+
+            // 释放图形资源
             g2d.dispose();
+
+            // 返回处理后的图像和像素字符信息
             return ImmutablePair.of(pixelImg, PixelContextHolder.getPixelChar());
         } finally {
+            // 清理像素字符上下文
             PixelContextHolder.clear();
         }
     }
 
+    /**
+     * 解析并缩放图像
+     * 该方法将源图像解析为像素风格的图像，并按指定的块大小进行缩放
+     *
+     * @param source 源图像，将基于此图像进行解析和缩放
+     * @return 返回一个ImmutablePair对象，包含处理后的图像和像素字符信息
+     */
     private ImmutablePair<BufferedImage, PixelContextHolder.ImgPixelChar> parseAndScaleImg(BufferedImage source) {
         try {
+            // 初始化一个新的像素字符上下文
             PixelContextHolder.newPic();
+
+            // 获取块大小，用于计算输出图像的尺寸
             int blockSize = pixelOptions.getBlockSize();
             int outWidth = source.getWidth() * blockSize;
             int outHeight = source.getHeight() * blockSize;
+
+            // 获取像素风格接口实现
             IPixelStyle pixelType = pixelOptions.getPixelType();
+
+            // 创建一个新的BufferedImage对象，用于绘制像素风格的图像
             BufferedImage pixelImg = new BufferedImage(outWidth, outHeight, source.getType());
+
+            // 获取Graphics2D对象，用于绘制
             Graphics2D g2d = GraphicUtil.getG2d(pixelImg);
+
+            // 设置绘制颜色为透明，以填充整个图像区域
             g2d.setColor(null);
             g2d.fillRect(0, 0, outWidth, outHeight);
+
+            // 遍历源图像的每个像素，并使用指定的像素风格进行绘制
             for (int y = 0; y < source.getHeight(); y += 1) {
                 for (int x = 0; x < source.getWidth(); x += 1) {
                     pixelType.render(g2d, source, pixelOptions, x, y);
                 }
             }
+
+            // 释放Graphics2D资源
             g2d.dispose();
+
+            // 返回处理后的图像和像素字符信息
             return ImmutablePair.of(pixelImg, PixelContextHolder.getPixelChar());
 
         } finally {
+            // 清理像素字符上下文
             PixelContextHolder.clear();
         }
     }

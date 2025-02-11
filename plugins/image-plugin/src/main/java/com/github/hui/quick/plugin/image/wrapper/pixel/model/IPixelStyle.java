@@ -28,16 +28,33 @@ public interface IPixelStyle {
      * @return
      */
     default Color getAverage(int[] colors) {
+        int alpha = 0;
         int red = 0;
         int green = 0;
         int blue = 0;
         for (int color : colors) {
-            red += ((color & 0xff0000) >> 16);
-            green += ((color & 0x00ff00) >> 8);
-            blue += (color & 0x0000ff);
+            alpha += (color >> 24) & 0xff;
+            red += (color >> 16) & 0xff;;
+            green += (color >> 8) & 0xff;;
+            blue += (color & 0xff);
         }
         int len = colors.length;
-        return calculateColor(red, green, blue, len);
+        return calculateColor(alpha, red, green, blue, len);
+    }
+
+    /**
+     * 计算颜色均值
+     *
+     * @param red
+     * @param green
+     * @param blue
+     * @param size
+     * @return
+     */
+    default Color calculateColor(int alpha, int red, int green, int blue, int size) {
+        Color color = calculateColor(red, green, blue, size);
+        alpha = alpha / size;
+        return new Color(color.getRed(), color.getGreen(), color.getBlue(), alpha);
     }
 
     /**
