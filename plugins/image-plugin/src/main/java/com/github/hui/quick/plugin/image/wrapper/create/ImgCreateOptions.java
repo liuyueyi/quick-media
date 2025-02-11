@@ -68,7 +68,7 @@ public class ImgCreateOptions {
 
     /**
      * 对齐方式
-     *
+     * <p>
      * 水平绘制时: 左对齐，居中， 右对齐
      * 垂直绘制时: 上对齐，居中，下对齐
      */
@@ -239,9 +239,17 @@ public class ImgCreateOptions {
      * 文本绘制方式， 水平绘制，or 垂直绘制
      */
     public enum DrawStyle {
-        // 垂直绘制，从左到右
-        VERTICAL_LEFT, // 垂直绘制，从右到左
-        VERTICAL_RIGHT, // 水平绘制
+        /**
+         * 垂直绘制，从左到右
+         */
+        VERTICAL_LEFT,
+        /**
+         * 垂直绘制，从右到左
+         */
+        VERTICAL_RIGHT,
+        /**
+         * 水平绘制
+         */
         HORIZONTAL;
 
 

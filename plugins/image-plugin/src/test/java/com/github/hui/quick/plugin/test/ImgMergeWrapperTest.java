@@ -43,6 +43,7 @@ public class ImgMergeWrapperTest {
 
         TextCell textCell = new TextCell();
         textCell.setColor(ColorUtil.int2color(0xFFB49876));
+        textCell.setColor(Color.BLACK);
         textCell.addText(text);
         textCell.setFont(new Font("苹方", Font.PLAIN, 32));
         int textX = 13 * w / (13 + 12 + 67);

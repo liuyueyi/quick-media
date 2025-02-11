@@ -33,6 +33,16 @@ public class SvgParserOptions {
      */
     private Predicate<Color> bgPredicate;
 
+    /**
+     * svg字符的解析方式，返回svg字符
+     */
+    private SvgCellParse svgCellParse;
+
+    @FunctionalInterface
+    public interface SvgCellParse {
+        String parse(Color color, int x, int y, int size);
+    }
+
     public BufferedImage getSource() {
         return source;
     }
@@ -65,17 +75,13 @@ public class SvgParserOptions {
         this.bgPredicate = bgPredicate;
     }
 
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        SvgParserOptions that = (SvgParserOptions) o;
-        return blockSize == that.blockSize && Objects.equals(source, that.source) && Objects.equals(scaleRate, that.scaleRate) && Objects.equals(bgPredicate, that.bgPredicate);
+    public SvgCellParse getSvgCellParse() {
+        return svgCellParse;
     }
 
-    @Override
-    public int hashCode() {
-        return Objects.hash(source, blockSize, scaleRate, bgPredicate);
+    public SvgParserOptions setSvgCellParse(SvgCellParse svgCellParse) {
+        this.svgCellParse = svgCellParse;
+        return this;
     }
 
     @Override
@@ -85,6 +91,20 @@ public class SvgParserOptions {
                 ", blockSize=" + blockSize +
                 ", scaleRate=" + scaleRate +
                 ", bgPredicate=" + bgPredicate +
+                ", svgCellParse=" + svgCellParse +
                 '}';
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        SvgParserOptions that = (SvgParserOptions) o;
+        return blockSize == that.blockSize && Objects.equals(source, that.source) && Objects.equals(scaleRate, that.scaleRate) && Objects.equals(bgPredicate, that.bgPredicate) && Objects.equals(svgCellParse, that.svgCellParse);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(source, blockSize, scaleRate, bgPredicate, svgCellParse);
     }
 }

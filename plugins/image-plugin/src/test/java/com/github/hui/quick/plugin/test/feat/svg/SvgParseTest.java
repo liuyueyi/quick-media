@@ -1,6 +1,9 @@
 package com.github.hui.quick.plugin.test.feat.svg;
 
 import com.github.hui.quick.plugin.base.awt.ColorUtil;
+import com.github.hui.quick.plugin.base.awt.ImageLoadUtil;
+import com.github.hui.quick.plugin.base.file.FileWriteUtil;
+import com.github.hui.quick.plugin.image.helper.ImgPixelHelper;
 import com.github.hui.quick.plugin.image.util.StrUtil;
 import com.github.hui.quick.plugin.image.wrapper.pixel.ImgPixelWrapper;
 import com.github.hui.quick.plugin.image.wrapper.pixel.model.PixelStyleEnum;
@@ -9,7 +12,9 @@ import org.junit.Test;
 
 import java.awt.*;
 import java.awt.image.BufferedImage;
+import java.io.File;
 import java.io.IOException;
+import java.util.concurrent.atomic.AtomicInteger;
 
 /**
  * png/jpeg -> svg
@@ -25,9 +30,42 @@ public class SvgParseTest {
             "        style=\"width: 100%; height: 100%; overflow: auto; fill: {BG_COLOR}\">\n";
     public static String SVG_END = "\n</svg>";
 
+
+    public String toRect(String color, int w, int h, int x, int y) {
+        return "<rect" + " fill=\"" + color + "\" height=\"" + h + "\" width=\"" + w + "\" y=\"" + y + "\" x=\"" + x + "\"/>";
+    }
+
+    @Test
+    public void basicParse() throws Exception {
+        String img = "https://spring.hhui.top/spring-blog/css/images/avatar.jpg";
+
+        BufferedImage bufferedImage = ImageLoadUtil.getImageByPath(img);
+        int w = bufferedImage.getWidth(), h = bufferedImage.getHeight();
+
+        StringBuilder builder = new StringBuilder();
+        String s = StrUtil.replace(SVG_START, "{width}", String.valueOf(w), "{height}", String.valueOf(h), "{BG_COLOR}", "white", "{FONT_COLOR}", "black");
+        builder.append(s).append("\n");
+
+        for (int x = 0; x < w; x++) {
+            for (int y = 0; y < h; y++) {
+                int color = bufferedImage.getRGB(x, y);
+                if (color == Color.WHITE.getRGB()) {
+                    // 背景直接不要
+                    continue;
+                }
+
+                String htmlColor = ColorUtil.int2htmlColor(color);
+                builder.append(toRect(htmlColor, 1, 1, x, y));
+            }
+        }
+        builder.append(SVG_END);
+        FileWriteUtil.saveContent(new File("/tmp/parseSvg-out1.svg"), builder.toString());
+    }
+
+
     @Test
     public void test2svg() {
-        int size = 4;
+        int size = 8;
         BufferedImage pixelImg = ImgPixelWrapper.build()
                 .setSourceImg("https://spring.hhui.top/spring-blog/css/images/avatar.jpg")
                 .setBlockSize(size)
@@ -52,10 +90,7 @@ public class SvgParseTest {
         builder.append(SVG_END);
         System.out.println(builder);
         System.out.println("over");
-    }
-
-    public String toRect(String color, int w, int h, int x, int y) {
-        return "<rect" + " fill=\"" + color + "\" height=\"" + h + "\" width=\"" + w + "\" y=\"" + y + "\" x=\"" + x + "\"/>";
+        FileWriteUtil.saveContent(new File("/tmp/parseSvg-out2.svg"), builder.toString());
     }
 
     @Test
@@ -78,18 +113,46 @@ public class SvgParseTest {
                     return false;
                 })
                 .build()
-                .asFile("d:/quick-media/am2.svg");
+                .asFile("/tmp/dlam.svg");
         System.out.println("----over----");
     }
 
     @Test
-    public void parsePhoto() throws Exception {
-        String photo = "d:/wzb.png";
-        SvgParserWrapper.of(photo).setScaleRate(1).setBlockSize(1)
-                .setBgPredicate(c -> {
-                    return c.getAlpha() < 10;
-                })
-                .build().asFile("d:/quick-media/w.svg");
-        System.out.println("---over---");
+    public void parsePhoto() {
+        try {
+            String photo = "d:/quick-media/lyf.png";
+            SvgParserWrapper.of(photo)
+                    .setScaleRate(0.4)
+                    .setBlockSize(1)
+                    .setBgPredicate(c -> {
+                        return c.getAlpha() < 10;
+                    })
+                    .build().asFile("d:/quick-media/lyf.svg");
+            System.out.println("---over---");
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    @Test
+    public void parsePhotoV2() throws Exception {
+        try {
+            String txt = "刘亦菲";
+            AtomicInteger ato = new AtomicInteger(1);
+            String photo = "d:/quick-media/lyf.png";
+            SvgParserWrapper.of(photo)
+                    .setScaleRate(4)
+                    .setBlockSize(12)
+                    .setBgPredicate(c -> {
+                        return c.getAlpha() < 10;
+                    })
+                    .setSvgCellParse((color, x, y, size) -> {
+                        return ImgPixelHelper.getSvgTxtCell(txt.charAt(ato.getAndAdd(1) % 3) + "", color, x, y, size);
+                    })
+                    .build().asFile("d:/quick-media/lyf2.svg");
+            System.out.println("---over---");
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 }

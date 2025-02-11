@@ -35,7 +35,9 @@ public class EdgeTest {
                 .setType(EdgeOperator.EdgeType.SOBEL)
                 .setBgColor(Color.WHITE)
                 .setLineColor(Color.BLACK)
-                .setImg("https://img0.baidu.com/it/u=591720380,976271434&fm=253&fmt=auto&app=138&f=JPEG?w=500&h=1111")
+//                .setImg("https://img0.baidu.com/it/u=591720380,976271434&fm=253&fmt=auto&app=138&f=JPEG?w=500&h=1111")
+                .setImg("https://img2.baidu.com/it/u=2063372117,4261025591&fm=253&fmt=auto&app=120&f=JPEG?w=500&h=1000")
+                .setImg("https://img2.woyaogexing.com/2017/05/24/432c24863a7ab65a!600x600.jpg")
                 .build()
                 .asImg();
         System.out.println("----");

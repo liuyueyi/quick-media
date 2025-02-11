@@ -41,13 +41,13 @@ public class ImgCreateWrapperTest {
                 .setFont(font)
                 .setAlignStyle(ImgCreateOptions.AlignStyle.CENTER)
                 .setDrawStyle(ImgCreateOptions.DrawStyle.HORIZONTAL)
-//                .setBgImg(ImageUtil.getImageByPath("createImg/bg.jpeg"))
+                .setBgImg(ImageLoadUtil.getImageByPath("createImg/bg.jpeg"))
                 .setBgColor(Color.WHITE)
                 .setBorder(true)
                 .setBorderColor(0xFFF7EED6);
 
 
-        BufferedReader reader = FileReadUtil.createLineRead("text/poem.txt");
+        BufferedReader reader = FileReadUtil.createLineRead("text/poem2.txt");
         String line;
         int index = 0;
         while ((line = reader.readLine()) != null) {
@@ -68,6 +68,7 @@ public class ImgCreateWrapperTest {
         }
 
         BufferedImage img = build.asImage();
+        ImageIO.write(img, "png", new File("/tmp/more2out.png"));
         String out = Base64Util.encode(img, "png");
         System.out.println("<img src=\"data:image/png;base64," + out + "\" />");
     }
@@ -80,31 +81,31 @@ public class ImgCreateWrapperTest {
         int topPadding = 20;
         int bottomPadding = 10;
         int linePadding = 10;
-        Font font = new Font("手札体", Font.PLAIN, 18);
+        Font font = new Font("手札体", Font.PLAIN, 18); // 需要操作系统有手札字体，否则用默认的
 
         ImgCreateWrapper.Builder build = ImgCreateWrapper.build()
-                .setImgW(w)
-                .setLeftPadding(leftPadding)
-                .setRightPadding(leftPadding)
-                .setTopPadding(topPadding)
-                .setBottomPadding(bottomPadding)
-                .setLinePadding(linePadding)
-                .setFont(font)
-                .setAlignStyle(ImgCreateOptions.AlignStyle.CENTER)
-                .setDrawStyle(ImgCreateOptions.DrawStyle.HORIZONTAL)
-                .setBgColor(Color.WHITE)
-                .setBorder(true)
-                .setBorderColor(0xFFF7EED6);
+                .setImgW(w) // 设置图片宽
+                .setLeftPadding(leftPadding) // 左边距
+                .setRightPadding(leftPadding) // 右边距
+                .setTopPadding(topPadding) // 上边距
+                .setBottomPadding(bottomPadding) // 下边距
+                .setLinePadding(linePadding) // 行间距
+                .setFont(font) // 字体
+                .setAlignStyle(ImgCreateOptions.AlignStyle.CENTER) // 文字对齐方式
+                .setDrawStyle(ImgCreateOptions.DrawStyle.HORIZONTAL) // 绘制样式，水平绘制
+                .setBgColor(Color.WHITE) // 背景色为白色
+                .setBorder(true) // 输出图片有边框
+                .setBorderColor(0xFFF7EED6); // 边框颜色
 
 
-        BufferedReader reader = FileReadUtil.createLineRead("text/poem.txt");
+        BufferedReader reader = FileReadUtil.createLineRead("text/poem.txt"); // 读取文字样本
         String line;
         while ((line = reader.readLine()) != null) {
             build.drawContent(line);
         }
 
         build.setAlignStyle(ImgCreateOptions.AlignStyle.RIGHT)
-                .drawImage("https://gitee.com/liuyueyi/Source/raw/master/img/info/blogInfoV2.png");
+                .drawImage("https://spring.hhui.top/spring-blog/imgs/info/info.png");
 
         BufferedImage img = build.asImage();
         ImageIO.write(img, "png", new File("/tmp/2out.png"));
@@ -143,15 +144,15 @@ public class ImgCreateWrapperTest {
             build.drawContent(line);
         }
 
-        build.setFont(FontUtil.getFont("font/txlove.ttf", Font.ITALIC, 18))
+        build.setFont(FontUtil.getFontOrDefault(null, Font.ITALIC, 18))
                 .setAlignStyle(ImgCreateOptions.AlignStyle.BOTTOM);
         build.drawContent(new SimpleDateFormat("yyyy-MM-dd").format(new Date()));
         build.drawContent(" ");
         build.setAlignStyle(ImgCreateOptions.AlignStyle.CENTER)
-                .drawImage("https://gitee.com/liuyueyi/Source/raw/master/img/info/blogInfoV2.png");
-//        build.setFontColor(Color.BLUE).drawContent("后缀签名").drawContent("灰灰自动生成");
+                .drawImage("https://spring.hhui.top/spring-blog/imgs/info/info.png");
+        build.setFontColor(Color.BLUE).drawContent("后缀签名").drawContent("一灰灰");
 
         BufferedImage img = build.asImage();
-        ImageIO.write(img, "png", new File("/tmp/2out.png"));
+        ImageIO.write(img, "png", new File("/tmp/v2out.png"));
     }
 }

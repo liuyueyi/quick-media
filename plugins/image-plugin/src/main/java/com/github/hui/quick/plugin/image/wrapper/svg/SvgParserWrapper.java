@@ -55,7 +55,7 @@ public class SvgParserWrapper {
                 int[] colors = ImgPixelHelper.getPixels(source, x, y, options.getBlockSize(), options.getBlockSize());
                 Color c = ImgPixelHelper.getAverageColor(colors);
                 if (!options.getBgPredicate().test(c)) {
-                    builder.append(ImgPixelHelper.getSvgCell(c, x * zoom, y * zoom, blockSize * zoom)).append("\n");
+                    builder.append(options.getSvgCellParse().parse(c, x * zoom, y * zoom, blockSize * zoom)).append("\n");
                 }
             }
         }
@@ -148,13 +148,17 @@ public class SvgParserWrapper {
             return this;
         }
 
+        public Builder setSvgCellParse(SvgParserOptions.SvgCellParse svgCellParse) {
+            pixelOptions.setSvgCellParse(svgCellParse);
+            return this;
+        }
+
         public SvgParserWrapper build() {
             SvgParserWrapper wrapper = new SvgParserWrapper(pixelOptions);
             pixelOptions.setBlockSize(conditionGetOrElse((s) -> s > 0, pixelOptions.getBlockSize(), DEFAULT_BLOCK_SIZE));
             pixelOptions.setScaleRate(conditionGetOrElse(Objects::nonNull, pixelOptions.getScaleRate(), DEFAULT_RATE));
-            pixelOptions.setBgPredicate(conditionGetOrElse(Objects::nonNull, pixelOptions.getBgPredicate(), color -> {
-                return color.getAlpha() == 0 || (color.getRed() == 255 && color.getBlue() == 255 && color.getGreen() == 255);
-            }));
+            pixelOptions.setBgPredicate(conditionGetOrElse(Objects::nonNull, pixelOptions.getBgPredicate(), color -> color.getAlpha() == 0 || (color.getRed() == 255 && color.getBlue() == 255 && color.getGreen() == 255)));
+            pixelOptions.setSvgCellParse(conditionGetOrElse(Objects::nonNull, pixelOptions.getSvgCellParse(), ImgPixelHelper::getSvgCell));
             return wrapper;
         }
     }

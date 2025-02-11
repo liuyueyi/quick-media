@@ -66,12 +66,12 @@ public class ImgPixelHelperTest {
     public void testCharPicture() throws Exception {
         String pic = "jj3.png";
 //        String img = "D://MobileFile/" + pic;
-        String img = "http://hbimg.b0.upaiyun.com/2b79e7e15883d8f8bbae0b1d1efd6cf2c0c1ed1b10753-cusHEA_fw236";
+        String img = "https://img2.baidu.com/it/u=1018187597,1354821523&fm=253&fmt=auto&app=138&f=JPEG?w=500&h=542";
         ImgPixelWrapper.build()
                 .setSourceImg(img)
                 .setChars("小黄人")
                 // 字体文件下载地址: https://www.diyiziti.com/Builder/446
-                .setFontName(prefix + "/潇洒手写体.ttf")
+                .setFontName(prefix + "/潇洒体.ttf")
                 .setBlockSize(24)
                 .setFontSize(22)
                 .setBgPredicate(color -> {
@@ -108,6 +108,7 @@ public class ImgPixelHelperTest {
     @Test
     public void testBorderOut() throws Exception {
         String img = "pixel/slake.jpeg";
+        img  = "d://quick-media/doraemon.jpeg";
         ImgPixelWrapper wrapper = ImgPixelWrapper.build().setSourceImg(img)
                 .setBlockSize(36)
                 .setFontSize(30)
@@ -190,6 +191,7 @@ public class ImgPixelHelperTest {
     @Test
     public void testSvg() throws Exception {
         String file = "D://quick-media/ddm.jpg";
+        file = "https://img2.baidu.com/it/u=2063372117,4261025591&fm=253&fmt=auto&app=120&f=JPEG?w=500&h=1000";
 //        String file = "http://pic.dphydh.com/pic/newspic/2017-12-13/505831-1.png";
 //        String file = "https://c-ssl.duitang.com/uploads/item/202003/29/20200329043918_2FUvk.thumb.400_0.gif";
         ImgPixelWrapper.build()

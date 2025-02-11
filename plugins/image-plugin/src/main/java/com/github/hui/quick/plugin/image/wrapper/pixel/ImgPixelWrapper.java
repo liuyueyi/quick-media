@@ -29,6 +29,8 @@ import java.util.function.Predicate;
 import static com.github.hui.quick.plugin.image.util.PredicateUtil.conditionGetOrElse;
 
 /**
+ * 图片像素化
+ *
  * @author yihui
  * @date 21/11/8
  */

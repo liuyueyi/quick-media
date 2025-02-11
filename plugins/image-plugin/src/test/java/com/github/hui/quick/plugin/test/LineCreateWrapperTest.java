@@ -18,7 +18,7 @@ import java.io.IOException;
  */
 public class LineCreateWrapperTest {
 
-    private static final String sign = "https://gitee.com/liuyueyi/Source/raw/master/img/info/blogInfoV2.png";
+    private static final String sign = "https://spring.hhui.top/spring-blog/imgs/info/info.png";
 
     @Test
     public void genVerticalImg() throws IOException, FontFormatException {
@@ -51,6 +51,8 @@ public class LineCreateWrapperTest {
 
         build.setAlignStyle(ImgCreateOptions.AlignStyle.BOTTOM)
                 .drawImage(sign);
+
+        build.asGif("/tmp/line.gif");
 
         String str = build.asString();
 
@@ -96,6 +98,7 @@ public class LineCreateWrapperTest {
         build.setAlignStyle(ImgCreateOptions.AlignStyle.CENTER)
                 .drawImage(sign);
 
+        build.asGif("/tmp/word.gif");
         String str = build.asString();
 
         String dom = "<img src=\"" + DomUtil.toDomSrc(str, MediaType.ImageGif) + "\"/>";

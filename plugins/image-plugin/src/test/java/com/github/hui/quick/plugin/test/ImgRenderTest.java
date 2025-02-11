@@ -255,4 +255,16 @@ public class ImgRenderTest {
         g2d.fillRect(0, 40, 10, 10);
         g2d.dispose();
     }
+
+
+    @Test
+    public void testImgGrayAlg() {
+        String img = "https://c-ssl.duitang.com/uploads/item/201809/16/20180916175034_Gr2hk.thumb.1000_0.jpeg";
+        BufferedImage out = ImgPixelWrapper.build()
+                .setSourceImg(img)
+                .setPixelType(PixelStyleEnum.GRAY_ALG)
+                .build()
+                .asBufferedImg();
+        System.out.println(out);
+    }
 }

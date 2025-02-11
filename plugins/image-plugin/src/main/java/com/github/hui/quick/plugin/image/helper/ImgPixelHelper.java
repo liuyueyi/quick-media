@@ -106,4 +106,9 @@ public class ImgPixelHelper {
         String htmlColor = ColorUtil.color2htmlColor(color);
         return "<rect" + " fill=\"" + htmlColor + "\" height=\"" + size + "\" width=\"" + size + "\" y=\"" + y + "\" x=\"" + x + "\"/>";
     }
+
+    public static String getSvgTxtCell(String txt, Color color, int x, int y, int size) {
+        String htmlColor = ColorUtil.color2htmlColor(color);
+        return "<text x=\"" + x + "\" y=\"" + y + "\" fill=\"" + htmlColor + "\"  font-size=\"" + size + "\" >" + txt + "</text>";
+    }
 }
