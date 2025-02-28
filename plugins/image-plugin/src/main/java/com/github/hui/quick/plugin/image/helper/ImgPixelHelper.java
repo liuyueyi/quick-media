@@ -6,7 +6,9 @@ import com.github.hui.quick.plugin.image.util.StrUtil;
 import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.util.Comparator;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * 图片像素画处理
@@ -83,6 +85,23 @@ public class ImgPixelHelper {
 
         builder.append(SVG_END);
         return builder.toString();
+    }
+
+    public static Color getAverageColor(List<Integer> colors) {
+        int a = 0, r = 0, g = 0, b = 0;
+        for (int color : colors) {
+            Color c = new Color(color, true);
+            a += c.getAlpha();
+            r += c.getRed();
+            g += c.getGreen();
+            b += c.getBlue();
+        }
+        int size = colors.size();
+        a = Math.round(a / (float) size);
+        r = Math.round(r / (float) size);
+        g = Math.round(g / (float) size);
+        b = Math.round(b / (float) size);
+        return new Color(r, g, b, a);
     }
 
     public static Color getAverageColor(int[] colors) {

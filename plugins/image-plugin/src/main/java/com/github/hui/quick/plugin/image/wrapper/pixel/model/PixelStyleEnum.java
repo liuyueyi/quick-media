@@ -4,9 +4,12 @@ import com.github.hui.quick.plugin.base.awt.ColorUtil;
 import com.github.hui.quick.plugin.image.helper.ImgPixelHelper;
 import com.github.hui.quick.plugin.image.wrapper.pixel.ImgPixelOptions;
 import com.github.hui.quick.plugin.image.wrapper.pixel.context.PixelContextHolder;
+import org.apache.commons.lang3.StringUtils;
 
 import java.awt.*;
 import java.awt.image.BufferedImage;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 
 /**
@@ -60,16 +63,36 @@ public enum PixelStyleEnum implements IPixelStyle {
 
         @Override
         public void draw(Graphics2D g2d, ImgPixelOptions options, int x, int y) {
-            char ch = ImgPixelHelper.toChar(options.getChars(), g2d.getColor());
             if (g2d.getFont() == null || g2d.getFont().getSize() != options.getBlockSize()) {
                 g2d.setFont(options.getFont());
             }
-            if (options.getBgPredicate().test(g2d.getColor().getRGB())) {
+
+            int blockSize = options.getBlockSize();
+            int[] colors = ImgPixelHelper.getPixels(options.getSource(), x, y, blockSize, blockSize);
+            Color avgColor = ImgPixelHelper.getAverageColor(colors);
+
+            char ch;
+            if (options.getBgPredicate().test(avgColor.getRGB())) {
                 // 背景色，使用背景字符进行填充
+                ch = options.getBgChar();
                 PixelContextHolder.addChar(y, options.getBgChar());
+                if (options.getCharSeparate() != null) PixelContextHolder.addChar(y, options.getCharSeparate());
             } else {
-                PixelContextHolder.addChar(y, ch);
+                if (!StringUtils.isBlank(options.getChars())) {
+                    // 非背景色
+                    ch = ImgPixelHelper.toChar(options.getChars(), avgColor);
+                    PixelContextHolder.addChar(y, ch, avgColor);
+                } else {
+                    // 没有设置字符时的场景，表明使用颜色进行填充
+                    String key = PixelContextHolder.putColor(avgColor, options.getSameColorThreshold());
+                    for (int i = 0; i < key.length(); i++) {
+                        PixelContextHolder.addChar(y, key.charAt(i));
+                    }
+                    PixelContextHolder.addChar(y, options.getCharSeparate() == null ? ',' : options.getCharSeparate());
+                    ch = key.charAt(0);
+                }
             }
+            g2d.setColor(avgColor);
             g2d.drawString(String.valueOf(ch), x, y);
         }
     },
@@ -126,7 +149,6 @@ public enum PixelStyleEnum implements IPixelStyle {
 
         @Override
         public void render(Graphics2D g2d, BufferedImage source, ImgPixelOptions options, int x, int y) {
-            char ch = ImgPixelHelper.toChar(options.getChars(), g2d.getColor());
             if (g2d.getFont() == null || g2d.getFont().getSize() != options.getBlockSize()) {
                 g2d.setFont(options.getFont());
             }
@@ -134,11 +156,14 @@ public enum PixelStyleEnum implements IPixelStyle {
             int blockSize = options.getBlockSize();
             int[] colors = ImgPixelHelper.getPixels(source, x, y, blockSize, blockSize);
             boolean allBg = true;
+            List<Integer> borderColors = new ArrayList<>();
             for (int i = 0; i < colors.length; i++) {
                 if (!options.getBgPredicate().test(colors[i])) {
+                    // 边框颜色分布
+                    borderColors.add(colors[i]);
+
                     // 这个区域内全部都是背景时，才表示为背景图
                     allBg = false;
-                    break;
                 }
             }
             if (allBg) {
@@ -147,8 +172,10 @@ public enum PixelStyleEnum implements IPixelStyle {
                 return;
             }
 
-            PixelContextHolder.addChar(y, ch);
-            g2d.setColor(Color.BLACK);
+            Color renderColor = ImgPixelHelper.getAverageColor(borderColors);
+            char ch = ImgPixelHelper.toChar(options.getChars(), renderColor);
+            PixelContextHolder.addChar(y, ch, renderColor);
+            g2d.setColor(renderColor);
             g2d.drawString(String.valueOf(ch), x, y);
         }
     },

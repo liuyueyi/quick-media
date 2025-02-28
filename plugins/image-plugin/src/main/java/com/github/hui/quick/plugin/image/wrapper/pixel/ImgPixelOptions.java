@@ -64,6 +64,16 @@ public class ImgPixelOptions {
     private Character bgChar = ' ';
 
     /**
+     * 字符分割符
+     */
+    private Character charSeparate;
+
+    /**
+     * 判断颜色相同的阈值，适用于 CHAR_COLOR 场景下，将相同色系的归于同一个(颜色) + 字符
+     */
+    private float sameColorThreshold;
+
+    /**
      * 字符图/svg图的背景色
      */
     private Color bgColor;
@@ -180,6 +190,27 @@ public class ImgPixelOptions {
 
     public ImgPixelOptions setBgChar(Character bgChar) {
         this.bgChar = bgChar;
+        return this;
+    }
+
+    public Character getCharSeparate() {
+        return charSeparate;
+    }
+
+    public ImgPixelOptions setCharSeparate(Character charSeparate) {
+        this.charSeparate = charSeparate;
+        return this;
+    }
+
+    public float getSameColorThreshold() {
+        if (sameColorThreshold <= 0.001) {
+            sameColorThreshold = 0.01f;
+        }
+        return sameColorThreshold;
+    }
+
+    public ImgPixelOptions setSameColorThreshold(float sameColorThreshold) {
+        this.sameColorThreshold = sameColorThreshold;
         return this;
     }
 }

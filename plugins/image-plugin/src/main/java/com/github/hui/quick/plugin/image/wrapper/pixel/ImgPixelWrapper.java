@@ -20,9 +20,16 @@ import org.slf4j.LoggerFactory;
 import javax.imageio.ImageIO;
 import java.awt.*;
 import java.awt.image.BufferedImage;
-import java.io.*;
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
+import java.util.Map;
 import java.util.Objects;
 import java.util.function.Predicate;
 
@@ -138,6 +145,25 @@ public class ImgPixelWrapper {
         }
 
         return PixelContextHolder.toPixelChars(imgPixelChar);
+    }
+
+    public List<ImmutablePair<List<String>, Map<String, Color>>> asCharsWithColor() {
+        // 静态图的转换
+        if (pixelOptions.getSource() != null) {
+            ImmutablePair<BufferedImage, PixelContextHolder.ImgPixelChar> pair = parseImg(pixelOptions.getSource());
+            PixelContextHolder.ImgPixelChar pixelChar = pair.right;
+            return Collections.singletonList(ImmutablePair.of(pixelChar.toPixelChars(), pixelChar.getCharColorMap()));
+        }
+
+        // gif图的转换
+        List<ImmutablePair<List<String>, Map<String, Color>>> res = new ArrayList<>();
+        GifDecoder decoder = pixelOptions.getGifSource();
+        int gifCnt = decoder.getFrameCount();
+        for (int index = 0; index < gifCnt; index++) {
+            PixelContextHolder.ImgPixelChar pair = parseImg(decoder.getFrame(index)).right;
+            res.add(ImmutablePair.of(pair.toPixelChars(), pair.getCharColorMap()));
+        }
+        return res;
     }
 
     /**
@@ -428,6 +454,16 @@ public class ImgPixelWrapper {
 
         public Builder setBgPredicate(Predicate<Integer> predicate) {
             pixelOptions.setBgPredicate(predicate);
+            return this;
+        }
+
+        public Builder setCharSeparate(Character charSeparate) {
+            pixelOptions.setCharSeparate(charSeparate);
+            return this;
+        }
+
+        public Builder setSameColorThreshold(float sameColorThreshold) {
+            pixelOptions.setSameColorThreshold(sameColorThreshold);
             return this;
         }
 

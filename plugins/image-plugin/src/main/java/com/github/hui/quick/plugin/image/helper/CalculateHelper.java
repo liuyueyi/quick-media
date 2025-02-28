@@ -1,5 +1,6 @@
 package com.github.hui.quick.plugin.image.helper;
 
+import com.github.hui.quick.plugin.image.util.CIEDE2000;
 import com.github.hui.quick.plugin.image.util.StrUtil;
 import com.github.hui.quick.plugin.image.wrapper.create.ImgCreateOptions;
 
@@ -24,7 +25,7 @@ public class CalculateHelper {
      * @return 返回计算后的x坐标
      */
     public static int calOffsetX(int leftPadding, int rightPadding, int width, int strSize,
-            ImgCreateOptions.AlignStyle style) {
+                                 ImgCreateOptions.AlignStyle style) {
         if (style == ImgCreateOptions.AlignStyle.LEFT) {
             return leftPadding;
         } else if (style == ImgCreateOptions.AlignStyle.RIGHT) {
@@ -49,7 +50,7 @@ public class CalculateHelper {
      * @return
      */
     public static int calOffsetY(int topPadding, int bottomPadding, int height, int strSize,
-            ImgCreateOptions.AlignStyle style) {
+                                 ImgCreateOptions.AlignStyle style) {
         if (style == ImgCreateOptions.AlignStyle.TOP) {
             return topPadding;
         } else if (style == ImgCreateOptions.AlignStyle.BOTTOM) {
@@ -99,7 +100,7 @@ public class CalculateHelper {
      * @return
      */
     private static String[] doSplitStr(String str, int lineNum, int lineLen,
-            Function<Character, Integer> charLenCalcFunc) {
+                                       Function<Character, Integer> charLenCalcFunc) {
         if (lineNum == 1) {
             return new String[]{str};
         }
@@ -158,4 +159,16 @@ public class CalculateHelper {
         }
         return totalLine;
     }
+
+    public static boolean sameColorByThreshold(Color c1, Color c2, float threshold) {
+//        int cnt = Math.abs(c1.getRed() - c2.getRed()) > threshold ? 0 : 1;
+//        cnt = Math.abs(c1.getGreen() - c2.getGreen()) > threshold ? cnt : cnt + 1;
+//        cnt = Math.abs(c1.getBlue() - c2.getBlue()) > threshold ? cnt : cnt + 1;
+//        // 只要有两个颜色的差值再与阈值内，则认为颜色相同
+//        return cnt == 3;
+
+        return CIEDE2000.calculateCIEDE2000(c1, c2) <= 3;
+    }
+
+
 }
