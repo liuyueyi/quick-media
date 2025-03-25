@@ -81,8 +81,7 @@ public class Html2ImageWrapper {
 
 
     public BufferedImage asImage() {
-        BufferedImage bf = HtmlRenderHelper.parseImage(options);
-        return bf;
+        return HtmlRenderHelper.parseImage(options);
     }
 
 

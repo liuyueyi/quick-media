@@ -266,8 +266,8 @@ public class ImgToDrawRect {
         // 这个表示将线图，转换为二维矩阵
         String path = "D://quick-media/pixel-in/";
         int blockSize = 3;
-        String file = "x_512.jpg";
-        float threshold = 10f;
+        String file = "x_pink.jpg";
+        float threshold = 8f;
 
         MatrixConf conf = new MatrixConf();
 
@@ -275,7 +275,7 @@ public class ImgToDrawRect {
         List<List<String>> s = formatMatrix(x_s);
 
         // 接下来我们将原图，也转换为二维矩阵
-        String origin = "o_512.jpg";
+        String origin = "o_pink.jpg";
         List<String> o_o = sourceImgToStr(conf, path, origin, blockSize, threshold);
         List<List<String>> o = formatMatrix(o_o);
 
@@ -287,7 +287,8 @@ public class ImgToDrawRect {
 
         // 保存文件
         String content = toPrettyFormat(conf);
-        FileWriteUtil.saveContent(new File("D:\\tmp\\trae\\src\\config\\config.json"), content);
+        FileWriteUtil.saveContent(new File("D:\\tmp\\trae\\src\\config\\config_2.json"), content);
+        System.out.println("文件保存成功");
     }
 
     /**
