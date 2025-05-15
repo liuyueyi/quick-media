@@ -59,8 +59,16 @@ public class SeekableOutputStream extends OutputStream {
     }
 
     public void write(byte[] b, int off, int len) throws IOException {
-        file.write(b, off, len);
+    if (b == null) {
+      throw new NullPointerException();
     }
+
+    if (off < 0 || len < 0 || len > b.length || off > b.length - len) {
+      throw new ArrayIndexOutOfBoundsException();
+    }
+
+    file.write(b, off, len);
+}
 
     /**
      * Invokes <code>getFD().sync()</code> on the underlying
