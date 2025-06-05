@@ -8,8 +8,6 @@ import com.github.hui.quick.plugin.image.wrapper.pixel.ImgPixelWrapper;
 import com.github.hui.quick.plugin.image.wrapper.pixel.model.PixelStyleEnum;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-import com.google.gson.JsonElement;
-import com.google.gson.JsonParser;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.math.NumberUtils;
 import org.apache.commons.lang3.tuple.ImmutablePair;
@@ -24,7 +22,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Objects;
 import java.util.function.Predicate;
 
 /**
@@ -266,8 +263,8 @@ public class ImgToDrawRect {
         // 这个表示将线图，转换为二维矩阵
         String path = "D://quick-media/pixel-in/";
         int blockSize = 3;
-        String file = "x_pink.jpg";
-        float threshold = 8f;
+        String file = "lkk_xt.jpg";
+        float threshold = 5f;
 
         MatrixConf conf = new MatrixConf();
 
@@ -275,7 +272,7 @@ public class ImgToDrawRect {
         List<List<String>> s = formatMatrix(x_s);
 
         // 接下来我们将原图，也转换为二维矩阵
-        String origin = "o_pink.jpg";
+        String origin = "lkk_yt.jpg";
         List<String> o_o = sourceImgToStr(conf, path, origin, blockSize, threshold);
         List<List<String>> o = formatMatrix(o_o);
 
@@ -287,7 +284,7 @@ public class ImgToDrawRect {
 
         // 保存文件
         String content = toPrettyFormat(conf);
-        FileWriteUtil.saveContent(new File("D:\\tmp\\trae\\src\\config\\config_2.json"), content);
+        FileWriteUtil.saveContent(new File(path + "out.json"), content);
         System.out.println("文件保存成功");
     }
 
@@ -297,8 +294,8 @@ public class ImgToDrawRect {
     @Test
     public void renderImgBorder() throws IOException {
         String path = "D://quick-media/pixel-in/";
-        String xt = "x_512.jpg";
-        String yt = "o_512.jpg";
+        String xt = "lkk_xt.jpg";
+        String yt = "lkk_yt.jpg";
         BufferedImage xtImg = ImageLoadUtil.getImageByPath(path + xt);
         BufferedImage ytImg = ImageLoadUtil.getImageByPath(path + yt);
 
