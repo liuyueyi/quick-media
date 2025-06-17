@@ -18,35 +18,22 @@ public class ArtLineTest {
 
     @Test
     public void testGetImgLineArt() throws Exception {
-        String path = "D://quick-media/pixel-in/";
-        String img = "chengxiaoyuan.png";
+        String path = "D://quick-media/pixel-in/tt/";
+        String img = "cxy.png";
+//        String img = "gir.png";
         BufferedImage org = ImageLoadUtil.getImageByPath(path + img);
         long start = System.currentTimeMillis();
+
+
         BufferedImage out = ExtractLineUtil.extractLineDrawing(org);
         long now = System.currentTimeMillis();
         System.out.println("线图提取成功： " + (now - start));
         start = now;
 
-//        // 中值滤波处理结果
-//        BufferedImage oo = FilterUtil.medianFilter(out, out.getWidth() / 100);
-//        now = System.currentTimeMillis();
-//        System.out.println("中值滤波: " + (now - start));
-//
-//        start = now;
-//        // 应用双边滤波
-//        // 定义滤波参数
-//        int radius = 2;
-//        double sigmaColor = 25;
-//        double sigmaSpace = 15;
-//        BufferedImage outputImage = FilterUtil.bilateralFilter(out, radius, sigmaColor, sigmaSpace);
-//        now = System.currentTimeMillis();
-//        System.out.println("双边滤波: " + (now - start));
-//        start = now;
 
-        // 边缘检测
-        BufferedImage edgeImage = detectEdges(out);
+        BufferedImage o = ExtractLineUtil.extractLineBySobelDetect(org);
         // 将边缘颜色设置为黑色
-        BufferedImage finalImage = applyEdgesToLineArt(out, edgeImage);
+        BufferedImage finalImage = applyEdgesToLineArt(org, o);
         now = System.currentTimeMillis();
         System.out.println("边缘检测 --> 重绘 -> " + (now - start));
 
@@ -56,45 +43,6 @@ public class ArtLineTest {
 
         BufferedImage finalImage3 = applyEdgesToLineArt(out, finalImage2);
         System.out.println("第三次");
-    }
-
-
-    // Sobel 算子边缘检测
-    public static BufferedImage detectEdges(BufferedImage image) {
-        int width = image.getWidth();
-        int height = image.getHeight();
-        BufferedImage edgeImage = new BufferedImage(width, height, BufferedImage.TYPE_BYTE_GRAY);
-
-        int[][] Gx = {
-                {-1, 0, 1},
-                {-2, 0, 2},
-                {-1, 0, 1}
-        };
-        int[][] Gy = {
-                {-1, -2, -1},
-                {0, 0, 0},
-                {1, 2, 1}
-        };
-
-        for (int y = 0; y < height; y++) {
-            for (int x = 0; x < width; x++) {
-                int gx = 0;
-                int gy = 0;
-                for (int dy = -1; dy <= 1; dy++) {
-                    for (int dx = -1; dx <= 1; dx++) {
-                        int nx = Math.max(0, Math.min(width - 1, x + dx));
-                        int ny = Math.max(0, Math.min(height - 1, y + dy));
-                        int pixel = new Color(image.getRGB(nx, ny)).getRed();
-                        gx += pixel * Gx[dy + 1][dx + 1];
-                        gy += pixel * Gy[dy + 1][dx + 1];
-                    }
-                }
-                int gradient = (int) Math.sqrt(gx * gx + gy * gy);
-                int edgeValue = gradient > 128 ? 0 : 255;
-                edgeImage.setRGB(x, y, new Color(edgeValue, edgeValue, edgeValue).getRGB());
-            }
-        }
-        return edgeImage;
     }
 
     // 将边缘颜色设置为黑色
